@@ -1,0 +1,20 @@
+{
+  "ui": {
+    "txs": "Transactions",
+    "blocks": "Blocks",
+    "locals": {
+      "en": "EN",
+      "ru": "RU"
+    },
+    "block": {
+      "height": "Height",
+      "txsCount": "Tx count",
+      "timestamp": "Timestamp"
+    },
+    "tx": {
+      "hash": "Hash",
+      "from": "Sender",
+      "to": "Recipient"
+    }
+  }
+ }
