@@ -7,7 +7,7 @@ on:
 jobs:
   build-prod:
     if: github.ref == 'refs/heads/master'
-    environment: production
+    environment: develop
     runs-on: ubuntu-18.04
 
     steps:
@@ -17,16 +17,13 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
-
-      #    - name: Export env variable
-      #      run: export GMAPKEY=${{ secrets.GMAPKEY }}
+          node-version: '14.x'
 
       - name: Install npm dependencies
         run: npm install
 
       - name: Run generate static task
-        run: GMAPKEY=${{ secrets.GMAPKEY }} BASE_URL=${{ secrets.BASE_URL }} npm run generate
+        run: BASE_URL=${{ secrets.BASE_URL }} npm run generate
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.1.4
