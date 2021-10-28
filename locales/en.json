@@ -3,7 +3,9 @@
     "txs": "Transactions",
     "blocks": "Blocks",
     "latestBlocks": "Latest Blocks",
-    "latestTnx": "Latest Transactions",
+    "latestTxs": "Latest Transactions",
+    "allBlocks": "Show all blocks",
+    "allTxs": "Show all transactions",
     "locals": {
       "en": "EN",
       "ru": "RU"
@@ -12,12 +14,16 @@
       "blockNumber": "Block Number",
       "txsCount": "Transctions in the block",
       "age": "Age",
-      "reward": "Block reward"
+      "reward": "Block reward",
+      "txn": "Txn",
+      "gasUsed": "Gas Used",
+      "gasLimit": "Gas Limit"
     },
     "tx": {
-      "hash": "Hash",
-      "from": "Sender",
-      "to": "Recipient"
+      "hash": "Transaction",
+      "from": "From",
+      "to": "To",
+      "amount": "Amount"
     },
     "forms": {
       "searchPlaceholder": "Search by Address / Txn Hash / Block / Token",

@@ -6,22 +6,75 @@
       borderless
       thead-class="table__header"
       caption-top
+      sort-icon-left
       :responsive="true"
       tbody-tr-class="table__row"
     >
       <template
         #table-caption
       >
-        <span class="table__title">{{ $props.title }}</span>
+        <div class="table__titles">
+          <span class="table__title">{{ $props.title }}</span>
+          <nuxt-link
+            class="table__link"
+            :to="`${type}`"
+          >
+            {{ headerlink }}
+          </nuxt-link>
+        </div>
       </template>
+      <!-- common -->
       <template #cell(id)="el">
-        <!-- <span class="table__grey">{{ el.item.id }}</span> -->
-        <a :href="`#${el.item.id}`">{{ el.item.id }}</a>
+        <nuxt-link
+          class="table__link"
+          :to="`#${el.item.id}`"
+        >
+          {{ el.item.id }}
+        </nuxt-link>
+      </template>
+      <template #cell(timestamp)="el">
+        <span>{{ el.item.timestamp }}</span>
+      </template>
+      <!-- blocks -->
+      <template #cell(reward)="el">
+        <span>{{ el.item.reward }} {{ el.item.symbol }}</span>
+      </template>
+      <template #cell(txsCount)="el">
+        <nuxt-link
+          class="table__link"
+          :to="'/account/+el.item.fromAddress'"
+        >
+          {{ el.item.txsCount }} txns
+        </nuxt-link>
+      </template>
+      <!-- transaction -->
+      <template #cell(hash)="el">
+        <nuxt-link
+          class="table__link"
+          :to="`#${el.item.hash}`"
+        >
+          {{ formatItem(el.item.hash, 9, 6) }}
+        </nuxt-link>
+        <span class="table__grey">{{ el.item.timestamp }}</span>
       </template>
       <template #cell(fromAddress)="el">
-        <nuxt-link :to="'/account/+el.item.fromAddress'">
+        <nuxt-link
+          class="table__link"
+          :to="'/account/+el.item.fromAddress'"
+        >
           {{ formatItem(el.item.fromAddress, 9, 6) }}
         </nuxt-link>
+      </template>
+      <template #cell(toAddress)="el">
+        <nuxt-link
+          class="table__link"
+          :to="'/account/+el.item.fromAddress'"
+        >
+          {{ formatItem(el.item.toAddress, 9, 6) }}
+        </nuxt-link>
+      </template>
+      <template #cell(value)="el">
+        <span>{{ el.item.value }} {{ el.item.symbol }}</span>
       </template>
       <template #cell(status)="el">
         <span
@@ -33,22 +86,12 @@
           class="table__failed"
         >{{ el.item.status }}</span>
       </template>
-      <template #cell(block)="el">
-        <span class="table__grey">{{ el.item.block }}</span>
+      <!-- <template #cell(block)="el">
         <a :href="`#${el.item.block}`">{{ el.item.block }}</a>
-      </template>
-      <template #cell(timestamp)="el">
-        <span class="table__grey">{{ el.item.timestamp }}</span>
-      </template>
-      <template #cell(transaction_fee)="el">
+      </template> -->
+      <!-- <template #cell(transaction_fee)="el">
         <span class="table__grey">{{ formatItem(el.item.transaction_fee, 9, 6) }}</span>
-      </template>
-      <template #cell(hash)="el">
-        <a
-          class="table__blue table__item_cut"
-          :href="`#${el.item.hash}`"
-        >{{ formatItem(el.item.hash, 9, 6) }}</a>
-      </template>
+      </template> -->
     </b-table>
   </div>
 </template>
@@ -63,6 +106,14 @@
 export default {
   props: {
     title: {
+      type: String,
+      default: '',
+    },
+    type: {
+      type: String,
+      default: '',
+    },
+    headerlink: {
       type: String,
       default: '',
     },
@@ -89,9 +140,23 @@ export default {
   line-height: 130%;
   background: #FFFFFF;
   border-radius: 6px;
+  &__titles {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0 30px 0 20px;
+  }
   &__title {
     margin: 10px;
     color: $black800;
+  }
+  &__link {
+    text-decoration: none;
+    color: $blue;
+    &:hover {
+      text-decoration: none;
+      color: $blue;
+    }
   }
   &__success {
     color: $green;
@@ -101,16 +166,11 @@ export default {
   }
   &__grey {
     color: $black500;
+    font-size: 14px;
   }
   &__blue {
     color: $blue;
   }
-  // &__item_cut {
-  //   max-width: 160px;
-  //   overflow: hidden;
-  //   white-space: nowrap;
-  //   text-overflow: ellipsis;
-  // }
   &__header {
     @include text-simple;
     background: rgba(0, 131, 199, 0.1);

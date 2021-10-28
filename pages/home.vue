@@ -9,67 +9,49 @@
         >
           {{ $t('home.title') }}
         </h3>
-        <SearchFilterField />
-        <!-- <div class="home__fields">
-          <div class="home__search-field">
-            <base-field
-              v-model="search"
-              class="home__input"
-              :is-search="true"
-              :is-hide-error="true"
-              :placeholder="$t('ui.forms.searchPlaceholder')"
-            />
-            <div class="home__buttons-field">
-              <div class="home__filters">
-                <span class="home__filter">
-                  {{ $t('home.filters') }}
-                  <span class="icon-caret_down" />
-                </span>
-              </div>
-              <div class="home__button-field">
-                <base-btn
-                  class="home__search-button"
-                  :text="$t('ui.forms.search')"
-                />
-              </div>
-            </div>
-          </div>
-        </div> -->
+        <search-filter />
       </div>
     </div>
     <div class="home__table home__content">
       <base-table
         :title="$t('ui.latestBlocks')"
+        :headerlink="$t('ui.allBlocks')"
+        type="blocks"
         :items="testBlocks"
         :fields="[
           {
-            key: 'id', label: this.$t('ui.block.blockNumber'), sortable: true,
+            key: 'id', label: this.$t('ui.block.blockNumber'), sortable: true
           },
           {
-            key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
+            key: 'timestamp', label: this.$t('ui.block.age'), sortable: true
           },
           {
-            key: 'txsCount', label: this.$t('ui.block.txsCount'), sortable: true,
+            key: 'txsCount', label: this.$t('ui.block.txsCount'), sortable: true
           },
           {
-            key: 'reward', label: this.$t('ui.block.reward'), sortable: true,
+            key: 'reward', label: this.$t('ui.block.reward'), sortable: true
           }
         ]"
       />
     </div>
     <div class="home__table home__content">
       <base-table
-        :title="$t('ui.txs') + ` (${txsCount})`"
-        :items="txs"
+        :title="$t('ui.latestTxs')"
+        :items="testTxs"
+        :headerlink="$t('ui.allTxs')"
+        type="transactions"
         :fields="[
           {
-            key: 'id', label: this.$t('ui.tx.hash'), sortable: false,
+            key: 'hash', label: this.$t('ui.tx.hash'), sortable: true,
           },
           {
-            key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: false,
+            key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
           },
           {
-            key: 'toAddress', label: this.$t('ui.tx.to'), sortable: false,
+            key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
+          },
+          {
+            key: 'value', label: this.$t('ui.tx.amount'), sortable: true,
           }
         ]"
       />
@@ -77,8 +59,6 @@
   </div>
 </template>
 <script>
-import SearchFilterField from '~/components/SearchFilterField/index.vue';
-
 export default {
   name: 'Home',
   layout: 'default',
@@ -93,13 +73,33 @@ export default {
         id: 17102304,
         timestamp: '25 secs ago',
         txsCount: 209,
-        reward: '0.06646 WUSD',
+        reward: 0.06646,
+        symbol: 'BUSD',
       },
       {
         id: 17102305,
         timestamp: '25 secs ago',
         txsCount: 209,
-        reward: '0.06646 WUSD',
+        reward: 0.06646,
+        symbol: 'WUSD',
+      },
+    ],
+    testTxs: [
+      {
+        hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b8158',
+        fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
+        toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
+        value: 0.06646,
+        symbol: 'BUSD',
+        timestamp: '10 secs ago',
+      },
+      {
+        hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
+        fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
+        toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
+        value: 0.07746,
+        symbol: 'WUSD',
+        timestamp: '10 secs ago',
       },
     ],
   }),
@@ -117,7 +117,7 @@ export default {
     this.txs = txsRes.data.result.txs;
     this.txsCount = txsRes.data.result.count;
     this.SetLoader(false);
-    console.log('BLOCKS', this.blocks);
+    console.log('BLOCKS', this.txs);
   },
 };
 </script>
@@ -134,7 +134,7 @@ export default {
     margin-bottom: 30px;
   }
   &__content {
-    width: 1180px;
+    @include container;
     margin: 0 auto;
   }
   &__title {
@@ -145,59 +145,11 @@ export default {
     font-size: 34px;
     color:  $white;
   }
-  // &__fields {
-  //   display: flex;
-  //   align-items: center;
-  // }
-  // &__search-field {
-  //   background: $white;
-  //   width: 1180px;
-  //   height: 83px;
-  //   display: flex;
-  //   justify-content: space-between;
-  //   align-items: center;
-  //   padding: 0 20px;
-  //   border-radius: 6px;
-  // }
-  // &__input {
-  //   flex-basis: 60%;
-  // }
-  // &__buttons-field {
-  //   display: flex;
-  // }
-  // &__filters {
-  //   width: 200px;
-  //   height: 83px;
-  //   border-left: 1px $black0 solid;
-  //   display: flex;
-  //   justify-content: center;
-  //   align-items: center;
-  // }
-  // &__filter {
-  //   display: flex;
-  //   justify-content: center;
-  //   align-items: center;
-  // }
-  // &__button-field {
-  //   height: 83px;
-  //   display: flex;
-  //   align-items: center;
-  //   border-left: $black0 1px solid;
-  // }
-  // &__search-button {
-  //   width: 220px;
-  //   margin-left: 20px;
-  // }
   &__header-button {
     width: 46px;
     height: 63px;
     margin-left: 10px;
     display: none;
   }
-}
-.icon-caret_down:before {
-  color: $black400;
-  font-size: 20px;
-  margin-left: 17px;
 }
 </style>

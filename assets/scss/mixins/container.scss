@@ -17,3 +17,25 @@
     height: 100%;
   }
 }
+@mixin container {
+  width: 1180px;
+  margin: 0 auto;
+  @include _1199 {
+    width: 990px;
+  }
+  @include _991 {
+    width: 760px;
+  }
+  @include _767 {
+    width: 570px;
+  }
+  @include _575 {
+    width: 480px;
+  }
+  @include _480 {
+    width: 380px;
+  }
+  @include _380 {
+    width: 375px;
+  }
+}

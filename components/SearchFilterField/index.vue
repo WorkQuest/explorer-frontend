@@ -31,8 +31,8 @@
     display: flex;
     align-items: center;
   &__search-field {
+    @include container;
     background: $white;
-    width: 1180px;
     height: 83px;
     display: flex;
     justify-content: space-between;
@@ -58,6 +58,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
   }
   &__button-field {
     height: 83px;
@@ -66,8 +67,13 @@
     border-left: $black0 1px solid;
   }
   &__search-button {
-    width: 220px;
+    width: 220px !important;
     margin-left: 20px;
   }
+}
+.icon-caret_down:before {
+  color: $black400;
+  font-size: 20px;
+  margin-left: 17px;
 }
 </style>
