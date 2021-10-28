@@ -19,66 +19,66 @@
                 <span class="header__text">WorkQuest</span>
               </div>
               <div class="header__links">
-<!--                <nuxt-link-->
-<!--                  to="/blocks"-->
-<!--                  class="header__link"-->
-<!--                  :exact-active-class="'header__link_active'"-->
-<!--                >-->
-<!--                  {{ $t('ui.blocks') }}-->
-<!--                </nuxt-link>-->
-<!--                <nuxt-link-->
-<!--                  to="/txs"-->
-<!--                  class="header__link"-->
-<!--                  :exact-active-class="'header__link_active'"-->
-<!--                >-->
-<!--                  {{ $t('ui.txs') }}-->
-<!--                </nuxt-link>-->
+                <!--                <nuxt-link-->
+                <!--                  to="/blocks"-->
+                <!--                  class="header__link"-->
+                <!--                  :exact-active-class="'header__link_active'"-->
+                <!--                >-->
+                <!--                  {{ $t('ui.blocks') }}-->
+                <!--                </nuxt-link>-->
+                <!--                <nuxt-link-->
+                <!--                  to="/txs"-->
+                <!--                  class="header__link"-->
+                <!--                  :exact-active-class="'header__link_active'"-->
+                <!--                >-->
+                <!--                  {{ $t('ui.txs') }}-->
+                <!--                </nuxt-link>-->
               </div>
             </div>
             <div class="header__right">
-<!--              <button-->
-<!--                class="header__button header__button_locale"-->
-<!--                @click="showLocale()"-->
-<!--              >-->
-<!--                {{ $t('ui.locals.'+this.$i18n.locale) }}-->
-<!--                <span class="icon-caret_down" />-->
-<!--                <transition name="fade">-->
-<!--                  <div-->
-<!--                    v-if="isShowLocale"-->
-<!--                    class="locale"-->
-<!--                  >-->
-<!--                    <div class="locale__items">-->
-<!--                      <div class="locale__item">-->
-<!--                        <img-->
-<!--                          src="/img/app/en.svg"-->
-<!--                          alt="EN"-->
-<!--                          class="locale__icon"-->
-<!--                        >-->
-<!--                        <div class="locale__text">-->
-<!--                          {{ $t('ui.locals.en') }}-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                      <div class="locale__item">-->
-<!--                        <img-->
-<!--                          src="/img/app/ru.svg"-->
-<!--                          alt="RU"-->
-<!--                          class="locale__icon"-->
-<!--                        >-->
-<!--                        <div class="locale__text">-->
-<!--                          {{ $t('ui.locals.ru') }}-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </transition>-->
-<!--              </button>-->
+              <!--              <button-->
+              <!--                class="header__button header__button_locale"-->
+              <!--                @click="showLocale()"-->
+              <!--              >-->
+              <!--                {{ $t('ui.locals.'+this.$i18n.locale) }}-->
+              <!--                <span class="icon-caret_down" />-->
+              <!--                <transition name="fade">-->
+              <!--                  <div-->
+              <!--                    v-if="isShowLocale"-->
+              <!--                    class="locale"-->
+              <!--                  >-->
+              <!--                    <div class="locale__items">-->
+              <!--                      <div class="locale__item">-->
+              <!--                        <img-->
+              <!--                          src="/img/app/en.svg"-->
+              <!--                          alt="EN"-->
+              <!--                          class="locale__icon"-->
+              <!--                        >-->
+              <!--                        <div class="locale__text">-->
+              <!--                          {{ $t('ui.locals.en') }}-->
+              <!--                        </div>-->
+              <!--                      </div>-->
+              <!--                      <div class="locale__item">-->
+              <!--                        <img-->
+              <!--                          src="/img/app/ru.svg"-->
+              <!--                          alt="RU"-->
+              <!--                          class="locale__icon"-->
+              <!--                        >-->
+              <!--                        <div class="locale__text">-->
+              <!--                          {{ $t('ui.locals.ru') }}-->
+              <!--                        </div>-->
+              <!--                      </div>-->
+              <!--                    </div>-->
+              <!--                  </div>-->
+              <!--                </transition>-->
+              <!--              </button>-->
             </div>
           </div>
         </div>
         <div class="template__content">
           <nuxt />
         </div>
-        <div class="template__footer"></div>
+        <div class="template__footer" />
       </div>
     </div>
     <transition name="fade">

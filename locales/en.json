@@ -2,19 +2,30 @@
   "ui": {
     "txs": "Transactions",
     "blocks": "Blocks",
+    "latestBlocks": "Latest Blocks",
+    "latestTnx": "Latest Transactions",
     "locals": {
       "en": "EN",
       "ru": "RU"
     },
     "block": {
-      "height": "Height",
-      "txsCount": "Tx count",
-      "timestamp": "Timestamp"
+      "blockNumber": "Block Number",
+      "txsCount": "Transctions in the block",
+      "age": "Age",
+      "reward": "Block reward"
     },
     "tx": {
       "hash": "Hash",
       "from": "Sender",
       "to": "Recipient"
+    },
+    "forms": {
+      "searchPlaceholder": "Search by Address / Txn Hash / Block / Token",
+      "search": "Search",
+      "filters": "All filters"
     }
+  },
+  "home": {
+    "title": "WorkQuest Chain Explorer"
   }
  }

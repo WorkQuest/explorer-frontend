@@ -14,9 +14,15 @@
       >
         <span class="table__title">{{ $props.title }}</span>
       </template>
-<!--      <template #cell(fromAddress)="el">-->
-<!--        <nuxt-link :to="'/account/+el.item.fromAddress'">{{ formatAddress(el, el.item.fromAddress) }}</nuxt-link>-->
-<!--      </template>-->
+      <template #cell(id)="el">
+        <!-- <span class="table__grey">{{ el.item.id }}</span> -->
+        <a :href="`#${el.item.id}`">{{ el.item.id }}</a>
+      </template>
+      <template #cell(fromAddress)="el">
+        <nuxt-link :to="'/account/+el.item.fromAddress'">
+          {{ formatItem(el.item.fromAddress, 9, 6) }}
+        </nuxt-link>
+      </template>
       <template #cell(status)="el">
         <span
           v-if="el.item.status === 'Success'"
@@ -29,24 +35,31 @@
       </template>
       <template #cell(block)="el">
         <span class="table__grey">{{ el.item.block }}</span>
+        <a :href="`#${el.item.block}`">{{ el.item.block }}</a>
       </template>
       <template #cell(timestamp)="el">
         <span class="table__grey">{{ el.item.timestamp }}</span>
       </template>
       <template #cell(transaction_fee)="el">
-        <span class="table__grey">{{ el.item.transaction_fee }}</span>
+        <span class="table__grey">{{ formatItem(el.item.transaction_fee, 9, 6) }}</span>
+      </template>
+      <template #cell(hash)="el">
+        <a
+          class="table__blue table__item_cut"
+          :href="`#${el.item.hash}`"
+        >{{ formatItem(el.item.hash, 9, 6) }}</a>
       </template>
     </b-table>
   </div>
 </template>
 
 <script>
-export function formatTxHash(hash) {
-  return `${hash.substring(0, 5)}...${hash.substring(hash.length - 6, hash.length)}`;
-}
-export function formatAddress(address) {
-  return `${address.substring(0, 5)}...${address.substring(address.length - 6, address.length)}`;
-}
+// export function formatTxHash(hash) {
+//   return `${hash.slice(0, 5)}...${hash.slice(hash.length - 6, hash.length)}`;
+// }
+// export function formatAddress(address) {
+//   return `${address.substring(0, 5)}...${address.substring(address.length - 6, address.length)}`;
+// }
 export default {
   props: {
     title: {
@@ -63,13 +76,8 @@ export default {
     },
   },
   computed: {
-    formatTxHash(hash) {
-      return `${hash.substring(0, 5)}...${hash.substring(hash.length - 6, hash.length)}`;
-    },
-    formatAddress(el, address) {
-      console.log(el, address);
-      return `${address.substring(0, 5)}...${address.substring(address.length - 6, address.length)}`;
-    },
+  },
+  methods: {
   },
 };
 </script>
@@ -94,6 +102,15 @@ export default {
   &__grey {
     color: $black500;
   }
+  &__blue {
+    color: $blue;
+  }
+  // &__item_cut {
+  //   max-width: 160px;
+  //   overflow: hidden;
+  //   white-space: nowrap;
+  //   text-overflow: ellipsis;
+  // }
   &__header {
     @include text-simple;
     background: rgba(0, 131, 199, 0.1);
