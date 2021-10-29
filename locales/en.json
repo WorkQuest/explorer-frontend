@@ -20,10 +20,12 @@
       "gasLimit": "Gas Limit"
     },
     "tx": {
-      "hash": "Transaction",
+      "transaction": "Txn hash",
       "from": "From",
       "to": "To",
-      "amount": "Amount"
+      "amount": "Amount",
+      "value": "Value",
+      "fee": "Txn Fee"
     },
     "forms": {
       "searchPlaceholder": "Search by Address / Txn Hash / Block / Token",

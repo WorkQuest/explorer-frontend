@@ -42,7 +42,7 @@
         type="transactions"
         :fields="[
           {
-            key: 'hash', label: this.$t('ui.tx.hash'), sortable: true,
+            key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true,
           },
           {
             key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,

@@ -47,6 +47,10 @@
           {{ el.item.txsCount }} txns
         </nuxt-link>
       </template>
+      <template #cell(gasUsed)="el">
+        <span>{{ el.item.gasUsed }} </span>
+        <span class="table__grey">95,5%</span>
+      </template>
       <!-- transaction -->
       <template #cell(hash)="el">
         <nuxt-link

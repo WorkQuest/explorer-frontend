@@ -69,5 +69,8 @@ Vue.mixin({
     formatItem(item, endFromBegining, startToEnd) {
       return `${item.slice(0, endFromBegining)}...${item.slice(item.length - startToEnd, item.length)}`;
     },
+    setTotalPages(itemsNum, itemsPerPage) {
+      return Math.ceil(itemsNum / itemsPerPage);
+    },
   },
 });

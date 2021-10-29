@@ -138,3 +138,16 @@ body {
 .b-toaster {
   z-index: 3000;
 }
+.page-item.active .page-link {
+  background: rgba(0, 131, 199, 0.1);
+  border-color: $black0;
+}
+.page-item.disabled .page-link {
+  border-color: $black0;
+  color: $black600;
+  padding: 0.6rem 1em;
+}
+.page-link {
+  border-color: $black0;
+  // color: ;
+}

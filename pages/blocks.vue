@@ -1,24 +1,35 @@
 <template>
-  <div class="blocks">
+  <div class="blocks blocks__container">
     <search-filter class="blocks__header" />
     <base-table
-      class="blocks__container"
-      :title="$t('ui.latestTxs')"
-      :items="testTxs"
+      class="blocks__table"
+      :title="$t('ui.blocks')"
+      :items="blocks"
       :fields="[
         {
-          key: 'hash', label: this.$t('ui.tx.hash'), sortable: true,
+          key: 'id', label: this.$t('ui.block.blockNumber'), sortable: true,
         },
         {
-          key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
+          key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
         },
         {
-          key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
+          key: 'txsCount', label: this.$t('ui.block.txn'), sortable: true,
         },
         {
-          key: 'value', label: this.$t('ui.tx.amount'), sortable: true,
-        }
+          key: 'gasUsed', label: this.$t('ui.block.gasUsed'), sortable: true,
+        },
+        {
+          key: 'gasLimit', label: this.$t('ui.block.gasLimit'), sortable: true,
+        },
+        {
+          key: 'size', label: this.$t('ui.block.reward'), sortable: true,
+        },
       ]"
+    />
+    <base-pager
+      v-if="totalPagesValue > 1"
+      v-model="currentPage"
+      :total-pages="totalPagesValue"
     />
   </div>
 </template>
@@ -28,7 +39,13 @@ export default {
   name: 'Blocks',
   data: () => ({
     blocks: [],
+    currentPage: 1,
   }),
+  computed: {
+    rows() {
+      return this.blocks.length;
+    },
+  },
   async mounted() {
     this.SetLoader(true);
     const blocksRes = await this.$axios.get('/v1/blocks');
@@ -44,5 +61,22 @@ export default {
     &__container {
         @include container;
     }
+    &__header {
+      margin-top: 30px;
+    }
+    // &__table {
+    //    margin: 25px 0;
+    // }
+    &__grey {
+    color: $black500;
+    }
+}
+.page {
+  &__active {
+    color: $blue;
+  }
+  &__common {
+    color: $black600;
+  }
 }
 </style>
