@@ -360,7 +360,7 @@ export default {
   background: #F7F8FA;
   &__content {
     display: grid;
-    grid-template-rows: 72px 1fr 256px;
+    // grid-template-rows: 72px 1fr 256px;
     min-height: 100vh;
   }
   &__main {
@@ -914,9 +914,9 @@ export default {
     }
   }
   .template {
-    &__content {
-      grid-template-rows: 72px 1fr auto;
-    }
+    // &__content {
+    //   grid-template-rows: 72px 1fr auto;
+    // }
   }
   .footer {
     &__top {

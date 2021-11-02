@@ -25,7 +25,14 @@
     </div>
   </div>
 </template>
-
+<script>
+export default {
+  name: 'SearckFilter',
+  data: () => ({
+    search: '',
+  }),
+};
+</script>
 <style lang="scss" scoped>
 .fields {
     display: flex;

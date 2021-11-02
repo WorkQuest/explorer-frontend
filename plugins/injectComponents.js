@@ -9,6 +9,7 @@ import BaseCheckbox from '~/components/ui/BaseCheckbox';
 import BaseTable from '~/components/ui/BaseTable';
 import BasePager from '~/components/ui/BasePager';
 import SearchFilterField from '~/components/SearchFilterField/index.vue';
+import TableBlocks from '~/components/TableBlocks/index.vue';
 
 Vue.component('ctm-modal', CtmModal);
 Vue.component('base-btn', BaseButton);
@@ -19,3 +20,4 @@ Vue.component('loader', Loader);
 Vue.component('base-table', BaseTable);
 Vue.component('base-pager', BasePager);
 Vue.component('search-filter', SearchFilterField);
+Vue.component('table-blocks', TableBlocks);

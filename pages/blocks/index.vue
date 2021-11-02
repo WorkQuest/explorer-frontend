@@ -1,7 +1,7 @@
 <template>
   <div class="blocks blocks__container">
     <search-filter class="blocks__header" />
-    <base-table
+    <table-blocks
       class="blocks__table"
       :title="$t('ui.blocks')"
       :items="blocks"
@@ -42,8 +42,8 @@ export default {
     currentPage: 1,
   }),
   computed: {
-    rows() {
-      return this.blocks.length;
+    totalPagesValue() {
+      return this.setTotalPages(this.blocks.length, 20);
     },
   },
   async mounted() {
@@ -51,7 +51,6 @@ export default {
     const blocksRes = await this.$axios.get('/v1/blocks');
     this.blocks = blocksRes.data.result.blocks;
     this.SetLoader(false);
-    console.log(this.blocks);
   },
 };
 </script>

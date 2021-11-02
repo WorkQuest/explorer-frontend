@@ -6,18 +6,25 @@
     "latestTxs": "Latest Transactions",
     "allBlocks": "Show all blocks",
     "allTxs": "Show all transactions",
+    "back": "Back",
+    "timestamp": "Timestamp",
     "locals": {
       "en": "EN",
       "ru": "RU"
     },
     "block": {
+      "block": "Block",
       "blockNumber": "Block Number",
       "txsCount": "Transctions in the block",
       "age": "Age",
       "reward": "Block reward",
       "txn": "Txn",
       "gasUsed": "Gas Used",
-      "gasLimit": "Gas Limit"
+      "gasLimit": "Gas Limit",
+      "blockInfo": "Block info",
+      "inThisBlock": "in this block",
+      "size": "Size",
+      "hash": "Hash"
     },
     "tx": {
       "transaction": "Txn hash",
@@ -25,7 +32,9 @@
       "to": "To",
       "amount": "Amount",
       "value": "Value",
-      "fee": "Txn Fee"
+      "fee": "Txn Fee",
+      "txDetails": "Transaction Details",
+      "status": "Status"
     },
     "forms": {
       "searchPlaceholder": "Search by Address / Txn Hash / Block / Token",
