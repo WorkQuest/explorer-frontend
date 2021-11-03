@@ -54,7 +54,7 @@
   </div>
 </template>
 <script>
-import Item from '~/components/Item.vue';
+import Item from '~/components/InfoItem.vue';
 
 export default {
   name: 'Block',

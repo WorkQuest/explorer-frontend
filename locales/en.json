@@ -34,7 +34,10 @@
       "value": "Value",
       "fee": "Txn Fee",
       "txDetails": "Transaction Details",
-      "status": "Status"
+      "status": "Status",
+      "logs": "Transaction Receipt Event Logs",
+      "topics": "Topics",
+      "data": "Data"
     },
     "forms": {
       "searchPlaceholder": "Search by Address / Txn Hash / Block / Token",

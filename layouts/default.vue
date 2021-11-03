@@ -27,7 +27,7 @@
                   {{ $t('ui.blocks') }}
                 </nuxt-link>
                 <nuxt-link
-                  to="/transaсtions"
+                  to="/transactions"
                   class="header__link"
                   :exact-active-class="'header__link_active'"
                 >

@@ -99,12 +99,53 @@ updatedAt: "2021-08-12T06:55:43.576Z"
 value: "0"
           <Item /> -->
         </div>
+        <div
+          v-if="activeElement === 'txs__tab_logs'"
+          class="txs__logs logs"
+        >
+          <p class="logs__header">
+            {{ $t('ui.tx.logs') }}
+          </p>
+          <p class="logs__hash">
+            {{ $t('ui.tx.transaction') }}
+            <span class="logs__number">
+              {{ tx.logs[0].transactionHash }}
+            </span>
+          </p>
+          <div class="logs__content">
+            <p class="logs__title">
+              {{ $t('ui.tx.topics') }}
+            </p>
+            <div class="logs__info">
+              <div
+                v-for="(item, index) in tx.logs[0].topics"
+                :key="index"
+                class="logs__topic"
+              >
+                <p class="logs__index">
+                  {{ index }}
+                </p>
+                <p class="logs__item">
+                  {{ item }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="logs__content">
+            <p class="logs__title">
+              {{ $t('ui.tx.data') }}
+            </p>
+            <div class="logs__info">
+              {{ tx.logs[0].data }}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import Item from '~/components/Item.vue';
+import Item from '~/components/InfoItem.vue';
 
 export default {
   name: 'Block',
@@ -183,6 +224,10 @@ export default {
         // }
         // 183px
     }
+    &__logs {
+      margin-top: 25px;
+      height: 370px;
+    }
 }
 .columns {
     &__item {
@@ -209,5 +254,48 @@ export default {
             }
         }
     }
+}
+.logs {
+  &__header {
+    @include text-simple;
+    font-size: 20px;
+  }
+  &__hash {
+    @include text-simple;
+    font-weight: 600;
+    margin-top: 20px;
+  }
+  &__number {
+    @include text-simple;
+    color: $blue;
+    margin-left: 10px;
+  }
+  &__content {
+    display: flex;
+    margin: 15px 0 0 23px;
+  }
+  &__topic {
+    display: flex;
+  }
+  &__info {
+    margin-left: 10px;
+  }
+  &__title {
+    @include text-simple;
+    font-weight: 600;
+  }
+  &__index {
+    background: $black100;
+    color: $black600;
+    text-align: center;
+    border-radius: 3px;
+    width: 21px;
+    height: 21px;
+    margin: 0 10px 15px 0;
+    font-size: 12px;
+  }
+  &__item {
+
+  }
 }
 </style>
