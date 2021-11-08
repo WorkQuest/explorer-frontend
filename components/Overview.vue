@@ -15,7 +15,85 @@
       Token
     </div>
     <div class="overview__input">
-      placeholder
+      Placeholder
+      <span
+        class="icon-caret_down"
+        @click="openChoice"
+      />
     </div>
+    <ChoiceToken v-if="isChoosing" />
   </div>
 </template>
+<script>
+import ChoiceToken from '~/components/ChoiceToken.vue';
+
+export default {
+  name: 'Contract',
+  components: {
+    ChoiceToken,
+  },
+  data: () => ({
+    isChoosing: false,
+  }),
+  computed: {
+  },
+  async mounted() {
+    this.SetLoader(true);
+    this.SetLoader(false);
+  },
+  methods: {
+    openChoice() {
+      if (this.isChoosing) {
+        this.isChoosing = false;
+      } else {
+        this.isChoosing = true;
+      }
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.overview {
+  padding: 20px;
+  background: $white;
+  border-radius: 6px;
+  max-width: 578px;
+  &__header {
+    @include text-simple;
+    @include normal-font-size;
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  &__info {
+    @include text-simple;
+    @include normal-font-size;
+    margin-bottom: 15px;
+  }
+  &__title {
+    @include text-simple;
+    @include normal-font-size;
+    font-weight: 600;
+    margin-right: 10px;
+  }
+  &__token {
+    @include text-simple;
+    @include normal-font-size;
+    margin-bottom: 5px;
+  }
+  &__input {
+    @include text-simple;
+    @include normal-font-size;
+    padding: 11px 20px 11px 15px;
+    background: $black0;
+    border-radius: 6px;
+    color: $black200;
+  }
+}
+.icon-caret_down::before {
+  color: $blue;
+  font-size: 20px;
+  float: right;
+  cursor: pointer;
+}
+</style>
