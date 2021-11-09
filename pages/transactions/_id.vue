@@ -168,9 +168,7 @@ export default {
   },
   methods: {
     onClick(event) {
-      console.log(event);
       this.activeElement = event.target.className;
-      console.log(this.activeElement);
     },
   },
 };

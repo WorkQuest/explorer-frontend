@@ -1,6 +1,7 @@
 <template>
   <div class="tokens">
     <base-field
+      v-model="search"
       is-search="true"
       is-hide-error="true"
       placeholder="Search"
@@ -30,7 +31,10 @@
 
 <script>
 export default {
-
+  name: 'ChoiceToken',
+  data: () => ({
+    search: '',
+  }),
 };
 </script>
 
@@ -40,21 +44,21 @@ export default {
     box-shadow: 0px 47.1676px 61.4131px rgba(10, 27, 61, 0.078707), 0px 26.7219px 32.8344px rgba(10, 27, 61, 0.0629546), 0px 14.4955px 18.4067px rgba(10, 27, 61, 0.0598272), 0px 6.96225px 9.77565px rgba(10, 27, 61, 0.0584222), 0px 2.43911px 4.06787px rgba(10, 27, 61, 0.0492837);
     border-radius: 6px;
     max-height: 499px;
-    padding: 15px;
+    padding-top: 15px;
     &__search {
       background: $black0;
       border-radius: 6px;
-      margin-bottom: 10px;
+      margin: 15px 10px 15px;
     }
 }
 .token {
-    padding: 15px 0;
+    padding: 15px 0 15px 15px;
     border-bottom: 1px solid $black100;
     &:hover {
       background: $black0;
     }
     &-wrapper {
-      max-height: 428px;
+      height: 394px;
       overflow: scroll;
     }
     &__uniswap {

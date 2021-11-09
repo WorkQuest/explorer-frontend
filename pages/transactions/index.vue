@@ -267,8 +267,8 @@ export default {
   },
   async mounted() {
     this.SetLoader(true);
-    const blocksRes = await this.$axios.get('/v1/txs');
-    this.txs = blocksRes.data.result.txs;
+    const txsRes = await this.$axios.get('/v1/txs');
+    this.txs = txsRes.data.result.txs;
     this.SetLoader(false);
     console.log('TXS', this.txs);
   },

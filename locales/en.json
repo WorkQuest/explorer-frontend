@@ -37,12 +37,17 @@
       "status": "Status",
       "logs": "Transaction Receipt Event Logs",
       "topics": "Topics",
-      "data": "Data"
+      "data": "Data",
+      "token": "Token"
     },
     "forms": {
       "searchPlaceholder": "Search by Address / Txn Hash / Block / Token",
       "search": "Search",
       "filters": "All filters"
+    },
+    "token": {
+      "tracker": "Token Tracker",
+      "token": "Token"
     }
   },
   "home": {

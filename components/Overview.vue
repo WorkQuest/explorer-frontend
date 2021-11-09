@@ -21,26 +21,20 @@
         @click="openChoice"
       />
     </div>
-    <ChoiceToken v-if="isChoosing" />
+    <ChoiceToken class="overview__select" v-if="isChoosing" />
   </div>
 </template>
 <script>
 import ChoiceToken from '~/components/ChoiceToken.vue';
 
 export default {
-  name: 'Contract',
+  name: 'Overview',
   components: {
     ChoiceToken,
   },
   data: () => ({
     isChoosing: false,
   }),
-  computed: {
-  },
-  async mounted() {
-    this.SetLoader(true);
-    this.SetLoader(false);
-  },
   methods: {
     openChoice() {
       if (this.isChoosing) {
@@ -59,6 +53,7 @@ export default {
   background: $white;
   border-radius: 6px;
   max-width: 578px;
+  position: relative;
   &__header {
     @include text-simple;
     @include normal-font-size;
@@ -88,6 +83,12 @@ export default {
     background: $black0;
     border-radius: 6px;
     color: $black200;
+  }
+  &__select {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    left: 0;
   }
 }
 .icon-caret_down::before {

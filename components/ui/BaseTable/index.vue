@@ -155,12 +155,7 @@ export default {
     color: $black800;
   }
   &__link {
-    text-decoration: none;
-    color: $blue;
-    &:hover {
-      text-decoration: none;
-      color: $blue;
-    }
+    @include link;
   }
   &__success {
     color: $green;

@@ -11,6 +11,7 @@
       tbody-tr-class="table__row"
     >
       <template
+        v-if="isOnly"
         #table-caption
       >
         <div class="table__titles">
@@ -58,21 +59,19 @@
           {{ formatItem(el.item.toAddress, 9, 6) }}
         </nuxt-link>
       </template>
-      <!-- <template #cell(status)="el">
-        <span
-          v-if="el.item.status === 'Success'"
-          class="table__success"
-        >{{ el.item.status }}</span>
-        <span
-          v-else
-          class="table__failed"
-        >{{ el.item.status }}</span>
-      </template> -->
       <template #cell(value)="el">
         <span>{{ cutValueData(el.item.value) }} WUSD</span>
       </template>
       <template #cell(transaction_fee)="el">
         <span class="table__grey">{{ formatItem(el.item.gasUsed, 9, 6) }}</span>
+      </template>
+      <template #cell(token)="el">
+        <nuxt-link
+          class="table__link"
+          :to="`/token/${el.item.token}`"
+        >
+          {{ formatItem(el.item.token, 10, 6) }}
+        </nuxt-link>
       </template>
     </b-table>
   </div>
@@ -87,10 +86,6 @@ export default {
       type: String,
       default: '',
     },
-    headerlink: {
-      type: String,
-      default: '',
-    },
     items: {
       type: Array,
       default: () => [],
@@ -98,6 +93,10 @@ export default {
     fields: {
       type: Array,
       default: () => [],
+    },
+    isOnly: {
+      type: Boolean,
+      default: true,
     },
   },
   computed: {
