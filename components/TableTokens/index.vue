@@ -1,6 +1,7 @@
 <template>
   <div class="table">
     <b-table
+      class="token"
       :items="items"
       :fields="fields"
       borderless
@@ -23,7 +24,22 @@
         </p>
       </template>
       <template #cell(token)="el">
-        <span>{{ el.item.token }}</span>
+        <div class="token__header">
+          <img
+            :src="require(`~/assets/img/tokens/${el.item.token}.svg`)"
+            width="15"
+            class="token__image"
+          >
+          <nuxt-link
+            :to="{ path: `tokens/`+el.item.token, params: { token: el.item.token }}"
+            class="token__title table__link"
+          >
+            {{ tokens[`${el.item.token}`].name }} ({{ el.item.token }})
+          </nuxt-link>
+        </div>
+        <p class="token__description">
+          {{ tokens[`${el.item.token}`].description }}
+        </p>
       </template>
 
       <template #cell(volume)="el">
@@ -34,12 +50,20 @@
       <template #cell(holders)="el">
         <span>{{ el.item.holders }} </span>
       </template>
+      <template #cell(address)="el">
+        <nuxt-link
+          class="table__link"
+          :to="{ path: el.item.address }"
+          replace
+        >
+          {{ el.item.address }}
+        </nuxt-link>
+      </template>
     </b-table>
   </div>
 </template>
 
 <script>
-import BigNumber from 'bignumber.js';
 
 export default {
   props: {
@@ -55,79 +79,35 @@ export default {
       type: Array,
       default: () => [],
     },
+    tokens: {
+      type: Array,
+      default: () => [],
+    },
   },
   computed: {
   },
   methods: {
-    cutValueData(value) {
-      return new BigNumber(value).shiftedBy(-18).toString();
-    },
   },
 };
 </script>
 
 <style lang="scss">
-.table {
-  overflow-x: hidden;
-  font-size: 16px;
-  line-height: 130%;
-  background: #FFFFFF;
-  border-radius: 6px;
-  &__titles {
+.token {
+  &__header {
     display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 0 30px 0 20px;
   }
   &__title {
-    margin: 10px;
-    color: $black800;
-  }
-  &__link {
-    text-decoration: none;
-    color: $blue;
-    &:hover {
-      text-decoration: none;
-      color: $blue;
-    }
-  }
-  &__success {
-    color: $green;
-  }
-  &__failed {
-    color: $red;
-  }
-  &__grey {
-    color: $black500;
-    font-size: 14px;
-  }
-  &__blue {
-    color: $blue;
-  }
-  &__header {
     @include text-simple;
-    background: rgba(0, 131, 199, 0.1);
-    height: 27px;
-    line-height: 17px;
-    color: $blue;
-    font-style: normal;
+    @include normal-font-size;
+    margin: 5px;
+  }
+  &__description {
+    @include text-simple;
+    @include normal-font-size;
     font-size: 12px;
-    word-break: break-word;
-  }
-  &__row {
-    line-height: 40px;
-  }
-  @include _991 {
-    .table {
-      &__row {
-        font-size: 12px;
-      }
-      &__header {
-        font-size: 10px;
-      }
-    }
-  }
-  @include _767 {
+    color: $black300;
+    max-width: 273px;
+    margin-left: 22px;
   }
 }
 </style>

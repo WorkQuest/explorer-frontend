@@ -1,27 +1,55 @@
 <template>
   <div class="overview">
-    <p class="overview__header">
-      Overview
-    </p>
-    <p class="overview__info">
-      <span class="overview__title">Balance</span>
-      0.487487673208130346 WUSD
-    </p>
-    <p class="overview__info">
-      <span class="overview__title">WUSD Value</span>
-      $0.43 (@ $0.89/WUSD)
-    </p>
-    <div class="overview__token">
-      Token
+    <div
+      v-if="token !== ''"
+      class="overview-wrap"
+    >
+      <p class="overview__header">
+        Overview
+      </p>
+      <p class="overview__info">
+        <span class="overview__title">Max Total Supply</span>
+        30 910 401 959,97513 {{ token }}
+      </p>
+      <p class="overview__info">
+        <span class="overview__title">Holders</span>
+        3 321 050
+      </p>
+      <p class="overview__info">
+        <span class="overview__title">Transfers</span>
+        115 777 329
+      </p>
     </div>
-    <div class="overview__input">
-      Placeholder
-      <span
-        class="icon-caret_down"
-        @click="openChoice"
+    <div
+      v-else
+      class="overview-wrap"
+    >
+      <p class="overview__header">
+        Overview
+      </p>
+      <p class="overview__info">
+        <span class="overview__title">Balance</span>
+        0.487487673208130346 WUSD
+      </p>
+      <p class="overview__info">
+        <span class="overview__title">WUSD Value</span>
+        $0.43 (@ $0.89/WUSD)
+      </p>
+      <div class="overview__token">
+        Token
+      </div>
+      <div class="overview__input">
+        Placeholder
+        <span
+          class="icon-caret_down"
+          @click="openChoice"
+        />
+      </div>
+      <ChoiceToken
+        v-if="isChoosing"
+        class="overview__select"
       />
     </div>
-    <ChoiceToken class="overview__select" v-if="isChoosing" />
   </div>
 </template>
 <script>
@@ -31,6 +59,12 @@ export default {
   name: 'Overview',
   components: {
     ChoiceToken,
+  },
+  props: {
+    token: {
+      type: String,
+      default: '',
+    },
   },
   data: () => ({
     isChoosing: false,

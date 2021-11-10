@@ -47,7 +47,14 @@
     },
     "token": {
       "tracker": "Token Tracker",
-      "token": "Token"
+      "token": "Token",
+      "volume": "Volume (24H)",
+      "holders": "Holders",
+      "method": "Method",
+      "quantity": "Quantity",
+      "rank": "Rank",
+      "address": "Address",
+      "percentage": "Percentage"
     }
   },
   "home": {

@@ -1,9 +1,11 @@
 <template>
   <div class="tokens">
-    TOKENS
+    <search-filter class="tokens__search" />
     <TableTokens
+      class="tokens__table"
       :title="$t('ui.token.tracker')"
       :items="tracker"
+      :tokens="tokens"
       :fields="[
         {
           key: 'number', label: '#', sortable: true,
@@ -12,10 +14,10 @@
           key: 'token', label: this.$t('ui.token.token'), sortable: true,
         },
         {
-          key: 'volume', label: this.$t('ui.block.age'), sortable: true,
+          key: 'volume', label: this.$t('ui.token.volume'), sortable: true,
         },
         {
-          key: 'holders', label: this.$t('ui.tx.from'), sortable: true,
+          key: 'holders', label: this.$t('ui.token.holders'), sortable: true,
         },
       ]"
     />
@@ -49,12 +51,10 @@ export default {
     tokens: {
       USDT: {
         name: 'Tether USD',
-        symbol: '',
         description: 'Tether gives you the joint benefits of open blockchain technology and traditional currency by converting your cash into a stable digital currency equivalent.',
       },
       BUSD: {
         name: 'Binance USD',
-        symbol: '',
         description: 'Binance USD (BUSD) is a dollar-backed stablecoin issued and custodied by Paxos Trust Company, and regulated by the New York State Department of Financial Services. BUSD is available directly for sale 1:1 with USD on Paxos.com and will be listed for trading on Binance.',
       },
     },
@@ -70,3 +70,14 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.tokens {
+  &__search {
+    margin: 25px 0;
+  }
+  &__table {
+    @include container;
+  }
+}
+</style>
