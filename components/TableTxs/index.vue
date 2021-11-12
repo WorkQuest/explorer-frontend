@@ -44,7 +44,7 @@
       <template #cell(fromAddress)="el">
         <nuxt-link
           class="table__link"
-          to="'/account/+el.item.fromAddress'"
+          :to="'/address/'+el.item.fromAddress"
         >
           {{ formatItem(el.item.fromAddress, 9, 6) }}
         </nuxt-link>
@@ -54,7 +54,7 @@
         <nuxt-link
           v-if="el.item.toAddress"
           class="table__link"
-          to="'/account/+el.item.fromAddress'"
+          :to="'/address/'+el.item.toAddress"
         >
           {{ formatItem(el.item.toAddress, 9, 6) }}
         </nuxt-link>

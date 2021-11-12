@@ -28,27 +28,27 @@
       <div class="tables__menu">
         <span
           class="tables__tab_transfers"
-          :class="{tables__tab_active: activeElement === 'tables__tab_transfers'}"
+          :class="{tables__tab_active: activeTab === 'tables__tab_transfers'}"
           @click="onClick"
-        >Transfers</span>
+        >{{ $t('ui.token.transfers') }}</span>
         <span
           class="tables__tab_holders"
-          :class="{tables__tab_active: activeElement === 'tables__tab_holders'}"
+          :class="{tables__tab_active: activeTab === 'tables__tab_holders'}"
           @click="onClick"
-        >Holders</span>
+        >{{ $t('ui.token.holders') }}</span>
         <span
           class="tables__tab_info"
-          :class="{tables__tab_active: activeElement === 'tables__tab_info'}"
+          :class="{tables__tab_active: activeTab === 'tables__tab_info'}"
           @click="onClick"
-        >Info</span>
+        >{{ $t('ui.token.info') }}</span>
         <span
           class="tables__tab_contract"
-          :class="{tables__tab_active: activeElement === 'tables__tab_contract'}"
+          :class="{tables__tab_active: activeTab === 'tables__tab_contract'}"
           @click="onClick"
-        >Contract</span>
+        >{{ $t('ui.token.contract') }}</span>
       </div>
       <div
-        v-if="activeElement === 'tables__tab_transfers'"
+        v-if="activeTab === 'tables__tab_transfers'"
         class="tables__tf"
       >
         <TableTxs
@@ -83,7 +83,7 @@
         />
       </div>
       <div
-        v-if="activeElement === 'tables__tab_holders'"
+        v-if="activeTab === 'tables__tab_holders'"
         class="tables__holders"
       >
         <TableTokens
@@ -114,6 +114,125 @@
           :total-pages="totalPagesValue"
         />
       </div>
+      <div
+        v-if="activeTab === 'tables__tab_info'"
+        class="tables__info token-info"
+      >
+        <p class="token-info__title">
+          {{ $t('ui.token.overview') }}
+        </p>
+        <p class="token-info__description">
+          {{ $t('ui.token.tether') }}
+        </p>
+        <p class="token-info__title">
+          {{ $t('ui.token.market') }}
+        </p>
+        <p class="token-info__description">
+          <span class="token-info__subtitle">
+            {{ $t('ui.token.volume') }}
+          </span>
+          $ 44 215 188 907,00
+        </p>
+        <p class="token-info__description">
+          <span class="token-info__subtitle">
+            {{ $t('ui.token.capitalization') }}
+          </span>
+          $ 62 059 827 982,00
+        </p>
+        <p class="token-info__description">
+          <span class="token-info__subtitle">
+            {{ $t('ui.token.supply') }}
+          </span>
+          61 992 333 258.00 USDT
+        </p>
+      </div>
+      <div
+        v-if="activeTab === 'tables__tab_contract'"
+        class="tables__contract contract"
+      >
+        <div class="contract__wrap">
+          <p
+            class="name"
+            @click="onClickContract"
+          >
+            1. {{ $t('ui.token.name') }}
+            <span
+              v-if="activePoint === 'name'"
+              class="icon-chevron_up"
+            />
+            <span
+              v-else
+              class="icon-chevron_down"
+            />
+          </p>
+          <p
+            v-if="activePoint === 'name'"
+            class="contract__description"
+          >
+            some description
+          </p>
+        </div>
+        <div class="contract__wrap">
+          <p
+            class="deprecated"
+            @click="onClickContract"
+          >
+            2. {{ $t('ui.token.deprecated') }}
+            <span
+              v-if="activePoint === 'deprecated'"
+              class="icon-chevron_up"
+            />
+            <span
+              v-else
+              class="icon-chevron_down"
+            />
+          </p>
+          <p
+            v-if="activePoint === 'deprecated'"
+            class="contract__description"
+          >
+            False
+            <span class="contract__note">bool</span>
+          </p>
+        </div>
+        <div class="contract__wrap">
+          <p
+            class="balances"
+            @click="onClickContract"
+          >
+            3. {{ $t('ui.token.balances') }}
+            <span
+              v-if="activePoint === 'balances'"
+              class="icon-chevron_up"
+            />
+            <span
+              v-else
+              class="icon-chevron_down"
+            />
+          </p>
+          <div
+            v-if="activePoint === 'balances'"
+            class="contract__description"
+          >
+            <!-- validation observer -->
+            <base-field
+              v-model="address"
+              :placeholder="$t('ui.token.input')"
+              :label="$t('ui.token.input')"
+              rules="required"
+              mode="white"
+              labelcolor="black"
+            />
+            <base-btn
+              class="contract__submit"
+              mode="borderless-left"
+              :text="$t('ui.token.query')"
+            />
+            <!-- /validation observer -->
+            <span class="contract__note">uint256</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -133,7 +252,9 @@ export default {
   },
   data: () => ({
     params: '',
-    activeElement: 'tables__tab_transfers',
+    address: '',
+    activeTab: 'tables__tab_transfers',
+    activePoint: '',
     currentPage: 1,
     tokens: {
       USDT: {
@@ -182,9 +303,9 @@ export default {
   }),
   computed: {
     totalPagesValue() {
-      if (this.activeElement === 'tables__tab_transfers') {
+      if (this.activeTab === 'tables__tab_transfers') {
         return this.setTotalPages(this.transfers.length, 20);
-      } if (this.activeElement === 'tables__tab_holders') {
+      } if (this.activeTab === 'tables__tab_holders') {
         return this.setTotalPages(this.holders.length, 20);
       }
       return 1;
@@ -197,7 +318,16 @@ export default {
   },
   methods: {
     onClick(event) {
-      this.activeElement = event.target.className;
+      this.activeTab = event.target.className;
+    },
+    onClickContract(event) {
+      if (this.activePoint !== '') {
+        this.activePoint = '';
+      } else if (event.target.className === ('icon-chevron_down' || 'icon-chevron_up')) {
+        this.activePoint = event.path[1].className;
+      } else {
+        this.activePoint = event.target.className;
+      }
     },
   },
 };
@@ -231,7 +361,6 @@ export default {
   background: $white;
   border-radius: 6px;
   padding-top: 20px;
-  min-height: 450px;
   &__menu {
     margin: 0 0 27px 20px
   }
@@ -248,5 +377,54 @@ export default {
         border-bottom: 2px solid $blue;
     }
     }
+}
+.token-info {
+  padding: 0 0 10px 20px;
+  &__title {
+    @include text-simple;
+    @include normal-font-size;
+    font-weight: 600;
+    font-size: 18px;
+    margin: 10px 0;
+  }
+  &__subtitle {
+    @include text-simple;
+    @include normal-font-size;
+    font-weight: 500;
+  }
+  &__description {
+    @include text-simple;
+    @include normal-font-size;
+    margin-bottom: 10px;
+  }
+}
+.contract {
+  padding: 0 20px 20px 20px;
+  display: grid;
+  grid-gap: 15px;
+  &__wrap {
+    background: $black0;
+    border-radius: 5px;
+    padding: 20px;
+  }
+  &__description {
+    margin-top: 20px;
+  }
+  &__note {
+    color: $black500;
+  }
+  &__submit {
+    width: 120px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+}
+.name, .deprecated, .balances {
+  cursor: pointer;
+}
+.icon-chevron_up::before, .icon-chevron_down::before {
+  color: $blue;
+  float: right;
 }
 </style>

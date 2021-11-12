@@ -2,10 +2,12 @@
   <div class="txs">
     <search-filter class="txs__search" />
     <div class="txs__content">
-      <div class="txs__back">
+      <nuxt-link
+        to="/transactions"
+        class="txs__back">
         <span class="icon-short_left" />
         {{ $t('ui.back') }}
-      </div>
+      </nuxt-link>
       <h3 class="txs__title">
         {{ $t('ui.tx.txDetails') }}
       </h3>
@@ -15,12 +17,12 @@
             class="txs__tab_overview"
             :class="{txs__tab_active: activeElement === 'txs__tab_overview'}"
             @click="onClick"
-          >Overview</span>
+          >{{ $t('ui.token.overview') }}</span>
           <span
             class="txs__tab_logs"
             :class="{txs__tab_active: activeElement === 'txs__tab_logs'}"
             @click="onClick"
-          >Logs</span>
+          >{{ $t('ui.token.logs') }}</span>
         </div>
         <div
           v-if="activeElement === 'txs__tab_overview'"
@@ -81,23 +83,6 @@
             :title="$t('ui.block.gasLimit')"
             :info="tx.gasLimit"
           />
-          <!-- blockNumber: 15433
-contractAddress: "0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe"
-createdAt: "2021-08-12T06:55:43.569Z"
-fromAddress: "0xe24f99419d788003c0d5212f05f47b1572cdc38a"
-gasLimit: null
-gasPrice: "10000000000"
-gasUsed: "43494"
-id: "0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b8158"
-input: "0xa9059cbb00000000000000000000000084cb5dc70dca8c9522c04cfffaee5a35000f6b72000000000000000000000000000000000000000000295be96e64066972000000"
-logs: Array(1)
-status: 1
-timestamp: "2021-08-12T04:45:53.000Z"
-toAddress: "0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe"
-tokenId: null
-updatedAt: "2021-08-12T06:55:43.576Z"
-value: "0"
-          <Item /> -->
         </div>
         <div
           v-if="activeElement === 'txs__tab_logs'"
@@ -163,7 +148,6 @@ export default {
     const txsRes = await this.$axios.get('/v1/txs');
     // eslint-disable-next-line prefer-destructuring
     this.tx = txsRes.data.result.txs[0];
-    console.log(this.tx);
     this.SetLoader(false);
   },
   methods: {
@@ -182,9 +166,13 @@ export default {
     &__back {
         @include text-simple;
         @include normal-font-size;
+        text-decoration: none;
         font-size: 18px;
         color: $black600;
         cursor: pointer;
+        &:hover {
+          text-decoration: none;
+        }
     }
     &__title {
         @include text-simple;
@@ -216,11 +204,6 @@ export default {
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
         grid-gap: 23px;
         margin-top: 25px;
-        // &:last-child {
-        //   grid-column-start: 1;
-        //   grid-column-end: 2;
-        // }
-        // 183px
     }
     &__logs {
       margin-top: 25px;
@@ -295,5 +278,12 @@ export default {
   &__item {
 
   }
+}
+@include _991 {
+.txs {
+  &__columns {
+    grid-gap: 5px;
+  }
+}
 }
 </style>

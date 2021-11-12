@@ -2,19 +2,28 @@
   <div class="block">
     <search-filter class="block__search" />
     <div class="block__content">
-      <div class="block__back">
+      <nuxt-link
+        to="/blocks"
+        class="block__back"
+      >
         <span class="icon-short_left" />
         {{ $t('ui.back') }}
-      </div>
+      </nuxt-link>
       <h3 class="block__title">
         {{ $t('ui.block.blockInfo') }}
       </h3>
       <div class="block__info">
         <div class="block__number-field">
-          <span class="icon-caret_left" />
+          <span
+            class="icon-caret_left"
+            @click="turnLeft"
+          />
           <span class="block__block">{{ $t('ui.block.block') }}</span>
           <span class="block__number">#{{ block.id }}</span>
-          <span class="icon-caret_right" />
+          <span
+            class="icon-caret_right"
+            @click="turnRight"
+          />
         </div>
         <div class="block__columns">
           <Item
@@ -62,6 +71,7 @@ export default {
     Item,
   },
   data: () => ({
+    blocks: {},
     block: {},
   }),
   computed: {
@@ -70,8 +80,20 @@ export default {
     this.SetLoader(true);
     const blocksRes = await this.$axios.get('/v1/blocks');
     // eslint-disable-next-line prefer-destructuring
-    this.block = blocksRes.data.result.blocks[0];
+    this.blocks = blocksRes.data.result.blocks;
+    // eslint-disable-next-line prefer-destructuring
+    this.block = this.blocks[0];
     this.SetLoader(false);
+  },
+  methods: {
+    turnLeft() {
+      // eslint-disable-next-line prefer-destructuring
+      this.block = this.blocks[0];
+    },
+    turnRight() {
+      // eslint-disable-next-line prefer-destructuring
+      this.block = this.blocks[1];
+    },
   },
 };
 </script>
@@ -79,14 +101,18 @@ export default {
 .block {
     @include container;
     &__search {
-        margin: 30px 0;
+        margin: 25px 0;
     }
     &__back {
         @include text-simple;
         @include normal-font-size;
+        text-decoration: none;
         font-size: 18px;
         color: $black600;
         cursor: pointer;
+        &:hover {
+          text-decoration: none;
+        }
     }
     &__title {
         @include text-simple;
@@ -131,5 +157,12 @@ export default {
     border: 1px solid $black0;
     border-radius: 6px;
     cursor: pointer;
+}
+@include _991 {
+  .block {
+    &__columns {
+      grid-template-columns: 220px 220px 220px;
+    }
+  }
 }
 </style>

@@ -53,8 +53,7 @@
       <template #cell(address)="el">
         <nuxt-link
           class="table__link"
-          :to="{ path: el.item.address }"
-          replace
+          :to="{ path: '/address/'+el.item.address }"
         >
           {{ el.item.address }}
         </nuxt-link>
@@ -80,8 +79,8 @@ export default {
       default: () => [],
     },
     tokens: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
   },
   computed: {

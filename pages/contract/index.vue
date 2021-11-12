@@ -3,7 +3,7 @@
     <search-filter class="contract__search" />
     <div class="contract__header">
       <h4 class="contract__title">
-        Contract
+        {{ $t('ui.token.contract') }}
       </h4>
       <p
         class="contract__contract"
@@ -79,7 +79,6 @@
       >
         <TableTxs
           class="tables__table"
-          :title="$t('ui.txs')"
           :is-only="false"
           :items="internal"
           :fields="[
@@ -112,7 +111,6 @@
       >
         <TableTxs
           class="tables__table"
-          :title="$t('ui.txs')"
           :is-only="false"
           :items="erc"
           :fields="[

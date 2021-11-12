@@ -90,23 +90,11 @@
           class="table__failed"
         >{{ el.item.status }}</span>
       </template>
-      <!-- <template #cell(block)="el">
-        <a :href="`#${el.item.block}`">{{ el.item.block }}</a>
-      </template> -->
-      <!-- <template #cell(transaction_fee)="el">
-        <span class="table__grey">{{ formatItem(el.item.transaction_fee, 9, 6) }}</span>
-      </template> -->
     </b-table>
   </div>
 </template>
 
 <script>
-// export function formatTxHash(hash) {
-//   return `${hash.slice(0, 5)}...${hash.slice(hash.length - 6, hash.length)}`;
-// }
-// export function formatAddress(address) {
-//   return `${address.substring(0, 5)}...${address.substring(address.length - 6, address.length)}`;
-// }
 export default {
   props: {
     title: {
@@ -178,8 +166,19 @@ export default {
     color: $blue;
     word-break: break-word;
   }
-  &__row {
-    // line-height: 40px;
+}
+
+@include _991 {
+  .table {
+    &__header, &__row {
+      font-size: 10px;
+    }
+    &__link {
+      font-size: 12px;
+    }
+    &__grey {
+      font-size: 10px;
+    }
   }
 }
 </style>

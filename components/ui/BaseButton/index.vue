@@ -225,7 +225,6 @@ export default {
     }
   }
 }
-
 @include _575 {
   .base-btn {
     font-size: 14px;

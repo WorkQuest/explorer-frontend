@@ -104,7 +104,6 @@ export default {
     ],
   }),
   created() {
-    // this.$router.push('/');
   },
   async mounted() {
     this.SetLoader(true);
@@ -117,7 +116,6 @@ export default {
     this.txs = txsRes.data.result.txs;
     this.txsCount = txsRes.data.result.count;
     this.SetLoader(false);
-    console.log('BLOCKS', this.txs);
   },
 };
 </script>

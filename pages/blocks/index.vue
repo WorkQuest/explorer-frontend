@@ -1,6 +1,6 @@
 <template>
   <div class="blocks blocks__container">
-    <search-filter class="blocks__header" />
+    <search-filter class="blocks__search" />
     <table-blocks
       class="blocks__table"
       :title="$t('ui.blocks')"
@@ -60,22 +60,12 @@ export default {
     &__container {
         @include container;
     }
-    &__header {
-      margin-top: 30px;
+    &__search {
+      margin: 25px 0;
     }
-    // &__table {
-    //    margin: 25px 0;
-    // }
     &__grey {
     color: $black500;
     }
 }
-.page {
-  &__active {
-    color: $blue;
-  }
-  &__common {
-    color: $black600;
-  }
-}
+
 </style>

@@ -9,30 +9,32 @@
     >
       <nuxt-link
         class="item__link"
-        :to="`blocks/${info}`"
+        :to="`/blocks/${info}`"
       >
         {{ info }}
       </nuxt-link>
     </p>
     <p
-      @click="pushToTxs"
       v-else-if="item === 'transaction'"
       class="item__link"
     >
-    <!-- site/register?plan=private
-    etherscan.io/txs?block=13542487 -->
-      <!-- <nuxt-link
+      <nuxt-link
         class="item__link"
-        :to="{ path: 'transaction', query: { block: 13542487 }}"
-      > -->
+        :to="{ path: '/transactions', query: { block: 13542487 }}"
+      >
         {{ info }} {{ $t('ui.txs') }}
-      <!-- </nuxt-link> -->
+      </nuxt-link>
     </p>
     <p
       v-else-if="item === 'address'"
       class="item__info item__info_blue"
     >
-      {{ info }}
+      <nuxt-link
+        class="item__link"
+        :to="{ path: '/address/'+info }"
+      >
+        {{ info }}
+      </nuxt-link>
       <span class="icon-copy" />
     </p>
     <p
@@ -74,10 +76,6 @@ export default {
     },
   },
   methods: {
-    pushToTxs() {
-      // this.$router.go(-1);
-      this.$router.replace('/transactions');
-    },
   },
 };
 </script>
@@ -115,7 +113,7 @@ export default {
     }
     &__link {
       @include text-simple;
-      cursor: pointer;
+      @include link;
       color: $blue;
     }
 }

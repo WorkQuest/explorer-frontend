@@ -1,13 +1,19 @@
 {
   "ui": {
+    "home": "Home",
     "txs": "Transactions",
     "blocks": "Blocks",
+    "transfers": "View ERC-20 Transfers",
+    "tokens": "ERC20 Top Tokens",
     "latestBlocks": "Latest Blocks",
     "latestTxs": "Latest Transactions",
     "allBlocks": "Show all blocks",
     "allTxs": "Show all transactions",
     "back": "Back",
+    "rights": "All rights reserved",
     "timestamp": "Timestamp",
+    "terms": "Terms and conditions",
+    "privacy": "Privacy policy",
     "locals": {
       "en": "EN",
       "ru": "RU"
@@ -38,7 +44,10 @@
       "logs": "Transaction Receipt Event Logs",
       "topics": "Topics",
       "data": "Data",
-      "token": "Token"
+      "token": "Token",
+      "forBlock": "For Block",
+      "total": "A total of",
+      "found": "transactions found"
     },
     "forms": {
       "searchPlaceholder": "Search by Address / Txn Hash / Block / Token",
@@ -54,7 +63,21 @@
       "quantity": "Quantity",
       "rank": "Rank",
       "address": "Address",
-      "percentage": "Percentage"
+      "percentage": "Percentage",
+      "transfers": "Transfers",
+      "info": "Info",
+      "contract": "Contract",
+      "overview": "Overview",
+      "logs": "Logs",
+      "tether": "Tether gives you the joint benefits of open blockchain technology and traditional currency by converting your cash into a stable digital currency equivalent.",
+      "market": "Market",
+      "capitalization": "Market Capitalization",
+      "supply": "Circulating Supply",
+      "name": "Name",
+      "deprecated": "Deprecated",
+      "balances": "Balances",
+      "input": "<input> (address)",
+      "query": "Query"
     }
   },
   "home": {

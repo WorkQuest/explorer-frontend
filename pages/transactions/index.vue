@@ -1,39 +1,64 @@
 <template>
-  <div class="transactions transactions__container">
-    <search-filter class="transactions__header" />
-    <TableTxs
-      class="transactions__table"
-      :title="$t('ui.txs')"
-      :items="txs"
-      :fields="[
-        {
-          key: 'id', label: this.$t('ui.tx.transaction'), sortable: true,
-        },
-        {
-          key: 'blockNumber', label: this.$t('ui.block.blockNumber'), sortable: true,
-        },
-        {
-          key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
-        },
-        {
-          key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
-        },
-        {
-          key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
-        },
-        {
-          key: 'value', label: this.$t('ui.tx.value'), sortable: true,
-        },
-        {
-          key: 'gasUsed', label: this.$t('ui.tx.fee'), sortable: true,
-        }
-      ]"
-    />
-    <base-pager
-      v-if="totalPagesValue > 1"
-      v-model="currentPage"
-      :total-pages="totalPagesValue"
-    />
+  <div class="transactions">
+    <search-filter class="transactions__search" />
+    <div class="transactions__wrap">
+      <div
+        v-if="query"
+        class="transactions__header"
+      >
+        <h5 class="transactions__title">
+          {{ $t('ui.tx.total') }} 406 {{ $t('ui.tx.found') }}
+        </h5>
+        <p class="transactions__block">
+          {{ $t('ui.tx.forBlock') }}
+          <nuxt-link
+            class="transactions__link"
+            :to="`/blocks/`+query"
+          >
+            {{ query }}
+          </nuxt-link>
+        </p>
+      </div>
+      <p
+        v-else
+        class="transactions__header"
+      >
+        {{ $t('ui.txs') }}
+      </p>
+      <TableTxs
+        class="transactions__table"
+        :is-only="false"
+        :items="txs"
+        :fields="[
+          {
+            key: 'id', label: this.$t('ui.tx.transaction'), sortable: true,
+          },
+          {
+            key: 'blockNumber', label: this.$t('ui.block.blockNumber'), sortable: true,
+          },
+          {
+            key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
+          },
+          {
+            key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
+          },
+          {
+            key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
+          },
+          {
+            key: 'value', label: this.$t('ui.tx.value'), sortable: true,
+          },
+          {
+            key: 'gasUsed', label: this.$t('ui.tx.fee'), sortable: true,
+          }
+        ]"
+      />
+      <base-pager
+        v-if="totalPagesValue > 1"
+        v-model="currentPage"
+        :total-pages="totalPagesValue"
+      />
+    </div>
   </div>
 </template>
 <script>
@@ -45,220 +70,9 @@ export default {
     TableTxs,
   },
   data: () => ({
-    // txs: [
-    //   {
-    //     id: 17102304,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b8158',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.06646,
-    //     transactionFee: '0.00012718',
-    //     symbol: 'BUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102304,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.07746,
-    //     transactionFee: '0.00012719',
-    //     symbol: 'WUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102305,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.07749,
-    //     transactionFee: '0.00012712',
-    //     symbol: 'WUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102304,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b8158',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.06646,
-    //     transactionFee: '0.00012718',
-    //     symbol: 'BUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102304,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.07746,
-    //     transactionFee: '0.00012719',
-    //     symbol: 'WUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102305,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.07749,
-    //     transactionFee: '0.00012712',
-    //     symbol: 'WUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102304,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b8158',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.06646,
-    //     transactionFee: '0.00012718',
-    //     symbol: 'BUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102304,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.07746,
-    //     transactionFee: '0.00012719',
-    //     symbol: 'WUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102305,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.07749,
-    //     transactionFee: '0.00012712',
-    //     symbol: 'WUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102304,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b8158',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.06646,
-    //     transactionFee: '0.00012718',
-    //     symbol: 'BUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102304,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.07746,
-    //     transactionFee: '0.00012719',
-    //     symbol: 'WUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102305,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.07749,
-    //     transactionFee: '0.00012712',
-    //     symbol: 'WUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102304,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b8158',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.06646,
-    //     transactionFee: '0.00012718',
-    //     symbol: 'BUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102304,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.07746,
-    //     transactionFee: '0.00012719',
-    //     symbol: 'WUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102305,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.07749,
-    //     transactionFee: '0.00012712',
-    //     symbol: 'WUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102304,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b8158',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.06646,
-    //     transactionFee: '0.00012718',
-    //     symbol: 'BUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102304,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.07746,
-    //     transactionFee: '0.00012719',
-    //     symbol: 'WUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102305,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.07749,
-    //     transactionFee: '0.00012712',
-    //     symbol: 'WUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102304,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b8158',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.06646,
-    //     transactionFee: '0.00012718',
-    //     symbol: 'BUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102304,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.07746,
-    //     transactionFee: '0.00012719',
-    //     symbol: 'WUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    //   {
-    //     id: 17102305,
-    //     hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-    //     fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-    //     toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-    //     value: 0.07749,
-    //     transactionFee: '0.00012712',
-    //     symbol: 'WUSD',
-    //     timestamp: '10 secs ago',
-    //   },
-    // ],
     currentPage: 1,
     txs: [],
+    query: '',
   }),
   computed: {
     totalPagesValue() {
@@ -269,25 +83,43 @@ export default {
     this.SetLoader(true);
     const txsRes = await this.$axios.get('/v1/txs');
     this.txs = txsRes.data.result.txs;
+    this.query = this.$route.query.block;
     this.SetLoader(false);
-    console.log('TXS', this.txs);
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .transactions {
-    &__container {
-        @include container;
+    @include container;
+    &__search {
+      margin: 25px 0;
     }
     &__header {
-      margin-top: 30px;
+      padding: 20px 0 0 20px;
+    }
+    &__title {
+      @include text-simple;
+      @include normal-font-size;
+    }
+    &__block {
+      @include text-simple;
+      @include normal-font-size;
+      color: $black300;
+      font-size: 14px;
+    }
+    &__wrap {
+      background: $white;
+      border-radius: 6px;
     }
     &__table {
        margin: 25px 0;
     }
     &__grey {
     color: $black500;
+    }
+    &__link {
+      @include link;
     }
 }
 .page {
@@ -296,6 +128,10 @@ export default {
   }
   &__common {
     color: $black600;
+  }
+}
+@include _991 {
+  .transactions {
   }
 }
 </style>
