@@ -6,7 +6,7 @@
       borderless
       thead-class="table__header"
       caption-top
-      sort-icon-left
+      sort-icon-right
       :responsive="true"
       tbody-tr-class="table__row"
     >
