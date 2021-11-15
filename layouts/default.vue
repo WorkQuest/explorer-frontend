@@ -61,32 +61,29 @@
                 class="header__button header__button_locale"
                 @click="showLocale()"
               >
-                {{ $t('ui.locals.'+this.$i18n.locale) }}
+                {{ currentLocale.toUpperCase() }}
                 <span class="icon-caret_down" />
                 <transition name="fade">
                   <div
                     v-if="isShowLocale"
                     class="locale"
                   >
-                    <div class="locale__items">
-                      <div class="locale__item">
+                    <div
+                      v-for="(item, i) in locales"
+                      :key="i"
+                      class="locale__container"
+                    >
+                      <div
+                        class="locale__items"
+                        @click="setLocale(item)"
+                      >
                         <img
-                          src="/img/app/en.svg"
-                          alt="EN"
+                          :src="`/img/app/${item}.svg`"
+                          :alt="item"
                           class="locale__icon"
                         >
                         <div class="locale__text">
-                          {{ $t('ui.locals.en') }}
-                        </div>
-                      </div>
-                      <div class="locale__item">
-                        <img
-                          src="/img/app/ru.svg"
-                          alt="RU"
-                          class="locale__icon"
-                        >
-                        <div class="locale__text">
-                          {{ $t('ui.locals.ru') }}
+                          {{ item.toUpperCase() }}
                         </div>
                       </div>
                     </div>
@@ -134,6 +131,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import moment from 'moment';
 import ClickOutside from 'vue-click-outside';
 
 export default {
@@ -152,12 +150,19 @@ export default {
       isShowLocale: false,
       isMobileMenu: false,
       isNotFlexContainer: true,
+      currentLocale: '',
+      locales: [],
     };
   },
   computed: {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
     }),
+  },
+  mounted() {
+    this.currentLocale = this.$i18n.locale;
+    this.locales = this.$i18n.locales;
+    moment.locale(this.currentLocale);
   },
   methods: {
     toRoute(path) {
@@ -234,6 +239,9 @@ export default {
       this.isShowNotify = false;
       this.isShowAdditionalMenu = false;
       this.isShowLocale = false;
+    },
+    setLocale(item) {
+      this.currentLocale = item;
     },
   },
 };
@@ -792,8 +800,7 @@ export default {
   &__items {
     padding: 10px 15px;
     display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: 15px;
+    grid-template-columns: 1fr 1fr;
   }
   &__item {
     display: grid;

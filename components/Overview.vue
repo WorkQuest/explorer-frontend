@@ -83,11 +83,13 @@ export default {
 
 <style lang="scss" scoped>
 .overview {
-  padding: 20px;
   background: $white;
   border-radius: 6px;
   max-width: 578px;
-  position: relative;
+  &-wrap {
+    margin: 20px;
+    position: relative;
+  }
   &__header {
     @include text-simple;
     @include normal-font-size;

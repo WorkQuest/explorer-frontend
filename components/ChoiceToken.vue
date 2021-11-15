@@ -59,7 +59,8 @@ export default {
     }
     &-wrapper {
       height: 394px;
-      overflow: scroll;
+      overflow-y: scroll;
+      overflow-x: hidden;
     }
     &__uniswap {
         @include text-simple;

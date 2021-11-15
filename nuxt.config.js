@@ -1,4 +1,5 @@
 import localeEn from './locales/en.json';
+import localeRu from './locales/ru.json';
 
 require('dotenv').config();
 
@@ -32,6 +33,7 @@ export default {
     '@nuxtjs/eslint-module',
     '@nuxtjs/dotenv',
     '@nuxtjs/color-mode',
+    '@nuxtjs/moment',
   ],
   styleResources: {
     scss: ['./assets/scss/resources.scss'],
@@ -56,12 +58,15 @@ export default {
   },
   i18n: {
     locales: ['en', 'ru'],
+    fallbackLocale: 'en',
     defaultLocale: 'en',
     strategy: 'no_prefix',
     vueI18n: {
       messages: {
         en: localeEn,
+        ru: localeRu,
       },
+      silentFallbackWarn: true,
     },
     detectBrowserLanguage: {
       useCookie: true,
@@ -69,6 +74,11 @@ export default {
       alwaysRedirect: true,
     },
   },
+  moment: {
+    defaultLocale: 'en',
+    locales: ['ru'],
+  },
   env: {
+    BASE_URL: process.env.BASE_URL,
   },
 };
