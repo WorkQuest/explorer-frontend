@@ -47,6 +47,12 @@ export default {
         volume: 43369072177.00,
         holders: 3320603,
       },
+      {
+        number: 3,
+        token: 'GHST',
+        volume: 43369072179.00,
+        holders: 3320600,
+      },
     ],
     tokens: {
       USDT: {
@@ -56,6 +62,10 @@ export default {
       BUSD: {
         name: 'Binance USD',
         description: 'Binance USD (BUSD) is a dollar-backed stablecoin issued and custodied by Paxos Trust Company, and regulated by the New York State Department of Financial Services. BUSD is available directly for sale 1:1 with USD on Paxos.com and will be listed for trading on Binance.',
+      },
+      GHST: {
+        name: 'Aavegotchi Ghost Token',
+        description: 'Aavegotchis are crypto-collectibles living on the Ethereum blockchain, backed by the ERC721 standard used in popular blockchain games. $GHST is the official utility token of the Aavegotchi ecosystem and can be used to purchase portals, wearables, and consumables.',
       },
     },
   }),

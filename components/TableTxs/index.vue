@@ -68,9 +68,9 @@
       <template #cell(token)="el">
         <nuxt-link
           class="table__link"
-          :to="`/tokens/${el.item.token}`"
+          :to="{ path: `tokens/`+el.item.token, params: { token: el.item.token }}"
         >
-          {{ formatItem(el.item.token, 10, 6) }}
+          {{ formatItem(tokens[`${el.item.token}`].name, 10, 0) }} ({{ el.item.token }})
         </nuxt-link>
       </template>
     </b-table>
@@ -97,6 +97,10 @@ export default {
     isOnly: {
       type: Boolean,
       default: true,
+    },
+    tokens: {
+      type: Object,
+      default: () => {},
     },
   },
   computed: {

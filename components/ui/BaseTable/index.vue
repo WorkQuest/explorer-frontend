@@ -27,7 +27,7 @@
       <template #cell(id)="el">
         <nuxt-link
           class="table__link"
-          :to="`#${el.item.id}`"
+          :to="`/blocks/${el.item.id}`"
         >
           {{ el.item.id }}
         </nuxt-link>
@@ -42,7 +42,7 @@
       <template #cell(txsCount)="el">
         <nuxt-link
           class="table__link"
-          :to="'/account/+el.item.fromAddress'"
+          :to="{ path: '/transactions', query: { block: 13542487 }}"
         >
           {{ el.item.txsCount }} txns
         </nuxt-link>
@@ -55,7 +55,7 @@
       <template #cell(hash)="el">
         <nuxt-link
           class="table__link"
-          :to="`#${el.item.hash}`"
+          :to="`/transactions/${el.item.hash}`"
         >
           {{ formatItem(el.item.hash, 9, 6) }}
         </nuxt-link>
@@ -64,7 +64,7 @@
       <template #cell(fromAddress)="el">
         <nuxt-link
           class="table__link"
-          :to="'/account/+el.item.fromAddress'"
+          :to="`/address/${el.item.fromAddress}`"
         >
           {{ formatItem(el.item.fromAddress, 9, 6) }}
         </nuxt-link>
@@ -72,7 +72,7 @@
       <template #cell(toAddress)="el">
         <nuxt-link
           class="table__link"
-          :to="'/account/+el.item.fromAddress'"
+          :to="`/address/${el.item.toAddress}`"
         >
           {{ formatItem(el.item.toAddress, 9, 6) }}
         </nuxt-link>

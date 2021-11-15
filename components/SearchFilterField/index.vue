@@ -27,7 +27,7 @@
 </template>
 <script>
 export default {
-  name: 'SearckFilter',
+  name: 'SearchFilter',
   data: () => ({
     search: '',
   }),

@@ -22,17 +22,17 @@
           class="tables__tab_txs"
           :class="{tables__tab_active: activeElement === 'tables__tab_txs'}"
           @click="onClick"
-        >Transactions</span>
+        >{{ $t('ui.txs') }}</span>
         <span
           class="tables__tab_internal"
           :class="{tables__tab_active: activeElement === 'tables__tab_internal'}"
           @click="onClick"
-        >Internal Txns</span>
+        >{{ $t('ui.token.internal') }}</span>
         <span
           class="tables__tab_erc"
           :class="{tables__tab_active: activeElement === 'tables__tab_erc'}"
           @click="onClick"
-        >ERC-20 Token Txns</span>
+        >ERC-20 {{ $t('ui.token.tokensTxns') }}</span>
       </div>
       <div
         v-if="activeElement === 'tables__tab_txs'"
@@ -130,7 +130,7 @@
               key: 'value', label: this.$t('ui.tx.value'), sortable: true,
             },
             {
-              key: 'token', label: this.$t('ui.tx.token'), sortable: true,
+              key: 'token', label: this.$t('ui.token.token'), sortable: true,
             },
           ]"
         />

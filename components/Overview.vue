@@ -5,18 +5,18 @@
       class="overview-wrap"
     >
       <p class="overview__header">
-        Overview
+        {{ $t('ui.token.overview') }}
       </p>
       <p class="overview__info">
-        <span class="overview__title">Max Total Supply</span>
+        <span class="overview__title">{{ $t('ui.token.maxSupply') }}</span>
         30 910 401 959,97513 {{ token }}
       </p>
       <p class="overview__info">
-        <span class="overview__title">Holders</span>
+        <span class="overview__title">{{ $t('ui.token.holders') }}</span>
         3 321 050
       </p>
       <p class="overview__info">
-        <span class="overview__title">Transfers</span>
+        <span class="overview__title">{{ $t('ui.token.transfers') }}</span>
         115 777 329
       </p>
     </div>
@@ -25,21 +25,21 @@
       class="overview-wrap"
     >
       <p class="overview__header">
-        Overview
+        {{ $t('ui.token.overview') }}
       </p>
       <p class="overview__info">
-        <span class="overview__title">Balance</span>
+        <span class="overview__title">{{ $t('ui.token.balance') }}</span>
         0.487487673208130346 WUSD
       </p>
       <p class="overview__info">
-        <span class="overview__title">WUSD Value</span>
+        <span class="overview__title">WUSD {{ $t('ui.tx.value') }}</span>
         $0.43 (@ $0.89/WUSD)
       </p>
       <div class="overview__token">
-        Token
+        {{ $t('ui.token.token') }}
       </div>
       <div class="overview__input">
-        Placeholder
+        {{ $t('ui.token.placeholder') }}
         <span
           class="icon-caret_down"
           @click="openChoice"
