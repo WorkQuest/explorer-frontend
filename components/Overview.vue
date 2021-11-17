@@ -79,11 +79,7 @@ export default {
   methods: {
     toggleChoice() {
       this.isChoosing = !this.isChoosing;
-      if (this.isChoosing === true) {
-        document.querySelector('.primary').classList.add('modal-active');
-        return;
-      }
-      document.querySelector('.primary').classList.remove('modal-active');
+      document.querySelector('.primary').classList.toggle('modal-active');
     },
     hideChoice() {
       this.isChoosing = false;
