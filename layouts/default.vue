@@ -40,6 +40,7 @@
                 >
                   {{ $t('ui.txs') }}
                 </nuxt-link>
+                <p class="header__separator" />
                 <nuxt-link
                   to="/transfers"
                   class="header__link"
@@ -851,10 +852,6 @@ export default {
     @include link;
   }
 }
-@include _1700 {}
-@include _1600 {}
-@include _1500 {}
-@include _1300 {}
 @include _1199 {
   .ctm-menu {
     &__toggle {
@@ -887,13 +884,40 @@ export default {
 }
 @include _767 {
   .header {
+    &__logo {
+      margin-bottom: 50px;
+      span {
+        font-size: 16px;
+      }
+      img {
+        width: 25px;
+      }
+    }
     &__left {
       grid-template-columns: 1fr;
       grid-gap: 35px;
+      background: $white;
+      padding: 23px 16px;
       position: absolute;
       left: 0;
       top: 0;
     }
+    &__links {
+      flex-direction: column;
+      align-items: flex-start;
+      width: 213px;
+    }
+    &__separator {
+      height: 1px;
+      background: $black100;
+      width: 100%;
+      display: block;
+    }
+  }
+  .footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
   }
 }
 @include _575 {
