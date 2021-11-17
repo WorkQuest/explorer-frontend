@@ -31,6 +31,14 @@
       v-model="currentPage"
       :total-pages="totalPagesValue"
     />
+    <!-- mobile -->
+    <base-field
+          v-model="search"
+          class="blocks__search_mobile"
+          :is-search="true"
+          :is-hide-error="true"
+          :placeholder="$t('ui.forms.searchPlaceholder')"
+        />
   </div>
 </template>
 

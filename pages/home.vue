@@ -9,14 +9,22 @@
         >
           {{ $t('home.title') }}
         </h3>
-        <search-filter />
+        <search-filter class="home__search" />
+        <base-field
+          v-model="search"
+          class="home__search_mobile"
+          :is-search="true"
+          :is-hide-error="true"
+          :placeholder="$t('ui.forms.searchPlaceholder')"
+        />
       </div>
     </div>
-    <div class="home__table home__content">
+    <div class="home__content home__content_mobile">
       <base-table
         :title="$t('ui.latestBlocks')"
         :headerlink="$t('ui.allBlocks')"
         type="blocks"
+        class="home__table"
         :items="testBlocks"
         :fields="[
           {
@@ -33,13 +41,32 @@
           }
         ]"
       />
+      <div class="home__blocks blocks">
+        <p class="blocks__title">
+          {{ $t('ui.latestBlocks') }}
+        </p>
+        <nuxt-link
+          class="blocks__link"
+          to="/blocks"
+        >
+          {{ $t('ui.allBlocks') }}
+        </nuxt-link>
+      </div>
+      <Block
+        v-for="(item, i) in testBlocks"
+        :key="i"
+        class="home__block"
+        :block="item"
+        :is-last="testBlocks[i] === testBlocks[testBlocks.length - 1]"
+      />
     </div>
-    <div class="home__table home__content">
+    <div class="home__content home__content_mobile">
       <base-table
         :title="$t('ui.latestTxs')"
         :items="testTxs"
         :headerlink="$t('ui.allTxs')"
         type="transactions"
+        class="home__table"
         :fields="[
           {
             key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true,
@@ -55,14 +82,35 @@
           }
         ]"
       />
+      <div class="home__blocks blocks">
+        <p class="blocks__title">
+          {{ $t('ui.latestTxs') }}
+        </p>
+        <nuxt-link
+          class="blocks__link"
+          to="/transactions"
+        >
+          {{ $t('ui.allTxs') }}
+        </nuxt-link>
+      </div>
+      <Txn
+        v-for="(item, i) in testTxs"
+        :key="i"
+        class="home__block"
+        :transaction="item"
+        :is-last="testTxs[i] === testTxs[testTxs.length - 1]"
+      />
     </div>
   </div>
 </template>
 <script>
+import Block from '~/components/mobile/block.vue';
+import Txn from '~/components/mobile/transaction.vue';
+
 export default {
   name: 'Home',
   layout: 'default',
-  components: {},
+  components: { Block, Txn },
   data: () => ({
     blocksCount: 0,
     txsCount: 0,
@@ -121,7 +169,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .home {
-  &__table {
+  &__search_mobile {
+    display: none;
   }
   &__header {
     background: $darkblue;
@@ -148,6 +197,50 @@ export default {
     height: 63px;
     margin-left: 10px;
     display: none;
+  }
+  &__block {
+    display: none;
+  }
+}
+.blocks {
+  display: none;
+}
+@include _767 {
+  .home {
+    &__search {
+      display: none;
+    }
+    &__search_mobile {
+      display: block;
+      background: $white;
+      border-radius: 6px;
+      padding: 10px 14px;
+    }
+    &__header {
+      height: 228px;
+    }
+    &__title {
+      font-size: 28px;
+      max-width: 200px;
+    }
+    &__table {
+      display: none;
+    }
+    &__content_mobile {
+      padding: 16px 21px 0 21px;
+      background: $white;
+      margin-bottom: 25px;
+    }
+    &__block {
+      display: grid;
+    }
+  }
+  .blocks {
+    display: flex;
+    justify-content: space-between;
+    &__link {
+      @include link;
+    }
   }
 }
 </style>

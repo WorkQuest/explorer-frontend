@@ -884,18 +884,17 @@ export default {
       display: none !important;
     }
   }
-  // .footer {
-  //   &__top {
-  //     display: grid;
-  //     grid-template-rows: auto 1fr;
-  //     grid-gap: 30px;
-  //     margin-bottom: 10px;
-  //   }
-  //   &__items {
-  //     grid-template-columns: 1fr;
-  //     grid-gap: 20px;
-  //   }
-  // }
+}
+@include _767 {
+  .header {
+    &__left {
+      grid-template-columns: 1fr;
+      grid-gap: 35px;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
 }
 @include _575 {
   .header {
