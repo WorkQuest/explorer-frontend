@@ -5,7 +5,31 @@
       class="blocks__table"
       :title="$t('ui.blocks')"
       :items="blocks"
-      :fields="[
+      :fields="tableHeaders"
+    />
+    <base-pager
+      v-if="totalPagesValue > 1"
+      v-model="currentPage"
+      :total-pages="totalPagesValue"
+    />
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Blocks',
+  data() {
+    return {
+      blocks: [],
+      currentPage: 1,
+    };
+  },
+  computed: {
+    totalPagesValue() {
+      return this.setTotalPages(this.blocks.length, 20);
+    },
+    tableHeaders() {
+      return [
         {
           key: 'id', label: this.$t('ui.block.blockNumber'), sortable: true,
         },
@@ -24,26 +48,7 @@
         {
           key: 'size', label: this.$t('ui.block.reward'), sortable: true,
         },
-      ]"
-    />
-    <base-pager
-      v-if="totalPagesValue > 1"
-      v-model="currentPage"
-      :total-pages="totalPagesValue"
-    />
-  </div>
-</template>
-
-<script>
-export default {
-  name: 'Blocks',
-  data: () => ({
-    blocks: [],
-    currentPage: 1,
-  }),
-  computed: {
-    totalPagesValue() {
-      return this.setTotalPages(this.blocks.length, 20);
+      ];
     },
   },
   async mounted() {

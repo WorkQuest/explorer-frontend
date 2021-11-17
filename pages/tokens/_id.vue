@@ -27,54 +27,22 @@
     <div class="token__tables tables">
       <div class="tables__menu">
         <span
-          class="tables__tab_transfers"
-          :class="{tables__tab_active: activeTab === 'tables__tab_transfers'}"
-          @click="onClick"
-        >{{ $t('ui.token.transfers') }}</span>
-        <span
-          class="tables__tab_holders"
-          :class="{tables__tab_active: activeTab === 'tables__tab_holders'}"
-          @click="onClick"
-        >{{ $t('ui.token.holders') }}</span>
-        <span
-          class="tables__tab_info"
-          :class="{tables__tab_active: activeTab === 'tables__tab_info'}"
-          @click="onClick"
-        >{{ $t('ui.token.info') }}</span>
-        <span
-          class="tables__tab_contract"
-          :class="{tables__tab_active: activeTab === 'tables__tab_contract'}"
-          @click="onClick"
-        >{{ $t('ui.token.contract') }}</span>
+          v-for="(tab, index) in tabs"
+          :key="index"
+          class="tables__tab"
+          :class="{tables__tab_active: activeTab === tab}"
+          @click="onClick(tab)"
+        >{{ $t(`ui.token.${tab}`) }}</span>
       </div>
       <div
-        v-if="activeTab === 'tables__tab_transfers'"
+        v-if="activeTab === 'transfers'"
         class="tables__tf"
       >
         <TableTxs
           class="tables__table"
           :is-only="false"
           :items="transfers"
-          :fields="[
-            {
-              key: 'id', label: this.$t('ui.tx.transaction'), sortable: true,
-            },
-            {
-              key: 'method', label: this.$t('ui.token.method'), sortable: true,
-            },
-            {
-              key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
-            },
-            {
-              key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
-            },
-            {
-              key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
-            },
-            {
-              key: 'quantity', label: this.$t('ui.token.quantity'), sortable: true,
-            },
-          ]"
+          :fields="tableHeadersTransfers"
         />
         <base-pager
           v-if="totalPagesValue > 1"
@@ -83,30 +51,14 @@
         />
       </div>
       <div
-        v-if="activeTab === 'tables__tab_holders'"
+        v-if="activeTab === 'holders'"
         class="tables__holders"
       >
         <TableTokens
           class="tables__table"
           :is-only="false"
           :items="holders"
-          :fields="[
-            {
-              key: 'id', label: this.$t('ui.token.rank'), sortable: true,
-            },
-            {
-              key: 'address', label: this.$t('ui.token.address'), sortable: true,
-            },
-            {
-              key: 'quantity', label: this.$t('ui.token.quantity'), sortable: true,
-            },
-            {
-              key: 'percentage', label: this.$t('ui.token.percentage'), sortable: true,
-            },
-            {
-              key: 'value', label: this.$t('ui.tx.value'), sortable: true,
-            },
-          ]"
+          :fields="tableHeadersHolders"
         />
         <base-pager
           v-if="totalPagesValue > 1"
@@ -115,7 +67,7 @@
         />
       </div>
       <div
-        v-if="activeTab === 'tables__tab_info'"
+        v-if="activeTab === 'info'"
         class="tables__info token-info"
       >
         <p class="token-info__title">
@@ -147,7 +99,7 @@
         </p>
       </div>
       <div
-        v-if="activeTab === 'tables__tab_contract'"
+        v-if="activeTab === 'contract'"
         class="tables__contract contract"
       >
         <div class="contract__wrap">
@@ -250,69 +202,113 @@ export default {
     TableTxs,
     TableTokens,
   },
-  data: () => ({
-    params: '',
-    address: '',
-    activeTab: 'tables__tab_transfers',
-    activePoint: '',
-    currentPage: 1,
-    tokens: {
-      USDT: {
-        name: 'Tether USD',
-        description: 'Tether gives you the joint benefits of open blockchain technology and traditional currency by converting your cash into a stable digital currency equivalent.',
+  data() {
+    return {
+      params: '',
+      address: '',
+      activeTab: 'transfers',
+      activePoint: '',
+      currentPage: 1,
+      tabs: ['transfers', 'holders', 'info', 'contract'],
+      tokens: {
+        USDT: {
+          name: 'Tether USD',
+          description: 'Tether gives you the joint benefits of open blockchain technology and traditional currency by converting your cash into a stable digital currency equivalent.',
+        },
+        BUSD: {
+          name: 'Binance USD',
+          description: 'Binance USD (BUSD) is a dollar-backed stablecoin issued and custodied by Paxos Trust Company, and regulated by the New York State Department of Financial Services. BUSD is available directly for sale 1:1 with USD on Paxos.com and will be listed for trading on Binance.',
+        },
+        GHST: {
+          name: 'Aavegotchi Ghost Token',
+          description: 'Aavegotchis are crypto-collectibles living on the Ethereum blockchain, backed by the ERC721 standard used in popular blockchain games. $GHST is the official utility token of the Aavegotchi ecosystem and can be used to purchase portals, wearables, and consumables.',
+        },
       },
-      BUSD: {
-        name: 'Binance USD',
-        description: 'Binance USD (BUSD) is a dollar-backed stablecoin issued and custodied by Paxos Trust Company, and regulated by the New York State Department of Financial Services. BUSD is available directly for sale 1:1 with USD on Paxos.com and will be listed for trading on Binance.',
-      },
-      GHST: {
-        name: 'Aavegotchi Ghost Token',
-        description: 'Aavegotchis are crypto-collectibles living on the Ethereum blockchain, backed by the ERC721 standard used in popular blockchain games. $GHST is the official utility token of the Aavegotchi ecosystem and can be used to purchase portals, wearables, and consumables.',
-      },
-    },
-    transfers: [
-      {
-        id: '0xdd3be9a7b1c18bd28188c51f8734b907264cd7de7aa4b68d8ba6e823da46e778',
-        method: 'Transfer',
-        timestamp: '25 secs ago',
-        fromAddress: '0x2cba9372edb012769d67d45b62ddd63ac654910a',
-        toAddress: '0xd26114cd6ee289accf82350c8d8487fedb8a0c07',
-        quantity: 1092.814502,
-      },
-      {
-        id: '0xdd3be9a7b1c18bd28188c51f8734b907264cd7de7aa4b68d8ba6e823da46e778',
-        method: 'Approve',
-        timestamp: '35 secs ago',
-        fromAddress: '0x2cba9372edb012769d67d45b62ddd63ac654910a',
-        toAddress: '0xd26114cd6ee289accf82350c8d8487fedb8a0c07',
-        quantity: 1092.814503,
-      },
-    ],
-    holders: [
-      {
-        id: '1',
-        address: '0xa929022c9107643515f5c777ce9a910f0d1e490c',
-        quantity: 1092.814502,
-        percentage: '6.1728%',
-        value: '$ 1 908 040 490,00',
-      },
-      {
-        id: '2',
-        address: '0xa929022c9107643515f5c777ce9a910f0d1e490c',
-        quantity: 1092.814502,
-        percentage: '6.1728%',
-        value: '$ 1 908 040 490,00',
-      },
-    ],
-  }),
+      transfers: [
+        {
+          id: '0xdd3be9a7b1c18bd28188c51f8734b907264cd7de7aa4b68d8ba6e823da46e778',
+          method: 'Transfer',
+          timestamp: '25 secs ago',
+          fromAddress: '0x2cba9372edb012769d67d45b62ddd63ac654910a',
+          toAddress: '0xd26114cd6ee289accf82350c8d8487fedb8a0c07',
+          quantity: 1092.814502,
+        },
+        {
+          id: '0xdd3be9a7b1c18bd28188c51f8734b907264cd7de7aa4b68d8ba6e823da46e778',
+          method: 'Approve',
+          timestamp: '35 secs ago',
+          fromAddress: '0x2cba9372edb012769d67d45b62ddd63ac654910a',
+          toAddress: '0xd26114cd6ee289accf82350c8d8487fedb8a0c07',
+          quantity: 1092.814503,
+        },
+      ],
+      holders: [
+        {
+          id: '1',
+          address: '0xa929022c9107643515f5c777ce9a910f0d1e490c',
+          quantity: 1092.814502,
+          percentage: '6.1728%',
+          value: '$ 1 908 040 490,00',
+        },
+        {
+          id: '2',
+          address: '0xa929022c9107643515f5c777ce9a910f0d1e490c',
+          quantity: 1092.814502,
+          percentage: '6.1728%',
+          value: '$ 1 908 040 490,00',
+        },
+      ],
+    };
+  },
   computed: {
     totalPagesValue() {
-      if (this.activeTab === 'tables__tab_transfers') {
+      if (this.activeTab === 'transfers') {
         return this.setTotalPages(this.transfers.length, 20);
-      } if (this.activeTab === 'tables__tab_holders') {
+      } if (this.activeTab === 'holders') {
         return this.setTotalPages(this.holders.length, 20);
       }
       return 1;
+    },
+    tableHeadersTransfers() {
+      return [
+        {
+          key: 'id', label: this.$t('ui.tx.transaction'), sortable: true,
+        },
+        {
+          key: 'method', label: this.$t('ui.token.method'), sortable: true,
+        },
+        {
+          key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
+        },
+        {
+          key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
+        },
+        {
+          key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
+        },
+        {
+          key: 'quantity', label: this.$t('ui.token.quantity'), sortable: true,
+        },
+      ];
+    },
+    tableHeadersHolders() {
+      return [
+        {
+          key: 'id', label: this.$t('ui.token.rank'), sortable: true,
+        },
+        {
+          key: 'address', label: this.$t('ui.token.address'), sortable: true,
+        },
+        {
+          key: 'quantity', label: this.$t('ui.token.quantity'), sortable: true,
+        },
+        {
+          key: 'percentage', label: this.$t('ui.token.percentage'), sortable: true,
+        },
+        {
+          key: 'value', label: this.$t('ui.tx.value'), sortable: true,
+        },
+      ];
     },
   },
   async mounted() {
@@ -321,8 +317,8 @@ export default {
     this.SetLoader(false);
   },
   methods: {
-    onClick(event) {
-      this.activeTab = event.target.className;
+    onClick(tab) {
+      this.activeTab = tab;
     },
     onClickContract(event) {
       if (this.activePoint !== '') {
@@ -369,13 +365,11 @@ export default {
     margin: 0 0 27px 20px
   }
   &__tab {
-    &_transfers, &_holders, &_info, &_contract {
     @include text-simple;
     margin-right: 20px;
     padding-bottom: 12px;
     color: $black500;
     cursor: pointer;
-    }
     &_active {
         @include text-simple;
         border-bottom: 2px solid $blue;

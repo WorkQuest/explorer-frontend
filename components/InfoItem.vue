@@ -63,7 +63,7 @@ export default {
       default: '',
     },
     info: {
-      type: String || Number,
+      type: [String, Number],
       default: '',
     },
     note: {
@@ -74,8 +74,6 @@ export default {
       type: String,
       default: '',
     },
-  },
-  methods: {
   },
 };
 </script>

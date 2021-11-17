@@ -4,7 +4,8 @@
     <div class="txs__content">
       <nuxt-link
         to="/transactions"
-        class="txs__back">
+        class="txs__back"
+      >
         <span class="icon-short_left" />
         {{ $t('ui.back') }}
       </nuxt-link>
@@ -137,10 +138,12 @@ export default {
   components: {
     Item,
   },
-  data: () => ({
-    tx: {},
-    activeElement: 'txs__tab_overview',
-  }),
+  data() {
+    return {
+      tx: {},
+      activeElement: 'txs__tab_overview',
+    };
+  },
   computed: {
   },
   async mounted() {

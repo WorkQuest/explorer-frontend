@@ -22,7 +22,7 @@
     :class="btnClass"
     @click="$emit('click')"
   >
-  {{ text }}
+    {{ text }}
     <div class="icon-btn_left">
       <slot name="left" />
     </div>

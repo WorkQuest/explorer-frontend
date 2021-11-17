@@ -2,9 +2,9 @@
   <div class="tokens">
     <base-field
       v-model="search"
-      is-search="true"
-      is-hide-error="true"
-      placeholder="Search"
+      :is-search="true"
+      :is-hide-error="true"
+      :placeholder="$t('ui.forms.search')"
       class="tokens__search"
     />
     <div class="token-wrapper">
@@ -32,9 +32,11 @@
 <script>
 export default {
   name: 'ChoiceToken',
-  data: () => ({
-    search: '',
-  }),
+  data() {
+    return {
+      search: '',
+    };
+  },
 };
 </script>
 

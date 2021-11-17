@@ -103,8 +103,6 @@ export default {
       default: () => {},
     },
   },
-  computed: {
-  },
   methods: {
     cutValueData(value) {
       return new BigNumber(value).shiftedBy(-18).toString();

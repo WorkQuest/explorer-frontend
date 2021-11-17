@@ -23,9 +23,11 @@ export default {
   name: 'ModalBox',
   components: {
   },
-  data: () => ({
-    modals,
-  }),
+  data() {
+    return {
+      modals,
+    };
+  },
   computed: {
     ...mapGetters({
       isShow: 'modals/getIsShow',
