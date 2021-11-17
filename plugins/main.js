@@ -66,5 +66,11 @@ Vue.mixin({
     NumberFormat(value, fixed) {
       return (+value && new Intl.NumberFormat('ru', { maximumFractionDigits: fixed || 8 }).format(value || 0)) || 0;
     },
+    formatItem(item, endFromBegining, startToEnd) {
+      return `${item.slice(0, endFromBegining)}...${item.slice(item.length - startToEnd, item.length)}`;
+    },
+    setTotalPages(itemsNum, itemsPerPage) {
+      return Math.ceil(itemsNum / itemsPerPage);
+    },
   },
 });

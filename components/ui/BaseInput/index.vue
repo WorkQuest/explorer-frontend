@@ -18,6 +18,7 @@
     <div
       v-if="label !== ''"
       class="ctm-field__header"
+      :class="{'ctm-field__header_black': labelcolor === 'black'}"
     >
       {{ label }}
     </div>
@@ -127,6 +128,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    labelcolor: {
+      type: String,
+      default: '',
+    },
   },
   methods: {
     input($event) {
@@ -185,6 +190,9 @@ export default {
     margin-bottom: 13px;
     height: 24px;
     color: #fff;
+    &_black {
+      @include text-simple;
+    }
   }
   &__err {
     color: #F82727;

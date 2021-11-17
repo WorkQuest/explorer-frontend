@@ -22,6 +22,7 @@
     :class="btnClass"
     @click="$emit('click')"
   >
+    {{ text }}
     <div class="icon-btn_left">
       <slot name="left" />
     </div>
@@ -47,6 +48,10 @@ export default {
       default: false,
     },
     mode: {
+      type: String,
+      default: '',
+    },
+    text: {
       type: String,
       default: '',
     },
@@ -220,7 +225,6 @@ export default {
     }
   }
 }
-
 @include _575 {
   .base-btn {
     font-size: 14px;

@@ -1,20 +1,95 @@
 {
   "ui": {
+    "home": "Home",
     "txs": "Transactions",
     "blocks": "Blocks",
+    "transfers": "View ERC-20 Transfers",
+    "tokens": "ERC20 Top Tokens",
+    "latestBlocks": "Latest Blocks",
+    "latestTxs": "Latest Transactions",
+    "allBlocks": "Show all blocks",
+    "allTxs": "Show all transactions",
+    "back": "Back",
+    "rights": "All rights reserved",
+    "timestamp": "Timestamp",
+    "terms": "Terms and conditions",
+    "privacy": "Privacy policy",
     "locals": {
       "en": "EN",
       "ru": "RU"
     },
     "block": {
-      "height": "Height",
-      "txsCount": "Tx count",
-      "timestamp": "Timestamp"
+      "block": "Block",
+      "blockNumber": "Block Number",
+      "txsCount": "Transctions in the block",
+      "age": "Age",
+      "reward": "Block reward",
+      "txn": "Txn",
+      "gasUsed": "Gas Used",
+      "gasLimit": "Gas Limit",
+      "blockInfo": "Block info",
+      "inThisBlock": "in this block",
+      "size": "Size",
+      "hash": "Hash"
     },
     "tx": {
-      "hash": "Hash",
-      "from": "Sender",
-      "to": "Recipient"
+      "transaction": "Txn hash",
+      "from": "From",
+      "to": "To",
+      "amount": "Amount",
+      "value": "Value",
+      "fee": "Txn Fee",
+      "txDetails": "Transaction Details",
+      "status": "Status",
+      "logs": "Transaction Receipt Event Logs",
+      "topics": "Topics",
+      "data": "Data",
+      "forBlock": "For Block",
+      "total": "A total of",
+      "found": "transactions found"
+    },
+    "forms": {
+      "searchPlaceholder": "Search by Address / Txn Hash / Block / Token",
+      "search": "Search",
+      "filters": "All filters"
+    },
+    "token": {
+      "tracker": "Token Tracker",
+      "token": "Token",
+      "volume": "Volume (24H)",
+      "holders": "Holders",
+      "method": "Method",
+      "quantity": "Quantity",
+      "rank": "Rank",
+      "address": "Address",
+      "percentage": "Percentage",
+      "transfers": "Transfers",
+      "info": "Info",
+      "contract": "Contract",
+      "overview": "Overview",
+      "logs": "Logs",
+      "tether": "Tether gives you the joint benefits of open blockchain technology and traditional currency by converting your cash into a stable digital currency equivalent.",
+      "market": "Market",
+      "capitalization": "Market Capitalization",
+      "supply": "Circulating Supply",
+      "name": "Name",
+      "deprecated": "Deprecated",
+      "balances": "Balances",
+      "balance": "Balance",
+      "input": "<input> (address)",
+      "query": "Query",
+      "summary": "Profile Summary",
+      "decimals": "Decimals",
+      "more": "More Info",
+      "creator": "ContractCreator",
+      "atTxn": "at txn",
+      "maxSupply": "Max Total Supply",
+      "placeholder": "Placeholder",
+      "internal": "Internal Txns",
+      "tokensTxns": "Token Txns"
     }
+  },
+  "home": {
+    "title": "WorkQuest Chain Explorer"
   }
  }

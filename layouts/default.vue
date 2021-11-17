@@ -19,66 +19,107 @@
                 <span class="header__text">WorkQuest</span>
               </div>
               <div class="header__links">
-<!--                <nuxt-link-->
-<!--                  to="/blocks"-->
-<!--                  class="header__link"-->
-<!--                  :exact-active-class="'header__link_active'"-->
-<!--                >-->
-<!--                  {{ $t('ui.blocks') }}-->
-<!--                </nuxt-link>-->
-<!--                <nuxt-link-->
-<!--                  to="/txs"-->
-<!--                  class="header__link"-->
-<!--                  :exact-active-class="'header__link_active'"-->
-<!--                >-->
-<!--                  {{ $t('ui.txs') }}-->
-<!--                </nuxt-link>-->
+                <nuxt-link
+                  to="/home"
+                  class="header__link"
+                  :active-class="'header__link_active'"
+                >
+                  {{ $t('ui.home') }}
+                </nuxt-link>
+                <nuxt-link
+                  to="/blocks"
+                  class="header__link"
+                  :active-class="'header__link_active'"
+                >
+                  {{ $t('ui.blocks') }}
+                </nuxt-link>
+                <nuxt-link
+                  to="/transactions"
+                  class="header__link"
+                  :active-class="'header__link_active'"
+                >
+                  {{ $t('ui.txs') }}
+                </nuxt-link>
+                <nuxt-link
+                  to="/transfers"
+                  class="header__link"
+                  :active-class="'header__link_active'"
+                >
+                  {{ $t('ui.transfers') }}
+                </nuxt-link>
+                <nuxt-link
+                  to="/tokens"
+                  class="header__link"
+                  :active-class="'header__link_active'"
+                >
+                  {{ $t('ui.tokens') }}
+                </nuxt-link>
               </div>
             </div>
             <div class="header__right">
-<!--              <button-->
-<!--                class="header__button header__button_locale"-->
-<!--                @click="showLocale()"-->
-<!--              >-->
-<!--                {{ $t('ui.locals.'+this.$i18n.locale) }}-->
-<!--                <span class="icon-caret_down" />-->
-<!--                <transition name="fade">-->
-<!--                  <div-->
-<!--                    v-if="isShowLocale"-->
-<!--                    class="locale"-->
-<!--                  >-->
-<!--                    <div class="locale__items">-->
-<!--                      <div class="locale__item">-->
-<!--                        <img-->
-<!--                          src="/img/app/en.svg"-->
-<!--                          alt="EN"-->
-<!--                          class="locale__icon"-->
-<!--                        >-->
-<!--                        <div class="locale__text">-->
-<!--                          {{ $t('ui.locals.en') }}-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                      <div class="locale__item">-->
-<!--                        <img-->
-<!--                          src="/img/app/ru.svg"-->
-<!--                          alt="RU"-->
-<!--                          class="locale__icon"-->
-<!--                        >-->
-<!--                        <div class="locale__text">-->
-<!--                          {{ $t('ui.locals.ru') }}-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </transition>-->
-<!--              </button>-->
+              <button
+                class="header__button header__button_locale"
+                @click="showLocale()"
+              >
+                {{ currentLocale.toUpperCase() }}
+                <span class="icon-caret_down" />
+                <transition name="fade">
+                  <div
+                    v-if="isShowLocale"
+                    class="locale"
+                  >
+                    <div
+                      v-for="(item, i) in locales"
+                      :key="i"
+                      class="locale__container"
+                    >
+                      <div
+                        class="locale__items"
+                        @click="setLocale(item)"
+                      >
+                        <img
+                          :src="`/img/app/${item}.svg`"
+                          :alt="item"
+                          class="locale__icon"
+                        >
+                        <div class="locale__text">
+                          {{ item.toUpperCase() }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </transition>
+              </button>
             </div>
           </div>
         </div>
         <div class="template__content">
           <nuxt />
         </div>
-        <div class="template__footer"></div>
+        <div class="template__footer footer">
+          <div class="footer__left">
+            <p class="footer__copy">
+              © Workquest 2021
+            </p>
+            <p class="footer__copy">
+              {{ $t('ui.rights') }}
+            </p>
+          </div>
+          <div class="footer__right">
+            <nuxt-link
+              to="/"
+              class="footer__link"
+            >
+              · {{ $t('ui.terms') }}
+            </nuxt-link>
+            <nuxt-link
+              to="/"
+              class="footer__link"
+            >
+              · {{ $t('ui.privacy') }}
+            </nuxt-link>
+          </div>
+        </div>
       </div>
     </div>
     <transition name="fade">
@@ -90,6 +131,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import moment from 'moment';
 import ClickOutside from 'vue-click-outside';
 
 export default {
@@ -108,12 +150,19 @@ export default {
       isShowLocale: false,
       isMobileMenu: false,
       isNotFlexContainer: true,
+      currentLocale: '',
+      locales: [],
     };
   },
   computed: {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
     }),
+  },
+  mounted() {
+    this.currentLocale = this.$i18n.locale;
+    this.locales = this.$i18n.locales;
+    moment.locale(this.currentLocale);
   },
   methods: {
     toRoute(path) {
@@ -190,6 +239,9 @@ export default {
       this.isShowNotify = false;
       this.isShowAdditionalMenu = false;
       this.isShowLocale = false;
+    },
+    setLocale(item) {
+      this.currentLocale = item;
     },
   },
 };
@@ -360,7 +412,6 @@ export default {
   background: #F7F8FA;
   &__content {
     display: grid;
-    grid-template-rows: 72px 1fr 256px;
     min-height: 100vh;
   }
   &__main {
@@ -392,12 +443,8 @@ export default {
     }
   }
   &__title {
-    font-family: 'Inter', sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 18px;
-    line-height: 130%;
-    color: $black800;
+    @include text-simple;
+    @include normal-font-size;
   }
   &__btn {
     background: #F7F8FA;
@@ -462,7 +509,6 @@ export default {
     grid-gap: 10px;
   }
   &__info {
-    //grid-template-rows: repeat(2, auto);
     grid-gap: 5px;
     display: grid;
     text-align: left;
@@ -646,9 +692,8 @@ export default {
     }
   }
   &__links {
-    display: grid;
+    display: flex;
     align-items: center;
-    grid-template-columns: repeat(4, auto);
     grid-gap: 25px;
   }
   &__right {
@@ -754,8 +799,7 @@ export default {
   &__items {
     padding: 10px 15px;
     display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: 15px;
+    grid-template-columns: 1fr 1fr;
   }
   &__item {
     display: grid;
@@ -776,104 +820,38 @@ export default {
     color: $black500;
   }
 }
-.footer {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  &__items {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(170px, auto));
-    grid-gap: 50px;
-    &_links {
-      grid-template-columns: 1fr;
-      grid-gap: 10px;
-    }
-  }
-  &__item {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    grid-gap: 15px;
-  }
-  &__body {
-    max-width: 1180px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  &__top {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-  }
-  &__bottom {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    border-top: 1px solid $black100;
-    height: 72px;
-    align-items: center;
-  }
-  &__links {
-    display: grid;
-    grid-template-columns: repeat(2, auto);
-    grid-gap: 20px;
-  }
-  &__link {
-    font-family: 'Inter', sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 130%;
-    color: $blue;
-    cursor: pointer;
-  }
-  &__logo {
-    display: grid;
-    align-items: center;
-    grid-template-columns: 40px 1fr;
-    grid-gap: 5px;
-    cursor: pointer;
-    span {
-      font-family: 'Inter', sans-serif;
-      font-style: normal;
-      font-weight: bold;
-      font-size: 23px;
-      line-height: 130%;
-      color: $black400;
-    }
-  }
-  &__text {
-    font-family: 'Inter', sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    &_grey {
-      font-weight: normal;
-      font-size: 16px;
-      color: $black500;
-    }
-    &_black {
-      font-weight: 500;
-      font-size: 16px;
-      color: $black700;
-    }
-    &_rights {
-      font-size: 14px;
-      line-height: 130%;
-      color: $black500;
-    }
-  }
-  &__rights {
-    display: grid;
-    grid-template-columns: repeat(2, auto);
-    grid-gap: 20px;
-  }
-}
 .ctm-menu {
   &__toggle {
     display: none;
+  }
+}
+.modal-active {
+  overflow-y: hidden;
+}
+.footer {
+  @include container;
+  padding: 25px 0;
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid $black100;
+  &__left {
+    display: flex;
+    grid-gap: 15px;
+  }
+  &__right {
+    display: flex;
+    grid-gap: 15px;
+  }
+  &__copy {
+    @include text-simple;
+    @include normal-font-size;
+    font-size: 14px;
+    color: $black500;
+  }
+  &__link {
+    @include link;
   }
 }
 @include _1700 {}
@@ -894,7 +872,6 @@ export default {
       margin: 0 20px 0 20px;
     }
     &__links {
-      display: none;
     }
     &__right {}
     &__button {
@@ -903,9 +880,6 @@ export default {
       }
     }
   }
-  .footer {
-    padding: 0 20px;
-  }
 }
 @include _991 {
   .header {
@@ -913,25 +887,7 @@ export default {
       display: none !important;
     }
   }
-  .template {
-    &__content {
-      grid-template-rows: 72px 1fr auto;
-    }
-  }
-  .footer {
-    &__top {
-      display: grid;
-      grid-template-rows: auto 1fr;
-      grid-gap: 30px;
-      margin-bottom: 10px;
-    }
-    &__items {
-      grid-template-columns: 1fr;
-      grid-gap: 20px;
-    }
-  }
 }
-@include _991 {}
 @include _575 {
   .header {
     &__logo {
