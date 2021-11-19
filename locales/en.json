@@ -30,7 +30,8 @@
       "blockInfo": "Block info",
       "inThisBlock": "in this block",
       "size": "Size",
-      "hash": "Hash"
+      "hash": "Hash",
+      "bytes": "bytes"
     },
     "tx": {
       "transaction": "Txn hash",

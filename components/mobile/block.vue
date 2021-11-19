@@ -36,7 +36,6 @@
       <span class="block__reward">
         {{ block.reward }} {{ block.symbol }}
       </span>
-      {{ isLast }}
     </div>
   </div>
 </template>
@@ -83,7 +82,7 @@ export default {
     }
     &__subtitle {
       font-weight: 600;
-      grid-column: 1/2;
+      grid-column: 1/3;
       margin-top: 11px;
     }
     &__link_small {

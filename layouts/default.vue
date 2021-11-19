@@ -3,6 +3,11 @@
     <div class="primary__template template">
       <div class="template__content">
         <div
+          v-if="isMobileMenu"
+          class="template__screen"
+          @click="closeMenu()"
+        />
+        <div
           v-click-outside="closeAll"
           class="template__header header"
         >
@@ -57,6 +62,15 @@
                 </nuxt-link>
               </div>
             </div>
+            <div
+              class="header__logo_mobile"
+              @click="toMain()"
+            >
+              <img
+                src="~assets/img/app/logo.svg"
+                alt="WorkQuest"
+              >
+            </div>
             <div class="header__right">
               <button
                 class="header__button header__button_locale"
@@ -91,13 +105,97 @@
                   </div>
                 </transition>
               </button>
+              <div
+                class="ctm-menu__toggle"
+                @click="openMenu()"
+              >
+                <button
+                  class="header__button header__button_menu"
+                >
+                  <span
+                    class="icon-hamburger"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- mobile header -->
+        <div
+          v-click-outside="closeAll"
+          class="template__header header_mobile"
+        >
+          <div
+            v-if="isMobileMenu"
+            class="header__left_mobile"
+          >
+            <div
+              class="header__logo"
+              @click="closeMenuByLink()"
+            >
+              <img
+                src="~assets/img/app/logo.svg"
+                alt="WorkQuest"
+              >
+              <span class="header__text">WorkQuest</span>
+            </div>
+            <div class="header__links">
+              <span @click="closeMenu()">
+                <nuxt-link
+                  to="/home"
+                  class="header__link"
+                  :active-class="'header__link_active'"
+                >
+                  {{ $t('ui.home') }}
+                </nuxt-link>
+              </span>
+              <span @click="closeMenu()">
+                <nuxt-link
+                  to="/blocks"
+                  class="header__link"
+                  :active-class="'header__link_active'"
+                >
+                  {{ $t('ui.blocks') }}
+                </nuxt-link>
+              </span>
+              <span @click="closeMenu()">
+                <nuxt-link
+                  to="/transactions"
+                  class="header__link"
+                  :active-class="'header__link_active'"
+                >
+                  {{ $t('ui.txs') }}
+                </nuxt-link>
+              </span>
+              <p class="header__separator" />
+              <span @click="closeMenu()">
+                <nuxt-link
+                  to="/transfers"
+                  class="header__link"
+                  :active-class="'header__link_active'"
+                >
+                  {{ $t('ui.transfers') }}
+                </nuxt-link>
+              </span>
+              <span @click="closeMenu()">
+                <nuxt-link
+                  to="/tokens"
+                  class="header__link"
+                  :active-class="'header__link_active'"
+                >
+                  {{ $t('ui.tokens') }}
+                </nuxt-link>
+              </span>
             </div>
           </div>
         </div>
         <div class="template__content">
           <nuxt />
         </div>
-        <div class="template__footer footer">
+        <div
+          v-if="isMobileMenu"
+          class="template__footer footer"
+        >
           <div class="footer__left">
             <p class="footer__copy">
               © Workquest 2021
@@ -175,8 +273,18 @@ export default {
       this.isNotFlexContainer = !this.isNotFlexContainer;
       this.closeAnother('mobile');
     },
+    openMenu() {
+      this.isMobileMenu = true;
+    },
+    closeMenu() {
+      this.isMobileMenu = false;
+    },
     toMain() {
       this.$router.push('/');
+    },
+    closeMenuByLink() {
+      this.toMain();
+      this.closeMenu();
     },
     goToMessages() {
       this.$router.push('/messages');
@@ -613,7 +721,7 @@ export default {
   top: 0;
   z-index: 99999;
   min-height: 72px;
-  background: #FFFFFF;
+  background: $white;
   box-shadow: 0 1px 0 #E6E9EC;
   width: 100%;
   display: flex;
@@ -713,6 +821,9 @@ export default {
     grid-template-columns: 40px 1fr;
     grid-gap: 5px;
     cursor: pointer;
+    &_mobile {
+      display: none;
+    }
     span {
       font-family: 'Inter', sans-serif;
       font-style: normal;
@@ -883,7 +994,20 @@ export default {
   }
 }
 @include _767 {
+  .template {
+    &__screen {
+      background: rgba(7, 18, 34, 0.6);
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      z-index: 2;
+    }
+  }
   .header {
+    z-index: 1;
+    &_mobile {
+      z-index: 5  ;
+    }
     &__logo {
       margin-bottom: 50px;
       span {
@@ -892,15 +1016,24 @@ export default {
       img {
         width: 25px;
       }
+      &_mobile {
+      display: block;
+    }
     }
     &__left {
+      display: none;
+      &_mobile {
       grid-template-columns: 1fr;
-      grid-gap: 35px;
+      grid-gap: 0;
+      grid-template-rows: auto 1fr;
+      align-items: flex-start;
       background: $white;
       padding: 23px 16px;
+      height: 70vh;
       position: absolute;
       left: 0;
       top: 0;
+      }
     }
     &__links {
       flex-direction: column;
@@ -918,6 +1051,22 @@ export default {
     position: absolute;
     bottom: 0;
     left: 0;
+    background: $black0;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    align-items: baseline;
+    padding: 10px 15px;
+    height: 30vh;
+    width: 245px;
+    grid-gap: 20px;
+    border: none;
+    z-index: 5;
+    &__left {
+      flex-direction: column;
+    }
+    &__right {
+      flex-direction: column;
+    }
   }
 }
 @include _575 {

@@ -1,6 +1,13 @@
 <template>
   <div class="block">
     <search-filter class="block__search" />
+    <base-field
+      v-model="search"
+      class="block__search_mobile"
+      :is-search="true"
+      :is-hide-error="true"
+      :placeholder="$t('ui.forms.searchPlaceholder')"
+    />
     <div class="block__content">
       <nuxt-link
         to="/blocks"
@@ -58,6 +65,61 @@
             :info="block.hash"
           />
         </div>
+        <div class="block__columns_mobile columns">
+          <div class="columns__time">
+            <span class="columns__timestamp">
+              16 sec ago
+            </span>
+            <div class="columns__subtitle">
+              {{ $t('ui.timestamp') }}
+            </div>
+            <span class="columns__info">
+              {{ block.timestamp }}
+            </span>
+          </div>
+          <p class="columns__subtitle">
+            {{ $t('ui.block.reward') }}
+          </p>
+          <p class="columns__info">
+            0.316538333801617818 MATIC
+          </p>
+          <p class="columns__subtitle">
+            {{ $t('ui.txs') }}
+          </p>
+          <nuxt-link
+            class="columns__link_small"
+            :to="{ path: '/transactions', query: { block: block.id }}"
+          >
+            {{ block.txsCount }} txns
+          </nuxt-link>
+          <p class="columns__info_grey">
+            {{ $t('ui.block.inThisBlock') }}
+          </p>
+          <p class="columns__subtitle">
+            {{ $t('ui.block.gasUsed') }}
+            <span class="columns__info">
+              {{ block.gasUsed }} (99,5%)
+            </span>
+          </p>
+          <p class="columns__subtitle">
+            {{ $t('ui.block.gasLimit') }}
+            <span class="columns__info">
+              {{ block.gasLimit }}
+            </span>
+          </p>
+          <p class="columns__subtitle">
+            {{ $t('ui.block.size') }}
+            <span class="columns__info">
+              {{ block.size }} {{ $t('ui.block.bytes') }}
+            </span>
+          </p>
+          <p class="columns__subtitle">
+            {{ $t('ui.block.hash') }}
+          </p>
+          <p class="columns__info">
+            {{ block.hash }}
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -102,6 +164,9 @@ export default {
     @include container;
     &__search {
         margin: 25px 0;
+        &_mobile {
+        display: none;
+      }
     }
     &__back {
         @include text-simple;
@@ -122,9 +187,10 @@ export default {
         margin: 15px 0 10px 0;
     }
     &__info {
-        padding: 25px 0 20px 20px;
+        padding: 25px 20px 20px 20px;
         background: $white;
         border-radius: 6px;
+        word-wrap: break-word;
     }
     &__block {
         @include text-simple;
@@ -158,10 +224,78 @@ export default {
     border-radius: 6px;
     cursor: pointer;
 }
+.columns {
+  display: none;
+}
+
 @include _991 {
   .block {
     &__columns {
       grid-template-columns: 220px 220px 220px;
+    }
+  }
+}
+@include _767 {
+  .block {
+    &__search {
+      display: none;
+      &_mobile {
+        display: block;
+        background: $white;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 25px 16px;
+      }
+    }
+    &__columns {
+      display: none;
+    }
+    &__number {
+      color: $blue;
+    }
+    &__back, &__title {
+      margin-left: 20px;
+    }
+  }
+  .columns {
+    padding: 20px 0;
+    display: block;
+    &__separator {
+        border: none;
+    }
+    &__number {
+      font-weight: 600;
+      font-size: 14px;
+      color: $black300;
+    }
+    &__link {
+      @include link;
+      font-size: 20px;
+      font-weight: normal;
+    }
+    &__timestamp {
+      font-weight: normal;
+      font-size: 14px;
+      color: $black400;
+      float: right;
+    }
+    &__subtitle {
+      font-weight: 600;
+      grid-column: 1/2;
+      margin-top: 11px;
+    }
+    &__link_small {
+      @include text-simple;
+      @include normal-font-size;
+      @include link;
+    }
+    &__info {
+      font-weight: normal;
+      &_grey {
+        color: $black400;
+        padding-bottom: 15px;
+        border-bottom: 1px solid $black100;
+      }
     }
   }
 }

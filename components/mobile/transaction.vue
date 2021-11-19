@@ -10,14 +10,14 @@
       <p>
         <nuxt-link
           class="transaction__link"
-          :to="`/transactions/${transaction.hash}`"
+          :to="`/transactions/${(transaction.hash || transaction.id)}`"
         >
-          {{ formatItem(transaction.hash, 9, 6) }}
+          {{ formatItem((transaction.hash || transaction.id), 9, 6) }}
         </nuxt-link>
       </p>
     </div>
     <p class="transaction__timestamp">
-      {{ transaction.timestamp }}
+      16 sec ago
     </p>
     <div class="transaction__subtitle">
       {{ $t('ui.tx.from') }}
@@ -25,22 +25,56 @@
         class="transaction__link_small"
         :to="`/address/${transaction.fromAddress}`"
       >
-        {{ formatItem(transaction.fromAddress, 9, 6) }}
+        {{ formatItem(transaction.fromAddress, 7, 6) }}
+      </nuxt-link>
+    </div>
+    <div
+      v-if="!isHome"
+      class="transaction__subtitle"
+    >
+      {{ $t('ui.block.blockNumber') }}
+      <nuxt-link
+        class="transaction__link_small"
+        :to="`/blocks/${transaction.blockNumber}`"
+      >
+        {{ transaction.blockNumber }}
       </nuxt-link>
     </div>
     <div class="transaction__subtitle">
       {{ $t('ui.tx.to') }}
       <nuxt-link
+        v-if="transaction.toAddress"
         class="transaction__link_small"
         :to="`/address/${transaction.toAddress}`"
       >
-        {{ formatItem(transaction.toAddress, 9, 6) }}
+        {{ formatItem(transaction.toAddress, 7, 6) }}
       </nuxt-link>
     </div>
-    <div class="transaction__subtitle">
+    <div
+      v-if="isHome"
+      class="transaction__subtitle"
+    >
       {{ $t('ui.tx.amount') }}
-      <span class="transaction__reward">
+      <span class="transaction__info">
         {{ transaction.value }} {{ transaction.symbol }}
+      </span>
+    </div>
+    <div
+      v-else
+      class="transaction__subtitle"
+    >
+      {{ $t('ui.tx.value') }}
+      <span class="transaction__info">
+        {{ transaction.value }} {{ transaction.symbol }}
+      </span>
+    </div>
+    <div
+      v-if="!isHome"
+      class="transaction__subtitle"
+    >
+      {{ $t('ui.tx.fee') }}
+      <span class="transaction__info">
+        {{ transaction.gasUsed }}
       </span>
     </div>
   </div>
@@ -55,6 +89,10 @@ export default {
       default: () => {},
     },
     isLast: {
+      type: Boolean,
+      default: false,
+    },
+    isHome: {
       type: Boolean,
       default: false,
     },
@@ -97,7 +135,7 @@ export default {
       @include link;
       margin-left: 10px;
     }
-    &__reward {
+    &__info {
       font-weight: normal;
        margin-left: 10px;
     }

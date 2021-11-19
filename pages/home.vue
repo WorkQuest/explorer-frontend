@@ -98,6 +98,7 @@
         :key="i"
         class="home__block"
         :transaction="item"
+        :is-home="true"
         :is-last="testTxs[i] === testTxs[testTxs.length - 1]"
       />
     </div>
@@ -215,6 +216,7 @@ export default {
       background: $white;
       border-radius: 6px;
       padding: 10px 14px;
+      margin: 0 16px;
     }
     &__header {
       height: 228px;
@@ -222,6 +224,7 @@ export default {
     &__title {
       font-size: 28px;
       max-width: 200px;
+      margin-left: 16px;
     }
     &__table {
       display: none;

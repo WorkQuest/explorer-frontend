@@ -1,6 +1,13 @@
 <template>
   <div class="transactions">
     <search-filter class="transactions__search" />
+    <base-field
+      v-model="search"
+      class="transactions__search_mobile"
+      :is-search="true"
+      :is-hide-error="true"
+      :placeholder="$t('ui.forms.searchPlaceholder')"
+    />
     <div class="transactions__wrap">
       <div
         v-if="query"
@@ -53,9 +60,17 @@
           }
         ]"
       />
+      <Transaction
+        v-for="(item, i) in txs"
+        :key="i"
+        class="transactions__transaction"
+        :transaction="item"
+        :is-last="txs[i] === txs[txs.length - 1]"
+      />
       <base-pager
         v-if="totalPagesValue > 1"
         v-model="currentPage"
+        class="transactions__pager"
         :total-pages="totalPagesValue"
       />
     </div>
@@ -63,20 +78,23 @@
 </template>
 <script>
 import TableTxs from '~/components/TableTxs/index.vue';
+import Transaction from '~/components/mobile/transaction.vue';
 
 export default {
   name: 'Transactions',
   components: {
     TableTxs,
+    Transaction,
   },
   data: () => ({
     currentPage: 1,
     txs: [],
     query: '',
+    search: '',
   }),
   computed: {
     totalPagesValue() {
-      return this.setTotalPages(this.txs.length, 20);
+      return this.setTotalPages(400, 20);
     },
   },
   async mounted() {
@@ -94,6 +112,9 @@ export default {
     @include container;
     &__search {
       margin: 25px 0;
+      &_mobile {
+        display: none;
+      }
     }
     &__header {
       padding: 20px 0 0 20px;
@@ -115,6 +136,9 @@ export default {
     &__table {
        margin: 25px 0;
     }
+    &__transaction {
+      display: none;
+    }
     &__grey {
     color: $black500;
     }
@@ -130,8 +154,34 @@ export default {
     color: $black600;
   }
 }
-@include _991 {
+
+@include _767 {
   .transactions {
+    &__table {
+      display: none;
+    }
+    &__search {
+      display: none;
+      &_mobile {
+        display: block;
+        background: $white;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 25px 16px;
+      }
+    }
+    &__wrap {
+      padding: 20px 16px 0 16px;
+    }
+    &__header {
+      padding: 0;
+    }
+    &__transaction {
+      display: block;
+    }
+    &__pager {
+      margin: 16px;
+    }
   }
 }
 </style>

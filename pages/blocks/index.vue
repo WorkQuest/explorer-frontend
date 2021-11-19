@@ -26,28 +26,44 @@
         },
       ]"
     />
+    <base-field
+      v-model="search"
+      class="blocks__search_mobile"
+      :is-search="true"
+      :is-hide-error="true"
+      :placeholder="$t('ui.forms.searchPlaceholder')"
+    />
+    <div class="blocks__items items">
+      <p class="items__title">
+        {{ $t('ui.blocks') }}
+      </p>
+      <Block
+        v-for="(item, i) in blocks"
+        :key="i"
+        class="items__block"
+        :block="item"
+        :is-last="blocks[i] === blocks[blocks.length - 1]"
+      />
+    </div>
     <base-pager
       v-if="totalPagesValue > 1"
       v-model="currentPage"
+      class="blocks__pager"
       :total-pages="totalPagesValue"
     />
-    <!-- mobile -->
-    <base-field
-          v-model="search"
-          class="blocks__search_mobile"
-          :is-search="true"
-          :is-hide-error="true"
-          :placeholder="$t('ui.forms.searchPlaceholder')"
-        />
   </div>
 </template>
 
 <script>
+import Block from '~/components/mobile/block.vue';
+
 export default {
   name: 'Blocks',
+  components: { Block },
   data: () => ({
     blocks: [],
     currentPage: 1,
+    search: '',
   }),
   computed: {
     totalPagesValue() {
@@ -70,10 +86,37 @@ export default {
     }
     &__search {
       margin: 25px 0;
+      &_mobile {
+        display: none;
+      }
     }
     &__grey {
     color: $black500;
     }
+}
+@include _767 {
+  .blocks {
+    &__search {
+      display: none;
+      &_mobile {
+        display: block;
+        background: $white;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 25px 16px;
+      }
+    }
+    &__table {
+      display: none;
+    }
+    &__pager {
+      margin: 16px;
+    }
+  }
+  .items {
+    background: $white;
+    padding: 16px;
+  }
 }
 
 </style>
