@@ -49,7 +49,6 @@ export default {
   },
   computed: {
     checkboxClass() {
-      // checkbox types: default, toggle
       const { type } = this;
 
       if (type === 'default') {

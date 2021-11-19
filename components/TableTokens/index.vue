@@ -83,10 +83,6 @@ export default {
       default: () => {},
     },
   },
-  computed: {
-  },
-  methods: {
-  },
 };
 </script>
 

@@ -1,11 +1,55 @@
 <template>
   <div class="blocks blocks__container">
     <search-filter class="blocks__search" />
+    <base-field
+      v-model="search"
+      class="blocks__search_mobile"
+      :is-search="true"
+      :is-hide-error="true"
+      :placeholder="$t('ui.forms.searchPlaceholder')"
+    />
     <table-blocks
       class="blocks__table"
       :title="$t('ui.blocks')"
       :items="blocks"
-      :fields="[
+      :fields="tableHeaders"
+    />
+    <div class="blocks__items items">
+      <p class="items__title">
+        {{ $t('ui.blocks') }}
+      </p>
+      <Block
+        v-for="(item, i) in blocks"
+        :key="i"
+        class="items__block"
+        :block="item"
+        :is-last="blocks[i] === blocks[blocks.length - 1]"
+      />
+    </div>
+    <base-pager
+      v-if="totalPagesValue > 1"
+      v-model="currentPage"
+      :total-pages="totalPagesValue"
+    />
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Blocks',
+  data() {
+    return {
+      blocks: [],
+      currentPage: 1,
+      search: '',
+    };
+  },
+  computed: {
+    totalPagesValue() {
+      return this.setTotalPages(this.blocks.length, 20);
+    },
+    tableHeaders() {
+      return [
         {
           key: 'id', label: this.$t('ui.block.blockNumber'), sortable: true,
         },
@@ -24,50 +68,7 @@
         {
           key: 'size', label: this.$t('ui.block.reward'), sortable: true,
         },
-      ]"
-    />
-    <base-field
-      v-model="search"
-      class="blocks__search_mobile"
-      :is-search="true"
-      :is-hide-error="true"
-      :placeholder="$t('ui.forms.searchPlaceholder')"
-    />
-    <div class="blocks__items items">
-      <p class="items__title">
-        {{ $t('ui.blocks') }}
-      </p>
-      <Block
-        v-for="(item, i) in blocks"
-        :key="i"
-        class="items__block"
-        :block="item"
-        :is-last="blocks[i] === blocks[blocks.length - 1]"
-      />
-    </div>
-    <base-pager
-      v-if="totalPagesValue > 1"
-      v-model="currentPage"
-      class="blocks__pager"
-      :total-pages="totalPagesValue"
-    />
-  </div>
-</template>
-
-<script>
-import Block from '~/components/mobile/block.vue';
-
-export default {
-  name: 'Blocks',
-  components: { Block },
-  data: () => ({
-    blocks: [],
-    currentPage: 1,
-    search: '',
-  }),
-  computed: {
-    totalPagesValue() {
-      return this.setTotalPages(this.blocks.length, 20);
+      ]
     },
   },
   async mounted() {

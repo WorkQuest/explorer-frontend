@@ -618,7 +618,6 @@ export default {
     grid-gap: 10px;
   }
   &__info {
-    //grid-template-rows: repeat(2, auto);
     grid-gap: 5px;
     display: grid;
     text-align: left;
@@ -938,9 +937,13 @@ export default {
     display: none;
   }
 }
+.modal-active {
+  overflow-y: hidden;
+}
 .footer {
   @include container;
   padding: 25px 0;
+  margin-top: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;

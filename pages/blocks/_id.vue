@@ -132,10 +132,12 @@ export default {
   components: {
     Item,
   },
-  data: () => ({
-    blocks: {},
-    block: {},
-  }),
+  data() {
+    return {
+      blocks: {},
+      block: {},
+    };
+  },
   computed: {
   },
   async mounted() {

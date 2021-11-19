@@ -103,9 +103,10 @@ export default {
       default: '',
     },
   },
-  data: () => ({
-    isShown: false,
-  }),
+
+  data() {
+    return { isShown: false };
+  },
   computed: {
     ddClass() {
       const { type } = this;

@@ -41,8 +41,9 @@
       <div class="overview__input">
         {{ $t('ui.token.placeholder') }}
         <span
+          v-click-outside="hideChoice"
           class="icon-caret_down"
-          @click="openChoice"
+          @click="toggleChoice"
         />
       </div>
       <ChoiceToken
@@ -53,6 +54,7 @@
   </div>
 </template>
 <script>
+import ClickOutside from 'vue-click-outside';
 import ChoiceToken from '~/components/ChoiceToken.vue';
 
 export default {
@@ -60,22 +62,27 @@ export default {
   components: {
     ChoiceToken,
   },
+  directives: {
+    ClickOutside,
+  },
   props: {
     token: {
       type: String,
       default: '',
     },
   },
-  data: () => ({
-    isChoosing: false,
-  }),
+  data() {
+    return {
+      isChoosing: false,
+    };
+  },
   methods: {
-    openChoice() {
-      if (this.isChoosing) {
-        this.isChoosing = false;
-      } else {
-        this.isChoosing = true;
-      }
+    toggleChoice() {
+      this.isChoosing = !this.isChoosing;
+      document.querySelector('.primary').classList.toggle('modal-active');
+    },
+    hideChoice() {
+      this.isChoosing = false;
     },
   },
 };

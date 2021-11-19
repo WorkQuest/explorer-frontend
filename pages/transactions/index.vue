@@ -36,29 +36,7 @@
         class="transactions__table"
         :is-only="false"
         :items="txs"
-        :fields="[
-          {
-            key: 'id', label: this.$t('ui.tx.transaction'), sortable: true,
-          },
-          {
-            key: 'blockNumber', label: this.$t('ui.block.blockNumber'), sortable: true,
-          },
-          {
-            key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
-          },
-          {
-            key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
-          },
-          {
-            key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
-          },
-          {
-            key: 'value', label: this.$t('ui.tx.value'), sortable: true,
-          },
-          {
-            key: 'gasUsed', label: this.$t('ui.tx.fee'), sortable: true,
-          }
-        ]"
+        :fields="tableHeaders"
       />
       <Transaction
         v-for="(item, i) in txs"
@@ -86,15 +64,42 @@ export default {
     TableTxs,
     Transaction,
   },
-  data: () => ({
-    currentPage: 1,
-    txs: [],
-    query: '',
-    search: '',
-  }),
+  data() {
+    return {
+      currentPage: 1,
+      txs: [],
+      query: '',
+      search: '',
+    };
+  },
   computed: {
     totalPagesValue() {
       return this.setTotalPages(400, 20);
+    },
+    tableHeaders() {
+      return [
+        {
+          key: 'id', label: this.$t('ui.tx.transaction'), sortable: true,
+        },
+        {
+          key: 'blockNumber', label: this.$t('ui.block.blockNumber'), sortable: true,
+        },
+        {
+          key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
+        },
+        {
+          key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
+        },
+        {
+          key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
+        },
+        {
+          key: 'value', label: this.$t('ui.tx.value'), sortable: true,
+        },
+        {
+          key: 'gasUsed', label: this.$t('ui.tx.fee'), sortable: true,
+        },
+      ];
     },
   },
   async mounted() {

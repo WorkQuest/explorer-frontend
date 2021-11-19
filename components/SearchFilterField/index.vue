@@ -28,9 +28,11 @@
 <script>
 export default {
   name: 'SearchFilter',
-  data: () => ({
-    search: '',
-  }),
+  data() {
+    return {
+      search: '',
+    };
+  },
 };
 </script>
 <style lang="scss" scoped>

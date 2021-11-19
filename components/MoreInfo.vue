@@ -67,17 +67,6 @@ export default {
       default: '',
     },
   },
-  data: () => ({
-  }),
-  methods: {
-    openChoice() {
-      if (this.isChoosing) {
-        this.isChoosing = false;
-      } else {
-        this.isChoosing = true;
-      }
-    },
-  },
 };
 </script>
 

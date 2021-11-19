@@ -136,9 +136,8 @@ export default {
 .pager {
   max-width: 450px;
   float: right;
-  background-color: #FFFFFF;
+  background-color: $white;
   border-radius: 6px;
-  margin-top: 25px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -154,7 +153,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-left: 1px solid #F7F8FA;
+    border-left: 1px solid $black0;
   }
   &__item {
     display: flex;
