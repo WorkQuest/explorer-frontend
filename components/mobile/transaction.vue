@@ -3,7 +3,10 @@
     class="transaction"
     :class="{transaction__separator: isLast}"
   >
-    <div class="transaction__hash">
+    <div
+      v-if="(transaction.hash || transaction.id)"
+      class="transaction__hash"
+    >
       <p>
         {{ $t('ui.tx.transaction') }}
       </p>
@@ -16,10 +19,29 @@
         </nuxt-link>
       </p>
     </div>
+    <div
+      v-if="transaction.blockNumber && internal"
+      class="transaction__hash"
+    >
+      <p>
+        {{ $t('ui.block.blockNumber') }}
+      </p>
+      <p>
+        <nuxt-link
+          class="transaction__link"
+          :to="`/blocks/${(transaction.blockNumber)}`"
+        >
+          {{ transaction.blockNumber }}
+        </nuxt-link>
+      </p>
+    </div>
     <p class="transaction__timestamp">
       16 sec ago
     </p>
-    <div class="transaction__subtitle">
+    <div
+      v-if="transaction.fromAddress"
+      class="transaction__subtitle"
+    >
       {{ $t('ui.tx.from') }}
       <nuxt-link
         class="transaction__link_small"
@@ -29,7 +51,7 @@
       </nuxt-link>
     </div>
     <div
-      v-if="!isHome"
+      v-if="transaction.blockNumber && !internal"
       class="transaction__subtitle"
     >
       {{ $t('ui.block.blockNumber') }}
@@ -40,7 +62,10 @@
         {{ transaction.blockNumber }}
       </nuxt-link>
     </div>
-    <div class="transaction__subtitle">
+    <div
+      v-if="transaction.toAddress"
+      class="transaction__subtitle"
+    >
       {{ $t('ui.tx.to') }}
       <nuxt-link
         v-if="transaction.toAddress"
@@ -69,12 +94,26 @@
       </span>
     </div>
     <div
-      v-if="!isHome"
+      v-if="transaction.gasUsed"
       class="transaction__subtitle"
     >
       {{ $t('ui.tx.fee') }}
       <span class="transaction__info">
         {{ transaction.gasUsed }}
+      </span>
+    </div>
+    <div
+      v-if="isToken"
+      class="transaction__subtitle"
+    >
+      {{ $t('ui.token.token') }}
+      <span class="transaction__info">
+        <nuxt-link
+          class="transaction__link_small"
+          :to="{ path: `tokens/`+transaction.token, params: { token: transaction.token }}"
+        >
+          {{ formatItem(tokens[`${transaction.token}`].name, 10, 0) }} ({{ transaction.token }})
+        </nuxt-link>
       </span>
     </div>
   </div>
@@ -88,11 +127,23 @@ export default {
       type: Object,
       default: () => {},
     },
+    tokens: {
+      type: Object,
+      default: () => {},
+    },
     isLast: {
       type: Boolean,
       default: false,
     },
     isHome: {
+      type: Boolean,
+      default: false,
+    },
+    isToken: {
+      type: Boolean,
+      default: false,
+    },
+    internal: {
       type: Boolean,
       default: false,
     },
@@ -126,7 +177,7 @@ export default {
     }
     &__subtitle {
       font-weight: 600;
-      grid-column: 1/2;
+      grid-column: 1/3;
       margin-top: 11px;
     }
     &__link_small {

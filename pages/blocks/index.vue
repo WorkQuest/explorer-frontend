@@ -35,8 +35,11 @@
 </template>
 
 <script>
+import Block from '~/components/mobile/block.vue';
+
 export default {
   name: 'Blocks',
+  components: { Block },
   data() {
     return {
       blocks: [],
@@ -68,7 +71,7 @@ export default {
         {
           key: 'size', label: this.$t('ui.block.reward'), sortable: true,
         },
-      ]
+      ];
     },
   },
   async mounted() {
@@ -95,6 +98,9 @@ export default {
     color: $black500;
     }
 }
+.items {
+  display: none;
+}
 @include _767 {
   .blocks {
     &__search {
@@ -115,6 +121,7 @@ export default {
     }
   }
   .items {
+    display: block;
     background: $white;
     padding: 16px;
   }

@@ -3,7 +3,10 @@
     class="block"
     :class="{block__separator: isLast}"
   >
-    <div class="block__number">
+    <div
+      v-if="block.id"
+      class="block__number"
+    >
       <p>
         {{ $t('ui.block.blockNumber') }}
       </p>
@@ -16,10 +19,16 @@
         </nuxt-link>
       </p>
     </div>
-    <p class="block__timestamp">
+    <p
+      v-if="block.timestamp"
+      class="block__timestamp"
+    >
       {{ block.timestamp }}
     </p>
-    <div class="block__subtitle">
+    <div
+      v-if="block.txsCount"
+      class="block__subtitle"
+    >
       {{ $t('ui.txs') }}
       <nuxt-link
         class="block__link_small"
@@ -31,7 +40,10 @@
         (10 sec ago)
       </span>
     </div>
-    <div class="block__subtitle">
+    <div
+      v-if="block.reward"
+      class="block__subtitle"
+    >
       {{ $t('ui.block.reward') }}
       <span class="block__reward">
         {{ block.reward }} {{ block.symbol }}

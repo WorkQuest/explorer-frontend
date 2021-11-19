@@ -259,11 +259,13 @@ export default {
   components: {
     Item,
   },
-  data: () => ({
-    tx: {},
-    activeElement: 'txs__tab_overview',
-    search: '',
-  }),
+  data() {
+    return {
+      tx: {},
+      activeElement: 'txs__tab_overview',
+      search: '',
+    };
+  },
   computed: {
   },
   async mounted() {

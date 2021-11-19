@@ -1,6 +1,13 @@
 <template>
   <div class="contract">
     <search-filter class="contract__search" />
+    <base-field
+      v-model="search"
+      class="contract__search_mobile"
+      :is-search="true"
+      :is-hide-error="true"
+      :placeholder="$t('ui.forms.searchPlaceholder')"
+    />
     <div class="contract__header">
       <h4 class="contract__title">
         {{ $t('ui.token.contract') }}
@@ -45,6 +52,13 @@
           :items="txs"
           :fields="tableHeadersTxs"
         />
+        <Transaction
+          v-for="(item, i) in txs"
+          :key="i"
+          class="tables__transaction"
+          :transaction="item"
+          :is-last="txs[i] === txs[txs.length - 1]"
+        />
         <base-pager
           v-if="totalPagesValue > 1"
           v-model="currentPage"
@@ -60,6 +74,14 @@
           :is-only="false"
           :items="internal"
           :fields="tableHeadersInternal"
+        />
+        <Transaction
+          v-for="(item, i) in internal"
+          :key="i"
+          class="tables__transaction"
+          :transaction="item"
+          :is-last="txs[i] === txs[txs.length - 1]"
+          :internal="true"
         />
         <base-pager
           v-if="totalPagesValue > 1"
@@ -78,6 +100,16 @@
           :fields="tableHeadersERC"
           :tokens="tokens"
         />
+        <Transaction
+          v-for="(item, i) in erc"
+          :key="i"
+          class="tables__transaction"
+          :transaction="item"
+          :is-last="txs[i] === txs[txs.length - 1]"
+          :is-home="true"
+          :tokens="tokens"
+          :is-token="true"
+        />
         <base-pager
           v-if="totalPagesValue > 1"
           v-model="currentPage"
@@ -90,17 +122,20 @@
 <script>
 import Overview from '~/components/Overview.vue';
 import MoreInfo from '~/components/MoreInfo.vue';
+import Transaction from '~/components/mobile/transaction.vue';
 
 export default {
   name: 'Contract',
   components: {
     Overview,
     MoreInfo,
+    Transaction,
   },
   data() {
     return {
       activeTab: 'tables__tab_txs',
       currentPage: 1,
+      search: '',
       tokens: {
         USDT: {
           name: 'Tether USD',
@@ -480,6 +515,9 @@ export default {
   @include container;
   &__search {
     margin: 25px 0;
+    &_mobile {
+      display: none;
+    }
   }
   &__header {
     display: flex;
@@ -514,11 +552,47 @@ export default {
         @include text-simple;
         border-bottom: 2px solid $blue;
     }
-    }
+  }
+  &__table {
+    display: none;
+  }
 }
 .icon-copy::before {
   color: $blue;
   font-size: 20px;
   cursor: pointer;
+}
+
+@include _767 {
+  .contract {
+    &__header {
+      display: grid;
+    }
+    &__contract {
+      word-wrap: break-word;
+      max-width: 300px;
+    }
+    &__info {
+      grid-template-columns: 1fr;
+      grid-gap: 0;
+    }
+    &__search {
+      display: none;
+      &_mobile {
+        display: block;
+        background: $white;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 25px 16px;
+      }
+    }
+  }
+  .tables {
+    &__tab {
+      &_txs, &_erc, &_internal {
+      margin-right: 5px;
+      }
+    }
+  }
 }
 </style>
