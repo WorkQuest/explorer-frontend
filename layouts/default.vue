@@ -122,7 +122,6 @@
         </div>
         <!-- mobile header -->
         <div
-          v-click-outside="closeAll"
           class="template__header header_mobile"
         >
           <div
@@ -308,7 +307,7 @@ export default {
     },
     changeLocale(newLocale) {
       this.closeAnother('locale');
-      this.isShowLocale = !this.isShowLocale;
+      this.isShowLocale = false;
       this.$i18n.setLocale(newLocale);
     },
     closeAnother(value) {

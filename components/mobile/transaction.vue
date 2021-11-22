@@ -39,6 +39,15 @@
       16 sec ago
     </p>
     <div
+      v-if="transaction.method"
+      class="transaction__subtitle"
+    >
+      {{ $t('ui.token.method') }}
+      <span class="transaction__info">
+        {{ transaction.method }}
+      </span>
+    </div>
+    <div
       v-if="transaction.fromAddress"
       class="transaction__subtitle"
     >
@@ -85,7 +94,7 @@
       </span>
     </div>
     <div
-      v-else
+      v-else-if="transaction.value"
       class="transaction__subtitle"
     >
       {{ $t('ui.tx.value') }}
@@ -100,6 +109,15 @@
       {{ $t('ui.tx.fee') }}
       <span class="transaction__info">
         {{ transaction.gasUsed }}
+      </span>
+    </div>
+    <div
+      v-if="transaction.quantity"
+      class="transaction__subtitle"
+    >
+      {{ $t('ui.token.quantity') }}
+      <span class="transaction__info">
+        {{ transaction.quantity }}
       </span>
     </div>
     <div

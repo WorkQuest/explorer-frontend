@@ -136,6 +136,7 @@ export default {
     return {
       blocks: {},
       block: {},
+      search: '',
     };
   },
   computed: {

@@ -53,6 +53,7 @@
         :items="testTxs"
         :headerlink="$t('ui.allTxs')"
         type="transactions"
+        class="home__table"
         :fields="tableHeadersTxs"
       />
       <div class="home__blocks blocks">
@@ -84,12 +85,14 @@ import Txn from '~/components/mobile/transaction.vue';
 export default {
   name: 'Home',
   layout: 'default',
+  components: { Block, Txn },
   data() {
     return {
       blocksCount: 0,
       txsCount: 0,
       blocks: [],
       txs: [],
+      search: '',
       testBlocks: [
         {
           id: 17102304,

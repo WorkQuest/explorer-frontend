@@ -1,6 +1,13 @@
 <template>
   <div class="address">
     <search-filter class="address__search" />
+    <base-field
+      v-model="search"
+      class="address__search_mobile"
+      :is-search="true"
+      :is-hide-error="true"
+      :placeholder="$t('ui.forms.searchPlaceholder')"
+    />
     <div class="address__header">
       <h4 class="address__title">
         {{ $t('ui.token.address') }}
@@ -46,24 +53,40 @@
           }
         ]"
       />
-      <base-pager
-        v-if="totalPagesValue > 1"
-        v-model="currentPage"
-        :total-pages="totalPagesValue"
+      <p class="address__subtitle">
+        {{ $t('ui.txs') }}
+      </p>
+      <Transaction
+        v-for="(item, i) in txs"
+        :key="i"
+        class="address__transaction"
+        :transaction="item"
+        :is-last="txs[i] === txs[txs.length - 1]"
       />
     </div>
+    <base-pager
+      v-if="totalPagesValue > 1"
+      v-model="currentPage"
+      class="address__pager"
+      :total-pages="totalPagesValue"
+    />
   </div>
 </template>
 
 <script>
 import BigNumber from 'bignumber.js';
+import Transaction from '~/components/mobile/transaction.vue';
 
 export default {
   name: 'AddressId',
+  components: {
+    Transaction,
+  },
   data() {
     return {
       addressInfo: {},
       address: '',
+      search: '',
       currentPage: 1,
       txs: [
         {
@@ -112,6 +135,9 @@ export default {
   @include container;
   &__search {
     margin: 25px 0;
+    &_mobile {
+        display: none;
+    }
   }
   &__header {
     display: flex;
@@ -129,10 +155,52 @@ export default {
   &__table {
     min-height: 450px;
   }
+  &__subtitle, &__transaction {
+    display: none;
+  }
 }
 .icon-copy::before {
   color: $blue;
   font-size: 20px;
   cursor: pointer;
+}
+
+@include _767 {
+  .address {
+    &__table {
+      display: none;
+    }
+    &__header {
+      display: block;
+      word-wrap: break-word;
+      max-width: 300px;
+    }
+    &__address, &__title {
+      margin-left: 16px;
+    }
+    &__info {
+      grid-template-columns: 1fr;
+    }
+    &__txs {
+      background: $white;
+      padding: 16px;
+    }
+    &__search {
+      display: none;
+      &_mobile {
+        display: block;
+        background: $white;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 25px 16px;
+      }
+    }
+    &__subtitle, &__transaction {
+      display: block;
+    }
+    &__pager {
+      margin: 16px;
+    }
+  }
 }
 </style>

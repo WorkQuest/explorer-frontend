@@ -74,7 +74,7 @@ export default {
   },
   computed: {
     totalPagesValue() {
-      return this.setTotalPages(400, 20);
+      return this.setTotalPages(this.txs.length, 20);
     },
     tableHeaders() {
       return [

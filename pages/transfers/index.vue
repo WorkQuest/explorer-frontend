@@ -1,6 +1,13 @@
 <template>
   <div class="transfer transfer__container">
-    <search-filter class="transfer__header" />
+    <search-filter class="transfer__search" />
+    <base-field
+      v-model="search"
+      class="transfer__search_mobile"
+      :is-search="true"
+      :is-hide-error="true"
+      :placeholder="$t('ui.forms.searchPlaceholder')"
+    />
     <TableTxs
       class="transfer__table"
       :title="$t('ui.token.token')+' '+$t('ui.token.transfers')"
@@ -8,24 +15,43 @@
       :tokens="tokens"
       :fields="tableHeaders"
     />
+    <div class="tables__transactions">
+      <p class="tables__title">
+        {{ $t('ui.token.token')+' '+$t('ui.token.transfers') }}
+      </p>
+      <Transaction
+        v-for="(item, i) in transfers"
+        :key="i"
+        class="tables__transaction"
+        :transaction="item"
+        :is-last="transfers[i] === transfers[transfers.length - 1]"
+        :is-home="true"
+        :tokens="tokens"
+        :is-token="true"
+      />
+    </div>
     <base-pager
       v-if="totalPagesValue > 1"
       v-model="currentPage"
+      class="transfer__pager"
       :total-pages="totalPagesValue"
     />
   </div>
 </template>
 <script>
 import TableTxs from '~/components/TableTxs/index.vue';
+import Transaction from '~/components/mobile/transaction.vue';
 
 export default {
   name: 'Transfer',
   components: {
     TableTxs,
+    Transaction,
   },
   data() {
     return {
       currentPage: 1,
+      search: '',
       transfers: [
         {
           id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
@@ -99,9 +125,12 @@ export default {
     &__container {
         @include container;
     }
-    &__header {
-      margin-top: 30px;
-    }
+    &__search {
+    margin: 25px 0;
+      &_mobile {
+        display: none;
+      }
+  }
     &__table {
        margin: 25px 0;
     }
@@ -116,5 +145,38 @@ export default {
   &__common {
     color: $black600;
   }
+}
+.tables {
+  &__transactions {
+    display: none;
+  }
+}
+
+@include _767 {
+.transfer {
+  &__table {
+    display: none;
+  }
+  &__search {
+      display: none;
+      &_mobile {
+        display: block;
+        background: $white;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 25px 16px;
+      }
+    }
+    &__pager {
+      margin: 16px;
+    }
+}
+.tables {
+  &__transactions {
+    display: block;
+    background: $white;
+    padding: 16px;
+  }
+}
 }
 </style>

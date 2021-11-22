@@ -103,4 +103,15 @@ export default {
   font-size: 16px;
   cursor: pointer;
 }
+@include _767 {
+  .info {
+    &__title {
+      display: block;
+    }
+    &__info {
+      max-width: 300px;
+      word-wrap: break-word;
+    }
+  }
+}
 </style>

@@ -62,6 +62,7 @@
         <base-pager
           v-if="totalPagesValue > 1"
           v-model="currentPage"
+          class="contract__pager"
           :total-pages="totalPagesValue"
         />
       </div>
@@ -80,12 +81,13 @@
           :key="i"
           class="tables__transaction"
           :transaction="item"
-          :is-last="txs[i] === txs[txs.length - 1]"
+          :is-last="internal[i] === internal[internal.length - 1]"
           :internal="true"
         />
         <base-pager
           v-if="totalPagesValue > 1"
           v-model="currentPage"
+          class="contract__pager"
           :total-pages="totalPagesValue"
         />
       </div>
@@ -113,6 +115,7 @@
         <base-pager
           v-if="totalPagesValue > 1"
           v-model="currentPage"
+          class="contract__pager"
           :total-pages="totalPagesValue"
         />
       </div>
@@ -567,6 +570,7 @@ export default {
   .contract {
     &__header {
       display: grid;
+      margin: 0 0 25px 15px;
     }
     &__contract {
       word-wrap: break-word;
@@ -586,11 +590,18 @@ export default {
         margin: 25px 16px;
       }
     }
+    &__pager {
+      margin: 16px;
+    }
   }
   .tables {
+    padding: 20px 15px 15px 15px;
+    &__menu {
+      margin: 0;
+    }
     &__tab {
       &_txs, &_erc, &_internal {
-      margin-right: 5px;
+      margin-right: 3px;
       }
     }
   }

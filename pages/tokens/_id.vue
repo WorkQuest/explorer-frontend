@@ -4,6 +4,13 @@
     class="token"
   >
     <search-filter class="token__search" />
+    <base-field
+      v-model="search"
+      class="token__search_mobile"
+      :is-search="true"
+      :is-hide-error="true"
+      :placeholder="$t('ui.forms.searchPlaceholder')"
+    />
     <div class="token__header">
       <img
         v-if="params"
@@ -44,9 +51,17 @@
           :items="transfers"
           :fields="tableHeadersTransfers"
         />
+        <Transaction
+          v-for="(item, i) in transfers"
+          :key="i"
+          class="tables__item"
+          :transaction="item"
+          :is-last="transfers[i] === transfers[transfers.length - 1]"
+        />
         <base-pager
           v-if="totalPagesValue > 1"
           v-model="currentPage"
+          class="token__pager"
           :total-pages="totalPagesValue"
         />
       </div>
@@ -60,9 +75,17 @@
           :items="holders"
           :fields="tableHeadersHolders"
         />
+        <Holder
+          v-for="(item, i) in holders"
+          :key="i"
+          class="tables__item"
+          :holder="item"
+          :is-last="holders[i] === holders[holders.length - 1]"
+        />
         <base-pager
           v-if="totalPagesValue > 1"
           v-model="currentPage"
+          class="token__pager"
           :total-pages="totalPagesValue"
         />
       </div>
@@ -193,6 +216,8 @@ import TableTxs from '~/components/TableTxs/index.vue';
 import TableTokens from '~/components/TableTokens/index.vue';
 import Overview from '~/components/Overview.vue';
 import MoreInfo from '~/components/MoreInfo.vue';
+import Transaction from '~/components/mobile/transaction.vue';
+import Holder from '~/components/mobile/holder.vue';
 
 export default {
   name: 'Token',
@@ -201,6 +226,8 @@ export default {
     MoreInfo,
     TableTxs,
     TableTokens,
+    Transaction,
+    Holder,
   },
   data() {
     return {
@@ -208,6 +235,7 @@ export default {
       address: '',
       activeTab: 'transfers',
       activePoint: '',
+      search: '',
       currentPage: 1,
       tabs: ['transfers', 'holders', 'info', 'contract'],
       tokens: {
@@ -337,6 +365,9 @@ export default {
   @include container;
   &__search {
     margin: 25px 0;
+    &_mobile {
+      display: none;
+    }
   }
   &__header {
     display: flex;
@@ -374,7 +405,10 @@ export default {
         @include text-simple;
         border-bottom: 2px solid $blue;
     }
-    }
+  }
+  &__item {
+    display: none;
+  }
 }
 .token-info {
   padding: 0 0 10px 20px;
@@ -424,5 +458,43 @@ export default {
 .icon-chevron_up::before, .icon-chevron_down::before {
   color: $blue;
   float: right;
+}
+
+@include _767 {
+  .token {
+    &__info {
+      grid-template-columns: 1fr;
+      grid-gap: 0;
+    }
+    &__search {
+      display: none;
+      &_mobile {
+        display: block;
+        background: $white;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 25px 16px;
+      }
+    }
+    &__pager {
+      margin: 16px;
+    }
+  }
+  .table {
+    display: none;
+  }
+  .tables {
+    padding: 16px;
+    &__menu {
+      margin: 0 0 15px 0;
+    }
+    &__info, &__contract {
+      padding: 0;
+      margin-top: 30px;
+    }
+    &__item {
+    display: block;
+  }
+  }
 }
 </style>

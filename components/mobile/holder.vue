@@ -1,70 +1,49 @@
 <template>
   <div
-    class="block"
-    :class="{block__separator: isLast}"
+    class="holder"
+    :class="{holder__separator: isLast}"
   >
     <div
-      v-if="block.id"
-      class="block__number"
+      v-if="holder.address"
+      class="holder__hash"
     >
       <p>
-        {{ $t('ui.block.blockNumber') }}
+        {{ $t('ui.token.address') }}
       </p>
       <p>
         <nuxt-link
-          class="block__link"
-          :to="`/blocks/${block.id}`"
+          class="holder__link"
+          :to="`/address/${(holder.address)}`"
         >
-          {{ block.id }}
+          {{ formatItem(holder.address, 9, 6) }}
         </nuxt-link>
       </p>
     </div>
-    <p
-      v-if="block.timestamp"
-      class="block__timestamp"
-    >
-      {{ block.timestamp }}
-    </p>
     <div
-      v-if="block.txsCount >= 0"
-      class="block__subtitle"
+      v-if="holder.quantity"
+      class="holder__subtitle"
     >
-      {{ $t('ui.txs') }}
-      <nuxt-link
-        class="block__link_small"
-        :to="{ path: '/transactions', query: { block: block.id }}"
-      >
-        {{ block.txsCount }} txns
-      </nuxt-link>
-      <span class="block__timestamp">
-        (10 sec ago)
+      {{ $t('ui.token.quantity') }}
+      <span class="holder__info">
+        {{ holder.quantity }}
       </span>
     </div>
     <div
-      v-if="block.gasUsed"
-      class="block__subtitle"
+      v-if="holder.percentage"
+      class="holder__subtitle"
     >
-      {{ $t('ui.block.gasUsed') }}
-      <span class="block__info">
-        {{ block.gasUsed }}
+      {{ $t('ui.token.percentage') }}
+      <span class="holder__info">
+        {{ holder.percentage }}
       </span>
     </div>
     <div
-      v-if="block.gasLimit"
-      class="block__subtitle"
+      v-if="holder.value"
+      class="holder__subtitle"
     >
-      {{ $t('ui.block.gasLimit') }}
-      <span class="block__info">
-        {{ block.gasLimit }}
-      </span>
-    </div>
-    <div
-      v-if="block.reward"
-      class="block__subtitle"
-    >
-      {{ $t('ui.block.reward') }}
-      <span class="block__info">
-        {{ block.reward }} {{ block.symbol }}
+      {{ $t('ui.tx.value') }}
+      <span class="holder__info">
+        {{ holder.value }}
       </span>
     </div>
   </div>
@@ -72,9 +51,13 @@
 <script>
 
 export default {
-  name: 'Block',
+  name: 'Holder',
   props: {
-    block: {
+    holder: {
+      type: Object,
+      default: () => {},
+    },
+    tokens: {
       type: Object,
       default: () => {},
     },
@@ -86,11 +69,19 @@ export default {
       type: Boolean,
       default: false,
     },
+    isToken: {
+      type: Boolean,
+      default: false,
+    },
+    internal: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
-.block {
+.holder {
     padding: 20px 0;
     border-bottom: 1px solid $black100;
     grid-template-columns: 1fr 1fr;
@@ -98,7 +89,7 @@ export default {
     &__separator {
         border: none;
     }
-    &__number {
+    &__hash {
       font-weight: 600;
       font-size: 14px;
       color: $black300;

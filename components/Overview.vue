@@ -41,13 +41,13 @@
       <div class="overview__input">
         {{ $t('ui.token.placeholder') }}
         <span
-          v-click-outside="hideChoice"
           class="icon-caret_down"
           @click="toggleChoice"
         />
       </div>
       <ChoiceToken
         v-if="isChoosing"
+        v-click-outside="hideChoice"
         class="overview__select"
       />
     </div>
@@ -139,5 +139,13 @@ export default {
   font-size: 20px;
   float: right;
   cursor: pointer;
+}
+
+@include _767 {
+  .overview {
+    &__title {
+      display: block;
+    }
+  }
 }
 </style>
