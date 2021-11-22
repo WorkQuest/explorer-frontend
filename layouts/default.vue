@@ -307,7 +307,7 @@ export default {
     },
     changeLocale(newLocale) {
       this.closeAnother('locale');
-      this.isShowLocale = false;
+      this.isShowLocale = !this.isShowLocale;
       this.$i18n.setLocale(newLocale);
     },
     closeAnother(value) {
