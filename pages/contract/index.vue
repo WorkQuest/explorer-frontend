@@ -556,7 +556,7 @@ export default {
         border-bottom: 2px solid $blue;
     }
   }
-  &__table {
+  &__transaction {
     display: none;
   }
 }
@@ -574,7 +574,7 @@ export default {
     }
     &__contract {
       word-wrap: break-word;
-      max-width: 300px;
+      max-width: 700px;
     }
     &__info {
       grid-template-columns: 1fr;
@@ -603,6 +603,33 @@ export default {
       &_txs, &_erc, &_internal {
       margin-right: 3px;
       }
+    }
+    &__table {
+      display: none;
+    }
+    &__transaction {
+      display: block;
+    }
+  }
+}
+@include _575 {
+  .contract {
+    &__contract {
+      max-width: 500px;
+    }
+  }
+}
+@include _480 {
+  .contract {
+    &__contract {
+      max-width: 450px;
+    }
+  }
+}
+@include _380 {
+  .contract {
+    &__contract {
+      max-width: 300px;
     }
   }
 }

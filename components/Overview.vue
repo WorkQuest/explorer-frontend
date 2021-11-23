@@ -143,6 +143,7 @@ export default {
 
 @include _767 {
   .overview {
+    @include container;
     &__title {
       display: block;
     }

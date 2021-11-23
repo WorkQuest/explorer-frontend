@@ -45,7 +45,6 @@
                 >
                   {{ $t('ui.txs') }}
                 </nuxt-link>
-                <p class="header__separator" />
                 <nuxt-link
                   to="/transfers"
                   class="header__link"
@@ -717,7 +716,7 @@ export default {
 .header {
   position: sticky;
   top: 0;
-  z-index: 99999;
+  z-index: 1;
   min-height: 72px;
   background: $white;
   box-shadow: 0 1px 0 #E6E9EC;
@@ -980,7 +979,9 @@ export default {
     }
     &__links {
     }
-    &__right {}
+    &__right {
+      grid-gap: 0 ;
+    }
     &__button {
       &_profile {
         display: none;
@@ -992,6 +993,29 @@ export default {
   .header {
     &__btn {
       display: none !important;
+    }
+    &__right {
+      grid-gap: 0;
+    }
+    &__button {
+      &_locale {
+        width: 60px;
+      }
+    }
+    &__logo {
+      grid-gap: 0;
+      img {
+        width: 30px;
+      }
+      span {
+        font-size: 19px;
+      }
+    }
+    &__links {
+      grid-gap: 10px;
+    }
+    &__link {
+      font-size: 15px;
     }
   }
 }
@@ -1073,11 +1097,6 @@ export default {
 }
 @include _575 {
   .header {
-    &__logo {
-      span {
-        display: none;
-      }
-    }
     &__btn {
       display: none !important;
     }

@@ -27,15 +27,6 @@
     width: 760px;
   }
   @include _767 {
-    width: 570px;
-  }
-  @include _575 {
-    width: 480px;
-  }
-  @include _480 {
-    width: 380px;
-  }
-  @include _380 {
-    width: 375px;
+    width: 100vw;
   }
 }
