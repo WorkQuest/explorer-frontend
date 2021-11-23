@@ -178,9 +178,6 @@ export default {
     &__address, &__title {
       margin-left: 16px;
     }
-    &__info {
-      grid-template-columns: 1fr;
-    }
     &__txs {
       background: $white;
       padding: 16px;

@@ -194,7 +194,7 @@
               v-model="address"
               :placeholder="$t('ui.token.input')"
               :label="$t('ui.token.input')"
-              rules="required"
+              :is-hide-error="true"
               mode="white"
               labelcolor="black"
             />
@@ -479,6 +479,9 @@ export default {
     &__pager {
       margin: 16px;
     }
+    &__header {
+      margin: 0 0 25px 16px;
+    }
   }
   .table {
     display: none;
@@ -494,7 +497,12 @@ export default {
     }
     &__item {
     display: block;
+    }
   }
+  .contract {
+    &__submit {
+      margin: 20px 0;
+    }
   }
 }
 </style>

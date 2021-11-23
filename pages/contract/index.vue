@@ -21,6 +21,7 @@
     </div>
     <div class="contract__info">
       <Overview />
+      <!-- TODO: fix more info links -->
       <MoreInfo />
     </div>
     <div class="contract__tables tables">

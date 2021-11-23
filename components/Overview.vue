@@ -83,6 +83,7 @@ export default {
     },
     hideChoice() {
       this.isChoosing = false;
+      document.querySelector('.primary').classList.toggle('modal-active');
     },
   },
 };
@@ -144,6 +145,7 @@ export default {
 @include _767 {
   .overview {
     @include container;
+    max-width: 100vw;
     &__title {
       display: block;
     }

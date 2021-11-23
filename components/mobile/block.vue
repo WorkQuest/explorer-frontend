@@ -23,7 +23,7 @@
       v-if="block.timestamp"
       class="block__timestamp"
     >
-      {{ block.timestamp }}
+      {{ formatData(block.timestamp) }}
     </p>
     <div
       v-if="block.txsCount >= 0"
@@ -70,6 +70,7 @@
   </div>
 </template>
 <script>
+import moment from 'moment';
 
 export default {
   name: 'Block',
@@ -85,6 +86,11 @@ export default {
     isHome: {
       type: Boolean,
       default: false,
+    },
+  },
+  methods: {
+    formatData(data) {
+      return moment(data).format('dd mm yy');
     },
   },
 };

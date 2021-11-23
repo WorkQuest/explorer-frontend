@@ -736,6 +736,9 @@ export default {
     align-items: center;
     grid-template-columns: auto 1fr;
     grid-gap: 35px;
+    &_mobile {
+      display: none;
+    }
   }
   &__link {
     font-family: 'Inter', sans-serif;
@@ -971,9 +974,6 @@ export default {
     }
   }
   .header {
-    &__button_menu {
-      display: flex;
-    }
     &__body {
       margin: 0 20px 0 20px;
     }
@@ -1034,6 +1034,9 @@ export default {
     &_mobile {
       z-index: 5  ;
     }
+    &__button_menu {
+      display: flex;
+    }
     &__logo {
       margin-bottom: 50px;
       span {
@@ -1049,16 +1052,17 @@ export default {
     &__left {
       display: none;
       &_mobile {
-      grid-template-columns: 1fr;
-      grid-gap: 0;
-      grid-template-rows: auto 1fr;
-      align-items: flex-start;
-      background: $white;
-      padding: 23px 16px;
-      height: 70vh;
-      position: absolute;
-      left: 0;
-      top: 0;
+        display: inline-block;
+        grid-template-columns: 1fr;
+        grid-gap: 0;
+        grid-template-rows: auto 1fr;
+        align-items: flex-start;
+        background: $white;
+        padding: 23px 16px;
+        height: 70vh;
+        position: absolute;
+        left: 0;
+        top: 0;
       }
     }
     &__links {

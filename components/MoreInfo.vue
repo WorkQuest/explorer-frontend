@@ -106,6 +106,7 @@ export default {
 @include _767 {
   .info {
     @include container;
+    max-width: 100vw;
     &__title {
       display: block;
     }

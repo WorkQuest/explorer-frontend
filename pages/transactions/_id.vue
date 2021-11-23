@@ -9,6 +9,8 @@
       :placeholder="$t('ui.forms.searchPlaceholder')"
     />
     <div class="txs__content">
+      <!-- {{ activeElement }}
+      TODO: fix tabs -->
       <nuxt-link
         to="/transactions"
         class="txs__back"
