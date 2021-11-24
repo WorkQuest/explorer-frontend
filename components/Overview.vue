@@ -135,7 +135,9 @@ export default {
     z-index: 1;
     width: 100%;
     left: 0;
-    overscroll-behavior: contain;
+    &-field {
+      overscroll-behavior: contain;
+    }
   }
 }
 .icon-caret_down::before {
