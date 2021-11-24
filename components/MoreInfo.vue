@@ -33,14 +33,14 @@
         <span class="info__title">{{ $t('ui.token.creator') }}</span>
         <nuxt-link
           class="info__link"
-          :to="'/account/'"
+          :to="'/address/0xe24f99419d788003c0d5212f05f47b1572cdc38a'"
         >
           {{ formatItem('0xe24f99419d788003c0d5212f05f47b1572cdc38a', 9, 6) }}
         </nuxt-link>
         {{ $t('ui.token.atTxn') }}
         <nuxt-link
           class="info__link"
-          :to="'/account/'"
+          :to="'/address/0xe24f99419d788003c0d5212f05f47b1572cdc38a'"
         >
           {{ formatItem('0xe24f99419d788003c0d5212f05f47b1572cdc38a', 9, 6) }}
         </nuxt-link>
@@ -49,7 +49,7 @@
         <span class="info__title">{{ $t('ui.token.tracker') }}</span>
         <nuxt-link
           class="info__link"
-          :to="'/account/'"
+          :to="'/tokens'"
         >
           {{ formatItem('Vault:JetSwappWINGS(vault) 16,032.204453', 26, 0) }}
         </nuxt-link>

@@ -9,8 +9,6 @@
       :placeholder="$t('ui.forms.searchPlaceholder')"
     />
     <div class="txs__content">
-      <!-- {{ activeElement }}
-      TODO: fix tabs -->
       <nuxt-link
         to="/transactions"
         class="txs__back"
@@ -24,18 +22,15 @@
       <div class="txs__info">
         <div class="txs__number-field">
           <span
+            v-for="(tab, i) in tabs"
+            :key="i"
             class="txs__tab_overview"
-            :class="{txs__tab_active: activeElement === 'txs__tab_overview'}"
-            @click="onClick"
-          >{{ $t('ui.token.overview') }}</span>
-          <span
-            class="txs__tab_logs"
-            :class="{txs__tab_active: activeElement === 'txs__tab_logs'}"
-            @click="onClick"
-          >{{ $t('ui.token.logs') }}</span>
+            :class="{txs__tab_active: activeElement === tab}"
+            @click="onClick(tab)"
+          >{{ $t(`ui.token.${tab}`) }}</span>
         </div>
         <div
-          v-if="activeElement === 'txs__tab_overview'"
+          v-if="activeElement === 'overview'"
           class="txs__columns columns"
         >
           <Item
@@ -95,7 +90,7 @@
           />
         </div>
         <div
-          v-if="activeElement === 'txs__tab_logs'"
+          v-if="activeElement === 'logs'"
           class="txs__logs logs"
         >
           <p class="logs__header">
@@ -152,7 +147,7 @@
         </div>
         <!-- mobile -->
         <div
-          v-if="activeElement === 'txs__tab_overview'"
+          v-if="activeElement === 'overview'"
           class="overview"
         >
           <div class="overview__hash">
@@ -264,7 +259,8 @@ export default {
   data() {
     return {
       tx: {},
-      activeElement: 'txs__tab_overview',
+      tabs: ['overview', 'logs'],
+      activeElement: 'overview',
       search: '',
     };
   },
@@ -278,8 +274,8 @@ export default {
     this.SetLoader(false);
   },
   methods: {
-    onClick(event) {
-      this.activeElement = event.target.className;
+    onClick(tab) {
+      this.activeElement = tab;
     },
   },
 };
