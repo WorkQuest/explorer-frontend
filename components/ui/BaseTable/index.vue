@@ -33,7 +33,7 @@
         </nuxt-link>
       </template>
       <template #cell(timestamp)="el">
-        <span>{{ el.item.timestamp }}</span>
+        <span>{{ formatDataFromNow(el.item.timestamp) }}</span>
       </template>
       <!-- blocks -->
       <template #cell(reward)="el">
@@ -59,7 +59,10 @@
         >
           {{ formatItem(el.item.hash, 9, 6) }}
         </nuxt-link>
-        <span class="table__grey">{{ el.item.timestamp }}</span>
+        <span
+          v-if="el.item.timestamp"
+          class="table__grey"
+        >{{ formatDataFromNow(el.item.timestamp) }}</span>
       </template>
       <template #cell(fromAddress)="el">
         <nuxt-link

@@ -36,7 +36,7 @@
       </p>
     </div>
     <p class="transaction__timestamp">
-      16 sec ago
+      {{ formatDataFromNow(transaction.timestamp) }}
     </p>
     <div
       v-if="transaction.method"

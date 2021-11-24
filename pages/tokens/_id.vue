@@ -13,7 +13,6 @@
     />
     <div class="token__header">
       <img
-        v-if="params"
         :src="require(`~/assets/img/tokens/${params}.svg`)"
         width="30"
         class="token__image"
@@ -256,7 +255,7 @@ export default {
         {
           id: '0xdd3be9a7b1c18bd28188c51f8734b907264cd7de7aa4b68d8ba6e823da46e778',
           method: 'Transfer',
-          timestamp: '25 secs ago',
+          timestamp: '2021-11-23T09:19:08.000Z',
           fromAddress: '0x2cba9372edb012769d67d45b62ddd63ac654910a',
           toAddress: '0xd26114cd6ee289accf82350c8d8487fedb8a0c07',
           quantity: 1092.814502,
@@ -264,7 +263,7 @@ export default {
         {
           id: '0xdd3be9a7b1c18bd28188c51f8734b907264cd7de7aa4b68d8ba6e823da46e778',
           method: 'Approve',
-          timestamp: '35 secs ago',
+          timestamp: '2021-11-24T09:19:08.000Z',
           fromAddress: '0x2cba9372edb012769d67d45b62ddd63ac654910a',
           toAddress: '0xd26114cd6ee289accf82350c8d8487fedb8a0c07',
           quantity: 1092.814503,

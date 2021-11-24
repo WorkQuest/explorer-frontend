@@ -55,7 +55,7 @@ export default {
       transfers: [
         {
           id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
+          timestamp: '2021-11-24T09:19:08.000Z',
           fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
           toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
           value: 664600000000000000,
@@ -63,7 +63,7 @@ export default {
         },
         {
           id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
+          timestamp: '2021-11-24T09:19:08.000Z',
           fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
           toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
           value: 664600000000000000,

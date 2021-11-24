@@ -938,9 +938,6 @@ export default {
     display: none;
   }
 }
-.modal-active {
-  overflow-y: hidden;
-}
 .footer {
   @include container;
   padding: 25px 0;

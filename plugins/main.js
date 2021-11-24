@@ -72,5 +72,11 @@ Vue.mixin({
     setTotalPages(itemsNum, itemsPerPage) {
       return Math.ceil(itemsNum / itemsPerPage);
     },
+    formatData(data) {
+      return moment(data).format('dd mm yy');
+    },
+    formatDataFromNow(data) {
+      return moment(data).startOf('hour').fromNow();
+    },
   },
 });

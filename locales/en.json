@@ -55,6 +55,7 @@
       "filters": "All filters"
     },
     "token": {
+      "txs": "Transactions",
       "tracker": "Token Tracker",
       "token": "Token",
       "volume": "Volume (24H)",
@@ -87,7 +88,7 @@
       "maxSupply": "Max Total Supply",
       "placeholder": "Placeholder",
       "internal": "Internal Txns",
-      "tokensTxns": "Token Txns"
+      "tokensTxns": "ERC-20 Token Txns"
     }
   },
   "home": {

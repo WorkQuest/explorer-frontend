@@ -96,14 +96,14 @@ export default {
       testBlocks: [
         {
           id: 17102304,
-          timestamp: '25 secs ago',
+          timestamp: '2021-11-23T09:19:08.000Z',
           txsCount: 209,
           reward: 0.06646,
           symbol: 'BUSD',
         },
         {
           id: 17102305,
-          timestamp: '25 secs ago',
+          timestamp: '2021-11-24T07:19:08.000Z',
           txsCount: 209,
           reward: 0.06646,
           symbol: 'WUSD',
@@ -116,7 +116,7 @@ export default {
           toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
           value: 0.06646,
           symbol: 'BUSD',
-          timestamp: '10 secs ago',
+          timestamp: '2021-11-23T09:19:08.000Z',
         },
         {
           hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
@@ -124,7 +124,7 @@ export default {
           toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
           value: 0.07746,
           symbol: 'WUSD',
-          timestamp: '10 secs ago',
+          timestamp: '2021-11-23T09:19:08.000Z',
         },
       ],
     };

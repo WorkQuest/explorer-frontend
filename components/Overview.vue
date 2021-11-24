@@ -38,18 +38,22 @@
       <div class="overview__token">
         {{ $t('ui.token.token') }}
       </div>
-      <div class="overview__input">
-        {{ $t('ui.token.placeholder') }}
-        <span
-          class="icon-caret_down"
-          @click="toggleChoice"
+      <div
+        v-click-outside="hideChoice"
+        class="overview__select-field"
+      >
+        <div class="overview__input">
+          {{ $t('ui.token.placeholder') }}
+          <span
+            class="icon-caret_down"
+            @click="toggleChoice"
+          />
+        </div>
+        <ChoiceToken
+          v-if="isChoosing"
+          class="overview__select"
         />
       </div>
-      <ChoiceToken
-        v-if="isChoosing"
-        v-click-outside="hideChoice"
-        class="overview__select"
-      />
     </div>
   </div>
 </template>
@@ -79,11 +83,9 @@ export default {
   methods: {
     toggleChoice() {
       this.isChoosing = !this.isChoosing;
-      document.querySelector('.primary').classList.toggle('modal-active');
     },
     hideChoice() {
       this.isChoosing = false;
-      document.querySelector('.primary').classList.toggle('modal-active');
     },
   },
 };
@@ -133,6 +135,7 @@ export default {
     z-index: 1;
     width: 100%;
     left: 0;
+    overscroll-behavior: contain;
   }
 }
 .icon-caret_down::before {

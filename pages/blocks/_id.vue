@@ -68,13 +68,13 @@
         <div class="block__columns_mobile columns">
           <div class="columns__time">
             <span class="columns__timestamp">
-              16 sec ago
+              {{ formatDataFromNow(block.timestamp) }}
             </span>
             <div class="columns__subtitle">
               {{ $t('ui.timestamp') }}
             </div>
             <span class="columns__info">
-              {{ block.timestamp }}
+              {{ formatData(block.timestamp) }}
             </span>
           </div>
           <p class="columns__subtitle">
@@ -125,6 +125,7 @@
   </div>
 </template>
 <script>
+import moment from 'moment';
 import Item from '~/components/InfoItem.vue';
 
 export default {

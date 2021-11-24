@@ -26,23 +26,15 @@
     <div class="contract__tables tables">
       <div class="tables__menu">
         <span
-          class="tables__tab_txs"
-          :class="{tables__tab_active: activeTab === 'tables__tab_txs'}"
-          @click="onClick"
-        >{{ $t('ui.txs') }}</span>
-        <span
-          class="tables__tab_internal"
-          :class="{tables__tab_active: activeTab === 'tables__tab_internal'}"
-          @click="onClick"
-        >{{ $t('ui.token.internal') }}</span>
-        <span
-          class="tables__tab_erc"
-          :class="{tables__tab_active: activeTab === 'tables__tab_erc'}"
-          @click="onClick"
-        >ERC-20 {{ $t('ui.token.tokensTxns') }}</span>
+          v-for="(tab, i) in tabs"
+          :key="i"
+          class="tables__tab"
+          :class="{tables__tab_active: activeTab === tab}"
+          @click="onClick(tab)"
+        >{{ $t(`ui.token.${tab}`) }}</span>
       </div>
       <div
-        v-if="activeTab === 'tables__tab_txs'"
+        v-if="activeTab === 'txs'"
         class="tables__txs"
       >
         <TableTxs
@@ -67,7 +59,7 @@
         />
       </div>
       <div
-        v-if="activeTab === 'tables__tab_internal'"
+        v-if="activeTab === 'internal'"
         class="tables__internal"
       >
         <TableTxs
@@ -92,7 +84,7 @@
         />
       </div>
       <div
-        v-if="activeTab === 'tables__tab_erc'"
+        v-if="activeTab === 'tokensTxns'"
         class="tables__erc"
       >
         <TableTxs
@@ -136,7 +128,7 @@ export default {
   },
   data() {
     return {
-      activeTab: 'tables__tab_txs',
+      activeTab: 'txs',
       currentPage: 1,
       search: '',
       tokens: {
@@ -153,6 +145,7 @@ export default {
           description: 'Aavegotchis are crypto-collectibles living on the Ethereum blockchain, backed by the ERC721 standard used in popular blockchain games. $GHST is the official utility token of the Aavegotchi ecosystem and can be used to purchase portals, wearables, and consumables.',
         },
       },
+      tabs: ['txs', 'internal', 'tokensTxns'],
       txs: [],
       internal: [
         {
@@ -423,11 +416,11 @@ export default {
   },
   computed: {
     totalPagesValue() {
-      if (this.activeTab === 'tables__tab_txs') {
+      if (this.activeTab === 'txs') {
         return this.setTotalPages(this.txs.length, 20);
-      } if (this.activeTab === 'tables__tab_internal') {
+      } if (this.activeTab === 'internal') {
         return this.setTotalPages(this.internal.length, 20);
-      } if (this.activeTab === 'tables__tab_erc') {
+      } if (this.activeTab === 'tokensTxns') {
         return this.setTotalPages(this.erc.length, 20);
       }
       return 1;
@@ -506,8 +499,8 @@ export default {
     this.SetLoader(false);
   },
   methods: {
-    onClick(event) {
-      this.activeTab = event.target.className;
+    onClick(tab) {
+      this.activeTab = tab;
     },
   },
 };
@@ -544,13 +537,11 @@ export default {
     margin: 0 0 27px 20px
   }
   &__tab {
-    &_txs, &_erc, &_internal {
     @include text-simple;
     margin-right: 20px;
     padding-bottom: 12px;
     color: $black500;
     cursor: pointer;
-    }
     &_active {
         @include text-simple;
         border-bottom: 2px solid $blue;
@@ -600,9 +591,7 @@ export default {
       margin: 0;
     }
     &__tab {
-      &_txs, &_erc, &_internal {
       margin-right: 3px;
-      }
     }
     &__table {
       display: none;
