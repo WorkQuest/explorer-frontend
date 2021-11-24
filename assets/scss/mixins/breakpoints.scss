@@ -42,7 +42,7 @@
 }
 
 @mixin _767 {
-  @media (max-width: 767px) {
+  @media (max-width: 850px) {
     @content;
   }
 }

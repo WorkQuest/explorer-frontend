@@ -63,6 +63,7 @@ export default {
       height: 394px;
       overflow-y: scroll;
       overflow-x: hidden;
+      overscroll-behavior: contain;
     }
     &__uniswap {
         @include text-simple;

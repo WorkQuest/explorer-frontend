@@ -12,6 +12,7 @@
       tbody-tr-class="table__row"
     >
       <template
+        v-if="$props.title"
         #table-caption
       >
         <div class="table__titles">

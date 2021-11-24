@@ -4,9 +4,15 @@
     class="token"
   >
     <search-filter class="token__search" />
+    <base-field
+      v-model="search"
+      class="token__search_mobile"
+      :is-search="true"
+      :is-hide-error="true"
+      :placeholder="$t('ui.forms.searchPlaceholder')"
+    />
     <div class="token__header">
       <img
-        v-if="params"
         :src="require(`~/assets/img/tokens/${params}.svg`)"
         width="30"
         class="token__image"
@@ -44,9 +50,17 @@
           :items="transfers"
           :fields="tableHeadersTransfers"
         />
+        <Transaction
+          v-for="(item, i) in transfers"
+          :key="i"
+          class="tables__item"
+          :transaction="item"
+          :is-last="transfers[i] === transfers[transfers.length - 1]"
+        />
         <base-pager
           v-if="totalPagesValue > 1"
           v-model="currentPage"
+          class="token__pager"
           :total-pages="totalPagesValue"
         />
       </div>
@@ -60,9 +74,17 @@
           :items="holders"
           :fields="tableHeadersHolders"
         />
+        <Holder
+          v-for="(item, i) in holders"
+          :key="i"
+          class="tables__item"
+          :holder="item"
+          :is-last="holders[i] === holders[holders.length - 1]"
+        />
         <base-pager
           v-if="totalPagesValue > 1"
           v-model="currentPage"
+          class="token__pager"
           :total-pages="totalPagesValue"
         />
       </div>
@@ -171,7 +193,7 @@
               v-model="address"
               :placeholder="$t('ui.token.input')"
               :label="$t('ui.token.input')"
-              rules="required"
+              :is-hide-error="true"
               mode="white"
               labelcolor="black"
             />
@@ -193,6 +215,8 @@ import TableTxs from '~/components/TableTxs/index.vue';
 import TableTokens from '~/components/TableTokens/index.vue';
 import Overview from '~/components/Overview.vue';
 import MoreInfo from '~/components/MoreInfo.vue';
+import Transaction from '~/components/mobile/transaction.vue';
+import Holder from '~/components/mobile/holder.vue';
 
 export default {
   name: 'Token',
@@ -201,6 +225,8 @@ export default {
     MoreInfo,
     TableTxs,
     TableTokens,
+    Transaction,
+    Holder,
   },
   data() {
     return {
@@ -208,6 +234,7 @@ export default {
       address: '',
       activeTab: 'transfers',
       activePoint: '',
+      search: '',
       currentPage: 1,
       tabs: ['transfers', 'holders', 'info', 'contract'],
       tokens: {
@@ -228,7 +255,7 @@ export default {
         {
           id: '0xdd3be9a7b1c18bd28188c51f8734b907264cd7de7aa4b68d8ba6e823da46e778',
           method: 'Transfer',
-          timestamp: '25 secs ago',
+          timestamp: '2021-11-23T09:19:08.000Z',
           fromAddress: '0x2cba9372edb012769d67d45b62ddd63ac654910a',
           toAddress: '0xd26114cd6ee289accf82350c8d8487fedb8a0c07',
           quantity: 1092.814502,
@@ -236,7 +263,7 @@ export default {
         {
           id: '0xdd3be9a7b1c18bd28188c51f8734b907264cd7de7aa4b68d8ba6e823da46e778',
           method: 'Approve',
-          timestamp: '35 secs ago',
+          timestamp: '2021-11-24T09:19:08.000Z',
           fromAddress: '0x2cba9372edb012769d67d45b62ddd63ac654910a',
           toAddress: '0xd26114cd6ee289accf82350c8d8487fedb8a0c07',
           quantity: 1092.814503,
@@ -337,6 +364,9 @@ export default {
   @include container;
   &__search {
     margin: 25px 0;
+    &_mobile {
+      display: none;
+    }
   }
   &__header {
     display: flex;
@@ -374,7 +404,10 @@ export default {
         @include text-simple;
         border-bottom: 2px solid $blue;
     }
-    }
+  }
+  &__item {
+    display: none;
+  }
 }
 .token-info {
   padding: 0 0 10px 20px;
@@ -424,5 +457,51 @@ export default {
 .icon-chevron_up::before, .icon-chevron_down::before {
   color: $blue;
   float: right;
+}
+
+@include _767 {
+  .token {
+    &__info {
+      grid-template-columns: 1fr;
+      grid-gap: 0;
+    }
+    &__search {
+      display: none;
+      &_mobile {
+        display: block;
+        background: $white;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 25px 16px;
+      }
+    }
+    &__pager {
+      margin: 16px;
+    }
+    &__header {
+      margin: 0 0 25px 16px;
+    }
+  }
+  .table {
+    display: none;
+  }
+  .tables {
+    padding: 16px;
+    &__menu {
+      margin: 0 0 15px 0;
+    }
+    &__info, &__contract {
+      padding: 0;
+      margin-top: 30px;
+    }
+    &__item {
+    display: block;
+    }
+  }
+  .contract {
+    &__submit {
+      margin: 20px 0;
+    }
+  }
 }
 </style>

@@ -26,7 +26,7 @@
         </nuxt-link>
       </template>
       <template #cell(timestamp)="el">
-        <span>{{ el.item.timestamp }}</span>
+        <span>{{ formatDataFromNow(el.item.timestamp) }}</span>
       </template>
       <template #cell(reward)="el">
         <span>{{ el.item.reward }} {{ el.item.symbol }}</span>
