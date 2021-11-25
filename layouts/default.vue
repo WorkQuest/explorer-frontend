@@ -192,6 +192,32 @@
         </div>
         <div
           v-if="isMobileMenu"
+          class="template__footer footer_mobile"
+        >
+          <div class="footer__left">
+            <p class="footer__copy">
+              © Workquest 2021
+            </p>
+            <p class="footer__copy">
+              {{ $t('ui.rights') }}
+            </p>
+          </div>
+          <div class="footer__right">
+            <nuxt-link
+              to="/"
+              class="footer__link"
+            >
+              · {{ $t('ui.terms') }}
+            </nuxt-link>
+            <nuxt-link
+              to="/"
+              class="footer__link"
+            >
+              · {{ $t('ui.privacy') }}
+            </nuxt-link>
+          </div>
+        </div>
+        <div
           class="template__footer footer"
         >
           <div class="footer__left">
@@ -381,7 +407,7 @@ export default {
   background: #F7F8FA;
   &__content {
     display: grid;
-    min-height: calc(100vh - 72px);
+    min-height: calc(100vh - 185px);
   }
   &__main {
     display: grid;
@@ -548,6 +574,9 @@ export default {
   justify-content: space-between;
   align-items: center;
   border-top: 1px solid $black100;
+  &_mobile {
+    display: none;
+  }
   &__left {
     display: flex;
     grid-gap: 15px;
@@ -677,19 +706,23 @@ export default {
     }
   }
   .footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    background: $black0;
-    flex-direction: column-reverse;
-    justify-content: flex-end;
-    align-items: baseline;
-    padding: 10px 15px;
-    height: 30vh;
-    width: 245px;
-    grid-gap: 20px;
-    border: none;
-    z-index: 5;
+    display: none;
+    &_mobile {
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      background: $black0;
+      flex-direction: column-reverse;
+      justify-content: flex-end;
+      align-items: baseline;
+      padding: 10px 15px;
+      height: 30vh;
+      width: 245px;
+      grid-gap: 20px;
+      border: none;
+      z-index: 5;
+    }
     &__left {
       flex-direction: column;
     }
