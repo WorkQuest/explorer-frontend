@@ -3,11 +3,6 @@
     <div class="primary__template template">
       <div class="template__content">
         <div
-          v-if="isMobileMenu"
-          class="template__screen"
-          @click="closeMenu()"
-        />
-        <div
           v-click-outside="closeAll"
           class="template__header header"
         >
@@ -106,13 +101,13 @@
               </button>
               <div
                 class="ctm-menu__toggle"
-                @click="openMenu()"
+                @click="toggleMobileMenu()"
               >
                 <button
                   class="header__button header__button_menu"
                 >
                   <span
-                    class="icon-hamburger"
+                    :class="{'icon-hamburger': !isMobileMenu, 'icon-close_big': isMobileMenu}"
                   />
                 </button>
               </div>
@@ -127,18 +122,8 @@
             v-if="isMobileMenu"
             class="header__left_mobile"
           >
-            <div
-              class="header__logo"
-              @click="closeMenuByLink()"
-            >
-              <img
-                src="~assets/img/app/logo.svg"
-                alt="WorkQuest"
-              >
-              <span class="header__text">WorkQuest</span>
-            </div>
             <div class="header__links">
-              <span @click="closeMenu()">
+              <span @click="toggleMobileMenu()">
                 <nuxt-link
                   to="/home"
                   class="header__link"
@@ -147,7 +132,7 @@
                   {{ $t('ui.home') }}
                 </nuxt-link>
               </span>
-              <span @click="closeMenu()">
+              <span @click="toggleMobileMenu()">
                 <nuxt-link
                   to="/blocks"
                   class="header__link"
@@ -156,7 +141,7 @@
                   {{ $t('ui.blocks') }}
                 </nuxt-link>
               </span>
-              <span @click="closeMenu()">
+              <span @click="toggleMobileMenu()">
                 <nuxt-link
                   to="/transactions"
                   class="header__link"
@@ -166,7 +151,7 @@
                 </nuxt-link>
               </span>
               <p class="header__separator" />
-              <span @click="closeMenu()">
+              <span @click="toggleMobileMenu()">
                 <nuxt-link
                   to="/transfers"
                   class="header__link"
@@ -175,7 +160,7 @@
                   {{ $t('ui.transfers') }}
                 </nuxt-link>
               </span>
-              <span @click="closeMenu()">
+              <span @click="toggleMobileMenu()">
                 <nuxt-link
                   to="/tokens"
                   class="header__link"
@@ -189,33 +174,6 @@
         </div>
         <div class="template__content">
           <nuxt />
-        </div>
-        <div
-          v-if="isMobileMenu"
-          class="template__footer footer_mobile"
-        >
-          <div class="footer__left">
-            <p class="footer__copy">
-              © Workquest 2021
-            </p>
-            <p class="footer__copy">
-              {{ $t('ui.rights') }}
-            </p>
-          </div>
-          <div class="footer__right">
-            <nuxt-link
-              to="/"
-              class="footer__link"
-            >
-              · {{ $t('ui.terms') }}
-            </nuxt-link>
-            <nuxt-link
-              to="/"
-              class="footer__link"
-            >
-              · {{ $t('ui.privacy') }}
-            </nuxt-link>
-          </div>
         </div>
         <div
           class="template__footer footer"
@@ -294,21 +252,14 @@ export default {
     },
     toggleMobileMenu() {
       this.isMobileMenu = !this.isMobileMenu;
-      this.isNotFlexContainer = !this.isNotFlexContainer;
       this.closeAnother('mobile');
-    },
-    openMenu() {
-      this.isMobileMenu = true;
-    },
-    closeMenu() {
-      this.isMobileMenu = false;
     },
     toMain() {
       this.$router.push('/');
     },
     closeMenuByLink() {
       this.toMain();
-      this.closeMenu();
+      this.toggleMobileMenu();
     },
     goToMessages() {
       this.$router.push('/messages');
@@ -648,15 +599,6 @@ export default {
   }
 }
 @include _767 {
-  .template {
-    &__screen {
-      background: rgba(7, 18, 34, 0.6);
-      width: 100vw;
-      height: 100vh;
-      position: fixed;
-      z-index: 2;
-    }
-  }
   .header {
     z-index: 1;
     &_mobile {
@@ -687,16 +629,16 @@ export default {
         align-items: flex-start;
         background: $white;
         padding: 23px 16px;
-        height: 70vh;
-        position: absolute;
+        height: 100vh;
+        position: fixed;
         left: 0;
-        top: 0;
+        top: 72px;
       }
     }
     &__links {
       flex-direction: column;
       align-items: flex-start;
-      width: 213px;
+      width: 100vw;
     }
     &__separator {
       height: 1px;
