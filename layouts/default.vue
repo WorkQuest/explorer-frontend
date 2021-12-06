@@ -446,7 +446,7 @@ export default {
       width: 86px;
       height: 46px;
       span {
-        padding-left: 10px;
+        padding-left: 3px;
       }
     }
   }
@@ -503,7 +503,8 @@ export default {
     min-height: 20px;
   }
   &__icon {
-    border-radius: 100%;
+    border-radius: 50%;
+    width: 80%;
   }
   &__text {
     @include text-simple;
@@ -591,10 +592,10 @@ export default {
       }
     }
     &__links {
-      grid-gap: 10px;
+      grid-gap: 15px;
     }
     &__link {
-      font-size: 15px;
+      font-size: 17px;
     }
   }
 }
@@ -648,29 +649,9 @@ export default {
     }
   }
   .footer {
-    display: none;
-    &_mobile {
-      display: block;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      background: $black0;
-      flex-direction: column-reverse;
-      justify-content: flex-end;
-      align-items: baseline;
-      padding: 10px 15px;
-      height: 30vh;
-      width: 245px;
-      grid-gap: 20px;
-      border: none;
-      z-index: 5;
-    }
-    &__left {
-      flex-direction: column;
-    }
-    &__right {
-      flex-direction: column;
-    }
+    display: flex;
+    justify-content: space-between;
+    padding: 25px 15px;
   }
 }
 @include _575 {
@@ -689,11 +670,14 @@ export default {
     min-width: 350px;
   }
   .footer {
+    &__right {
+      flex-direction: column;
+    }
     &__bottom {
       display: grid;
     }
     &__left {
-      grid-column: 1/2;
+      flex-direction: column;
     }
     &__rights {
       grid-column: 1/2;
