@@ -87,7 +87,7 @@
                         @click="setLocale(item)"
                       >
                         <img
-                          :src="`/img/app/${item}.svg`"
+                          :src="require(`~/assets/img/app/${item}.svg`)"
                           :alt="item"
                           class="locale__icon"
                         >
