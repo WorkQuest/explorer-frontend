@@ -3,11 +3,6 @@
     <div class="primary__template template">
       <div class="template__content">
         <div
-          v-if="isMobileMenu"
-          class="template__screen"
-          @click="closeMenu()"
-        />
-        <div
           v-click-outside="closeAll"
           class="template__header header"
         >
@@ -92,7 +87,7 @@
                         @click="setLocale(item)"
                       >
                         <img
-                          :src="`/img/app/${item}.svg`"
+                          :src="require(`~/assets/img/app/${item}.svg`)"
                           :alt="item"
                           class="locale__icon"
                         >
@@ -106,13 +101,13 @@
               </button>
               <div
                 class="ctm-menu__toggle"
-                @click="openMenu()"
+                @click="toggleMobileMenu()"
               >
                 <button
                   class="header__button header__button_menu"
                 >
                   <span
-                    class="icon-hamburger"
+                    :class="{'icon-hamburger': !isMobileMenu, 'icon-close_big': isMobileMenu}"
                   />
                 </button>
               </div>
@@ -127,18 +122,8 @@
             v-if="isMobileMenu"
             class="header__left_mobile"
           >
-            <div
-              class="header__logo"
-              @click="closeMenuByLink()"
-            >
-              <img
-                src="~assets/img/app/logo.svg"
-                alt="WorkQuest"
-              >
-              <span class="header__text">WorkQuest</span>
-            </div>
             <div class="header__links">
-              <span @click="closeMenu()">
+              <span @click="toggleMobileMenu()">
                 <nuxt-link
                   to="/home"
                   class="header__link"
@@ -147,7 +132,7 @@
                   {{ $t('ui.home') }}
                 </nuxt-link>
               </span>
-              <span @click="closeMenu()">
+              <span @click="toggleMobileMenu()">
                 <nuxt-link
                   to="/blocks"
                   class="header__link"
@@ -156,7 +141,7 @@
                   {{ $t('ui.blocks') }}
                 </nuxt-link>
               </span>
-              <span @click="closeMenu()">
+              <span @click="toggleMobileMenu()">
                 <nuxt-link
                   to="/transactions"
                   class="header__link"
@@ -166,7 +151,7 @@
                 </nuxt-link>
               </span>
               <p class="header__separator" />
-              <span @click="closeMenu()">
+              <span @click="toggleMobileMenu()">
                 <nuxt-link
                   to="/transfers"
                   class="header__link"
@@ -175,7 +160,7 @@
                   {{ $t('ui.transfers') }}
                 </nuxt-link>
               </span>
-              <span @click="closeMenu()">
+              <span @click="toggleMobileMenu()">
                 <nuxt-link
                   to="/tokens"
                   class="header__link"
@@ -191,7 +176,6 @@
           <nuxt />
         </div>
         <div
-          v-if="isMobileMenu"
           class="template__footer footer"
         >
           <div class="footer__left">
@@ -268,21 +252,14 @@ export default {
     },
     toggleMobileMenu() {
       this.isMobileMenu = !this.isMobileMenu;
-      this.isNotFlexContainer = !this.isNotFlexContainer;
       this.closeAnother('mobile');
-    },
-    openMenu() {
-      this.isMobileMenu = true;
-    },
-    closeMenu() {
-      this.isMobileMenu = false;
     },
     toMain() {
       this.$router.push('/');
     },
     closeMenuByLink() {
       this.toMain();
-      this.closeMenu();
+      this.toggleMobileMenu();
     },
     goToMessages() {
       this.$router.push('/messages');
@@ -381,7 +358,7 @@ export default {
   background: #F7F8FA;
   &__content {
     display: grid;
-    min-height: calc(100vh - 72px);
+    min-height: calc(100vh - 185px);
   }
   &__main {
     display: grid;
@@ -469,7 +446,7 @@ export default {
       width: 86px;
       height: 46px;
       span {
-        padding-left: 10px;
+        padding-left: 3px;
       }
     }
   }
@@ -526,7 +503,8 @@ export default {
     min-height: 20px;
   }
   &__icon {
-    border-radius: 100%;
+    border-radius: 50%;
+    width: 80%;
   }
   &__text {
     @include text-simple;
@@ -548,6 +526,9 @@ export default {
   justify-content: space-between;
   align-items: center;
   border-top: 1px solid $black100;
+  &_mobile {
+    display: none;
+  }
   &__left {
     display: flex;
     grid-gap: 15px;
@@ -596,11 +577,6 @@ export default {
     &__right {
       grid-gap: 0;
     }
-    &__button {
-      &_locale {
-        width: 60px;
-      }
-    }
     &__logo {
       grid-gap: 0;
       img {
@@ -611,27 +587,18 @@ export default {
       }
     }
     &__links {
-      grid-gap: 10px;
+      grid-gap: 15px;
     }
     &__link {
-      font-size: 15px;
+      font-size: 17px;
     }
   }
 }
 @include _767 {
-  .template {
-    &__screen {
-      background: rgba(7, 18, 34, 0.6);
-      width: 100vw;
-      height: 100vh;
-      position: fixed;
-      z-index: 2;
-    }
-  }
   .header {
-    z-index: 1;
+    z-index: 5;
     &_mobile {
-      z-index: 5  ;
+      z-index: 2  ;
     }
     &__button_menu {
       display: flex;
@@ -658,16 +625,16 @@ export default {
         align-items: flex-start;
         background: $white;
         padding: 23px 16px;
-        height: 70vh;
-        position: absolute;
+        height: 100vh;
+        position: fixed;
         left: 0;
-        top: 0;
+        top: 72px;
       }
     }
     &__links {
       flex-direction: column;
       align-items: flex-start;
-      width: 213px;
+      width: 100vw;
     }
     &__separator {
       height: 1px;
@@ -677,25 +644,9 @@ export default {
     }
   }
   .footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    background: $black0;
-    flex-direction: column-reverse;
-    justify-content: flex-end;
-    align-items: baseline;
-    padding: 10px 15px;
-    height: 30vh;
-    width: 245px;
-    grid-gap: 20px;
-    border: none;
-    z-index: 5;
-    &__left {
-      flex-direction: column;
-    }
-    &__right {
-      flex-direction: column;
-    }
+    display: flex;
+    justify-content: space-between;
+    padding: 25px 15px;
   }
 }
 @include _575 {
@@ -714,11 +665,14 @@ export default {
     min-width: 350px;
   }
   .footer {
+    &__right {
+      flex-direction: column;
+    }
     &__bottom {
       display: grid;
     }
     &__left {
-      grid-column: 1/2;
+      flex-direction: column;
     }
     &__rights {
       grid-column: 1/2;
