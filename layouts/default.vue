@@ -601,9 +601,9 @@ export default {
 }
 @include _767 {
   .header {
-    z-index: 1;
+    z-index: 5;
     &_mobile {
-      z-index: 5  ;
+      z-index: 2  ;
     }
     &__button_menu {
       display: flex;
