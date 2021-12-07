@@ -577,11 +577,6 @@ export default {
     &__right {
       grid-gap: 0;
     }
-    &__button {
-      &_locale {
-        width: 60px;
-      }
-    }
     &__logo {
       grid-gap: 0;
       img {
