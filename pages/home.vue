@@ -21,11 +21,12 @@
     </div>
     <div class="home__content home__content_mobile">
       <base-table
+        v-if="blocks"
         :title="$t('ui.latestBlocks')"
         :headerlink="$t('ui.allBlocks')"
         type="blocks"
         class="home__table"
-        :items="testBlocks"
+        :items="blocks"
         :fields="tableHeadersBlocks"
       />
       <div class="home__blocks blocks">
@@ -40,17 +41,18 @@
         </nuxt-link>
       </div>
       <Block
-        v-for="(item, i) in testBlocks"
+        v-for="(item, i) in blocks"
         :key="i"
         class="home__block"
         :block="item"
-        :is-last="testBlocks[i] === testBlocks[testBlocks.length - 1]"
+        :is-last="blocks[i] === blocks[blocks.length - 1]"
       />
     </div>
     <div class="home__content home__content_mobile">
       <base-table
+        v-if="txs"
         :title="$t('ui.latestTxs')"
-        :items="testTxs"
+        :items="txs"
         :headerlink="$t('ui.allTxs')"
         type="transactions"
         class="home__table"
@@ -68,17 +70,18 @@
         </nuxt-link>
       </div>
       <Txn
-        v-for="(item, i) in testTxs"
+        v-for="(item, i) in txs"
         :key="i"
         class="home__block"
         :transaction="item"
         :is-home="true"
-        :is-last="testTxs[i] === testTxs[testTxs.length - 1]"
+        :is-last="txs[i] === txs[txs.length - 1]"
       />
     </div>
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
 import Block from '~/components/mobile/block.vue';
 import Txn from '~/components/mobile/transaction.vue';
 
@@ -88,48 +91,16 @@ export default {
   components: { Block, Txn },
   data() {
     return {
-      blocksCount: 0,
-      txsCount: 0,
-      blocks: [],
-      txs: [],
       search: '',
-      testBlocks: [
-        {
-          id: 17102304,
-          timestamp: '2021-11-23T09:19:08.000Z',
-          txsCount: 209,
-          reward: 0.06646,
-          symbol: 'BUSD',
-        },
-        {
-          id: 17102305,
-          timestamp: '2021-11-24T07:19:08.000Z',
-          txsCount: 209,
-          reward: 0.06646,
-          symbol: 'WUSD',
-        },
-      ],
-      testTxs: [
-        {
-          hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b8158',
-          fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-          toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-          value: 0.06646,
-          symbol: 'BUSD',
-          timestamp: '2021-11-23T09:19:08.000Z',
-        },
-        {
-          hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-          fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-          toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-          value: 0.07746,
-          symbol: 'WUSD',
-          timestamp: '2021-11-23T09:19:08.000Z',
-        },
-      ],
     };
   },
   computed: {
+    ...mapGetters({
+      blocks: 'blocks/getBlocks',
+      blocksCount: 'blocks/getBlocksCount',
+      txs: 'tx/getTxs',
+      txsCount: 'tx/getTxsCount',
+    }),
     tableHeadersBlocks() {
       return [
         {
@@ -165,15 +136,19 @@ export default {
   },
   async mounted() {
     this.SetLoader(true);
-    const [blocksRes, txsRes] = await Promise.all([
-      this.$axios.get('/v1/blocks'),
-      this.$axios.get('/v1/txs'),
-    ]);
-    this.blocks = blocksRes.data.result.blocks;
-    this.blocksCount = blocksRes.data.result.count;
-    this.txs = txsRes.data.result.txs;
-    this.txsCount = txsRes.data.result.count;
+    await this.getAllBlocks();
+    await this.getAllTxs();
     this.SetLoader(false);
+  },
+  methods: {
+    async getAllBlocks() {
+      const limit = 'limit=2';
+      await this.$store.dispatch('blocks/getBlocks', limit);
+    },
+    async getAllTxs() {
+      const limit = 'limit=2';
+      await this.$store.dispatch('tx/getTxs', limit);
+    },
   },
 };
 </script>

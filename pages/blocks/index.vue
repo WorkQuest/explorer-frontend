@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import Block from '~/components/mobile/block.vue';
 
 export default {
@@ -42,12 +43,15 @@ export default {
   components: { Block },
   data() {
     return {
-      blocks: [],
       currentPage: 1,
       search: '',
     };
   },
   computed: {
+    ...mapGetters({
+      blocks: 'blocks/getBlocks',
+      blocksCount: 'blocks/getBlocksCount',
+    }),
     totalPagesValue() {
       return this.setTotalPages(this.blocks.length, 20);
     },
@@ -76,9 +80,13 @@ export default {
   },
   async mounted() {
     this.SetLoader(true);
-    const blocksRes = await this.$axios.get('/v1/blocks');
-    this.blocks = blocksRes.data.result.blocks;
+    await this.getAllBlocks();
     this.SetLoader(false);
+  },
+  methods: {
+    async getAllBlocks() {
+      await this.$store.dispatch('blocks/getBlocks');
+    },
   },
 };
 </script>

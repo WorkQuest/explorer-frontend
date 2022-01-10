@@ -37,7 +37,7 @@
       </template>
       <!-- blocks -->
       <template #cell(reward)="el">
-        <span>{{ el.item.reward }} {{ el.item.symbol }}</span>
+        <span>{{ el.item.size }} {{ el.item.symbol }}</span>
       </template>
       <template #cell(txsCount)="el">
         <nuxt-link
