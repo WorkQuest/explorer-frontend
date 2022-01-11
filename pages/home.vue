@@ -21,7 +21,6 @@
     </div>
     <div class="home__content home__content_mobile">
       <base-table
-        v-if="blocks"
         :title="$t('ui.latestBlocks')"
         :headerlink="$t('ui.allBlocks')"
         type="blocks"
@@ -50,7 +49,6 @@
     </div>
     <div class="home__content home__content_mobile">
       <base-table
-        v-if="txs"
         :title="$t('ui.latestTxs')"
         :items="txs"
         :headerlink="$t('ui.allTxs')"
@@ -98,6 +96,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isLoading: 'main/getIsLoading',
       blocks: 'blocks/getBlocks',
       blocksCount: 'blocks/getBlocksCount',
       txs: 'tx/getTxs',

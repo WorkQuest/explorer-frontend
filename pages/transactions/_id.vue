@@ -93,35 +93,59 @@
           v-if="activeElement === 'logs'"
           class="txs__logs logs"
         >
-          <p class="logs__header">
+          <div v-if="tx.logs.length === 0">
+            There is no logs...
+          </div>
+          <p
+            v-if="tx.logs.length > 0"
+            class="logs__header"
+          >
             {{ $t('ui.tx.logs') }}
           </p>
-          <p class="logs__hash">
+          <p
+            v-if="tx.logs.length > 0"
+            class="logs__hash"
+          >
             {{ $t('ui.tx.transaction') }}
-            <span class="logs__number">
+            <span
+              v-if="tx.logs.length > 0"
+              class="logs__number"
+            >
               {{ tx.logs[0].transactionHash }}
             </span>
             <span
-              v-if="tx.logs"
+              v-if="tx.logs.length > 0"
               class="logs__number_mobile"
             >
               {{ formatItem(tx.logs[0].transactionHash, 9, 6) }}
             </span>
           </p>
-          <div class="logs__content">
+          <div
+            v-if="tx.logs.length > 0"
+            class="logs__content"
+          >
             <p class="logs__title">
               {{ $t('ui.tx.topics') }}
             </p>
-            <div class="logs__info">
+            <div
+              v-if="tx.logs.length > 0"
+              class="logs__info"
+            >
               <div
                 v-for="(item, index) in tx.logs[0].topics"
                 :key="index"
                 class="logs__topic"
               >
-                <p class="logs__index">
+                <p
+                  v-if="tx.logs.length > 0"
+                  class="logs__index"
+                >
                   {{ index }}
                 </p>
-                <p class="logs__item">
+                <p
+                  v-if="tx.logs.length > 0"
+                  class="logs__item"
+                >
                   {{ item }}
                 </p>
                 <p class="logs__item_mobile">
@@ -130,15 +154,21 @@
               </div>
             </div>
           </div>
-          <div class="logs__content">
+          <div
+            v-if="tx.logs.length > 0"
+            class="logs__content"
+          >
             <p class="logs__title">
               {{ $t('ui.tx.data') }}
             </p>
-            <div class="logs__info logs__info_desktop">
+            <div
+              v-if="tx.logs.length > 0"
+              class="logs__info logs__info_desktop"
+            >
               {{ tx.logs[0].data }}
             </div>
             <div
-              v-if="tx.logs"
+              v-if="tx.logs.length > 0"
               class="logs__info_mobile"
             >
               {{ formatItem(tx.logs[0].data, 9, 6) }}
@@ -165,7 +195,8 @@
             </p>
           </div>
           <p class="overview__timestamp">
-            16 sec ago
+            {{tx}}
+<!--            {{ $moment(tx.createdAt).startOf('minute').fromNow() }}-->
           </p>
           <div class="overview__subtitle">
             {{ $t('ui.tx.status') }}
@@ -249,6 +280,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
 import Item from '~/components/InfoItem.vue';
 
 export default {
@@ -258,21 +290,19 @@ export default {
   },
   data() {
     return {
-      tx: {},
       tabs: ['overview', 'logs'],
       activeElement: 'overview',
       search: '',
     };
   },
   computed: {
+    ...mapGetters({
+      tx: 'tx/getTxsByHash',
+    }),
   },
-  // TODO: Починить вкладку logs
-  // TODO: Вывод текущей транзакции
   async mounted() {
     this.SetLoader(true);
-    const txsRes = await this.$axios.get('/v1/txs');
-    // eslint-disable-next-line prefer-destructuring
-    this.tx = txsRes.data.result.txs[0];
+    await this.$store.dispatch('tx/getTxsByHash', this.$route.params.id);
     this.SetLoader(false);
   },
   methods: {

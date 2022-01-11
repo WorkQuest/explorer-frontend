@@ -9,7 +9,13 @@
       sort-icon-right
       :responsive="true"
       tbody-tr-class="table__row"
+      :busy="isLoading"
     >
+      <template #table-busy>
+        <div class="text-center text-danger my-2">
+          <strong>Loading...</strong>
+        </div>
+      </template>
       <template
         #table-caption
       >
@@ -98,6 +104,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   props: {
     title: {
@@ -120,6 +128,11 @@ export default {
       type: Array,
       default: () => [],
     },
+  },
+  computed: {
+    ...mapGetters({
+      isLoading: 'main/getIsLoading',
+    }),
   },
 };
 </script>
