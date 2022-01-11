@@ -140,6 +140,8 @@ export default {
   data() {
     return {
       search: '',
+      limit: 50,
+      offset: 0,
       index: 0,
       block: {},
     };
@@ -153,38 +155,38 @@ export default {
   },
   async mounted() {
     this.SetLoader(true);
-    await this.getAllBlocks();
     await this.getBlock();
-    this.block = this.currentBlock;
+    await this.getAllBlocks();
     this.SetLoader(false);
   },
   methods: {
     // TODO: Сделать переход от текущего блока в разные стороны, а не от начала
     async getBlock() {
       await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
+      this.block = this.currentBlock;
     },
     async getAllBlocks() {
-      const limit = `limit=${process.env.BLOCKS_LIMIT}`;
-      await this.$store.dispatch('blocks/getBlocks', limit);
-    },
-    decreaseIndex() {
-      if (this.index !== 0 && this.index - 1 <= this.blocks.length) {
-        this.index -= 1;
-      }
-      return this.index;
-    },
-    increaseIndex() {
-      if (this.index !== this.blocks.length && this.index + 1 < this.blocks.length) {
-        this.index += 1;
-      }
-      return this.index;
+      await this.$store.dispatch('blocks/getBlocks', {
+        limit: this.limit,
+        offset: this.offset,
+      });
     },
     turnLeft() {
-      this.block = this.blocks[this.decreaseIndex()];
+      console.log(this.blocks);
+      this.block = this.blocks[
+        this.index !== 0
+        && this.index - 1 <= this.blocks.length
+          ? this.index -= 1 : this.index
+      ];
       this.$router.push(`${this.block.id}`);
     },
     turnRight() {
-      this.block = this.blocks[this.increaseIndex()];
+      console.log(this.blocks);
+      this.block = this.blocks[
+        this.index !== this.blocks.length
+        && this.index + 1 < this.blocks.length
+          ? this.index += 1 : this.index
+      ];
       this.$router.push(`${this.block.id}`);
     },
   },
@@ -193,6 +195,7 @@ export default {
 <style lang="scss" scoped>
 .block {
     @include container;
+    transition: .5s;
     &__search {
         margin: 25px 0;
         &_mobile {

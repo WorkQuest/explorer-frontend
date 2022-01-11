@@ -508,6 +508,7 @@ export default {
 
 <style lang="scss" scoped>
 .contract {
+  animation: show  1s 1;
   @include container;
   &__search {
     margin: 25px 0;

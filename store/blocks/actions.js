@@ -8,10 +8,11 @@ export default {
       return console.log(e);
     }
   },
-  async getBlocks({ commit }, limit) {
+  async getBlocks({ commit }, queries) {
     try {
-      // limit // offset
-      const response = await this.$axios.$get(`/v1/blocks?${limit}`);
+      const response = await this.$axios.$get('/v1/blocks', {
+        params: { ...queries },
+      });
       commit('setBlocks', response.result);
       return response;
     } catch (e) {

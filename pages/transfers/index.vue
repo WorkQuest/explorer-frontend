@@ -122,6 +122,7 @@ export default {
 
 <style lang="scss" scoped>
 .transfer {
+  animation: show  1s 1;
     &__container {
         @include container;
     }

@@ -152,6 +152,7 @@ export default {
 
 <style lang="scss" scoped>
 .tokens {
+  animation: show  1s 1;
   &__search {
     margin: 25px 0;
     &_mobile {

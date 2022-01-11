@@ -27,9 +27,9 @@
       />
     </div>
     <base-pager
-      v-if="totalPagesValue > 1"
-      v-model="currentPage"
-      :total-pages="totalPagesValue"
+      v-if="totalPages > 1"
+      v-model="page"
+      :total-pages="totalPages"
     />
   </div>
 </template>
@@ -43,7 +43,9 @@ export default {
   components: { Block },
   data() {
     return {
-      currentPage: 1,
+      limit: 20,
+      offset: 0,
+      page: 1,
       search: '',
     };
   },
@@ -52,8 +54,8 @@ export default {
       blocks: 'blocks/getBlocks',
       blocksCount: 'blocks/getBlocksCount',
     }),
-    totalPagesValue() {
-      return this.setTotalPages(this.blocks.length, 20);
+    totalPages() {
+      return Math.ceil(this.blocksCount / this.limit);
     },
     tableHeaders() {
       return [
@@ -78,22 +80,31 @@ export default {
       ];
     },
   },
+  watch: {
+    async page() {
+      this.SetLoader(true);
+      this.offset = (this.page - 1) * this.limit;
+      await this.$store.dispatch('blocks/getBlocks', {
+        limit: this.limit,
+        offset: this.offset,
+      });
+      this.SetLoader(false);
+    },
+  },
   async mounted() {
     this.SetLoader(true);
-    await this.getAllBlocks();
+    await this.$store.dispatch('blocks/getBlocks', {
+      limit: this.limit,
+      offset: this.offset,
+    });
     this.SetLoader(false);
-  },
-  methods: {
-    async getAllBlocks() {
-      const limit = `limit=${process.env.BLOCKS_LIMIT}`;
-      await this.$store.dispatch('blocks/getBlocks', limit);
-    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .blocks {
+  animation: show  1s 1;
     &__container {
         @include container;
     }

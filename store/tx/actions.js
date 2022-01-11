@@ -17,9 +17,11 @@ export default {
       return console.log(e);
     }
   },
-  async getTxs({ commit }, limit) {
+  async getTxs({ commit }, queries) {
     try {
-      const response = await this.$axios.$get(`/v1/txs?${limit}`);
+      const response = await this.$axios.$get('/v1/txs', {
+        params: { ...queries },
+      });
       commit('setTxs', response.result);
       return response;
     } catch (e) {

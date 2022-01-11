@@ -46,10 +46,10 @@
         :is-last="txs[i] === txs[txs.length - 1]"
       />
       <base-pager
-        v-if="totalPagesValue > 1"
-        v-model="currentPage"
+        v-if="totalPages > 1"
+        v-model="page"
         class="transactions__pager"
-        :total-pages="totalPagesValue"
+        :total-pages="totalPages"
       />
     </div>
   </div>
@@ -67,7 +67,9 @@ export default {
   },
   data() {
     return {
-      currentPage: 1,
+      limit: 20,
+      offset: 0,
+      page: 1,
       query: '',
       search: '',
     };
@@ -77,8 +79,8 @@ export default {
       txs: 'tx/getTxs',
       txsCount: 'tx/getTxsCount',
     }),
-    totalPagesValue() {
-      return this.setTotalPages(this.txs.length, 20);
+    totalPages() {
+      return Math.ceil(this.txsCount / this.limit);
     },
     tableHeaders() {
       return [
@@ -106,10 +108,23 @@ export default {
       ];
     },
   },
+  watch: {
+    async page() {
+      this.SetLoader(true);
+      this.offset = (this.page - 1) * this.limit;
+      await this.$store.dispatch('tx/getTxs', {
+        limit: this.limit,
+        offset: this.offset,
+      });
+      this.SetLoader(false);
+    },
+  },
   async mounted() {
     this.SetLoader(true);
-    const limit = `limit=${process.env.TXS_LIMIT}`;
-    await this.$store.dispatch('tx/getTxs', limit);
+    await this.$store.dispatch('tx/getTxs', {
+      limit: this.limit,
+      offset: this.offset,
+    });
     this.query = this.$route.query.block;
     this.SetLoader(false);
   },
@@ -118,6 +133,7 @@ export default {
 
 <style lang="scss" scoped>
 .transactions {
+  animation: show  1s 1;
     @include container;
     &__search {
       margin: 25px 0;

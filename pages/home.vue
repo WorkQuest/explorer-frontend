@@ -92,6 +92,8 @@ export default {
   data() {
     return {
       search: '',
+      limit: 2,
+      offset: 0,
     };
   },
   computed: {
@@ -136,15 +138,21 @@ export default {
   },
   async mounted() {
     this.SetLoader(true);
-    const limit = 'limit=2';
-    await this.$store.dispatch('blocks/getBlocks', limit);
-    await this.$store.dispatch('tx/getTxs', limit);
+    await this.$store.dispatch('blocks/getBlocks', {
+      limit: this.limit,
+      offset: this.offset,
+    });
+    await this.$store.dispatch('tx/getTxs', {
+      limit: this.limit,
+      offset: this.offset,
+    });
     this.SetLoader(false);
   },
 };
 </script>
 <style lang="scss" scoped>
 .home {
+  animation: show  1s 1;
   &__search_mobile {
     display: none;
   }
