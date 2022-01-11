@@ -41,7 +41,7 @@
           <Item
             class="columns__item_two-one"
             :title="$t('ui.timestamp')"
-            info="16 secs ago"
+            :info="formatDataFromNow(tx.timestamp)"
             :note="tx.timestamp"
           />
           <Item
@@ -195,8 +195,7 @@
             </p>
           </div>
           <p class="overview__timestamp">
-            {{tx}}
-<!--            {{ $moment(tx.createdAt).startOf('minute').fromNow() }}-->
+            {{ formatDataFromNow(tx.timestamp) }}
           </p>
           <div class="overview__subtitle">
             {{ $t('ui.tx.status') }}

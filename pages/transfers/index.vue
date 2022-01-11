@@ -1,4 +1,5 @@
 <template>
+  <!--        TODO: Вывести трансферы -->
   <div class="transfer transfer__container">
     <search-filter class="transfer__search" />
     <base-field

@@ -38,7 +38,7 @@
         <div class="block__columns">
           <Item
             :title="$t('ui.timestamp')"
-            info="16 secs ago"
+            :info="formatDataFromNow(block.timestamp)"
             :note="block.timestamp"
           />
           <Item
@@ -47,6 +47,7 @@
             :note="$t('ui.block.inThisBlock')"
             item="transaction"
           />
+          <!--        TODO: Вывести награду -->
           <Item
             :title="$t('ui.block.reward')"
             info="0.316538333801617818 MATIC"
@@ -84,6 +85,7 @@
             {{ $t('ui.block.reward') }}
           </p>
           <p class="columns__info">
+            <!--        TODO: Вывести награду -->
             0.316538333801617818 MATIC
           </p>
           <p class="columns__subtitle">
@@ -102,6 +104,7 @@
             {{ $t('ui.block.gasUsed') }}
             <span class="columns__info">
               {{ block.gasUsed }}
+              <!--        TODO: Вывести проценты -->
               <!--              (99,5%)-->
             </span>
           </p>

@@ -1,4 +1,5 @@
 <template>
+  <!--        TODO: Вывести токены -->
   <div
     v-if="params"
     class="token"

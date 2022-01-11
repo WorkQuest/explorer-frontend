@@ -1,4 +1,5 @@
 <template>
+  <!--        TODO: Вывести токены -->
   <div class="tokens">
     <search-filter class="tokens__search" />
     <TableTokens

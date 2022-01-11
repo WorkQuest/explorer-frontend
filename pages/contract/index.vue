@@ -15,6 +15,7 @@
       <p
         class="contract__contract"
       >
+<!--        TODO: Вывести адрес контракта-->
         0x7811B8604c64D62D02dc7e5a8c47185B1b59E0b3
         <span class="icon-copy" />
       </p>
