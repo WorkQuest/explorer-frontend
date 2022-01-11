@@ -172,7 +172,6 @@ export default {
       });
     },
     turnLeft() {
-      console.log(this.blocks);
       this.block = this.blocks[
         this.index !== 0
         && this.index - 1 <= this.blocks.length
@@ -181,7 +180,6 @@ export default {
       this.$router.push(`${this.block.id}`);
     },
     turnRight() {
-      console.log(this.blocks);
       this.block = this.blocks[
         this.index !== this.blocks.length
         && this.index + 1 < this.blocks.length
