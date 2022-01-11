@@ -85,7 +85,8 @@ export default {
   },
   methods: {
     async getAllBlocks() {
-      await this.$store.dispatch('blocks/getBlocks');
+      const limit = `limit=${process.env.BLOCKS_LIMIT}`;
+      await this.$store.dispatch('blocks/getBlocks', limit);
     },
   },
 };

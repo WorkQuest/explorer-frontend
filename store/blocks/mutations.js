@@ -3,6 +3,6 @@ export default {
     state.block = data;
   },
   setBlocks(state, data) {
-    state.blocks = data;
+    state.blocksInfo = data;
   },
 };

@@ -26,7 +26,10 @@
             @click="turnLeft"
           />
           <span class="block__block">{{ $t('ui.block.block') }}</span>
-          <span class="block__number">#{{ block.id }}</span>
+          <span
+            v-if="block.id"
+            class="block__number"
+          >#{{ block.id }}</span>
           <span
             class="icon-caret_right"
             @click="turnRight"
@@ -98,7 +101,8 @@
           <p class="columns__subtitle">
             {{ $t('ui.block.gasUsed') }}
             <span class="columns__info">
-              {{ block.gasUsed }} (99,5%)
+              {{ block.gasUsed }}
+              <!--              (99,5%)-->
             </span>
           </p>
           <p class="columns__subtitle">
@@ -125,7 +129,7 @@
   </div>
 </template>
 <script>
-import moment from 'moment';
+import { mapGetters } from 'vuex';
 import Item from '~/components/InfoItem.vue';
 
 export default {
@@ -135,30 +139,51 @@ export default {
   },
   data() {
     return {
-      blocks: {},
-      block: {},
       search: '',
+      index: 0,
+      block: {},
     };
   },
   computed: {
+    ...mapGetters({
+      currentBlock: 'blocks/getCurrentBlock',
+      blocks: 'blocks/getBlocks',
+      blocksCount: 'blocks/getBlocksCount',
+    }),
   },
   async mounted() {
     this.SetLoader(true);
-    const blocksRes = await this.$axios.get('/v1/blocks');
-    // eslint-disable-next-line prefer-destructuring
-    this.blocks = blocksRes.data.result.blocks;
-    // eslint-disable-next-line prefer-destructuring
-    this.block = this.blocks[0];
+    await this.getAllBlocks();
+    await this.getBlock();
+    this.block = this.currentBlock;
     this.SetLoader(false);
   },
   methods: {
+    // TODO: Сделать переход от текущего блока в разные стороны, а не от начала
+    async getBlock() {
+      await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
+    },
+    async getAllBlocks() {
+      const limit = `limit=${process.env.BLOCKS_LIMIT}`;
+      await this.$store.dispatch('blocks/getBlocks', limit);
+    },
+    decreaseIndex() {
+      if (this.index !== 0 && this.index - 1 <= this.blocks.length) {
+        this.index -= 1;
+      }
+      return this.index;
+    },
+    increaseIndex() {
+      if (this.index !== this.blocks.length && this.index + 1 < this.blocks.length) {
+        this.index += 1;
+      }
+      return this.index;
+    },
     turnLeft() {
-      // eslint-disable-next-line prefer-destructuring
-      this.block = this.blocks[0];
+      this.block = this.blocks[this.decreaseIndex()];
     },
     turnRight() {
-      // eslint-disable-next-line prefer-destructuring
-      this.block = this.blocks[1];
+      this.block = this.blocks[this.increaseIndex()];
     },
   },
 };

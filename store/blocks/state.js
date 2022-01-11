@@ -1,4 +1,7 @@
 export default () => ({
-  block: null,
-  blocks: null,
+  block: {},
+  blocksInfo: {
+    count: 0,
+    blocks: [],
+  },
 });
