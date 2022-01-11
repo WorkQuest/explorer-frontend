@@ -19,7 +19,7 @@ export default {
   },
   async getTxs({ commit }, limit) {
     try {
-      const response = await this.$axios.$get(`/v1/txs?${limit || ''}`);
+      const response = await this.$axios.$get(`/v1/txs?${limit}`);
       commit('setTxs', response.result);
       return response;
     } catch (e) {

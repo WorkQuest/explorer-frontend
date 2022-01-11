@@ -14,7 +14,7 @@
         class="transactions__header"
       >
         <h5 class="transactions__title">
-          {{ $t('ui.tx.total') }} 406 {{ $t('ui.tx.found') }}
+          {{ $t('ui.tx.total') }} {{ txs.length }} {{ $t('ui.tx.found') }}
         </h5>
         <p class="transactions__block">
           {{ $t('ui.tx.forBlock') }}
