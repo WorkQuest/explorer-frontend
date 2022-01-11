@@ -136,19 +136,10 @@ export default {
   },
   async mounted() {
     this.SetLoader(true);
-    await this.getAllBlocks();
-    await this.getAllTxs();
+    const limit = 'limit=2';
+    await this.$store.dispatch('blocks/getBlocks', limit);
+    await this.$store.dispatch('tx/getTxs', limit);
     this.SetLoader(false);
-  },
-  methods: {
-    async getAllBlocks() {
-      const limit = 'limit=2';
-      await this.$store.dispatch('blocks/getBlocks', limit);
-    },
-    async getAllTxs() {
-      const limit = 'limit=2';
-      await this.$store.dispatch('tx/getTxs', limit);
-    },
   },
 };
 </script>

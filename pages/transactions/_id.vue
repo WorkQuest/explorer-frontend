@@ -266,6 +266,8 @@ export default {
   },
   computed: {
   },
+  // TODO: Починить вкладку logs
+  // TODO: Вывод текущей транзакции
   async mounted() {
     this.SetLoader(true);
     const txsRes = await this.$axios.get('/v1/txs');

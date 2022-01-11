@@ -55,6 +55,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
 import TableTxs from '~/components/TableTxs/index.vue';
 import Transaction from '~/components/mobile/transaction.vue';
 
@@ -67,12 +68,15 @@ export default {
   data() {
     return {
       currentPage: 1,
-      txs: [],
       query: '',
       search: '',
     };
   },
   computed: {
+    ...mapGetters({
+      txs: 'tx/getTxs',
+      txsCount: 'tx/getTxsCount',
+    }),
     totalPagesValue() {
       return this.setTotalPages(this.txs.length, 20);
     },
@@ -104,8 +108,8 @@ export default {
   },
   async mounted() {
     this.SetLoader(true);
-    const txsRes = await this.$axios.get('/v1/txs');
-    this.txs = txsRes.data.result.txs;
+    const limit = `limit=${process.env.TXS_LIMIT}`;
+    await this.$store.dispatch('tx/getTxs', limit);
     this.query = this.$route.query.block;
     this.SetLoader(false);
   },

@@ -181,9 +181,11 @@ export default {
     },
     turnLeft() {
       this.block = this.blocks[this.decreaseIndex()];
+      this.$router.push(`${this.block.id}`);
     },
     turnRight() {
       this.block = this.blocks[this.increaseIndex()];
+      this.$router.push(`${this.block.id}`);
     },
   },
 };
