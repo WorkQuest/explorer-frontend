@@ -1,7 +1,9 @@
 export default {
-  async getTxsByAccount({ commit }, address) {
+  async getTxsByAccount({ commit }, { address, limit, offset }) {
     try {
-      const response = await this.$axios.$get(`/v1/account/${address}/txs`);
+      const response = await this.$axios.$get(`/v1/account/${address}/txs`, {
+        params: { limit, offset },
+      });
       commit('setTxsByAccount', response.result);
       return response;
     } catch (e) {

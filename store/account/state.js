@@ -1,4 +1,4 @@
 export default () => ({
-  accountAddress: null,
-  accountBalances: null,
+  accountInfo: {},
+  accountBalances: {},
 });

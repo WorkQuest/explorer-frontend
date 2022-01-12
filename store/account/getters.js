@@ -1,4 +1,5 @@
 export default {
-  getAccountAddress: (state) => state.accountAddress,
-  getAccountBalances: (state) => state.accountBalances,
+  getAccountInfo: (state) => state.accountInfo,
+  getAccountBalances: (state) => state.accountBalances?.balances,
+  getAccountBalancesCount: (state) => state.accountBalances?.count,
 };

@@ -1,6 +1,6 @@
 export default {
-  setAccountAddress(state, data) {
-    state.accountAddress = data;
+  setAccountInfo(state, data) {
+    state.accountInfo = data;
   },
   setAccountBalances(state, data) {
     state.accountBalances = data;
