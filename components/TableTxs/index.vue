@@ -12,7 +12,7 @@
       :busy="isLoading"
     >
       <template #table-busy>
-        <div class="text-center text-danger my-2">
+        <div class="text-center">
           <strong>Loading...</strong>
         </div>
       </template>
@@ -107,7 +107,8 @@ export default {
     },
     tokens: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
   },
   computed: {

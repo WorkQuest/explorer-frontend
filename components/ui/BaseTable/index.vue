@@ -12,7 +12,7 @@
       :busy="isLoading"
     >
       <template #table-busy>
-        <div class="text-center text-danger my-2">
+        <div class="text-center">
           <strong>Loading...</strong>
         </div>
       </template>
@@ -144,32 +144,40 @@ export default {
   line-height: 130%;
   background: #FFFFFF;
   border-radius: 6px;
+
   &__titles {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
     padding: 0 30px 0 20px;
   }
+
   &__title {
     margin: 10px;
     color: $black800;
   }
+
   &__link {
     @include link;
   }
+
   &__success {
     color: $green;
   }
+
   &__failed {
     color: $red;
   }
+
   &__grey {
     color: $black500;
     font-size: 14px;
   }
+
   &__blue {
     color: $blue;
   }
+
   &__header {
     @include text-simple;
     @include normal-font-size;
@@ -185,9 +193,11 @@ export default {
     &__header, &__row {
       font-size: 10px;
     }
+
     &__link {
       font-size: 12px;
     }
+
     &__grey {
       font-size: 10px;
     }
