@@ -11,6 +11,7 @@ export default {
   async getAccountBalances({ commit }, address) {
     try {
       const response = await this.$axios.$get(`/v1/account/${address}/balances`);
+      console.log(response);
       commit('setAccountBalances', response.result);
       return response;
     } catch (e) {

@@ -177,10 +177,6 @@ export default {
     await this.SetLoader(false);
   },
   methods: {
-    cropTxt(str) {
-      if (str.length > 66) str = `${str.slice(0, 10)}...${str.slice(-10)}`;
-      return str;
-    },
     // TODO: Сделать переход от текущего блока в разные стороны, а не от начала
     async getBlock() {
       await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);

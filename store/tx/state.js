@@ -1,5 +1,14 @@
 export default () => ({
-  txsByAccount: null,
-  txsByHash: null,
-  txs: null,
+  txsByAccount: {
+    count: 0,
+    txs: [],
+  },
+  txsByHash: {
+    count: 0,
+    txs: [],
+  },
+  txs: {
+    count: 0,
+    txs: [],
+  },
 });

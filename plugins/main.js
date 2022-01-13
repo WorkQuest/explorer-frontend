@@ -15,20 +15,24 @@ Vue.mixin({
         ...payload,
       });
     },
+    cropTxt(str) {
+      if (str.length > 66) str = `${str.slice(0, 10)}...${str.slice(-10)}`;
+      return str;
+    },
     async SetLoader(value) {
       await this.$store.dispatch('main/setLoading', value);
     },
     async CloseModal() {
-      this.$store.dispatch('modals/hide');
+      await this.$store.dispatch('modals/hide');
     },
     async ClipboardSuccessHandler(value) {
-      this.$store.dispatch('main/showToast', {
+      await this.$store.dispatch('main/showToast', {
         title: 'Copied successfully',
         text: value,
       });
     },
     async ClipboardErrorHandler(value) {
-      this.$store.dispatch('main/showToast', {
+      await this.$store.dispatch('main/showToast', {
         title: 'Copy error',
         text: value,
       });

@@ -1,4 +1,7 @@
 export default () => ({
   accountInfo: {},
-  accountBalances: {},
+  accountBalances: {
+    count: 0,
+    balances: [],
+  },
 });
