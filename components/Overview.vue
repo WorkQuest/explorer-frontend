@@ -21,11 +21,11 @@
     <div class="overview-wrap">
       <p class="overview__info">
         <span class="overview__title">{{ $t('ui.token.balance') }}</span>
-        {{ balanceWusd }} {{ tokenName }}
+        {{ Floor(balanceWusd) }} {{ tokenName }}
       </p>
       <p class="overview__info">
         <span class="overview__title">WUSD {{ $t('ui.tx.value') }}</span>
-        ${{ balanceWusd }} (@ $0.89/WUSD)
+        ${{ Floor(balanceWusd) }} (@ $0.89/WUSD)
       </p>
       <div class="overview__token">
         {{ $t('ui.token.token') }}
@@ -66,8 +66,6 @@ export default {
   data() {
     return {
       address: this.$route.params.id,
-      balanceWusd: 0,
-      tokenName: '',
       isChoosing: false,
     };
   },
@@ -77,28 +75,23 @@ export default {
       accountBalances: 'account/getAccountBalances',
       accountBalancesCount: 'account/getAccountBalancesCount',
     }),
-  },
-  async created() {
-    await this.$store.dispatch('account/getAccountBalances', this.address);
+    tokenName() {
+      if (this.accountBalancesCount > 0) return this.accountBalances[0].tokenId.toUpperCase();
+      return '';
+    },
+    balanceWusd() {
+      if (this.accountBalancesCount > 0) {
+        return new BigNumber(this.accountBalances[0].amount).shiftedBy(-this.accountBalances[0].token.decimals);
+      }
+      return 0;
+    },
   },
   async mounted() {
     await this.SetLoader(true);
-    await this.currentBalanceWusd();
-    await this.currentTokenName();
+    await this.$store.dispatch('account/getAccountBalances', this.address);
     await this.SetLoader(false);
   },
   methods: {
-    async currentTokenName() {
-      if (this.accountBalances && this.accountBalancesCount > 0) {
-        this.tokenName = this.accountBalances[0].tokenId.toUpperCase();
-      }
-    },
-    async currentBalanceWusd() {
-      if (this.accountBalances && this.accountBalancesCount > 0) {
-        const amount = new BigNumber(this.accountBalances[0].amount);
-        this.balanceWusd = amount.shiftedBy(-this.accountBalances[0].token.decimals).toFixed(5);
-      }
-    },
     toggleChoice() {
       this.isChoosing = !this.isChoosing;
     },
