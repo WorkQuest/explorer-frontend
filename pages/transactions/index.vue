@@ -110,71 +110,83 @@ export default {
   },
   watch: {
     async page() {
-      this.SetLoader(true);
+      await this.SetLoader(true);
       this.offset = (this.page - 1) * this.limit;
       await this.$store.dispatch('tx/getTxs', {
         limit: this.limit,
         offset: this.offset,
       });
-      this.SetLoader(false);
+      await this.SetLoader(false);
     },
   },
   async mounted() {
-    this.SetLoader(true);
+    await this.SetLoader(true);
     await this.$store.dispatch('tx/getTxs', {
       limit: this.limit,
       offset: this.offset,
     });
     this.query = this.$route.query.block;
-    this.SetLoader(false);
+    await this.SetLoader(false);
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .transactions {
-  animation: show  1s 1;
-    @include container;
-    &__search {
-      margin: 25px 0;
-      &_mobile {
-        display: none;
-      }
-    }
-    &__header {
-      padding: 20px 0 0 20px;
-    }
-    &__title {
-      @include text-simple;
-      @include normal-font-size;
-    }
-    &__block {
-      @include text-simple;
-      @include normal-font-size;
-      color: $black300;
-      font-size: 14px;
-    }
-    &__wrap {
-      background: $white;
-      border-radius: 6px;
-    }
-    &__table {
-       margin: 25px 0;
-    }
-    &__transaction {
+  animation: show 1s 1;
+  @include container;
+
+  &__search {
+    margin: 25px 0;
+
+    &_mobile {
       display: none;
     }
-    &__grey {
+  }
+
+  &__header {
+    padding: 20px 0 0 20px;
+  }
+
+  &__title {
+    @include text-simple;
+    @include normal-font-size;
+  }
+
+  &__block {
+    @include text-simple;
+    @include normal-font-size;
+    color: $black300;
+    font-size: 14px;
+  }
+
+  &__wrap {
+    background: $white;
+    border-radius: 6px;
+  }
+
+  &__table {
+    margin: 25px 0;
+  }
+
+  &__transaction {
+    display: none;
+  }
+
+  &__grey {
     color: $black500;
-    }
-    &__link {
-      @include link;
-    }
+  }
+
+  &__link {
+    @include link;
+  }
 }
+
 .page {
   &__active {
     color: $blue;
   }
+
   &__common {
     color: $black600;
   }
@@ -185,8 +197,10 @@ export default {
     &__table {
       display: none;
     }
+
     &__search {
       display: none;
+
       &_mobile {
         display: block;
         background: $white;
@@ -195,15 +209,19 @@ export default {
         margin: 25px 16px;
       }
     }
+
     &__wrap {
       padding: 20px 16px 0 16px;
     }
+
     &__header {
       padding: 0;
     }
+
     &__transaction {
       display: block;
     }
+
     &__pager {
       margin: 16px;
     }

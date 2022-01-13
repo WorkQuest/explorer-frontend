@@ -82,49 +82,56 @@ export default {
   },
   watch: {
     async page() {
-      this.SetLoader(true);
+      await this.SetLoader(true);
       this.offset = (this.page - 1) * this.limit;
       await this.$store.dispatch('blocks/getBlocks', {
         limit: this.limit,
         offset: this.offset,
       });
-      this.SetLoader(false);
+      await this.SetLoader(false);
     },
   },
   async mounted() {
-    this.SetLoader(true);
+    await this.SetLoader(true);
     await this.$store.dispatch('blocks/getBlocks', {
       limit: this.limit,
       offset: this.offset,
     });
-    this.SetLoader(false);
+    await this.SetLoader(false);
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .blocks {
-  animation: show  1s 1;
-    &__container {
-        @include container;
+  animation: show 1s 1;
+
+  &__container {
+    @include container;
+  }
+
+  &__search {
+    margin: 25px 0;
+
+    &_mobile {
+      display: none;
     }
-    &__search {
-      margin: 25px 0;
-      &_mobile {
-        display: none;
-      }
-    }
-    &__grey {
+  }
+
+  &__grey {
     color: $black500;
-    }
+  }
 }
+
 .items {
   display: none;
 }
+
 @include _767 {
   .blocks {
     &__search {
       display: none;
+
       &_mobile {
         display: block;
         background: $white;
@@ -133,9 +140,11 @@ export default {
         margin: 25px 16px;
       }
     }
+
     &__table {
       display: none;
     }
+
     &__pager {
       margin: 16px;
     }

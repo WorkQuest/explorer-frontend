@@ -115,6 +115,7 @@ export default {
 
   &__info {
     @include text-simple;
+    word-break: break-all;
 
     &_blue {
       color: $blue;

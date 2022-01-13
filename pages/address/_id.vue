@@ -21,9 +21,7 @@
           class="btn__copy"
           type="button"
         >
-          <span
-            class="icon-copy"
-          />
+          <span class="icon-copy" />
         </button>
       </p>
     </div>
@@ -37,29 +35,7 @@
         class="address__table"
         :title="$t('ui.txs')"
         :items="txs"
-        :fields="[
-          {
-            key: 'id', label: this.$t('ui.tx.transaction'), sortable: true,
-          },
-          {
-            key: 'blockNumber', label: this.$t('ui.block.blockNumber'), sortable: true,
-          },
-          {
-            key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
-          },
-          {
-            key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
-          },
-          {
-            key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
-          },
-          {
-            key: 'value', label: this.$t('ui.tx.value'), sortable: true,
-          },
-          {
-            key: 'gasUsed', label: this.$t('ui.tx.fee'), sortable: true,
-          }
-        ]"
+        :fields="tableFields"
       />
       <p class="address__subtitle">
         {{ $t('ui.txs') }}
@@ -109,6 +85,31 @@ export default {
     totalPages() {
       return Math.ceil(this.txsCount / this.limit);
     },
+    tableFields() {
+      return [
+        {
+          key: 'id', label: this.$t('ui.tx.transaction'), sortable: true,
+        },
+        {
+          key: 'blockNumber', label: this.$t('ui.block.blockNumber'), sortable: true,
+        },
+        {
+          key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
+        },
+        {
+          key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
+        },
+        {
+          key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
+        },
+        {
+          key: 'value', label: this.$t('ui.tx.value'), sortable: true,
+        },
+        {
+          key: 'gasUsed', label: this.$t('ui.tx.fee'), sortable: true,
+        },
+      ];
+    },
   },
   watch: {
     async page() {
@@ -123,7 +124,7 @@ export default {
     },
   },
   async mounted() {
-    this.SetLoader(true);
+    await this.SetLoader(true);
     await this.$store.dispatch('tx/getTxsByAccount', {
       address: this.address,
       limit: this.limit,

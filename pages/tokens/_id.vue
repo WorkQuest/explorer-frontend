@@ -21,9 +21,7 @@
       <h4 class="token__title">
         {{ $t('ui.token.token') }}
       </h4>
-      <p
-        class="token__token"
-      >
+      <p class="token__token">
         {{ tokens[`${params}`].name }}
       </p>
     </div>
@@ -292,7 +290,8 @@ export default {
     totalPagesValue() {
       if (this.activeTab === 'transfers') {
         return this.setTotalPages(this.transfers.length, 20);
-      } if (this.activeTab === 'holders') {
+      }
+      if (this.activeTab === 'holders') {
         return this.setTotalPages(this.holders.length, 20);
       }
       return 1;
@@ -340,9 +339,9 @@ export default {
     },
   },
   async mounted() {
-    this.SetLoader(true);
+    await this.SetLoader(true);
     this.params = this.$route.params.id;
-    this.SetLoader(false);
+    await this.SetLoader(false);
   },
   methods: {
     onClick(tab) {
@@ -362,26 +361,31 @@ export default {
 </script>
 <style lang="scss" scoped>
 .token {
-  animation: show  1s 1;
+  animation: show 1s 1;
   @include container;
+
   &__search {
     margin: 25px 0;
+
     &_mobile {
       display: none;
     }
   }
+
   &__header {
     display: flex;
     grid-gap: 10px;
     align-items: center;
     margin-bottom: 25px;
   }
+
   &__title {
     @include text-simple;
     @include normal-font-size;
     font-weight: 600;
     font-size: 28px;
   }
+
   &__info {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -389,30 +393,37 @@ export default {
     margin-bottom: 25px;
   }
 }
+
 .tables {
   background: $white;
   border-radius: 6px;
   padding-top: 20px;
+
   &__menu {
     margin: 0 0 27px 20px
   }
+
   &__tab {
     @include text-simple;
     margin-right: 20px;
     padding-bottom: 12px;
     color: $black500;
     cursor: pointer;
+
     &_active {
-        @include text-simple;
-        border-bottom: 2px solid $blue;
+      @include text-simple;
+      border-bottom: 2px solid $blue;
     }
   }
+
   &__item {
     display: none;
   }
 }
+
 .token-info {
   padding: 0 0 10px 20px;
+
   &__title {
     @include text-simple;
     @include normal-font-size;
@@ -420,32 +431,39 @@ export default {
     font-size: 18px;
     margin: 10px 0;
   }
+
   &__subtitle {
     @include text-simple;
     @include normal-font-size;
     font-weight: 500;
   }
+
   &__description {
     @include text-simple;
     @include normal-font-size;
     margin-bottom: 10px;
   }
 }
+
 .contract {
   padding: 0 20px 20px 20px;
   display: grid;
   grid-gap: 15px;
+
   &__wrap {
     background: $black0;
     border-radius: 5px;
     padding: 20px;
   }
+
   &__description {
     margin-top: 20px;
   }
+
   &__note {
     color: $black500;
   }
+
   &__submit {
     width: 120px;
     display: flex;
@@ -453,9 +471,11 @@ export default {
     margin-bottom: 20px;
   }
 }
+
 .name, .deprecated, .balances {
   cursor: pointer;
 }
+
 .icon-chevron_up::before, .icon-chevron_down::before {
   color: $blue;
   float: right;
@@ -467,8 +487,10 @@ export default {
       grid-template-columns: 1fr;
       grid-gap: 0;
     }
+
     &__search {
       display: none;
+
       &_mobile {
         display: block;
         background: $white;
@@ -477,9 +499,11 @@ export default {
         margin: 25px 16px;
       }
     }
+
     &__pager {
       margin: 16px;
     }
+
     &__header {
       margin: 0 0 25px 16px;
     }
@@ -489,15 +513,18 @@ export default {
   }
   .tables {
     padding: 16px;
+
     &__menu {
       margin: 0 0 15px 0;
     }
+
     &__info, &__contract {
       padding: 0;
       margin-top: 30px;
     }
+
     &__item {
-    display: block;
+      display: block;
     }
   }
   .contract {

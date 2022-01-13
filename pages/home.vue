@@ -1,12 +1,8 @@
 <template>
   <div class="home">
-    <div
-      class="home__header"
-    >
+    <div class="home__header">
       <div class="home__content">
-        <h3
-          class="home__title"
-        >
+        <h3 class="home__title">
           {{ $t('home.title') }}
         </h3>
         <search-filter class="home__search" />
@@ -136,7 +132,7 @@ export default {
     },
   },
   async mounted() {
-    this.SetLoader(true);
+    await this.SetLoader(true);
     await this.$store.dispatch('blocks/getBlocks', {
       limit: this.limit,
       offset: this.offset,
@@ -145,16 +141,18 @@ export default {
       limit: this.limit,
       offset: this.offset,
     });
-    this.SetLoader(false);
+    await this.SetLoader(false);
   },
 };
 </script>
 <style lang="scss" scoped>
 .home {
-  animation: show  1s 1;
+  animation: show 1s 1;
+
   &__search_mobile {
     display: none;
   }
+
   &__header {
     background: $darkblue;
     height: 350px;
@@ -163,36 +161,43 @@ export default {
     align-items: center;
     margin-bottom: 30px;
   }
+
   &__content {
     @include container;
     margin: 0 auto;
   }
+
   &__title {
     @include text-simple;
     @include normal-font-size;
     margin-bottom: 20px;
     font-weight: 600;
     font-size: 34px;
-    color:  $white;
+    color: $white;
   }
+
   &__header-button {
     width: 46px;
     height: 63px;
     margin-left: 10px;
     display: none;
   }
+
   &__block {
     display: none;
   }
 }
+
 .blocks {
   display: none;
 }
+
 @include _767 {
   .home {
     &__search {
       display: none;
     }
+
     &__search_mobile {
       display: block;
       background: $white;
@@ -200,22 +205,27 @@ export default {
       padding: 10px 14px;
       margin: 0 16px;
     }
+
     &__header {
       height: 228px;
     }
+
     &__title {
       font-size: 28px;
       max-width: 200px;
       margin-left: 16px;
     }
+
     &__table {
       display: none;
     }
+
     &__content_mobile {
       padding: 16px 21px 0 21px;
       background: $white;
       margin-bottom: 25px;
     }
+
     &__block {
       display: grid;
     }
@@ -223,6 +233,7 @@ export default {
   .blocks {
     display: flex;
     justify-content: space-between;
+
     &__link {
       @include link;
     }

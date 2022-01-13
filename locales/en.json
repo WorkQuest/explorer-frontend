@@ -14,6 +14,7 @@
     "timestamp": "Timestamp",
     "terms": "Terms and conditions",
     "privacy": "Privacy policy",
+    "loading": "Loading...",
     "locals": {
       "en": "EN",
       "ru": "RU"
@@ -37,6 +38,7 @@
       "transaction": "Txn hash",
       "from": "From",
       "to": "To",
+      "noLogs": "There is no logs...",
       "amount": "Amount",
       "value": "Value",
       "fee": "Txn Fee",
@@ -94,4 +96,4 @@
   "home": {
     "title": "WorkQuest Chain Explorer"
   }
- }
+}

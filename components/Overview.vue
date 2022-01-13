@@ -1,8 +1,6 @@
 <template>
   <div class="overview">
-    <div
-      class="overview-wrap"
-    >
+    <div class="overview-wrap">
       <!--  TODO: Вывести реальные данные -->
       <p class="overview__header">
         {{ $t('ui.token.overview') }}
@@ -20,9 +18,7 @@
       <!--        115 777 329-->
       <!--      </p>-->
     </div>
-    <div
-      class="overview-wrap"
-    >
+    <div class="overview-wrap">
       <p class="overview__info">
         <span class="overview__title">{{ $t('ui.token.balance') }}</span>
         {{ balanceWusd }} {{ tokenName }}
@@ -86,10 +82,10 @@ export default {
     await this.$store.dispatch('account/getAccountBalances', this.address);
   },
   async mounted() {
-    this.SetLoader(true);
+    await this.SetLoader(true);
     await this.currentBalanceWusd();
     await this.currentTokenName();
-    this.SetLoader(false);
+    await this.SetLoader(false);
   },
   methods: {
     async currentTokenName() {

@@ -18,7 +18,7 @@
     />
     <div class="tables__transactions">
       <p class="tables__title">
-        {{ $t('ui.token.token')+' '+$t('ui.token.transfers') }}
+        {{ $t('ui.token.token') + ' ' + $t('ui.token.transfers') }}
       </p>
       <Transaction
         v-for="(item, i) in transfers"
@@ -115,39 +115,47 @@ export default {
     },
   },
   async mounted() {
-    this.SetLoader(true);
-    this.SetLoader(false);
+    await this.SetLoader(true);
+    await this.SetLoader(false);
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .transfer {
-  animation: show  1s 1;
-    &__container {
-        @include container;
-    }
-    &__search {
-    margin: 25px 0;
-      &_mobile {
-        display: none;
-      }
+  animation: show 1s 1;
+
+  &__container {
+    @include container;
   }
-    &__table {
-       margin: 25px 0;
+
+  &__search {
+    margin: 25px 0;
+
+    &_mobile {
+      display: none;
     }
-    &__grey {
+  }
+
+  &__table {
+    margin: 25px 0;
+  }
+
+  &__grey {
     color: $black500;
-    }
+  }
 }
+
 .page {
   &__active {
     color: $blue;
   }
+
   &__common {
     color: $black600;
   }
 }
+
 .tables {
   &__transactions {
     display: none;
@@ -155,12 +163,14 @@ export default {
 }
 
 @include _767 {
-.transfer {
-  &__table {
-    display: none;
-  }
-  &__search {
+  .transfer {
+    &__table {
       display: none;
+    }
+
+    &__search {
+      display: none;
+
       &_mobile {
         display: block;
         background: $white;
@@ -169,16 +179,17 @@ export default {
         margin: 25px 16px;
       }
     }
+
     &__pager {
       margin: 16px;
     }
-}
-.tables {
-  &__transactions {
-    display: block;
-    background: $white;
-    padding: 16px;
   }
-}
+  .tables {
+    &__transactions {
+      display: block;
+      background: $white;
+      padding: 16px;
+    }
+  }
 }
 </style>

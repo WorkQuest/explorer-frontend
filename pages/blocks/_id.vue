@@ -40,36 +40,12 @@
         </div>
         <div class="block__columns">
           <Item
-            :title="$t('ui.timestamp')"
-            :info="formatDataFromNow(block.timestamp)"
-            :note="block.timestamp"
-          />
-          <Item
-            :title="$t('ui.txs')"
-            :info="block.txsCount"
-            :note="$t('ui.block.inThisBlock')"
-            item="transaction"
-          />
-          <!--        TODO: Вывести награду -->
-          <Item
-            :title="$t('ui.block.reward')"
-            info="0.316538333801617818 MATIC"
-          />
-          <Item
-            :title="$t('ui.block.gasUsed')"
-            :info="block.gasUsed"
-          />
-          <Item
-            :title="$t('ui.block.gasLimit')"
-            :info="block.gasLimit"
-          />
-          <Item
-            :title="$t('ui.block.size')"
-            :info="block.size"
-          />
-          <Item
-            :title="$t('ui.block.hash')"
-            :info="block.hash"
+            v-for="(item, i) in blockColumns"
+            :key="i"
+            :title="item.title"
+            :info="item.info"
+            :note="item.note"
+            :item="item.item"
           />
         </div>
         <div class="block__columns_mobile columns">
@@ -158,12 +134,47 @@ export default {
       blocks: 'blocks/getBlocks',
       blocksCount: 'blocks/getBlocksCount',
     }),
+    blockColumns() {
+      return [
+        {
+          title: this.$t('ui.timestamp'),
+          info: this.formatDataFromNow(this.block.timestamp),
+          note: this.block.timestamp,
+        },
+        {
+          title: this.$t('ui.txs'),
+          info: this.block.txsCount,
+          note: this.$t('ui.block.inThisBlock'),
+          item: 'transaction',
+        },
+        {
+          title: this.$t('ui.block.reward'),
+          info: '0.316538333801617818 MATIC',
+        },
+        {
+          title: this.$t('ui.block.gasUsed'),
+          info: this.block.gasUsed,
+        },
+        {
+          title: this.$t('ui.block.gasLimit'),
+          info: this.block.gasLimit,
+        },
+        {
+          title: this.$t('ui.block.size'),
+          info: this.block.size,
+        },
+        {
+          title: this.$t('ui.block.hash'),
+          info: this.block.hash,
+        },
+      ];
+    },
   },
   async mounted() {
-    this.SetLoader(true);
+    await this.SetLoader(true);
     await this.getBlock();
     await this.getAllBlocks();
-    this.SetLoader(false);
+    await this.SetLoader(false);
   },
   methods: {
     cropTxt(str) {

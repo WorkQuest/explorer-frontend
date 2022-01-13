@@ -13,7 +13,7 @@
     >
       <template #table-busy>
         <div class="text-center">
-          <strong>Loading...</strong>
+          <strong>{{ $t('ui.loading') }}</strong>
         </div>
       </template>
       <template

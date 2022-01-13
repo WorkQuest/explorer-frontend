@@ -34,59 +34,12 @@
           class="txs__columns columns"
         >
           <Item
-            class="columns__item_six"
-            :title="$t('ui.tx.transaction')"
-            :info="tx.id"
-          />
-          <Item
-            class="columns__item_two-one"
-            :title="$t('ui.timestamp')"
-            :info="formatDataFromNow(tx.timestamp)"
-            :note="tx.timestamp"
-          />
-          <Item
-            class="columns__item_two-two"
-            :title="$t('ui.tx.status')"
-            :info="tx.status"
-            item="status"
-          />
-          <Item
-            class="columns__item_two-three"
-            :title="$t('ui.block.block')"
-            info="17102304"
-            item="link"
-          />
-          <Item
-            class="columns__item_three-one"
-            :title="$t('ui.tx.from')"
-            :info="tx.fromAddress"
-            item="address"
-          />
-          <Item
-            class="columns__item_three-two"
-            :title="$t('ui.tx.to')"
-            :info="tx.toAddress"
-            item="address"
-          />
-          <Item
-            class="columns__item_three-one"
-            :title="$t('ui.tx.value')"
-            :info="tx.value"
-          />
-          <Item
-            class="columns__item_three-two"
-            :title="$t('ui.tx.fee')"
-            :info="tx.gasPrice"
-          />
-          <Item
-            class="columns__item_three-one"
-            :title="$t('ui.block.gasUsed')"
-            :info="tx.gasUsed"
-          />
-          <Item
-            class="columns__item_three-two"
-            :title="$t('ui.block.gasLimit')"
-            :info="tx.gasLimit"
+            v-for="(item, i) in txsColumns"
+            :key="i"
+            :class="item.class"
+            :title="item.title"
+            :info="item.info"
+            :note="item.note"
           />
         </div>
         <div
@@ -94,7 +47,7 @@
           class="txs__logs logs"
         >
           <div v-if="tx.logs.length === 0">
-            There is no logs...
+            {{ $t('tx.noLogs') }}
           </div>
           <p
             v-if="tx.logs.length > 0"
@@ -108,16 +61,11 @@
           >
             {{ $t('ui.tx.transaction') }}
             <span
-              v-if="tx.logs.length > 0"
-              class="logs__number"
+              v-for="(item, i) in txsLogs"
+              :key="i"
+              :class="item.class"
             >
-              {{ tx.logs[0].transactionHash }}
-            </span>
-            <span
-              v-if="tx.logs.length > 0"
-              class="logs__number_mobile"
-            >
-              {{ formatItem(tx.logs[0].transactionHash, 9, 6) }}
+              {{ item.text }}
             </span>
           </p>
           <div
@@ -127,25 +75,16 @@
             <p class="logs__title">
               {{ $t('ui.tx.topics') }}
             </p>
-            <div
-              v-if="tx.logs.length > 0"
-              class="logs__info"
-            >
+            <div class="logs__info">
               <div
                 v-for="(item, index) in tx.logs[0].topics"
                 :key="index"
                 class="logs__topic"
               >
-                <p
-                  v-if="tx.logs.length > 0"
-                  class="logs__index"
-                >
+                <p class="logs__index">
                   {{ index }}
                 </p>
-                <p
-                  v-if="tx.logs.length > 0"
-                  class="logs__item"
-                >
+                <p class="logs__item">
                   {{ item }}
                 </p>
                 <p class="logs__item_mobile">
@@ -161,16 +100,10 @@
             <p class="logs__title">
               {{ $t('ui.tx.data') }}
             </p>
-            <div
-              v-if="tx.logs.length > 0"
-              class="logs__info logs__info_desktop"
-            >
+            <div class="logs__info logs__info_desktop">
               {{ tx.logs[0].data }}
             </div>
-            <div
-              v-if="tx.logs.length > 0"
-              class="logs__info_mobile"
-            >
+            <div class="logs__info_mobile">
               {{ formatItem(tx.logs[0].data, 9, 6) }}
             </div>
           </div>
@@ -206,9 +139,7 @@
               {{ tx.status }}
             </p>
           </div>
-          <div
-            class="overview__subtitle"
-          >
+          <div class="overview__subtitle">
             {{ $t('ui.block.blockNumber') }}
             <nuxt-link
               v-if="tx.blockNumber"
@@ -234,9 +165,7 @@
               class="btn__copy"
               type="button"
             >
-              <span
-                class="icon-copy"
-              />
+              <span class="icon-copy" />
             </button>
           </div>
           <div class="overview__subtitle">
@@ -255,38 +184,28 @@
               class="btn__copy"
               type="button"
             >
-              <span
-                class="icon-copy"
-              />
+              <span class="icon-copy" />
             </button>
           </div>
-          <div
-            class="overview__subtitle"
-          >
+          <div class="overview__subtitle">
             {{ $t('ui.tx.amount') }}
             <span class="overview__info">
               {{ tx.value }} {{ tx.symbol }}
             </span>
           </div>
-          <div
-            class="overview__subtitle  overview__subtitle_underlined"
-          >
+          <div class="overview__subtitle  overview__subtitle_underlined">
             {{ $t('ui.tx.fee') }}
             <span class="overview__info">
               {{ tx.gasUsed }}
             </span>
           </div>
-          <div
-            class="overview__subtitle"
-          >
+          <div class="overview__subtitle">
             {{ $t('ui.block.gasUsed') }}
             <span class="overview__info">
               {{ tx.gasUsed }}
             </span>
           </div>
-          <div
-            class="overview__subtitle"
-          >
+          <div class="overview__subtitle">
             {{ $t('ui.block.gasLimit') }}
             <span class="overview__info">
               {{ tx.gasLimit }}
@@ -317,13 +236,84 @@ export default {
     ...mapGetters({
       tx: 'tx/getTxsByHash',
     }),
+    txsColumns() {
+      return [
+        {
+          class: 'columns__item_six',
+          title: this.$t('ui.tx.transaction'),
+          info: this.tx.id,
+        },
+        {
+          class: 'columns__item_two-one',
+          title: this.$t('ui.timestamp'),
+          info: this.formatDataFromNow(this.tx.timestamp),
+          note: this.tx.timestamp,
+        },
+        {
+          class: 'columns__item_two-two',
+          title: this.$t('ui.tx.status'),
+          info: this.tx.status,
+          item: 'status',
+        },
+        {
+          class: 'columns__item_two-three',
+          title: this.$t('ui.block.block'),
+          info: '17102304',
+          item: 'link',
+        },
+        {
+          class: 'columns__item_three-one',
+          title: this.$t('ui.tx.from'),
+          info: this.tx.fromAddress,
+          item: 'address',
+        },
+        {
+          class: 'columns__item_three-two',
+          title: this.$t('ui.tx.to'),
+          info: this.tx.toAddress,
+          item: 'address',
+        },
+        {
+          class: 'columns__item_three-one',
+          title: this.$t('ui.tx.value'),
+          info: this.tx.value,
+        },
+        {
+          class: 'columns__item_three-two',
+          title: this.$t('ui.tx.fee'),
+          info: this.tx.gasPrice,
+        },
+        {
+          class: 'columns__item_three-one',
+          title: this.$t('ui.block.gasUsed'),
+          info: this.tx.gasUsed,
+        },
+        {
+          class: 'columns__item_three-two',
+          title: this.$t('ui.block.gasLimit'),
+          info: this.tx.gasLimit,
+        },
+      ];
+    },
+    txsLogs() {
+      return [
+        {
+          class: 'logs__number',
+          text: this.tx.logs[0].transactionHash,
+        },
+        {
+          class: 'logs__number_mobile',
+          text: this.formatItem(this.tx.logs[0].transactionHash, 9, 6),
+        },
+      ];
+    },
   },
   async beforeCreate() {
     await this.$store.dispatch('tx/getTxsByHash', this.$route.params.id);
   },
   async mounted() {
-    this.SetLoader(true);
-    this.SetLoader(false);
+    await this.SetLoader(true);
+    await this.SetLoader(false);
   },
   methods: {
     onClick(tab) {

@@ -12,12 +12,18 @@
       <h4 class="contract__title">
         {{ $t('ui.token.contract') }}
       </h4>
-      <p
-        class="contract__contract"
-      >
-<!--        TODO: Вывести адрес контракта-->
+      <p class="contract__contract">
+        <!--        TODO: Вывести адрес контракта-->
         0x7811B8604c64D62D02dc7e5a8c47185B1b59E0b3
-        <span class="icon-copy" />
+        <button
+          v-clipboard:copy="0x7811B8604c64D62D02dc7e5a8c47185B1b59E0b3"
+          v-clipboard:success="ClipboardSuccessHandler"
+          v-clipboard:error="ClipboardErrorHandler"
+          class="btn__copy"
+          type="button"
+        >
+          <span class="icon-copy" />
+        </button>
       </p>
     </div>
     <div class="contract__info">
@@ -419,9 +425,11 @@ export default {
     totalPagesValue() {
       if (this.activeTab === 'txs') {
         return this.setTotalPages(this.txs.length, 20);
-      } if (this.activeTab === 'internal') {
+      }
+      if (this.activeTab === 'internal') {
         return this.setTotalPages(this.internal.length, 20);
-      } if (this.activeTab === 'tokensTxns') {
+      }
+      if (this.activeTab === 'tokensTxns') {
         return this.setTotalPages(this.erc.length, 20);
       }
       return 1;
@@ -508,21 +516,43 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.btn {
+  &__copy {
+    height: 35px;
+    width: 35px;
+    align-items: center;
+    justify-items: center;
+    background: $white;
+    border: 1px solid $black0;
+    padding: 5px;
+    border-radius: 6px;
+    transition: .5s;
+
+    &:hover {
+      background: $black100;
+    }
+  }
+}
+
 .contract {
-  animation: show  1s 1;
+  animation: show 1s 1;
   @include container;
+
   &__search {
     margin: 25px 0;
+
     &_mobile {
       display: none;
     }
   }
+
   &__header {
     display: flex;
     grid-gap: 10px;
     align-items: center;
     margin-bottom: 25px;
   }
+
   &__info {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -530,29 +560,35 @@ export default {
     margin-bottom: 25px;
   }
 }
+
 .tables {
   background: $white;
   border-radius: 6px;
   padding-top: 20px;
   min-height: 450px;
+
   &__menu {
     margin: 0 0 27px 20px
   }
+
   &__tab {
     @include text-simple;
     margin-right: 20px;
     padding-bottom: 12px;
     color: $black500;
     cursor: pointer;
+
     &_active {
-        @include text-simple;
-        border-bottom: 2px solid $blue;
+      @include text-simple;
+      border-bottom: 2px solid $blue;
     }
   }
+
   &__transaction {
     display: none;
   }
 }
+
 .icon-copy::before {
   color: $blue;
   font-size: 20px;
@@ -565,16 +601,20 @@ export default {
       display: grid;
       margin: 0 0 25px 15px;
     }
+
     &__contract {
       word-wrap: break-word;
       max-width: 700px;
     }
+
     &__info {
       grid-template-columns: 1fr;
       grid-gap: 0;
     }
+
     &__search {
       display: none;
+
       &_mobile {
         display: block;
         background: $white;
@@ -583,26 +623,32 @@ export default {
         margin: 25px 16px;
       }
     }
+
     &__pager {
       margin: 16px;
     }
   }
   .tables {
     padding: 20px 15px 15px 15px;
+
     &__menu {
       margin: 0;
     }
+
     &__tab {
       margin-right: 3px;
     }
+
     &__table {
       display: none;
     }
+
     &__transaction {
       display: block;
     }
   }
 }
+
 @include _575 {
   .contract {
     &__contract {
@@ -610,6 +656,7 @@ export default {
     }
   }
 }
+
 @include _480 {
   .contract {
     &__contract {
@@ -617,6 +664,7 @@ export default {
     }
   }
 }
+
 @include _380 {
   .contract {
     &__contract {
