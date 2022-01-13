@@ -86,18 +86,16 @@ export default {
         }
         let medium = [];
         if (value >= totalPages - 2) {
-          medium = array.splice(totalPages - 4, 3) || [];
+          medium = array.splice(totalPages - 5, 4) || [];
           medium = [-1, ...medium];
-        } else if (value > 3) {
+        } else if (value > 4) {
           medium = array.splice(value - 2, 3) || [];
           medium = [-1, ...medium, -1];
         } else {
-          medium = array.splice(1, 3) || [];
+          medium = array.splice(1, 4) || [];
           medium = [...medium, -1];
         }
-        return [
-          1, ...medium, totalPages,
-        ];
+        return [1, ...medium, totalPages];
       }
       return totalPages;
     },
@@ -136,11 +134,12 @@ export default {
 .pager {
   max-width: 450px;
   float: right;
-  background-color: $white;
+  background-color: #FFFFFF;
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
+
   &__dots {
     @include text-simple;
     font-weight: 600;
@@ -153,16 +152,19 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-left: 1px solid $black0;
+    border-left: 1px solid #F7F8FA;
   }
+
   &__item {
     display: flex;
     align-items: center;
     justify-content: center;
+
     &_active {
       background-color: #e6f3fa;
     }
   }
+
   &__cloud {
     @include btn-filter;
     @include text-simple;
@@ -177,14 +179,17 @@ export default {
     line-height: 130%;
     letter-spacing: 0.04em;
     color: #4C5767;
+
     &_active {
       color: #3A56FF;
       cursor: default;
     }
   }
+
   &__items {
     display: flex;
   }
+
   &__icon {
     display: flex;
     justify-content: center;
@@ -192,12 +197,15 @@ export default {
     width: 40px;
     height: 40px;
     border-left: 1px solid #F7F8FA;
+
     &_disabled {
       cursor: default;
     }
   }
+
   &__img {
     object-fit: cover;
+
     &_prev {
       transform: rotate(180deg);
     }
