@@ -29,7 +29,7 @@
       </p>
       <p class="overview__info">
         <span class="overview__title">WUSD {{ $t('ui.tx.value') }}</span>
-        ${{ balanceUsd }} (@ $0.89/WUSD)
+        ${{ balanceWusd }} (@ $0.89/WUSD)
       </p>
       <div class="overview__token">
         {{ $t('ui.token.token') }}
@@ -71,7 +71,6 @@ export default {
     return {
       address: this.$route.params.id,
       balanceWusd: 0,
-      balanceUsd: 0,
       tokenName: '',
       isChoosing: false,
     };
@@ -89,7 +88,6 @@ export default {
   async mounted() {
     this.SetLoader(true);
     await this.currentBalanceWusd();
-    await this.currentBalanceInDollars();
     await this.currentTokenName();
     this.SetLoader(false);
   },
@@ -98,10 +96,6 @@ export default {
       if (this.accountBalances && this.accountBalancesCount > 0) {
         this.tokenName = this.accountBalances[0].tokenId.toUpperCase();
       }
-    },
-    async currentBalanceInDollars() {
-      if (this.balanceWusd === 0) this.balanceUsd = 0;
-      else this.balanceUsd = 0.89 / this.balanceWusd;
     },
     async currentBalanceWusd() {
       if (this.accountBalances && this.accountBalancesCount > 0) {

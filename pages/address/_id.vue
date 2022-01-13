@@ -12,11 +12,19 @@
       <h4 class="address__title">
         {{ $t('ui.token.address') }}
       </h4>
-      <p
-        class="address__address"
-      >
+      <p class="address__address">
         {{ address }}
-        <span class="icon-copy" />
+        <button
+          v-clipboard:copy="address"
+          v-clipboard:success="ClipboardSuccessHandler"
+          v-clipboard:error="ClipboardErrorHandler"
+          class="btn__copy"
+          type="button"
+        >
+          <span
+            class="icon-copy"
+          />
+        </button>
       </p>
     </div>
     <div class="address__info">
@@ -75,7 +83,6 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import BigNumber from 'bignumber.js';
 import Transaction from '~/components/mobile/transaction.vue';
 
 export default {
@@ -105,14 +112,14 @@ export default {
   },
   watch: {
     async page() {
-      this.SetLoader(true);
+      await this.SetLoader(true);
       this.offset = (this.page - 1) * this.limit;
       await this.$store.dispatch('tx/getTxsByAccount', {
         address: this.address,
         limit: this.limit,
         offset: this.offset,
       });
-      this.SetLoader(false);
+      await this.SetLoader(false);
     },
   },
   async mounted() {
@@ -123,17 +130,30 @@ export default {
       offset: this.offset,
     });
     await this.$store.dispatch('account/getAccountByAddress', this.address);
-    this.SetLoader(false);
-  },
-  methods: {
-    formatAmount(amount, precision) {
-      return new BigNumber(amount).shiftedBy(-precision).toFixed(6);
-    },
+    await this.SetLoader(false);
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.btn {
+  &__copy {
+    height: 35px;
+    width: 35px;
+    align-items: center;
+    justify-items: center;
+    background: $white;
+    border: 1px solid $black0;
+    padding: 5px;
+    border-radius: 6px;
+    transition: .5s;
+
+    &:hover {
+      background: $black100;
+    }
+  }
+}
+
 .address {
   @include container;
 

@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import { mapGetters } from 'vuex';
 import moment from 'moment';
 import VueTippy, { TippyComponent } from 'vue-tippy';
 import modals from '~/store/modals/modals';
@@ -10,25 +9,25 @@ Vue.component('tippy', TippyComponent);
 Vue.mixin({
 
   methods: {
-    ShowModal(payload) {
-      this.$store.dispatch('modals/show', {
+    async ShowModal(payload) {
+      await this.$store.dispatch('modals/show', {
         key: modals.default,
         ...payload,
       });
     },
-    SetLoader(value) {
-      this.$store.dispatch('main/setLoading', value);
+    async SetLoader(value) {
+      await this.$store.dispatch('main/setLoading', value);
     },
-    CloseModal() {
+    async CloseModal() {
       this.$store.dispatch('modals/hide');
     },
-    ClipboardSuccessHandler(value) {
+    async ClipboardSuccessHandler(value) {
       this.$store.dispatch('main/showToast', {
         title: 'Copied successfully',
         text: value,
       });
     },
-    ClipboardErrorHandler(value) {
+    async ClipboardErrorHandler(value) {
       this.$store.dispatch('main/showToast', {
         title: 'Copy error',
         text: value,

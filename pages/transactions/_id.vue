@@ -227,7 +227,17 @@
             >
               {{ formatItem(tx.fromAddress, 7, 6) }}
             </nuxt-link>
-            <span class="icon-copy" />
+            <button
+              v-clipboard:copy="tx.fromAddress"
+              v-clipboard:success="ClipboardSuccessHandler"
+              v-clipboard:error="ClipboardErrorHandler"
+              class="btn__copy"
+              type="button"
+            >
+              <span
+                class="icon-copy"
+              />
+            </button>
           </div>
           <div class="overview__subtitle">
             {{ $t('ui.tx.to') }}
@@ -238,7 +248,17 @@
             >
               {{ formatItem(tx.toAddress, 7, 6) }}
             </nuxt-link>
-            <span class="icon-copy" />
+            <button
+              v-clipboard:copy="tx.toAddress"
+              v-clipboard:success="ClipboardSuccessHandler"
+              v-clipboard:error="ClipboardErrorHandler"
+              class="btn__copy"
+              type="button"
+            >
+              <span
+                class="icon-copy"
+              />
+            </button>
           </div>
           <div
             class="overview__subtitle"
@@ -303,7 +323,6 @@ export default {
   },
   async mounted() {
     this.SetLoader(true);
-    console.log(this.$route.params);
     this.SetLoader(false);
   },
   methods: {
@@ -314,6 +333,24 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.btn {
+  &__copy {
+    height: 35px;
+    width: 35px;
+    align-items: center;
+    justify-items: center;
+    background: $white;
+    border: 1px solid $black0;
+    padding: 5px;
+    border-radius: 6px;
+    transition: .5s;
+
+    &:hover {
+      background: $black100;
+    }
+  }
+}
+
 .txs {
   animation: show 1s 1;
   @include container;

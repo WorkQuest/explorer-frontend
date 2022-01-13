@@ -15,7 +15,17 @@
         >
           0xdac17f958d2ee523a2206206994597c13d831ec7
         </nuxt-link>
-        <span class="icon-copy" />
+        <button
+          v-clipboard:copy="0xdac17f958d2ee523a2206206994597c13d831ec7"
+          v-clipboard:success="ClipboardSuccessHandler"
+          v-clipboard:error="ClipboardErrorHandler"
+          class="btn__copy"
+          type="button"
+        >
+          <span
+            class="icon-copy"
+          />
+        </button>
       </p>
       <p class="info__info">
         <span class="info__title">{{ $t('ui.token.decimals') }}</span>
@@ -71,51 +81,78 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.btn {
+  &__copy {
+    height: 35px;
+    width: 35px;
+    align-items: center;
+    justify-items: center;
+    background: $white;
+    border: 1px solid $black0;
+    padding: 5px;
+    border-radius: 6px;
+    transition: .5s;
+
+    &:hover {
+      background: $black100;
+    }
+  }
+}
+
 .info {
   padding: 20px;
   background: $white;
   border-radius: 6px;
   max-width: 578px;
   position: relative;
+
   &__header {
     @include text-simple;
     @include normal-font-size;
     font-size: 18px;
     margin-bottom: 20px;
   }
+
   &__info {
     @include text-simple;
     @include normal-font-size;
     margin-bottom: 15px;
   }
+
   &__title {
     @include text-simple;
     @include normal-font-size;
     font-weight: 600;
     margin-right: 10px;
   }
+
   &__link {
     @include link;
   }
 }
+
 .icon-copy::before {
   color: $blue;
   font-size: 16px;
   cursor: pointer;
 }
+
 @include _767 {
   .info {
     @include container;
     max-width: 100vw;
+
     &__title {
       display: block;
     }
+
     &__info {
       max-width: 700px;
       word-wrap: break-word;
     }
   }
 }
+
 @include _575 {
   .info {
     &__info {
@@ -123,6 +160,7 @@ export default {
     }
   }
 }
+
 @include _480 {
   .info {
     &__info {
@@ -130,6 +168,7 @@ export default {
     }
   }
 }
+
 @include _380 {
   .info {
     &__info {

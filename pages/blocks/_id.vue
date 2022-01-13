@@ -8,7 +8,10 @@
       :is-hide-error="true"
       :placeholder="$t('ui.forms.searchPlaceholder')"
     />
-    <div class="block__content">
+    <div
+      v-if="block"
+      class="block__content"
+    >
       <nuxt-link
         to="/blocks"
         class="block__back"
@@ -105,7 +108,7 @@
             <span class="columns__info">
               {{ block.gasUsed }}
               <!--        TODO: Вывести проценты -->
-              <!--              (99,5%)-->
+              (99,5%)
             </span>
           </p>
           <p class="columns__subtitle">
@@ -163,6 +166,10 @@ export default {
     this.SetLoader(false);
   },
   methods: {
+    cropTxt(str) {
+      if (str.length > 66) str = `${str.slice(0, 10)}...${str.slice(-10)}`;
+      return str;
+    },
     // TODO: Сделать переход от текущего блока в разные стороны, а не от начала
     async getBlock() {
       await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
@@ -195,85 +202,92 @@ export default {
 </script>
 <style lang="scss" scoped>
 .block {
-    @include container;
-    transition: .5s;
-    &__search {
-        margin: 25px 0;
-        &_mobile {
-        display: none;
-      }
+  @include container;
+  transition: .5s;
+
+  &__search {
+    margin: 25px 0;
+
+    &_mobile {
+      display: none;
     }
-    &__back {
-        @include text-simple;
-        @include normal-font-size;
-        text-decoration: none;
-        font-size: 18px;
-        color: $black600;
-        cursor: pointer;
-        &:hover {
-          text-decoration: none;
-        }
-    }
-    &__title {
-        @include text-simple;
-        font-weight: 600;
-        font-size: 28px;
-        line-height: 36px;
-        margin: 15px 0 10px 0;
-    }
-    &__info {
-        padding: 25px 20px 20px 20px;
-        background: $white;
-        border-radius: 6px;
-        word-wrap: break-word;
-    }
-    &__block {
-        @include text-simple;
-        margin-left: 10px;
-    }
-    &__number {
-        @include text-simple;
-        color: $black400;
-        margin-right: 10px;
-    }
-    &__columns {
-        display: grid;
-        grid-template-columns: 367px 367px 367px;
-        grid-gap: 23px;
-        margin-top: 25px;
-        &:last-child {
-          grid-column-start: 1;
-          grid-column-end: 2;
-        }
-    }
-}
-.icon-short_left {
+  }
+
+  &__back {
+    @include text-simple;
+    @include normal-font-size;
+    text-decoration: none;
     font-size: 18px;
     color: $black600;
-}
-.icon-caret_left, .icon-caret_right {
-    font-size: 16px;
-    color: $black600;
-    padding: 7px;
-    border: 1px solid $black0;
-    border-radius: 6px;
     cursor: pointer;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  &__title {
+    @include text-simple;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 36px;
+    margin: 15px 0 10px 0;
+  }
+
+  &__info {
+    padding: 25px 20px 20px 20px;
+    background: $white;
+    border-radius: 6px;
+    word-wrap: break-word;
+  }
+
+  &__block {
+    @include text-simple;
+    margin-left: 10px;
+  }
+
+  &__number {
+    @include text-simple;
+    color: $black400;
+    margin-right: 10px;
+  }
+
+  &__columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 23px;
+    margin-top: 25px;
+
+    &:last-child {
+      grid-column-start: 1;
+      grid-column-end: 2;
+    }
+  }
 }
+
+.icon-short_left {
+  font-size: 18px;
+  color: $black600;
+}
+
+.icon-caret_left, .icon-caret_right {
+  font-size: 16px;
+  color: $black600;
+  padding: 7px;
+  border: 1px solid $black0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
 .columns {
   display: none;
 }
 
-@include _991 {
-  .block {
-    &__columns {
-      grid-template-columns: 220px 220px 220px;
-    }
-  }
-}
 @include _767 {
   .block {
     &__search {
       display: none;
+
       &_mobile {
         display: block;
         background: $white;
@@ -282,12 +296,15 @@ export default {
         margin: 25px 16px;
       }
     }
+
     &__columns {
       display: none;
     }
+
     &__number {
       color: $blue;
     }
+
     &__back, &__title {
       margin-left: 20px;
     }
@@ -295,37 +312,45 @@ export default {
   .columns {
     padding: 20px 0;
     display: block;
+
     &__separator {
-        border: none;
+      border: none;
     }
+
     &__number {
       font-weight: 600;
       font-size: 14px;
       color: $black300;
     }
+
     &__link {
       @include link;
       font-size: 20px;
       font-weight: normal;
     }
+
     &__timestamp {
       font-weight: normal;
       font-size: 14px;
       color: $black400;
       float: right;
     }
+
     &__subtitle {
       font-weight: 600;
       grid-column: 1/2;
       margin-top: 11px;
     }
+
     &__link_small {
       @include text-simple;
       @include normal-font-size;
       @include link;
     }
+
     &__info {
       font-weight: normal;
+
       &_grey {
         color: $black400;
         padding-bottom: 15px;
