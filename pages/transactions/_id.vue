@@ -30,7 +30,7 @@
           >{{ $t(`ui.token.${tab}`) }}</span>
         </div>
         <div
-          v-if="activeElement === 'overview'"
+          v-if="tx && activeElement === 'overview'"
           class="txs__columns columns"
         >
           <Item
@@ -90,7 +90,7 @@
           />
         </div>
         <div
-          v-if="activeElement === 'logs'"
+          v-if="tx && activeElement === 'logs'"
           class="txs__logs logs"
         >
           <div v-if="tx.logs.length === 0">
@@ -177,7 +177,7 @@
         </div>
         <!-- mobile -->
         <div
-          v-if="activeElement === 'overview'"
+          v-if="tx && activeElement === 'overview'"
           class="overview"
         >
           <div class="overview__hash">
@@ -186,7 +186,6 @@
             </p>
             <p>
               <nuxt-link
-                v-if="tx.id"
                 class="overview__link"
                 :to="`/transactions/${(tx.id)}`"
               >
@@ -299,9 +298,12 @@ export default {
       tx: 'tx/getTxsByHash',
     }),
   },
+  async beforeCreate() {
+    await this.$store.dispatch('tx/getTxsByHash', this.$route.params.id);
+  },
   async mounted() {
     this.SetLoader(true);
-    await this.$store.dispatch('tx/getTxsByHash', this.$route.params.id);
+    console.log(this.$route.params);
     this.SetLoader(false);
   },
   methods: {
@@ -313,122 +315,148 @@ export default {
 </script>
 <style lang="scss" scoped>
 .txs {
-    animation: show  1s 1;
-    @include container;
-    &__search {
-        margin: 30px 0;
-        &_mobile {
-          display: none;
-        }
+  animation: show 1s 1;
+  @include container;
+
+  &__search {
+    margin: 30px 0;
+
+    &_mobile {
+      display: none;
     }
-    &__back {
-        @include text-simple;
-        @include normal-font-size;
-        text-decoration: none;
-        font-size: 18px;
-        color: $black600;
-        cursor: pointer;
-        &:hover {
-          text-decoration: none;
-        }
+  }
+
+  &__back {
+    @include text-simple;
+    @include normal-font-size;
+    text-decoration: none;
+    font-size: 18px;
+    color: $black600;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: none;
     }
-    &__title {
-        @include text-simple;
-        font-weight: 600;
-        font-size: 28px;
-        line-height: 36px;
-        margin: 15px 0 10px 0;
+  }
+
+  &__title {
+    @include text-simple;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 36px;
+    margin: 15px 0 10px 0;
+  }
+
+  &__info {
+    padding: 25px 0 20px 20px;
+    background: $white;
+    border-radius: 6px;
+  }
+
+  &__tab {
+    &_overview, &_logs {
+      @include text-simple;
+      margin-right: 20px;
+      padding-bottom: 12px;
+      color: $black500;
+      cursor: pointer;
     }
-    &__info {
-        padding: 25px 0 20px 20px;
-        background: $white;
-        border-radius: 6px;
+
+    &_active {
+      @include text-simple;
+      border-bottom: 2px solid $blue;
     }
-    &__tab {
-        &_overview, &_logs {
-        @include text-simple;
-        margin-right: 20px;
-        padding-bottom: 12px;
-        color: $black500;
-        cursor: pointer;
-        }
-        &_active {
-            @include text-simple;
-            border-bottom: 2px solid $blue;
-        }
-    }
-    &__columns {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-        grid-gap: 23px;
-        margin-top: 25px;
-    }
-    &__logs {
-      margin-top: 25px;
-      height: 370px;
-    }
+  }
+
+  &__columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 23px;
+    margin-top: 25px;
+  }
+
+  &__logs {
+    margin-top: 25px;
+    height: 370px;
+  }
 }
+
 .columns {
-    &__item {
-        &_six {
-            grid-column: 1 / span 6;
-        }
-        &_three {
-            &-one {
-                grid-column: 1 / span 3;
-            }
-            &-two {
-                grid-column: 4 / span 3;
-            }
-        }
-        &_two {
-            &-one {
-                grid-column: 1 / span 2;
-            }
-            &-two {
-                grid-column: 3 / span 2;
-            }
-            &-three {
-                grid-column: 5 / span 2;
-            }
-        }
+  &__item {
+    &_six {
+      grid-column: 1 / span 6;
     }
+
+    &_three {
+      &-one {
+        grid-column: 1 / span 3;
+      }
+
+      &-two {
+        grid-column: 4 / span 3;
+      }
+    }
+
+    &_two {
+      &-one {
+        grid-column: 1 / span 2;
+      }
+
+      &-two {
+        grid-column: 3 / span 2;
+      }
+
+      &-three {
+        grid-column: 5 / span 2;
+      }
+    }
+  }
 }
+
 .logs {
   &__header {
     @include text-simple;
     font-size: 20px;
   }
+
   &__hash {
     @include text-simple;
     font-weight: 600;
     margin-top: 20px;
   }
+
   &__number {
     @include text-simple;
     color: $blue;
     margin-left: 10px;
+
     &_mobile {
       display: none;
     }
   }
+
   &__content {
     display: flex;
     margin: 15px 0 0 23px;
   }
+
   &__topic {
     display: flex;
   }
+
   &__info {
     margin-left: 10px;
+
     &_mobile {
       display: none;
     }
   }
+
   &__title {
     @include text-simple;
     font-weight: 600;
   }
+
   &__index {
     background: $black100;
     color: $black600;
@@ -439,6 +467,7 @@ export default {
     margin: 0 10px 15px 0;
     font-size: 12px;
   }
+
   &__item {
     &_mobile {
       display: none;
@@ -446,15 +475,17 @@ export default {
 
   }
 }
+
 .overview {
   display: none;
 }
+
 @include _991 {
-.txs {
-  &__columns {
-    grid-gap: 5px;
+  .txs {
+    &__columns {
+      grid-gap: 5px;
+    }
   }
-}
 }
 
 @include _767 {
@@ -462,14 +493,18 @@ export default {
     &__info {
       padding: 16px;
     }
+
     &__title {
       margin-left: 16px;
     }
+
     &__back {
       margin-left: 16px;
     }
+
     &__search {
       display: none;
+
       &_mobile {
         display: block;
         background: $white;
@@ -483,70 +518,82 @@ export default {
     padding: 20px 0;
     grid-template-columns: 1fr 1fr;
     display: grid;
+
     &__hash {
       font-weight: 600;
       font-size: 14px;
       color: $black300;
     }
+
     &__link {
       @include link;
       font-size: 20px;
       font-weight: normal;
     }
+
     &__timestamp {
       font-weight: normal;
       font-size: 14px;
       color: $black400;
       justify-self: end;
     }
+
     &__subtitle {
       font-weight: 600;
       grid-column: 1/3;
       margin-top: 11px;
+
       &_underlined {
         padding-bottom: 15px;
         border-bottom: 1px solid $black100;
       }
     }
+
     &__link_small {
       @include text-simple;
       @include normal-font-size;
       @include link;
       margin-left: 10px;
     }
+
     &__info {
       font-weight: normal;
-       margin-left: 10px;
+      margin-left: 10px;
     }
+
     &__status {
       &_green {
-          background: rgba(34, 204, 20, 0.1);
-          border-radius: 3px;
-          color: $default-green;
-          width: 58px;
-          text-align: center;
-          display: inline-block;
-        }
-        &_red {
-          background: rgba(223, 51, 51, 0.1);
-          border-radius: 3px;
-          color: $red;
-          width: 58px;
-          text-align: center;
-          display: inline-block;
-        }
+        background: rgba(34, 204, 20, 0.1);
+        border-radius: 3px;
+        color: $default-green;
+        width: 58px;
+        text-align: center;
+        display: inline-block;
+      }
+
+      &_red {
+        background: rgba(223, 51, 51, 0.1);
+        border-radius: 3px;
+        color: $red;
+        width: 58px;
+        text-align: center;
+        display: inline-block;
+      }
     }
   }
   .logs {
     &__header {
       font-size: 16px;
     }
+
     &__content {
       margin: 0 0 15px 0;
       display: grid;
     }
+
     &__number {
       display: none;
+
       &_mobile {
         display: block;
         @include text-simple;
@@ -555,17 +602,22 @@ export default {
         font-size: 20px;
       }
     }
+
     &__item {
       display: none;
+
       &_mobile {
         display: inline-block;
       }
     }
+
     &__info {
       margin: 15px 0 0 0;
+
       &_desktop {
         display: none;
       }
+
       &_mobile {
         display: block;
       }
@@ -575,9 +627,9 @@ export default {
     display: none;
   }
   .icon-copy::before {
-  color: $blue;
-  font-size: 20px;
-  cursor: pointer;
-}
+    color: $blue;
+    font-size: 20px;
+    cursor: pointer;
+  }
 }
 </style>
