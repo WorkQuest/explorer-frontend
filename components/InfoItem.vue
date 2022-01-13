@@ -42,9 +42,7 @@
         class="btn__copy"
         type="button"
       >
-        <span
-          class="icon-copy"
-        />
+        <span class="icon-copy" />
       </button>
     </p>
     <p

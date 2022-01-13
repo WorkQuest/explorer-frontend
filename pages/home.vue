@@ -98,49 +98,33 @@ export default {
       txs: 'tx/getTxs',
       txsCount: 'tx/getTxsCount',
     }),
+    payload() {
+      return {
+        limit: this.limit,
+        offset: this.offset,
+      };
+    },
     tableHeadersBlocks() {
       return [
-        {
-          key: 'id', label: this.$t('ui.block.blockNumber'), sortable: true,
-        },
-        {
-          key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
-        },
-        {
-          key: 'txsCount', label: this.$t('ui.block.txsCount'), sortable: true,
-        },
-        {
-          key: 'reward', label: this.$t('ui.block.reward'), sortable: true,
-        },
+        { key: 'id', label: this.$t('ui.block.blockNumber'), sortable: true },
+        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'txsCount', label: this.$t('ui.block.txsCount'), sortable: true },
+        { key: 'reward', label: this.$t('ui.block.reward'), sortable: true },
       ];
     },
     tableHeadersTxs() {
       return [
-        {
-          key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true,
-        },
-        {
-          key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
-        },
-        {
-          key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
-        },
-        {
-          key: 'value', label: this.$t('ui.tx.amount'), sortable: true,
-        },
+        { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
+        { key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true },
+        { key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true },
+        { key: 'value', label: this.$t('ui.tx.amount'), sortable: true },
       ];
     },
   },
   async mounted() {
     await this.SetLoader(true);
-    await this.$store.dispatch('blocks/getBlocks', {
-      limit: this.limit,
-      offset: this.offset,
-    });
-    await this.$store.dispatch('tx/getTxs', {
-      limit: this.limit,
-      offset: this.offset,
-    });
+    await this.$store.dispatch('blocks/getBlocks', this.payload);
+    await this.$store.dispatch('tx/getTxs', this.payload);
     await this.SetLoader(false);
   },
 };

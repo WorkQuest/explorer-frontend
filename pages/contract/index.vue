@@ -423,89 +423,48 @@ export default {
   },
   computed: {
     totalPagesValue() {
-      if (this.activeTab === 'txs') {
-        return this.setTotalPages(this.txs.length, 20);
-      }
-      if (this.activeTab === 'internal') {
-        return this.setTotalPages(this.internal.length, 20);
-      }
-      if (this.activeTab === 'tokensTxns') {
-        return this.setTotalPages(this.erc.length, 20);
-      }
+      if (this.activeTab === 'txs') return this.setTotalPages(this.txs.length, 20);
+      if (this.activeTab === 'internal') return this.setTotalPages(this.internal.length, 20);
+      if (this.activeTab === 'tokensTxns') return this.setTotalPages(this.erc.length, 20);
       return 1;
     },
     tableHeadersTxs() {
       return [
-        {
-          key: 'id', label: this.$t('ui.tx.transaction'), sortable: true,
-        },
-        {
-          key: 'blockNumber', label: this.$t('ui.block.blockNumber'), sortable: true,
-        },
-        {
-          key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
-        },
-        {
-          key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
-        },
-        {
-          key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
-        },
-        {
-          key: 'value', label: this.$t('ui.tx.value'), sortable: true,
-        },
-        {
-          key: 'gasUsed', label: this.$t('ui.tx.fee'), sortable: true,
-        },
+        { key: 'id', label: this.$t('ui.tx.transaction'), sortable: true },
+        { key: 'blockNumber', label: this.$t('ui.block.blockNumber'), sortable: true },
+        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true },
+        { key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true },
+        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
+        { key: 'gasUsed', label: this.$t('ui.tx.fee'), sortable: true },
       ];
     },
     tableHeadersInternal() {
       return [
-        {
-          key: 'blockNumber', label: this.$t('ui.block.blockNumber'), sortable: true,
-        },
-        {
-          key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
-        },
-        {
-          key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
-        },
-        {
-          key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
-        },
-        {
-          key: 'value', label: this.$t('ui.tx.value'), sortable: true,
-        },
+        { key: 'blockNumber', label: this.$t('ui.block.blockNumber'), sortable: true },
+        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true },
+        { key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true },
+        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
       ];
     },
     tableHeadersERC() {
       return [
-        {
-          key: 'id', label: this.$t('ui.tx.transaction'), sortable: true,
-        },
-        {
-          key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
-        },
-        {
-          key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
-        },
-        {
-          key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
-        },
-        {
-          key: 'value', label: this.$t('ui.tx.value'), sortable: true,
-        },
-        {
-          key: 'token', label: this.$t('ui.token.token'), sortable: true,
-        },
+        { key: 'id', label: this.$t('ui.tx.transaction'), sortable: true },
+        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true },
+        { key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true },
+        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
+        { key: 'token', label: this.$t('ui.token.token'), sortable: true },
       ];
     },
   },
   async mounted() {
-    this.SetLoader(true);
+    await this.SetLoader(true);
+    // TODO: Переписать
     const txsRes = await this.$axios.get('/v1/txs');
     this.txs = txsRes.data.result.txs;
-    this.SetLoader(false);
+    await this.SetLoader(false);
   },
   methods: {
     onClick(tab) {

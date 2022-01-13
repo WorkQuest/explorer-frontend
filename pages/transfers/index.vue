@@ -93,24 +93,12 @@ export default {
     },
     tableHeaders() {
       return [
-        {
-          key: 'id', label: this.$t('ui.tx.transaction'), sortable: true,
-        },
-        {
-          key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
-        },
-        {
-          key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
-        },
-        {
-          key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
-        },
-        {
-          key: 'value', label: this.$t('ui.tx.value'), sortable: true,
-        },
-        {
-          key: 'token', label: this.$t('ui.token.token'), sortable: true,
-        },
+        { key: 'id', label: this.$t('ui.tx.transaction'), sortable: true },
+        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true },
+        { key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true },
+        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
+        { key: 'token', label: this.$t('ui.token.token'), sortable: true },
       ];
     },
   },

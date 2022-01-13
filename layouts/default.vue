@@ -77,21 +77,15 @@
                 class="ctm-menu__toggle"
                 @click="toggleMobileMenu()"
               >
-                <button
-                  class="header__button header__button_menu"
-                >
-                  <span
-                    :class="{'icon-hamburger': !isMobileMenu, 'icon-close_big': isMobileMenu}"
-                  />
+                <button class="header__button header__button_menu">
+                  <span :class="{'icon-hamburger': !isMobileMenu, 'icon-close_big': isMobileMenu}" />
                 </button>
               </div>
             </div>
           </div>
         </div>
         <!-- mobile header -->
-        <div
-          class="template__header header_mobile"
-        >
+        <div class="template__header header_mobile">
           <div
             v-if="isMobileMenu"
             class="header__left_mobile"
@@ -130,9 +124,7 @@
         <div class="template__content">
           <nuxt />
         </div>
-        <div
-          class="template__footer footer"
-        >
+        <div class="template__footer footer">
           <div class="footer__left">
             <p class="footer__copy">
               © Workquest {{ new Date().getFullYear() }}

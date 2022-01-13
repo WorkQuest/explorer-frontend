@@ -82,22 +82,17 @@
           <p class="columns__subtitle">
             {{ $t('ui.block.gasUsed') }}
             <span class="columns__info">
-              {{ block.gasUsed }}
               <!--        TODO: Вывести проценты -->
-              (99,5%)
+              {{ block.gasUsed }} (99,5%)
             </span>
           </p>
           <p class="columns__subtitle">
             {{ $t('ui.block.gasLimit') }}
-            <span class="columns__info">
-              {{ block.gasLimit }}
-            </span>
+            <span class="columns__info">{{ block.gasLimit }}</span>
           </p>
           <p class="columns__subtitle">
             {{ $t('ui.block.size') }}
-            <span class="columns__info">
-              {{ block.size }} {{ $t('ui.block.bytes') }}
-            </span>
+            <span class="columns__info">{{ block.size }} {{ $t('ui.block.bytes') }}</span>
           </p>
           <p class="columns__subtitle">
             {{ $t('ui.block.hash') }}
@@ -169,6 +164,12 @@ export default {
         },
       ];
     },
+    payload() {
+      return {
+        limit: this.limit,
+        offset: this.offset,
+      };
+    },
   },
   async mounted() {
     await this.SetLoader(true);
@@ -183,10 +184,7 @@ export default {
       this.block = this.currentBlock;
     },
     async getAllBlocks() {
-      await this.$store.dispatch('blocks/getBlocks', {
-        limit: this.limit,
-        offset: this.offset,
-      });
+      await this.$store.dispatch('blocks/getBlocks', this.payload);
     },
     turnLeft() {
       this.block = this.blocks[

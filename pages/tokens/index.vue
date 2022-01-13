@@ -89,22 +89,13 @@ export default {
       search: '',
       tracker: [
         {
-          number: 1,
-          token: 'USDT',
-          volume: 43369072176.00,
-          holders: 3320602,
+          number: 1, token: 'USDT', volume: 43369072176.00, holders: 3320602,
         },
         {
-          number: 2,
-          token: 'BUSD',
-          volume: 43369072177.00,
-          holders: 3320603,
+          number: 2, token: 'BUSD', volume: 43369072177.00, holders: 3320603,
         },
         {
-          number: 3,
-          token: 'GHST',
-          volume: 43369072179.00,
-          holders: 3320600,
+          number: 3, token: 'GHST', volume: 43369072179.00, holders: 3320600,
         },
       ],
       tokens: {
@@ -129,18 +120,10 @@ export default {
     },
     tableHeaders() {
       return [
-        {
-          key: 'number', label: '#', sortable: true,
-        },
-        {
-          key: 'token', label: this.$t('ui.token.token'), sortable: true,
-        },
-        {
-          key: 'volume', label: this.$t('ui.token.volume'), sortable: true,
-        },
-        {
-          key: 'holders', label: this.$t('ui.token.holders'), sortable: true,
-        },
+        { key: 'number', label: '#', sortable: true },
+        { key: 'token', label: this.$t('ui.token.token'), sortable: true },
+        { key: 'volume', label: this.$t('ui.token.volume'), sortable: true },
+        { key: 'holders', label: this.$t('ui.token.holders'), sortable: true },
       ];
     },
   },

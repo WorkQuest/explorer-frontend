@@ -114,9 +114,7 @@
           class="overview"
         >
           <div class="overview__hash">
-            <p>
-              {{ $t('ui.tx.transaction') }}
-            </p>
+            <p>{{ $t('ui.tx.transaction') }}</p>
             <p>
               <nuxt-link
                 class="overview__link"
@@ -189,27 +187,19 @@
           </div>
           <div class="overview__subtitle">
             {{ $t('ui.tx.amount') }}
-            <span class="overview__info">
-              {{ tx.value }} {{ tx.symbol }}
-            </span>
+            <span class="overview__info">{{ tx.value }} {{ tx.symbol }}</span>
           </div>
           <div class="overview__subtitle  overview__subtitle_underlined">
             {{ $t('ui.tx.fee') }}
-            <span class="overview__info">
-              {{ tx.gasUsed }}
-            </span>
+            <span class="overview__info">{{ tx.gasUsed }}</span>
           </div>
           <div class="overview__subtitle">
             {{ $t('ui.block.gasUsed') }}
-            <span class="overview__info">
-              {{ tx.gasUsed }}
-            </span>
+            <span class="overview__info">{{ tx.gasUsed }}</span>
           </div>
           <div class="overview__subtitle">
             {{ $t('ui.block.gasLimit') }}
-            <span class="overview__info">
-              {{ tx.gasLimit }}
-            </span>
+            <span class="overview__info">{{ tx.gasLimit }}</span>
           </div>
         </div>
       </div>
@@ -238,11 +228,7 @@ export default {
     }),
     txsColumns() {
       return [
-        {
-          class: 'columns__item_six',
-          title: this.$t('ui.tx.transaction'),
-          info: this.tx.id,
-        },
+        { class: 'columns__item_six', title: this.$t('ui.tx.transaction'), info: this.tx.id },
         {
           class: 'columns__item_two-one',
           title: this.$t('ui.timestamp'),
@@ -250,61 +236,27 @@ export default {
           note: this.tx.timestamp,
         },
         {
-          class: 'columns__item_two-two',
-          title: this.$t('ui.tx.status'),
-          info: this.tx.status,
-          item: 'status',
+          class: 'columns__item_two-two', title: this.$t('ui.tx.status'), info: this.tx.status, item: 'status',
         },
         {
-          class: 'columns__item_two-three',
-          title: this.$t('ui.block.block'),
-          info: '17102304',
-          item: 'link',
+          class: 'columns__item_two-three', title: this.$t('ui.block.block'), info: '17102304', item: 'link',
         },
         {
-          class: 'columns__item_three-one',
-          title: this.$t('ui.tx.from'),
-          info: this.tx.fromAddress,
-          item: 'address',
+          class: 'columns__item_three-one', title: this.$t('ui.tx.from'), info: this.tx.fromAddress, item: 'address',
         },
         {
-          class: 'columns__item_three-two',
-          title: this.$t('ui.tx.to'),
-          info: this.tx.toAddress,
-          item: 'address',
+          class: 'columns__item_three-two', title: this.$t('ui.tx.to'), info: this.tx.toAddress, item: 'address',
         },
-        {
-          class: 'columns__item_three-one',
-          title: this.$t('ui.tx.value'),
-          info: this.tx.value,
-        },
-        {
-          class: 'columns__item_three-two',
-          title: this.$t('ui.tx.fee'),
-          info: this.tx.gasPrice,
-        },
-        {
-          class: 'columns__item_three-one',
-          title: this.$t('ui.block.gasUsed'),
-          info: this.tx.gasUsed,
-        },
-        {
-          class: 'columns__item_three-two',
-          title: this.$t('ui.block.gasLimit'),
-          info: this.tx.gasLimit,
-        },
+        { class: 'columns__item_three-one', title: this.$t('ui.tx.value'), info: this.tx.value },
+        { class: 'columns__item_three-two', title: this.$t('ui.tx.fee'), info: this.tx.gasPrice },
+        { class: 'columns__item_three-one', title: this.$t('ui.block.gasUsed'), info: this.tx.gasUsed },
+        { class: 'columns__item_three-two', title: this.$t('ui.block.gasLimit'), info: this.tx.gasLimit },
       ];
     },
     txsLogs() {
       return [
-        {
-          class: 'logs__number',
-          text: this.tx.logs[0].transactionHash,
-        },
-        {
-          class: 'logs__number_mobile',
-          text: this.formatItem(this.tx.logs[0].transactionHash, 9, 6),
-        },
+        { class: 'logs__number', text: this.tx.logs[0].transactionHash },
+        { class: 'logs__number_mobile', text: this.formatItem(this.tx.logs[0].transactionHash, 9, 6) },
       ];
     },
   },

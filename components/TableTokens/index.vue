@@ -81,7 +81,8 @@ export default {
     },
     tokens: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
   },
 };
@@ -92,11 +93,13 @@ export default {
   &__header {
     display: flex;
   }
+
   &__title {
     @include text-simple;
     @include normal-font-size;
     margin: 5px;
   }
+
   &__description {
     @include text-simple;
     @include normal-font-size;

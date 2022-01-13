@@ -28,9 +28,7 @@
     <div class="address__info">
       <Overview />
     </div>
-    <div
-      class="address__txs"
-    >
+    <div class="address__txs">
       <TableTxs
         class="address__table"
         :title="$t('ui.txs')"
@@ -82,32 +80,25 @@ export default {
       txsCount: 'tx/getTxsByAccountCount',
       accountInfo: 'account/getAccountInfo',
     }),
+    payload() {
+      return {
+        address: this.address,
+        limit: this.limit,
+        offset: this.offset,
+      };
+    },
     totalPages() {
       return Math.ceil(this.txsCount / this.limit);
     },
     tableFields() {
       return [
-        {
-          key: 'id', label: this.$t('ui.tx.transaction'), sortable: true,
-        },
-        {
-          key: 'blockNumber', label: this.$t('ui.block.blockNumber'), sortable: true,
-        },
-        {
-          key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
-        },
-        {
-          key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
-        },
-        {
-          key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
-        },
-        {
-          key: 'value', label: this.$t('ui.tx.value'), sortable: true,
-        },
-        {
-          key: 'gasUsed', label: this.$t('ui.tx.fee'), sortable: true,
-        },
+        { key: 'id', label: this.$t('ui.tx.transaction'), sortable: true },
+        { key: 'blockNumber', label: this.$t('ui.block.blockNumber'), sortable: true },
+        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true },
+        { key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true },
+        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
+        { key: 'gasUsed', label: this.$t('ui.tx.fee'), sortable: true },
       ];
     },
   },
@@ -115,21 +106,13 @@ export default {
     async page() {
       await this.SetLoader(true);
       this.offset = (this.page - 1) * this.limit;
-      await this.$store.dispatch('tx/getTxsByAccount', {
-        address: this.address,
-        limit: this.limit,
-        offset: this.offset,
-      });
+      await this.$store.dispatch('tx/getTxsByAccount', this.payload);
       await this.SetLoader(false);
     },
   },
   async mounted() {
     await this.SetLoader(true);
-    await this.$store.dispatch('tx/getTxsByAccount', {
-      address: this.address,
-      limit: this.limit,
-      offset: this.offset,
-    });
+    await this.$store.dispatch('tx/getTxsByAccount', this.payload);
     await this.$store.dispatch('account/getAccountByAddress', this.address);
     await this.SetLoader(false);
   },

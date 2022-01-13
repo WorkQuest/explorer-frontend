@@ -101,21 +101,15 @@
           {{ $t('ui.token.market') }}
         </p>
         <p class="token-info__description">
-          <span class="token-info__subtitle">
-            {{ $t('ui.token.volume') }}
-          </span>
+          <span class="token-info__subtitle">{{ $t('ui.token.volume') }}</span>
           $ 44 215 188 907,00
         </p>
         <p class="token-info__description">
-          <span class="token-info__subtitle">
-            {{ $t('ui.token.capitalization') }}
-          </span>
+          <span class="token-info__subtitle">{{ $t('ui.token.capitalization') }}</span>
           $ 62 059 827 982,00
         </p>
         <p class="token-info__description">
-          <span class="token-info__subtitle">
-            {{ $t('ui.token.supply') }}
-          </span>
+          <span class="token-info__subtitle">{{ $t('ui.token.supply') }}</span>
           61 992 333 258.00 USDT
         </p>
       </div>
@@ -288,53 +282,27 @@ export default {
   },
   computed: {
     totalPagesValue() {
-      if (this.activeTab === 'transfers') {
-        return this.setTotalPages(this.transfers.length, 20);
-      }
-      if (this.activeTab === 'holders') {
-        return this.setTotalPages(this.holders.length, 20);
-      }
+      if (this.activeTab === 'transfers') return this.setTotalPages(this.transfers.length, 20);
+      if (this.activeTab === 'holders') return this.setTotalPages(this.holders.length, 20);
       return 1;
     },
     tableHeadersTransfers() {
       return [
-        {
-          key: 'id', label: this.$t('ui.tx.transaction'), sortable: true,
-        },
-        {
-          key: 'method', label: this.$t('ui.token.method'), sortable: true,
-        },
-        {
-          key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
-        },
-        {
-          key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
-        },
-        {
-          key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
-        },
-        {
-          key: 'quantity', label: this.$t('ui.token.quantity'), sortable: true,
-        },
+        { key: 'id', label: this.$t('ui.tx.transaction'), sortable: true },
+        { key: 'method', label: this.$t('ui.token.method'), sortable: true },
+        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true },
+        { key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true },
+        { key: 'quantity', label: this.$t('ui.token.quantity'), sortable: true },
       ];
     },
     tableHeadersHolders() {
       return [
-        {
-          key: 'id', label: this.$t('ui.token.rank'), sortable: true,
-        },
-        {
-          key: 'address', label: this.$t('ui.token.address'), sortable: true,
-        },
-        {
-          key: 'quantity', label: this.$t('ui.token.quantity'), sortable: true,
-        },
-        {
-          key: 'percentage', label: this.$t('ui.token.percentage'), sortable: true,
-        },
-        {
-          key: 'value', label: this.$t('ui.tx.value'), sortable: true,
-        },
+        { key: 'id', label: this.$t('ui.token.rank'), sortable: true },
+        { key: 'address', label: this.$t('ui.token.address'), sortable: true },
+        { key: 'quantity', label: this.$t('ui.token.quantity'), sortable: true },
+        { key: 'percentage', label: this.$t('ui.token.percentage'), sortable: true },
+        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
       ];
     },
   },
@@ -348,13 +316,9 @@ export default {
       this.activeTab = tab;
     },
     onClickContract(event) {
-      if (this.activePoint !== '') {
-        this.activePoint = '';
-      } else if (event.target.className === ('icon-chevron_down' || 'icon-chevron_up')) {
-        this.activePoint = event.path[1].className;
-      } else {
-        this.activePoint = event.target.className;
-      }
+      if (this.activePoint !== '') this.activePoint = '';
+      else if (event.target.className === ('icon-chevron_down' || 'icon-chevron_up')) this.activePoint = event.path[1].className;
+      else this.activePoint = event.target.className;
     },
   },
 };
