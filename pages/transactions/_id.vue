@@ -9,13 +9,14 @@
       :placeholder="$t('ui.forms.searchPlaceholder')"
     />
     <div class="txs__content">
-      <nuxt-link
-        to="/transactions"
+      <button
         class="txs__back"
+        type="button"
+        @click="goBack()"
       >
         <span class="icon-short_left" />
         {{ $t('ui.back') }}
-      </nuxt-link>
+      </button>
       <h3 class="txs__title">
         {{ $t('ui.tx.txDetails') }}
       </h3>
@@ -264,6 +265,9 @@ export default {
     await this.SetLoader(false);
   },
   methods: {
+    goBack() {
+      this.$router.go(-1);
+    },
     onClick(tab) {
       this.activeElement = tab;
     },
