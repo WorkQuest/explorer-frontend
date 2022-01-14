@@ -113,7 +113,7 @@ export default {
   data() {
     return {
       search: '',
-      limit: 50,
+      limit: 200,
       offset: 0,
       index: 0,
       block: {},
@@ -156,10 +156,13 @@ export default {
     await this.SetLoader(true);
     await this.getBlock();
     await this.getAllBlocks();
+    await this.currentBlockInArray();
     await this.SetLoader(false);
   },
   methods: {
-    // TODO: Сделать переход от текущего блока в разные стороны, а не от начала
+    async currentBlockInArray() {
+      this.index = this.blocks.findIndex((block) => block.id === this.currentBlock.id);
+    },
     async getBlock() {
       await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
       this.block = this.currentBlock;
@@ -168,19 +171,11 @@ export default {
       await this.$store.dispatch('blocks/getBlocks', this.payload);
     },
     turnLeft() {
-      this.block = this.blocks[
-        this.index !== 0
-        && this.index - 1 <= this.blocks.length
-          ? this.index -= 1 : this.index
-      ];
+      this.block = this.blocks[this.index !== 0 && this.index - 1 <= this.blocks.length ? this.index -= 1 : this.index];
       this.$router.push(`${this.block.id}`);
     },
     turnRight() {
-      this.block = this.blocks[
-        this.index !== this.blocks.length
-        && this.index + 1 < this.blocks.length
-          ? this.index += 1 : this.index
-      ];
+      this.block = this.blocks[this.index !== this.blocks.length && this.index + 1 < this.blocks.length ? this.index += 1 : this.index];
       this.$router.push(`${this.block.id}`);
     },
   },
