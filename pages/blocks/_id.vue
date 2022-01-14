@@ -142,26 +142,11 @@ export default {
           note: this.$t('ui.block.inThisBlock'),
           item: 'transaction',
         },
-        {
-          title: this.$t('ui.block.reward'),
-          info: '0.316538333801617818 MATIC',
-        },
-        {
-          title: this.$t('ui.block.gasUsed'),
-          info: this.block.gasUsed,
-        },
-        {
-          title: this.$t('ui.block.gasLimit'),
-          info: this.block.gasLimit,
-        },
-        {
-          title: this.$t('ui.block.size'),
-          info: this.block.size,
-        },
-        {
-          title: this.$t('ui.block.hash'),
-          info: this.block.hash,
-        },
+        { title: this.$t('ui.block.reward'), info: '0.316538333801617818 MATIC' },
+        { title: this.$t('ui.block.gasUsed'), info: this.block.gasUsed },
+        { title: this.$t('ui.block.gasLimit'), info: this.block.gasLimit },
+        { title: this.$t('ui.block.size'), info: this.block.size },
+        { title: this.$t('ui.block.hash'), info: this.block.hash },
       ];
     },
     payload() {

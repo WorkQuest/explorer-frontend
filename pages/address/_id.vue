@@ -69,7 +69,7 @@ export default {
       address: this.$route.params.id,
       search: '',
       page: 1,
-      limit: 5,
+      limit: 10,
       offset: 0,
     };
   },
