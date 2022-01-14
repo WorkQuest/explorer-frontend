@@ -49,7 +49,7 @@
           class="txs__logs logs"
         >
           <div v-if="tx.logs.length === 0">
-            {{ $t('tx.noLogs') }}
+            {{ $t('ui.tx.noLogs') }}
           </div>
           <p
             v-if="tx.logs.length > 0"
