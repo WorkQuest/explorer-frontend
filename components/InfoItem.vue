@@ -116,6 +116,7 @@ export default {
 }
 
 .item {
+
   &__header {
     @include text-simple;
     font-weight: 600;

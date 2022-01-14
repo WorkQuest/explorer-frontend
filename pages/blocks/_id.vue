@@ -113,7 +113,7 @@ export default {
   data() {
     return {
       search: '',
-      limit: 200,
+      limit: 100,
       offset: 0,
       index: 0,
       block: {},
@@ -164,13 +164,13 @@ export default {
     async turnLeft() {
       await this.SetLoader(true);
       this.block = this.blocks[this.index !== 0 && this.index - 1 <= this.blocks.length ? this.index -= 1 : this.index];
-      await this.$router.push(`${this.block.id}`);
+      await this.$router.replace(`${this.block.id}`);
       await this.SetLoader(false);
     },
     async turnRight() {
       await this.SetLoader(true);
       this.block = this.blocks[this.index !== this.blocks.length && this.index + 1 < this.blocks.length ? this.index += 1 : this.index];
-      await this.$router.push(`${this.block.id}`);
+      await this.$router.replace(`${this.block.id}`);
       await this.SetLoader(false);
     },
   },
@@ -179,7 +179,7 @@ export default {
 <style lang="scss" scoped>
 .block {
   @include container;
-  transition: .5s;
+  transition: .5s ease-in;
 
   &__search {
     margin: 25px 0;
