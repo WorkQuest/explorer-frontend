@@ -124,6 +124,7 @@ export default {
       currentBlock: 'blocks/getCurrentBlock',
       blocks: 'blocks/getBlocks',
       blocksCount: 'blocks/getBlocksCount',
+      isLoading: 'main/getIsLoading',
     }),
     blockColumns() {
       return [
@@ -153,25 +154,25 @@ export default {
     },
   },
   async mounted() {
-    await this.SetLoader(true);
+    await this.SetLoader(this.isLoading);
     await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
     this.block = this.currentBlock;
     await this.$store.dispatch('blocks/getBlocks', this.payload);
     this.index = this.blocks.findIndex((block) => block.id === this.currentBlock.id);
-    await this.SetLoader(false);
+    await this.SetLoader(this.isLoading);
   },
   methods: {
     async turnLeft() {
-      await this.SetLoader(true);
+      await this.SetLoader(this.isLoading);
       this.block = this.blocks[this.index !== 0 && this.index - 1 <= this.blocks.length ? this.index -= 1 : this.index];
       await this.$router.replace(`${this.block.id}`);
-      await this.SetLoader(false);
+      await this.SetLoader(this.isLoading);
     },
     async turnRight() {
-      await this.SetLoader(true);
+      await this.SetLoader(this.isLoading);
       this.block = this.blocks[this.index !== this.blocks.length && this.index + 1 < this.blocks.length ? this.index += 1 : this.index];
       await this.$router.replace(`${this.block.id}`);
-      await this.SetLoader(false);
+      await this.SetLoader(this.isLoading);
     },
   },
 };

@@ -12,7 +12,7 @@ export default {
   },
   async getTxsByHash({ commit }, hash) {
     try {
-      const response = await this.$axios.$get(`/v1/tx/${hash}`);
+      const response = await this.$axios.$get(`/tx/${hash}`);
       commit('setTxsByHash', response.result);
       return response;
     } catch (e) {
@@ -21,7 +21,7 @@ export default {
   },
   async getTxs({ commit }, queries) {
     try {
-      const response = await this.$axios.$get('/v1/txs', {
+      const response = await this.$axios.$get('/txs', {
         params: { ...queries },
       });
       commit('setTxs', response.result);

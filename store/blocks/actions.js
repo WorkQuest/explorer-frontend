@@ -1,7 +1,7 @@
 export default {
   async getBlockById({ commit }, blockId) {
     try {
-      const response = await this.$axios.$get(`/v1/block/${blockId}`);
+      const response = await this.$axios.$get(`/block/${blockId}`);
       commit('setBlock', response.result);
       return response;
     } catch (e) {
@@ -10,7 +10,7 @@ export default {
   },
   async getBlocks({ commit }, queries) {
     try {
-      const response = await this.$axios.$get('/v1/blocks', {
+      const response = await this.$axios.$get('/blocks', {
         params: { ...queries },
       });
       commit('setBlocks', response.result);
