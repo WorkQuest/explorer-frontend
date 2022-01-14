@@ -20,7 +20,7 @@
     >
       <nuxt-link
         class="item__link"
-        :to="{ path: '/transactions', query: { block: 277543 }}"
+        :to="{ path: '/transactions', query: { block: currentBlock.id }}"
       >
         {{ info }} {{ $t('ui.txs') }}
       </nuxt-link>
@@ -64,6 +64,8 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   props: {
     title: {
@@ -82,6 +84,16 @@ export default {
       type: String,
       default: '',
     },
+  },
+  computed: {
+    ...mapGetters({
+      currentBlock: 'blocks/getCurrentBlock',
+    }),
+  },
+  async mounted() {
+    await this.SetLoader(true);
+    await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
+    await this.SetLoader(false);
   },
 };
 </script>

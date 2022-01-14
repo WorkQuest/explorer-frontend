@@ -48,7 +48,7 @@
       <template #cell(txsCount)="el">
         <nuxt-link
           class="table__link"
-          :to="{ path: '/transactions', query: { block: 13542487 }}"
+          :to="{ path: '/transactions', query: { block: el.item.id }}"
         >
           {{ el.item.txsCount }} txns
         </nuxt-link>
@@ -87,7 +87,7 @@
         </nuxt-link>
       </template>
       <template #cell(value)="el">
-        <span>{{ el.item.value }} {{ el.item.symbol }}</span>
+        <span>{{ Floor(cutValueData(el.item.value)) }} WUSD</span>
       </template>
       <template #cell(status)="el">
         <span
@@ -105,6 +105,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import BigNumber from 'bignumber.js';
 
 export default {
   props: {
@@ -133,6 +134,11 @@ export default {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
     }),
+  },
+  methods: {
+    cutValueData(value) {
+      return new BigNumber(value).shiftedBy(-18).toString();
+    },
   },
 };
 </script>

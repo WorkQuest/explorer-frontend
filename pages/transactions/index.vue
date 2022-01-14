@@ -14,7 +14,7 @@
         class="transactions__header"
       >
         <h5 class="transactions__title">
-          {{ $t('ui.tx.total') }} {{ txs.length }} {{ $t('ui.tx.found') }}
+          {{ $t('ui.tx.total') }} {{ txsTable.length }} {{ $t('ui.tx.found') }}
         </h5>
         <p class="transactions__block">
           {{ $t('ui.tx.forBlock') }}
@@ -35,15 +35,17 @@
       <table-txs
         class="transactions__table"
         :is-only="false"
-        :items="txs"
+        :items="txsTable"
         :fields="tableHeaders"
       />
       <transaction
-        v-for="(item, i) in txs"
+        v-for="(item, i) in txsTable"
         :key="i"
         class="transactions__transaction"
         :transaction="item"
-        :is-last="txs[i] === txs[txs.length - 1]"
+        :is-last="query ? currentBlock.txs[i]
+          : txs[i] === query ? currentBlock.txs[txs.length - 1]
+            : txs[txs.length - 1]"
       />
       <base-pager
         v-if="totalPages > 1"
@@ -71,9 +73,14 @@ export default {
     ...mapGetters({
       txs: 'tx/getTxs',
       txsCount: 'tx/getTxsCount',
+      currentBlock: 'blocks/getCurrentBlock',
     }),
     query() {
       return this.$route.query.block;
+    },
+    txsTable() {
+      if (this.query) return this.currentBlock.txs;
+      return this.txs;
     },
     payload() {
       return {
@@ -82,7 +89,7 @@ export default {
       };
     },
     totalPages() {
-      return Math.ceil(this.txsCount / this.limit);
+      return Math.ceil(this.query ? this.currentBlock.txs.length : this.txsCount / this.limit);
     },
     tableHeaders() {
       return [
@@ -106,7 +113,8 @@ export default {
   },
   async mounted() {
     await this.SetLoader(true);
-    await this.$store.dispatch('tx/getTxs', this.payload);
+    if (this.query) await this.$store.dispatch('blocks/getBlockById', this.$route.query.block);
+    if (!this.query) await this.$store.dispatch('tx/getTxs', this.payload);
     await this.SetLoader(false);
   },
 };

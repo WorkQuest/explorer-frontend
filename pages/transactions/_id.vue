@@ -41,6 +41,7 @@
             :title="item.title"
             :info="item.info"
             :note="item.note"
+            :item="item.item"
           />
         </div>
         <div

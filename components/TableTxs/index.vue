@@ -66,7 +66,7 @@
         </nuxt-link>
       </template>
       <template #cell(value)="el">
-        <span>{{ cutValueData(el.item.value) }} WUSD</span>
+        <span>{{ Floor(cutValueData(el.item.value)) }} WUSD</span>
       </template>
       <template #cell(transaction_fee)="el">
         <span class="table__grey">{{ formatItem(el.item.gasUsed, 9, 6) }}</span>

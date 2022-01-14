@@ -40,7 +40,7 @@
       <template #cell(txsCount)="el">
         <nuxt-link
           class="table__link"
-          :to="{ path: '/transactions', query: { block: 13542487 }}"
+          :to="{ path: '/transactions', query: { block: el.item.id }}"
         >
           {{ el.item.txsCount }} txns
         </nuxt-link>

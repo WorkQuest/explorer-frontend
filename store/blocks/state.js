@@ -1,5 +1,7 @@
 export default () => ({
-  block: {},
+  block: {
+    txs: [],
+  },
   blocksInfo: {
     count: 0,
     blocks: [],
