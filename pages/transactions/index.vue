@@ -43,9 +43,7 @@
         :key="i"
         class="transactions__transaction"
         :transaction="item"
-        :is-last="query ? currentBlock.txs[i]
-          : txs[i] === query ? currentBlock.txs[txs.length - 1]
-            : txs[txs.length - 1]"
+        :is-last="isLast"
       />
       <base-pager
         v-if="totalPages > 1"
@@ -75,6 +73,12 @@ export default {
       txsCount: 'tx/getTxsCount',
       currentBlock: 'blocks/getCurrentBlock',
     }),
+    isLast() {
+      if (this.query) {
+        return this.currentBlock.txs.forEach((i) => i === this.currentBlock.txs[this.currentBlock.txs.length - 1]);
+      }
+      return this.txs.forEach((i) => i === this.txs[this.txs.length - 1]);
+    },
     query() {
       return this.$route.query.block;
     },

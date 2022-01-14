@@ -92,7 +92,6 @@ export default {
   },
   async mounted() {
     await this.SetLoader(true);
-    await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
     await this.SetLoader(false);
   },
 };
