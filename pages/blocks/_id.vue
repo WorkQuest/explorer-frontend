@@ -39,7 +39,7 @@
           />
         </div>
         <div class="block__columns">
-          <Item
+          <info-item
             v-for="(item, i) in blockColumns"
             :key="i"
             :title="item.title"
@@ -107,13 +107,9 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import Item from '~/components/InfoItem.vue';
 
 export default {
   name: 'Block',
-  components: {
-    Item,
-  },
   data() {
     return {
       search: '',

@@ -18,7 +18,7 @@
       <p class="items__title">
         {{ $t('ui.blocks') }}
       </p>
-      <Block
+      <block
         v-for="(item, i) in blocks"
         :key="i"
         class="items__block"
@@ -36,11 +36,9 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import Block from '~/components/mobile/block.vue';
 
 export default {
   name: 'Blocks',
-  components: { Block },
   data() {
     return {
       limit: 20,

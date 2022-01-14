@@ -2,7 +2,7 @@
   <!--        TODO: Вывести токены -->
   <div class="tokens">
     <search-filter class="tokens__search" />
-    <TableTokens
+    <table-tokens
       class="tokens__table"
       :title="$t('ui.token.tracker')"
       :items="tracker"
@@ -76,13 +76,8 @@
 </template>
 
 <script>
-import TableTokens from '~/components/TableTokens/index.vue';
-
 export default {
   name: 'TokensTracker',
-  components: {
-    TableTokens,
-  },
   data() {
     return {
       currentPage: 1,

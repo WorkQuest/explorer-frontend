@@ -35,7 +35,7 @@
           {{ $t('ui.allBlocks') }}
         </nuxt-link>
       </div>
-      <Block
+      <block
         v-for="(item, i) in blocks"
         :key="i"
         class="home__block"
@@ -63,7 +63,7 @@
           {{ $t('ui.allTxs') }}
         </nuxt-link>
       </div>
-      <Txn
+      <transaction
         v-for="(item, i) in txs"
         :key="i"
         class="home__block"
@@ -76,13 +76,10 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import Block from '~/components/mobile/block.vue';
-import Txn from '~/components/mobile/transaction.vue';
 
 export default {
   name: 'Home',
   layout: 'default',
-  components: { Block, Txn },
   data() {
     return {
       search: '',

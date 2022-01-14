@@ -27,8 +27,8 @@
       </p>
     </div>
     <div class="contract__info">
-      <Overview />
-      <MoreInfo />
+      <overview />
+      <more-info />
     </div>
     <div class="contract__tables tables">
       <div class="tables__menu">
@@ -44,14 +44,14 @@
         v-if="activeTab === 'txs'"
         class="tables__txs"
       >
-        <TableTxs
+        <table-txs
           class="tables__table"
           :title="$t('ui.txs')"
           :is-only="false"
           :items="txs"
           :fields="tableHeadersTxs"
         />
-        <Transaction
+        <transaction
           v-for="(item, i) in txs"
           :key="i"
           class="tables__transaction"
@@ -69,13 +69,13 @@
         v-if="activeTab === 'internal'"
         class="tables__internal"
       >
-        <TableTxs
+        <table-txs
           class="tables__table"
           :is-only="false"
           :items="internal"
           :fields="tableHeadersInternal"
         />
-        <Transaction
+        <transaction
           v-for="(item, i) in internal"
           :key="i"
           class="tables__transaction"
@@ -94,14 +94,14 @@
         v-if="activeTab === 'tokensTxns'"
         class="tables__erc"
       >
-        <TableTxs
+        <table-txs
           class="tables__table"
           :is-only="false"
           :items="erc"
           :fields="tableHeadersERC"
           :tokens="tokens"
         />
-        <Transaction
+        <transaction
           v-for="(item, i) in erc"
           :key="i"
           class="tables__transaction"
@@ -122,17 +122,8 @@
   </div>
 </template>
 <script>
-import Overview from '~/components/Overview.vue';
-import MoreInfo from '~/components/MoreInfo.vue';
-import Transaction from '~/components/mobile/transaction.vue';
-
 export default {
   name: 'Contract',
-  components: {
-    Overview,
-    MoreInfo,
-    Transaction,
-  },
   data() {
     return {
       activeTab: 'txs',

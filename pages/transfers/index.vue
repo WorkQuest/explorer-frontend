@@ -9,7 +9,7 @@
       :is-hide-error="true"
       :placeholder="$t('ui.forms.searchPlaceholder')"
     />
-    <TableTxs
+    <table-txs
       class="transfer__table"
       :title="$t('ui.token.token')+' '+$t('ui.token.transfers')"
       :items="transfers"
@@ -20,7 +20,7 @@
       <p class="tables__title">
         {{ $t('ui.token.token') + ' ' + $t('ui.token.transfers') }}
       </p>
-      <Transaction
+      <transaction
         v-for="(item, i) in transfers"
         :key="i"
         class="tables__transaction"
@@ -40,15 +40,8 @@
   </div>
 </template>
 <script>
-import TableTxs from '~/components/TableTxs/index.vue';
-import Transaction from '~/components/mobile/transaction.vue';
-
 export default {
   name: 'Transfer',
-  components: {
-    TableTxs,
-    Transaction,
-  },
   data() {
     return {
       currentPage: 1,

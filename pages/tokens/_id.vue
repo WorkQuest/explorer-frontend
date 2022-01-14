@@ -26,8 +26,8 @@
       </p>
     </div>
     <div class="token__info">
-      <Overview :token="params" />
-      <MoreInfo :token="params" />
+      <overview :token="params" />
+      <more-info :token="params" />
     </div>
     <div class="token__tables tables">
       <div class="tables__menu">
@@ -43,13 +43,13 @@
         v-if="activeTab === 'transfers'"
         class="tables__tf"
       >
-        <TableTxs
+        <table-txs
           class="tables__table"
           :is-only="false"
           :items="transfers"
           :fields="tableHeadersTransfers"
         />
-        <Transaction
+        <transaction
           v-for="(item, i) in transfers"
           :key="i"
           class="tables__item"
@@ -67,13 +67,13 @@
         v-if="activeTab === 'holders'"
         class="tables__holders"
       >
-        <TableTokens
+        <table-tokens
           class="tables__table"
           :is-only="false"
           :items="holders"
           :fields="tableHeadersHolders"
         />
-        <Holder
+        <holder
           v-for="(item, i) in holders"
           :key="i"
           class="tables__item"
@@ -204,23 +204,8 @@
   </div>
 </template>
 <script>
-import TableTxs from '~/components/TableTxs/index.vue';
-import TableTokens from '~/components/TableTokens/index.vue';
-import Overview from '~/components/Overview.vue';
-import MoreInfo from '~/components/MoreInfo.vue';
-import Transaction from '~/components/mobile/transaction.vue';
-import Holder from '~/components/mobile/holder.vue';
-
 export default {
   name: 'Token',
-  components: {
-    Overview,
-    MoreInfo,
-    TableTxs,
-    TableTokens,
-    Transaction,
-    Holder,
-  },
   data() {
     return {
       params: '',

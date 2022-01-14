@@ -32,13 +32,13 @@
       >
         {{ $t('ui.txs') }}
       </p>
-      <TableTxs
+      <table-txs
         class="transactions__table"
         :is-only="false"
         :items="txs"
         :fields="tableHeaders"
       />
-      <Transaction
+      <transaction
         v-for="(item, i) in txs"
         :key="i"
         class="transactions__transaction"
@@ -56,15 +56,9 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import TableTxs from '~/components/TableTxs/index.vue';
-import Transaction from '~/components/mobile/transaction.vue';
 
 export default {
   name: 'Transactions',
-  components: {
-    TableTxs,
-    Transaction,
-  },
   data() {
     return {
       limit: 20,

@@ -26,10 +26,10 @@
       </p>
     </div>
     <div class="address__info">
-      <Overview />
+      <overview />
     </div>
     <div class="address__txs">
-      <TableTxs
+      <table-txs
         class="address__table"
         :title="$t('ui.txs')"
         :items="txs"
@@ -38,7 +38,7 @@
       <p class="address__subtitle">
         {{ $t('ui.txs') }}
       </p>
-      <Transaction
+      <transaction
         v-for="(item, i) in txs"
         :key="i"
         class="address__transaction"
@@ -57,13 +57,9 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import Transaction from '~/components/mobile/transaction.vue';
 
 export default {
   name: 'AddressId',
-  components: {
-    Transaction,
-  },
   data() {
     return {
       address: this.$route.params.id,

@@ -33,7 +33,7 @@
           v-if="tx && activeElement === 'overview'"
           class="txs__columns columns"
         >
-          <Item
+          <info-item
             v-for="(item, i) in txsColumns"
             :key="i"
             :class="item.class"
@@ -208,13 +208,9 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import Item from '~/components/InfoItem.vue';
 
 export default {
   name: 'Block',
-  components: {
-    Item,
-  },
   data() {
     return {
       tabs: ['overview', 'logs'],
