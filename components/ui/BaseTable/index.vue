@@ -9,7 +9,13 @@
       sort-icon-right
       :responsive="true"
       tbody-tr-class="table__row"
+      :busy="isLoading"
     >
+      <template #table-busy>
+        <div class="text-center">
+          <strong>{{ $t('ui.loading') }}</strong>
+        </div>
+      </template>
       <template
         #table-caption
       >
@@ -37,12 +43,12 @@
       </template>
       <!-- blocks -->
       <template #cell(reward)="el">
-        <span>{{ el.item.reward }} {{ el.item.symbol }}</span>
+        <span>{{ el.item.size }} {{ el.item.symbol }}</span>
       </template>
       <template #cell(txsCount)="el">
         <nuxt-link
           class="table__link"
-          :to="{ path: '/transactions', query: { block: 13542487 }}"
+          :to="{ path: '/transactions', query: { block: el.item.id }}"
         >
           {{ el.item.txsCount }} txns
         </nuxt-link>
@@ -81,7 +87,7 @@
         </nuxt-link>
       </template>
       <template #cell(value)="el">
-        <span>{{ el.item.value }} {{ el.item.symbol }}</span>
+        <span>{{ Floor(cutValueData(el.item.value)) }} WUSD</span>
       </template>
       <template #cell(status)="el">
         <span
@@ -98,6 +104,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import BigNumber from 'bignumber.js';
+
 export default {
   props: {
     title: {
@@ -121,6 +130,16 @@ export default {
       default: () => [],
     },
   },
+  computed: {
+    ...mapGetters({
+      isLoading: 'main/getIsLoading',
+    }),
+  },
+  methods: {
+    cutValueData(value) {
+      return new BigNumber(value).shiftedBy(-18).toString();
+    },
+  },
 };
 </script>
 
@@ -131,32 +150,40 @@ export default {
   line-height: 130%;
   background: #FFFFFF;
   border-radius: 6px;
+
   &__titles {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
     padding: 0 30px 0 20px;
   }
+
   &__title {
     margin: 10px;
     color: $black800;
   }
+
   &__link {
     @include link;
   }
+
   &__success {
     color: $green;
   }
+
   &__failed {
     color: $red;
   }
+
   &__grey {
     color: $black500;
     font-size: 14px;
   }
+
   &__blue {
     color: $blue;
   }
+
   &__header {
     @include text-simple;
     @include normal-font-size;
@@ -172,9 +199,11 @@ export default {
     &__header, &__row {
       font-size: 10px;
     }
+
     &__link {
       font-size: 12px;
     }
+
     &__grey {
       font-size: 10px;
     }

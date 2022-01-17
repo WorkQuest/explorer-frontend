@@ -9,7 +9,15 @@
       sort-icon-right
       :responsive="true"
       tbody-tr-class="table__row"
+      :busy="isLoading"
+      :empty-text="$t('ui.tx.noTxs')"
+      show-empty
     >
+      <template #table-busy>
+        <div class="text-center">
+          <strong>{{ $t('ui.loading') }}</strong>
+        </div>
+      </template>
       <template
         v-if="isOnly"
         #table-caption
@@ -60,7 +68,7 @@
         </nuxt-link>
       </template>
       <template #cell(value)="el">
-        <span>{{ cutValueData(el.item.value) }} WUSD</span>
+        <span>{{ Floor(cutValueData(el.item.value)) }} WUSD</span>
       </template>
       <template #cell(transaction_fee)="el">
         <span class="table__grey">{{ formatItem(el.item.gasUsed, 9, 6) }}</span>
@@ -78,6 +86,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import BigNumber from 'bignumber.js';
 
 export default {
@@ -100,8 +109,14 @@ export default {
     },
     tokens: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
+  },
+  computed: {
+    ...mapGetters({
+      isLoading: 'main/getIsLoading',
+    }),
   },
   methods: {
     cutValueData(value) {
@@ -110,7 +125,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-
-</style>

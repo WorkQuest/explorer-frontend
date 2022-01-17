@@ -14,11 +14,13 @@
     "timestamp": "Timestamp",
     "terms": "Terms and conditions",
     "privacy": "Privacy policy",
+    "loading": "Loading...",
     "locals": {
       "en": "EN",
       "ru": "RU"
     },
     "block": {
+      "noBlocks": "There is no blocks...",
       "block": "Block",
       "blockNumber": "Block Number",
       "txsCount": "Transctions in the block",
@@ -37,6 +39,7 @@
       "transaction": "Txn hash",
       "from": "From",
       "to": "To",
+      "noLogs": "There is no logs...",
       "amount": "Amount",
       "value": "Value",
       "fee": "Txn Fee",
@@ -47,7 +50,8 @@
       "data": "Data",
       "forBlock": "For Block",
       "total": "A total of",
-      "found": "transactions found"
+      "found": "transactions found",
+      "noTxs": "There is no transactions..."
     },
     "forms": {
       "searchPlaceholder": "Search by Address / Txn Hash / Block / Token",
@@ -55,6 +59,7 @@
       "filters": "All filters"
     },
     "token": {
+      "noTokens": "There is no tokens...",
       "txs": "Transactions",
       "tracker": "Token Tracker",
       "token": "Token",
@@ -94,4 +99,4 @@
   "home": {
     "title": "WorkQuest Chain Explorer"
   }
- }
+}

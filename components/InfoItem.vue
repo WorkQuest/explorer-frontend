@@ -20,7 +20,7 @@
     >
       <nuxt-link
         class="item__link"
-        :to="{ path: '/transactions', query: { block: 13542487 }}"
+        :to="{ path: '/transactions', query: { block: currentBlock.id }}"
       >
         {{ info }} {{ $t('ui.txs') }}
       </nuxt-link>
@@ -35,7 +35,15 @@
       >
         {{ info }}
       </nuxt-link>
-      <span class="icon-copy" />
+      <button
+        v-clipboard:copy="info"
+        v-clipboard:success="ClipboardSuccessHandler"
+        v-clipboard:error="ClipboardErrorHandler"
+        class="btn__copy"
+        type="button"
+      >
+        <span class="icon-copy" />
+      </button>
     </p>
     <p
       v-else-if="item === 'status'"
@@ -56,6 +64,8 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   props: {
     title: {
@@ -75,46 +85,82 @@ export default {
       default: '',
     },
   },
+  computed: {
+    ...mapGetters({
+      currentBlock: 'blocks/getCurrentBlock',
+    }),
+  },
+  async mounted() {
+    await this.SetLoader(true);
+    await this.SetLoader(false);
+  },
 };
 </script>
 <style lang="scss" scoped>
+.btn {
+  &__copy {
+    height: 35px;
+    width: 35px;
+    align-items: center;
+    justify-items: center;
+    background: $white;
+    border: 1px solid $black0;
+    padding: 5px;
+    border-radius: 6px;
+    transition: .5s;
+
+    &:hover {
+      background: $black100;
+    }
+  }
+}
+
 .item {
-    &__header {
-        @include text-simple;
-        font-weight: 600;
-        font-size: 18px;
-    }
-    &__info {
-        @include text-simple;
-        &_blue {
-           color: $blue;
-        }
-        &_green {
-          background: rgba(34, 204, 20, 0.1);
-          border-radius: 3px;
-          color: $default-green;
-          width: 58px;
-          text-align: center;
-        }
-        &_red {
-          background: rgba(223, 51, 51, 0.1);
-          border-radius: 3px;
-          color: $red;
-          width: 58px;
-          text-align: center;
-        }
-    }
-    &__note {
-        @include text-simple;
-        font-size: 14px;
-        color: $black300;
-    }
-    &__link {
-      @include text-simple;
-      @include link;
+
+  &__header {
+    @include text-simple;
+    font-weight: 600;
+    font-size: 18px;
+  }
+
+  &__info {
+    @include text-simple;
+    word-break: break-all;
+
+    &_blue {
       color: $blue;
     }
+
+    &_green {
+      background: rgba(34, 204, 20, 0.1);
+      border-radius: 3px;
+      color: $default-green;
+      width: 58px;
+      text-align: center;
+    }
+
+    &_red {
+      background: rgba(223, 51, 51, 0.1);
+      border-radius: 3px;
+      color: $red;
+      width: 58px;
+      text-align: center;
+    }
+  }
+
+  &__note {
+    @include text-simple;
+    font-size: 14px;
+    color: $black300;
+  }
+
+  &__link {
+    @include text-simple;
+    @include link;
+    color: $blue;
+  }
 }
+
 .icon-copy::before {
   color: $blue;
   font-size: 20px;

@@ -9,13 +9,14 @@
       :placeholder="$t('ui.forms.searchPlaceholder')"
     />
     <div class="txs__content">
-      <nuxt-link
-        to="/transactions"
+      <button
         class="txs__back"
+        type="button"
+        @click="$router.go(-1)"
       >
         <span class="icon-short_left" />
         {{ $t('ui.back') }}
-      </nuxt-link>
+      </button>
       <h3 class="txs__title">
         {{ $t('ui.tx.txDetails') }}
       </h3>
@@ -30,85 +31,49 @@
           >{{ $t(`ui.token.${tab}`) }}</span>
         </div>
         <div
-          v-if="activeElement === 'overview'"
+          v-if="tx && activeElement === 'overview'"
           class="txs__columns columns"
         >
-          <Item
-            class="columns__item_six"
-            :title="$t('ui.tx.transaction')"
-            :info="tx.id"
-          />
-          <Item
-            class="columns__item_two-one"
-            :title="$t('ui.timestamp')"
-            info="16 secs ago"
-            :note="tx.timestamp"
-          />
-          <Item
-            class="columns__item_two-two"
-            :title="$t('ui.tx.status')"
-            :info="tx.status"
-            item="status"
-          />
-          <Item
-            class="columns__item_two-three"
-            :title="$t('ui.block.block')"
-            info="17102304"
-            item="link"
-          />
-          <Item
-            class="columns__item_three-one"
-            :title="$t('ui.tx.from')"
-            :info="tx.fromAddress"
-            item="address"
-          />
-          <Item
-            class="columns__item_three-two"
-            :title="$t('ui.tx.to')"
-            :info="tx.toAddress"
-            item="address"
-          />
-          <Item
-            class="columns__item_three-one"
-            :title="$t('ui.tx.value')"
-            :info="tx.value"
-          />
-          <Item
-            class="columns__item_three-two"
-            :title="$t('ui.tx.fee')"
-            :info="tx.gasPrice"
-          />
-          <Item
-            class="columns__item_three-one"
-            :title="$t('ui.block.gasUsed')"
-            :info="tx.gasUsed"
-          />
-          <Item
-            class="columns__item_three-two"
-            :title="$t('ui.block.gasLimit')"
-            :info="tx.gasLimit"
+          <info-item
+            v-for="(item, i) in txsColumns"
+            :key="i"
+            :class="item.class"
+            :title="item.title"
+            :info="item.info"
+            :note="item.note"
+            :item="item.item"
           />
         </div>
         <div
-          v-if="activeElement === 'logs'"
+          v-if="tx && activeElement === 'logs'"
           class="txs__logs logs"
         >
-          <p class="logs__header">
+          <div v-if="tx.logs.length === 0">
+            {{ $t('ui.tx.noLogs') }}
+          </div>
+          <p
+            v-if="tx.logs.length > 0"
+            class="logs__header"
+          >
             {{ $t('ui.tx.logs') }}
           </p>
-          <p class="logs__hash">
+          <p
+            v-if="tx.logs.length > 0"
+            class="logs__hash"
+          >
             {{ $t('ui.tx.transaction') }}
-            <span class="logs__number">
-              {{ tx.logs[0].transactionHash }}
-            </span>
             <span
-              v-if="tx.logs"
-              class="logs__number_mobile"
+              v-for="(item, i) in txsLogs"
+              :key="i"
+              :class="item.class"
             >
-              {{ formatItem(tx.logs[0].transactionHash, 9, 6) }}
+              {{ item.text }}
             </span>
           </p>
-          <div class="logs__content">
+          <div
+            v-if="tx.logs.length > 0"
+            class="logs__content"
+          >
             <p class="logs__title">
               {{ $t('ui.tx.topics') }}
             </p>
@@ -130,33 +95,30 @@
               </div>
             </div>
           </div>
-          <div class="logs__content">
+          <div
+            v-if="tx.logs.length > 0"
+            class="logs__content"
+          >
             <p class="logs__title">
               {{ $t('ui.tx.data') }}
             </p>
             <div class="logs__info logs__info_desktop">
               {{ tx.logs[0].data }}
             </div>
-            <div
-              v-if="tx.logs"
-              class="logs__info_mobile"
-            >
+            <div class="logs__info_mobile">
               {{ formatItem(tx.logs[0].data, 9, 6) }}
             </div>
           </div>
         </div>
         <!-- mobile -->
         <div
-          v-if="activeElement === 'overview'"
+          v-if="tx && activeElement === 'overview'"
           class="overview"
         >
           <div class="overview__hash">
-            <p>
-              {{ $t('ui.tx.transaction') }}
-            </p>
+            <p>{{ $t('ui.tx.transaction') }}</p>
             <p>
               <nuxt-link
-                v-if="tx.id"
                 class="overview__link"
                 :to="`/transactions/${(tx.id)}`"
               >
@@ -165,7 +127,7 @@
             </p>
           </div>
           <p class="overview__timestamp">
-            16 sec ago
+            {{ formatDataFromNow(tx.timestamp) }}
           </p>
           <div class="overview__subtitle">
             {{ $t('ui.tx.status') }}
@@ -177,9 +139,7 @@
               {{ tx.status }}
             </p>
           </div>
-          <div
-            class="overview__subtitle"
-          >
+          <div class="overview__subtitle">
             {{ $t('ui.block.blockNumber') }}
             <nuxt-link
               v-if="tx.blockNumber"
@@ -198,7 +158,15 @@
             >
               {{ formatItem(tx.fromAddress, 7, 6) }}
             </nuxt-link>
-            <span class="icon-copy" />
+            <button
+              v-clipboard:copy="tx.fromAddress"
+              v-clipboard:success="ClipboardSuccessHandler"
+              v-clipboard:error="ClipboardErrorHandler"
+              class="btn__copy"
+              type="button"
+            >
+              <span class="icon-copy" />
+            </button>
           </div>
           <div class="overview__subtitle">
             {{ $t('ui.tx.to') }}
@@ -209,39 +177,31 @@
             >
               {{ formatItem(tx.toAddress, 7, 6) }}
             </nuxt-link>
-            <span class="icon-copy" />
+            <button
+              v-clipboard:copy="tx.toAddress"
+              v-clipboard:success="ClipboardSuccessHandler"
+              v-clipboard:error="ClipboardErrorHandler"
+              class="btn__copy"
+              type="button"
+            >
+              <span class="icon-copy" />
+            </button>
           </div>
-          <div
-            class="overview__subtitle"
-          >
+          <div class="overview__subtitle">
             {{ $t('ui.tx.amount') }}
-            <span class="overview__info">
-              {{ tx.value }} {{ tx.symbol }}
-            </span>
+            <span class="overview__info">{{ tx.value }} {{ tx.symbol }}</span>
           </div>
-          <div
-            class="overview__subtitle  overview__subtitle_underlined"
-          >
+          <div class="overview__subtitle  overview__subtitle_underlined">
             {{ $t('ui.tx.fee') }}
-            <span class="overview__info">
-              {{ tx.gasUsed }}
-            </span>
+            <span class="overview__info">{{ tx.gasUsed }}</span>
           </div>
-          <div
-            class="overview__subtitle"
-          >
+          <div class="overview__subtitle">
             {{ $t('ui.block.gasUsed') }}
-            <span class="overview__info">
-              {{ tx.gasUsed }}
-            </span>
+            <span class="overview__info">{{ tx.gasUsed }}</span>
           </div>
-          <div
-            class="overview__subtitle"
-          >
+          <div class="overview__subtitle">
             {{ $t('ui.block.gasLimit') }}
-            <span class="overview__info">
-              {{ tx.gasLimit }}
-            </span>
+            <span class="overview__info">{{ tx.gasLimit }}</span>
           </div>
         </div>
       </div>
@@ -249,29 +209,61 @@
   </div>
 </template>
 <script>
-import Item from '~/components/InfoItem.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Block',
-  components: {
-    Item,
-  },
   data() {
     return {
-      tx: {},
       tabs: ['overview', 'logs'],
       activeElement: 'overview',
       search: '',
     };
   },
   computed: {
+    ...mapGetters({
+      tx: 'tx/getTxsByHash',
+    }),
+    txsColumns() {
+      return [
+        { class: 'columns__item_six', title: this.$t('ui.tx.transaction'), info: this.tx.id },
+        {
+          class: 'columns__item_two-one',
+          title: this.$t('ui.timestamp'),
+          info: this.formatDataFromNow(this.tx.timestamp),
+          note: this.$moment(this.tx.timestamp).format('MMM-DD-YYYY HH:MM:SS A +UTC'),
+        },
+        {
+          class: 'columns__item_two-two', title: this.$t('ui.tx.status'), info: this.tx.status, item: 'status',
+        },
+        {
+          class: 'columns__item_two-three', title: this.$t('ui.block.block'), info: '17102304', item: 'link',
+        },
+        {
+          class: 'columns__item_three-one', title: this.$t('ui.tx.from'), info: this.tx.fromAddress, item: 'address',
+        },
+        {
+          class: 'columns__item_three-two', title: this.$t('ui.tx.to'), info: this.tx.toAddress, item: 'address',
+        },
+        { class: 'columns__item_three-one', title: this.$t('ui.tx.value'), info: this.tx.value },
+        { class: 'columns__item_three-two', title: this.$t('ui.tx.fee'), info: this.tx.gasPrice },
+        { class: 'columns__item_three-one', title: this.$t('ui.block.gasUsed'), info: this.tx.gasUsed },
+        { class: 'columns__item_three-two', title: this.$t('ui.block.gasLimit'), info: this.tx.gasLimit },
+      ];
+    },
+    txsLogs() {
+      return [
+        { class: 'logs__number', text: this.tx.logs[0].transactionHash },
+        { class: 'logs__number_mobile', text: this.formatItem(this.tx.logs[0].transactionHash, 9, 6) },
+      ];
+    },
+  },
+  async beforeCreate() {
+    await this.$store.dispatch('tx/getTxsByHash', this.$route.params.id);
   },
   async mounted() {
-    this.SetLoader(true);
-    const txsRes = await this.$axios.get('/v1/txs');
-    // eslint-disable-next-line prefer-destructuring
-    this.tx = txsRes.data.result.txs[0];
-    this.SetLoader(false);
+    await this.SetLoader(true);
+    await this.SetLoader(false);
   },
   methods: {
     onClick(tab) {
@@ -281,122 +273,167 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.btn {
+  &__copy {
+    height: 35px;
+    width: 35px;
+    align-items: center;
+    justify-items: center;
+    background: $white;
+    border: 1px solid $black0;
+    padding: 5px;
+    border-radius: 6px;
+    transition: .5s;
+
+    &:hover {
+      background: $black100;
+    }
+  }
+}
+
 .txs {
-    @include container;
-    &__search {
-        margin: 30px 0;
-        &_mobile {
-          display: none;
-        }
+  animation: show 1s 1;
+  @include container;
+
+  &__search {
+    margin: 30px 0;
+
+    &_mobile {
+      display: none;
     }
-    &__back {
-        @include text-simple;
-        @include normal-font-size;
-        text-decoration: none;
-        font-size: 18px;
-        color: $black600;
-        cursor: pointer;
-        &:hover {
-          text-decoration: none;
-        }
+  }
+
+  &__back {
+    @include text-simple;
+    @include normal-font-size;
+    text-decoration: none;
+    font-size: 18px;
+    color: $black600;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: none;
     }
-    &__title {
-        @include text-simple;
-        font-weight: 600;
-        font-size: 28px;
-        line-height: 36px;
-        margin: 15px 0 10px 0;
+  }
+
+  &__title {
+    @include text-simple;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 36px;
+    margin: 15px 0 10px 0;
+  }
+
+  &__info {
+    padding: 25px 0 20px 20px;
+    background: $white;
+    border-radius: 6px;
+  }
+
+  &__tab {
+    &_overview, &_logs {
+      @include text-simple;
+      margin-right: 20px;
+      padding-bottom: 12px;
+      color: $black500;
+      cursor: pointer;
     }
-    &__info {
-        padding: 25px 0 20px 20px;
-        background: $white;
-        border-radius: 6px;
+
+    &_active {
+      @include text-simple;
+      border-bottom: 2px solid $blue;
     }
-    &__tab {
-        &_overview, &_logs {
-        @include text-simple;
-        margin-right: 20px;
-        padding-bottom: 12px;
-        color: $black500;
-        cursor: pointer;
-        }
-        &_active {
-            @include text-simple;
-            border-bottom: 2px solid $blue;
-        }
-    }
-    &__columns {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-        grid-gap: 23px;
-        margin-top: 25px;
-    }
-    &__logs {
-      margin-top: 25px;
-      height: 370px;
-    }
+  }
+
+  &__columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 23px;
+    margin-top: 25px;
+  }
+
+  &__logs {
+    margin-top: 25px;
+    height: 370px;
+  }
 }
+
 .columns {
-    &__item {
-        &_six {
-            grid-column: 1 / span 6;
-        }
-        &_three {
-            &-one {
-                grid-column: 1 / span 3;
-            }
-            &-two {
-                grid-column: 4 / span 3;
-            }
-        }
-        &_two {
-            &-one {
-                grid-column: 1 / span 2;
-            }
-            &-two {
-                grid-column: 3 / span 2;
-            }
-            &-three {
-                grid-column: 5 / span 2;
-            }
-        }
+  &__item {
+    &_six {
+      grid-column: 1 / span 6;
     }
+
+    &_three {
+      &-one {
+        grid-column: 1 / span 3;
+      }
+
+      &-two {
+        grid-column: 4 / span 3;
+      }
+    }
+
+    &_two {
+      &-one {
+        grid-column: 1 / span 2;
+      }
+
+      &-two {
+        grid-column: 3 / span 2;
+      }
+
+      &-three {
+        grid-column: 5 / span 2;
+      }
+    }
+  }
 }
+
 .logs {
   &__header {
     @include text-simple;
     font-size: 20px;
   }
+
   &__hash {
     @include text-simple;
     font-weight: 600;
     margin-top: 20px;
   }
+
   &__number {
     @include text-simple;
     color: $blue;
     margin-left: 10px;
+
     &_mobile {
       display: none;
     }
   }
+
   &__content {
     display: flex;
     margin: 15px 0 0 23px;
   }
+
   &__topic {
     display: flex;
   }
+
   &__info {
     margin-left: 10px;
+
     &_mobile {
       display: none;
     }
   }
+
   &__title {
     @include text-simple;
     font-weight: 600;
   }
+
   &__index {
     background: $black100;
     color: $black600;
@@ -407,6 +444,7 @@ export default {
     margin: 0 10px 15px 0;
     font-size: 12px;
   }
+
   &__item {
     &_mobile {
       display: none;
@@ -414,15 +452,17 @@ export default {
 
   }
 }
+
 .overview {
   display: none;
 }
+
 @include _991 {
-.txs {
-  &__columns {
-    grid-gap: 5px;
+  .txs {
+    &__columns {
+      grid-gap: 5px;
+    }
   }
-}
 }
 
 @include _767 {
@@ -430,14 +470,18 @@ export default {
     &__info {
       padding: 16px;
     }
+
     &__title {
       margin-left: 16px;
     }
+
     &__back {
       margin-left: 16px;
     }
+
     &__search {
       display: none;
+
       &_mobile {
         display: block;
         background: $white;
@@ -451,70 +495,82 @@ export default {
     padding: 20px 0;
     grid-template-columns: 1fr 1fr;
     display: grid;
+
     &__hash {
       font-weight: 600;
       font-size: 14px;
       color: $black300;
     }
+
     &__link {
       @include link;
       font-size: 20px;
       font-weight: normal;
     }
+
     &__timestamp {
       font-weight: normal;
       font-size: 14px;
       color: $black400;
       justify-self: end;
     }
+
     &__subtitle {
       font-weight: 600;
       grid-column: 1/3;
       margin-top: 11px;
+
       &_underlined {
         padding-bottom: 15px;
         border-bottom: 1px solid $black100;
       }
     }
+
     &__link_small {
       @include text-simple;
       @include normal-font-size;
       @include link;
       margin-left: 10px;
     }
+
     &__info {
       font-weight: normal;
-       margin-left: 10px;
+      margin-left: 10px;
     }
+
     &__status {
       &_green {
-          background: rgba(34, 204, 20, 0.1);
-          border-radius: 3px;
-          color: $default-green;
-          width: 58px;
-          text-align: center;
-          display: inline-block;
-        }
-        &_red {
-          background: rgba(223, 51, 51, 0.1);
-          border-radius: 3px;
-          color: $red;
-          width: 58px;
-          text-align: center;
-          display: inline-block;
-        }
+        background: rgba(34, 204, 20, 0.1);
+        border-radius: 3px;
+        color: $default-green;
+        width: 58px;
+        text-align: center;
+        display: inline-block;
+      }
+
+      &_red {
+        background: rgba(223, 51, 51, 0.1);
+        border-radius: 3px;
+        color: $red;
+        width: 58px;
+        text-align: center;
+        display: inline-block;
+      }
     }
   }
   .logs {
     &__header {
       font-size: 16px;
     }
+
     &__content {
       margin: 0 0 15px 0;
       display: grid;
     }
+
     &__number {
       display: none;
+
       &_mobile {
         display: block;
         @include text-simple;
@@ -523,17 +579,22 @@ export default {
         font-size: 20px;
       }
     }
+
     &__item {
       display: none;
+
       &_mobile {
         display: inline-block;
       }
     }
+
     &__info {
       margin: 15px 0 0 0;
+
       &_desktop {
         display: none;
       }
+
       &_mobile {
         display: block;
       }
@@ -543,9 +604,9 @@ export default {
     display: none;
   }
   .icon-copy::before {
-  color: $blue;
-  font-size: 20px;
-  cursor: pointer;
-}
+    color: $blue;
+    font-size: 20px;
+    cursor: pointer;
+  }
 }
 </style>

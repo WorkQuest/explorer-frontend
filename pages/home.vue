@@ -1,12 +1,8 @@
 <template>
   <div class="home">
-    <div
-      class="home__header"
-    >
+    <div class="home__header">
       <div class="home__content">
-        <h3
-          class="home__title"
-        >
+        <h3 class="home__title">
           {{ $t('home.title') }}
         </h3>
         <search-filter class="home__search" />
@@ -25,7 +21,7 @@
         :headerlink="$t('ui.allBlocks')"
         type="blocks"
         class="home__table"
-        :items="testBlocks"
+        :items="blocks"
         :fields="tableHeadersBlocks"
       />
       <div class="home__blocks blocks">
@@ -39,18 +35,18 @@
           {{ $t('ui.allBlocks') }}
         </nuxt-link>
       </div>
-      <Block
-        v-for="(item, i) in testBlocks"
+      <block
+        v-for="(item, i) in blocks"
         :key="i"
         class="home__block"
         :block="item"
-        :is-last="testBlocks[i] === testBlocks[testBlocks.length - 1]"
+        :is-last="blocks[i] === blocks[blocks.length - 1]"
       />
     </div>
     <div class="home__content home__content_mobile">
       <base-table
         :title="$t('ui.latestTxs')"
-        :items="testTxs"
+        :items="txs"
         :headerlink="$t('ui.allTxs')"
         type="transactions"
         class="home__table"
@@ -67,121 +63,77 @@
           {{ $t('ui.allTxs') }}
         </nuxt-link>
       </div>
-      <Txn
-        v-for="(item, i) in testTxs"
+      <transaction
+        v-for="(item, i) in txs"
         :key="i"
         class="home__block"
         :transaction="item"
         :is-home="true"
-        :is-last="testTxs[i] === testTxs[testTxs.length - 1]"
+        :is-last="txs[i] === txs[txs.length - 1]"
       />
     </div>
   </div>
 </template>
 <script>
-import Block from '~/components/mobile/block.vue';
-import Txn from '~/components/mobile/transaction.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Home',
   layout: 'default',
-  components: { Block, Txn },
   data() {
     return {
-      blocksCount: 0,
-      txsCount: 0,
-      blocks: [],
-      txs: [],
       search: '',
-      testBlocks: [
-        {
-          id: 17102304,
-          timestamp: '2021-11-23T09:19:08.000Z',
-          txsCount: 209,
-          reward: 0.06646,
-          symbol: 'BUSD',
-        },
-        {
-          id: 17102305,
-          timestamp: '2021-11-24T07:19:08.000Z',
-          txsCount: 209,
-          reward: 0.06646,
-          symbol: 'WUSD',
-        },
-      ],
-      testTxs: [
-        {
-          hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b8158',
-          fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-          toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-          value: 0.06646,
-          symbol: 'BUSD',
-          timestamp: '2021-11-23T09:19:08.000Z',
-        },
-        {
-          hash: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-          fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-          toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-          value: 0.07746,
-          symbol: 'WUSD',
-          timestamp: '2021-11-23T09:19:08.000Z',
-        },
-      ],
+      limit: 2,
+      offset: 0,
     };
   },
   computed: {
+    ...mapGetters({
+      isLoading: 'main/getIsLoading',
+      blocks: 'blocks/getBlocks',
+      blocksCount: 'blocks/getBlocksCount',
+      txs: 'tx/getTxs',
+      txsCount: 'tx/getTxsCount',
+    }),
+    payload() {
+      return {
+        limit: this.limit,
+        offset: this.offset,
+      };
+    },
     tableHeadersBlocks() {
       return [
-        {
-          key: 'id', label: this.$t('ui.block.blockNumber'), sortable: true,
-        },
-        {
-          key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
-        },
-        {
-          key: 'txsCount', label: this.$t('ui.block.txsCount'), sortable: true,
-        },
-        {
-          key: 'reward', label: this.$t('ui.block.reward'), sortable: true,
-        },
+        { key: 'id', label: this.$t('ui.block.blockNumber'), sortable: true },
+        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'txsCount', label: this.$t('ui.block.txsCount'), sortable: true },
+        { key: 'reward', label: this.$t('ui.block.reward'), sortable: true },
       ];
     },
     tableHeadersTxs() {
       return [
-        {
-          key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true,
-        },
-        {
-          key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
-        },
-        {
-          key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
-        },
-        {
-          key: 'value', label: this.$t('ui.tx.amount'), sortable: true,
-        },
+        { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
+        { key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true },
+        { key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true },
+        { key: 'value', label: this.$t('ui.tx.amount'), sortable: true },
       ];
     },
   },
   async mounted() {
-    this.SetLoader(true);
-    const [blocksRes, txsRes] = await Promise.all([
-      this.$axios.get('/v1/blocks'),
-      this.$axios.get('/v1/txs'),
-    ]);
-    this.blocks = blocksRes.data.result.blocks;
-    this.blocksCount = blocksRes.data.result.count;
-    this.txs = txsRes.data.result.txs;
-    this.txsCount = txsRes.data.result.count;
-    this.SetLoader(false);
+    await this.SetLoader(true);
+    await this.$store.dispatch('blocks/getBlocks', this.payload);
+    await this.$store.dispatch('tx/getTxs', this.payload);
+    await this.SetLoader(false);
   },
 };
 </script>
 <style lang="scss" scoped>
 .home {
+  animation: show 1s 1;
+
   &__search_mobile {
     display: none;
   }
+
   &__header {
     background: $darkblue;
     height: 350px;
@@ -190,36 +142,43 @@ export default {
     align-items: center;
     margin-bottom: 30px;
   }
+
   &__content {
     @include container;
     margin: 0 auto;
   }
+
   &__title {
     @include text-simple;
     @include normal-font-size;
     margin-bottom: 20px;
     font-weight: 600;
     font-size: 34px;
-    color:  $white;
+    color: $white;
   }
+
   &__header-button {
     width: 46px;
     height: 63px;
     margin-left: 10px;
     display: none;
   }
+
   &__block {
     display: none;
   }
 }
+
 .blocks {
   display: none;
 }
+
 @include _767 {
   .home {
     &__search {
       display: none;
     }
+
     &__search_mobile {
       display: block;
       background: $white;
@@ -227,22 +186,27 @@ export default {
       padding: 10px 14px;
       margin: 0 16px;
     }
+
     &__header {
       height: 228px;
     }
+
     &__title {
       font-size: 28px;
       max-width: 200px;
       margin-left: 16px;
     }
+
     &__table {
       display: none;
     }
+
     &__content_mobile {
       padding: 16px 21px 0 21px;
       background: $white;
       margin-bottom: 25px;
     }
+
     &__block {
       display: grid;
     }
@@ -250,6 +214,7 @@ export default {
   .blocks {
     display: flex;
     justify-content: space-between;
+
     &__link {
       @include link;
     }

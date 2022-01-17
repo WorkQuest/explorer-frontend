@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import { mapGetters } from 'vuex';
 import moment from 'moment';
 import VueTippy, { TippyComponent } from 'vue-tippy';
 import modals from '~/store/modals/modals';
@@ -10,26 +9,30 @@ Vue.component('tippy', TippyComponent);
 Vue.mixin({
 
   methods: {
-    ShowModal(payload) {
-      this.$store.dispatch('modals/show', {
+    async ShowModal(payload) {
+      await this.$store.dispatch('modals/show', {
         key: modals.default,
         ...payload,
       });
     },
-    SetLoader(value) {
-      this.$store.dispatch('main/setLoading', value);
+    cropTxt(str) {
+      if (str.length > 66) str = `${str.slice(0, 10)}...${str.slice(-10)}`;
+      return str;
     },
-    CloseModal() {
-      this.$store.dispatch('modals/hide');
+    async SetLoader(value) {
+      await this.$store.dispatch('main/setLoading', value);
     },
-    ClipboardSuccessHandler(value) {
-      this.$store.dispatch('main/showToast', {
+    async CloseModal() {
+      await this.$store.dispatch('modals/hide');
+    },
+    async ClipboardSuccessHandler(value) {
+      await this.$store.dispatch('main/showToast', {
         title: 'Copied successfully',
         text: value,
       });
     },
-    ClipboardErrorHandler(value) {
-      this.$store.dispatch('main/showToast', {
+    async ClipboardErrorHandler(value) {
+      await this.$store.dispatch('main/showToast', {
         title: 'Copy error',
         text: value,
       });
@@ -67,7 +70,8 @@ Vue.mixin({
       return (+value && new Intl.NumberFormat('ru', { maximumFractionDigits: fixed || 8 }).format(value || 0)) || 0;
     },
     formatItem(item, endFromBegining, startToEnd) {
-      return `${item.slice(0, endFromBegining)}...${item.slice(item.length - startToEnd, item.length)}`;
+      if (item) return `${item.slice(0, endFromBegining)}...${item.slice(item.length - startToEnd, item.length)}`;
+      return '';
     },
     setTotalPages(itemsNum, itemsPerPage) {
       return Math.ceil(itemsNum / itemsPerPage);

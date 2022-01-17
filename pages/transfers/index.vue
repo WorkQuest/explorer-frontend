@@ -1,4 +1,5 @@
 <template>
+  <!--        TODO: Вывести трансферы -->
   <div class="transfer transfer__container">
     <search-filter class="transfer__search" />
     <base-field
@@ -8,7 +9,7 @@
       :is-hide-error="true"
       :placeholder="$t('ui.forms.searchPlaceholder')"
     />
-    <TableTxs
+    <table-txs
       class="transfer__table"
       :title="$t('ui.token.token')+' '+$t('ui.token.transfers')"
       :items="transfers"
@@ -17,9 +18,9 @@
     />
     <div class="tables__transactions">
       <p class="tables__title">
-        {{ $t('ui.token.token')+' '+$t('ui.token.transfers') }}
+        {{ $t('ui.token.token') + ' ' + $t('ui.token.transfers') }}
       </p>
-      <Transaction
+      <transaction
         v-for="(item, i) in transfers"
         :key="i"
         class="tables__transaction"
@@ -39,15 +40,8 @@
   </div>
 </template>
 <script>
-import TableTxs from '~/components/TableTxs/index.vue';
-import Transaction from '~/components/mobile/transaction.vue';
-
 export default {
   name: 'Transfer',
-  components: {
-    TableTxs,
-    Transaction,
-  },
   data() {
     return {
       currentPage: 1,
@@ -92,60 +86,57 @@ export default {
     },
     tableHeaders() {
       return [
-        {
-          key: 'id', label: this.$t('ui.tx.transaction'), sortable: true,
-        },
-        {
-          key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
-        },
-        {
-          key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
-        },
-        {
-          key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
-        },
-        {
-          key: 'value', label: this.$t('ui.tx.value'), sortable: true,
-        },
-        {
-          key: 'token', label: this.$t('ui.token.token'), sortable: true,
-        },
+        { key: 'id', label: this.$t('ui.tx.transaction'), sortable: true },
+        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true },
+        { key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true },
+        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
+        { key: 'token', label: this.$t('ui.token.token'), sortable: true },
       ];
     },
   },
   async mounted() {
-    this.SetLoader(true);
-    this.SetLoader(false);
+    await this.SetLoader(true);
+    await this.SetLoader(false);
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .transfer {
-    &__container {
-        @include container;
-    }
-    &__search {
-    margin: 25px 0;
-      &_mobile {
-        display: none;
-      }
+  animation: show 1s 1;
+
+  &__container {
+    @include container;
   }
-    &__table {
-       margin: 25px 0;
+
+  &__search {
+    margin: 25px 0;
+
+    &_mobile {
+      display: none;
     }
-    &__grey {
+  }
+
+  &__table {
+    margin: 25px 0;
+  }
+
+  &__grey {
     color: $black500;
-    }
+  }
 }
+
 .page {
   &__active {
     color: $blue;
   }
+
   &__common {
     color: $black600;
   }
 }
+
 .tables {
   &__transactions {
     display: none;
@@ -153,12 +144,14 @@ export default {
 }
 
 @include _767 {
-.transfer {
-  &__table {
-    display: none;
-  }
-  &__search {
+  .transfer {
+    &__table {
       display: none;
+    }
+
+    &__search {
+      display: none;
+
       &_mobile {
         display: block;
         background: $white;
@@ -167,16 +160,17 @@ export default {
         margin: 25px 16px;
       }
     }
+
     &__pager {
       margin: 16px;
     }
-}
-.tables {
-  &__transactions {
-    display: block;
-    background: $white;
-    padding: 16px;
   }
-}
+  .tables {
+    &__transactions {
+      display: block;
+      background: $white;
+      padding: 16px;
+    }
+  }
 }
 </style>

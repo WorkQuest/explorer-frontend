@@ -1,7 +1,8 @@
 <template>
+  <!--        TODO: Вывести токены -->
   <div class="tokens">
     <search-filter class="tokens__search" />
-    <TableTokens
+    <table-tokens
       class="tokens__table"
       :title="$t('ui.token.tracker')"
       :items="tracker"
@@ -75,35 +76,21 @@
 </template>
 
 <script>
-import TableTokens from '~/components/TableTokens/index.vue';
-
 export default {
   name: 'TokensTracker',
-  components: {
-    TableTokens,
-  },
   data() {
     return {
       currentPage: 1,
       search: '',
       tracker: [
         {
-          number: 1,
-          token: 'USDT',
-          volume: 43369072176.00,
-          holders: 3320602,
+          number: 1, token: 'USDT', volume: 43369072176.00, holders: 3320602,
         },
         {
-          number: 2,
-          token: 'BUSD',
-          volume: 43369072177.00,
-          holders: 3320603,
+          number: 2, token: 'BUSD', volume: 43369072177.00, holders: 3320603,
         },
         {
-          number: 3,
-          token: 'GHST',
-          volume: 43369072179.00,
-          holders: 3320600,
+          number: 3, token: 'GHST', volume: 43369072179.00, holders: 3320600,
         },
       ],
       tokens: {
@@ -128,39 +115,36 @@ export default {
     },
     tableHeaders() {
       return [
-        {
-          key: 'number', label: '#', sortable: true,
-        },
-        {
-          key: 'token', label: this.$t('ui.token.token'), sortable: true,
-        },
-        {
-          key: 'volume', label: this.$t('ui.token.volume'), sortable: true,
-        },
-        {
-          key: 'holders', label: this.$t('ui.token.holders'), sortable: true,
-        },
+        { key: 'number', label: '#', sortable: true },
+        { key: 'token', label: this.$t('ui.token.token'), sortable: true },
+        { key: 'volume', label: this.$t('ui.token.volume'), sortable: true },
+        { key: 'holders', label: this.$t('ui.token.holders'), sortable: true },
       ];
     },
   },
   async mounted() {
-    this.SetLoader(true);
-    this.SetLoader(false);
+    await this.SetLoader(true);
+    await this.SetLoader(false);
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .tokens {
+  animation: show 1s 1;
+
   &__search {
     margin: 25px 0;
+
     &_mobile {
       display: none;
     }
   }
+
   &__table {
     @include container;
   }
+
   &__content {
     display: none;
   }
@@ -171,13 +155,16 @@ export default {
     &__table {
       display: none;
     }
+
     &__content {
       display: block;
-      background:$white;
+      background: $white;
       padding: 16px;
     }
+
     &__search {
       display: none;
+
       &_mobile {
         display: block;
         background: $white;
@@ -186,10 +173,12 @@ export default {
         margin: 25px 16px;
       }
     }
+
     &__title {
       @include text-simple;
       @include normal-font-size;
     }
+
     &__pager {
       margin: 16px;
     }
@@ -197,10 +186,12 @@ export default {
   .token {
     padding: 20px 0;
     border-bottom: 1px solid $black100;
-     &__separator {
-        border: none;
-        padding-bottom: 5px;
+
+    &__separator {
+      border: none;
+      padding-bottom: 5px;
     }
+
     &__token {
       @include text-simple;
       @include normal-font-size;
@@ -208,9 +199,11 @@ export default {
       font-size: 14px;
       color: $black300;
     }
+
     &__header {
-    display: flex;
+      display: flex;
     }
+
     &__title {
       @include text-simple;
       @include normal-font-size;
@@ -218,6 +211,7 @@ export default {
       font-size: 20px;
       margin: 5px;
     }
+
     &__description {
       @include text-simple;
       @include normal-font-size;
@@ -226,11 +220,13 @@ export default {
       max-width: 100%;
       margin: 0;
     }
+
     &__subtitle {
       font-weight: 600;
       grid-column: 1/3;
       margin-top: 11px;
     }
+
     &__info {
       font-weight: normal;
       margin-left: 10px;

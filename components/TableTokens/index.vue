@@ -10,6 +10,8 @@
       sort-icon-right
       :responsive="true"
       tbody-tr-class="table__row"
+      :empty-text="$t('ui.token.noToken')"
+      show-empty
     >
       <template
         v-if="$props.title"
@@ -81,7 +83,8 @@ export default {
     },
     tokens: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
   },
 };
@@ -92,11 +95,13 @@ export default {
   &__header {
     display: flex;
   }
+
   &__title {
     @include text-simple;
     @include normal-font-size;
     margin: 5px;
   }
+
   &__description {
     @include text-simple;
     @include normal-font-size;

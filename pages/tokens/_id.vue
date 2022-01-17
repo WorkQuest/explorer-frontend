@@ -1,4 +1,5 @@
 <template>
+  <!--        TODO: Вывести токены -->
   <div
     v-if="params"
     class="token"
@@ -20,15 +21,13 @@
       <h4 class="token__title">
         {{ $t('ui.token.token') }}
       </h4>
-      <p
-        class="token__token"
-      >
+      <p class="token__token">
         {{ tokens[`${params}`].name }}
       </p>
     </div>
     <div class="token__info">
-      <Overview :token="params" />
-      <MoreInfo :token="params" />
+      <overview :token="params" />
+      <more-info :token="params" />
     </div>
     <div class="token__tables tables">
       <div class="tables__menu">
@@ -44,13 +43,13 @@
         v-if="activeTab === 'transfers'"
         class="tables__tf"
       >
-        <TableTxs
+        <table-txs
           class="tables__table"
           :is-only="false"
           :items="transfers"
           :fields="tableHeadersTransfers"
         />
-        <Transaction
+        <transaction
           v-for="(item, i) in transfers"
           :key="i"
           class="tables__item"
@@ -68,13 +67,13 @@
         v-if="activeTab === 'holders'"
         class="tables__holders"
       >
-        <TableTokens
+        <table-tokens
           class="tables__table"
           :is-only="false"
           :items="holders"
           :fields="tableHeadersHolders"
         />
-        <Holder
+        <holder
           v-for="(item, i) in holders"
           :key="i"
           class="tables__item"
@@ -102,21 +101,15 @@
           {{ $t('ui.token.market') }}
         </p>
         <p class="token-info__description">
-          <span class="token-info__subtitle">
-            {{ $t('ui.token.volume') }}
-          </span>
+          <span class="token-info__subtitle">{{ $t('ui.token.volume') }}</span>
           $ 44 215 188 907,00
         </p>
         <p class="token-info__description">
-          <span class="token-info__subtitle">
-            {{ $t('ui.token.capitalization') }}
-          </span>
+          <span class="token-info__subtitle">{{ $t('ui.token.capitalization') }}</span>
           $ 62 059 827 982,00
         </p>
         <p class="token-info__description">
-          <span class="token-info__subtitle">
-            {{ $t('ui.token.supply') }}
-          </span>
+          <span class="token-info__subtitle">{{ $t('ui.token.supply') }}</span>
           61 992 333 258.00 USDT
         </p>
       </div>
@@ -211,23 +204,8 @@
   </div>
 </template>
 <script>
-import TableTxs from '~/components/TableTxs/index.vue';
-import TableTokens from '~/components/TableTokens/index.vue';
-import Overview from '~/components/Overview.vue';
-import MoreInfo from '~/components/MoreInfo.vue';
-import Transaction from '~/components/mobile/transaction.vue';
-import Holder from '~/components/mobile/holder.vue';
-
 export default {
   name: 'Token',
-  components: {
-    Overview,
-    MoreInfo,
-    TableTxs,
-    TableTokens,
-    Transaction,
-    Holder,
-  },
   data() {
     return {
       params: '',
@@ -289,97 +267,74 @@ export default {
   },
   computed: {
     totalPagesValue() {
-      if (this.activeTab === 'transfers') {
-        return this.setTotalPages(this.transfers.length, 20);
-      } if (this.activeTab === 'holders') {
-        return this.setTotalPages(this.holders.length, 20);
-      }
+      if (this.activeTab === 'transfers') return this.setTotalPages(this.transfers.length, 20);
+      if (this.activeTab === 'holders') return this.setTotalPages(this.holders.length, 20);
       return 1;
     },
     tableHeadersTransfers() {
       return [
-        {
-          key: 'id', label: this.$t('ui.tx.transaction'), sortable: true,
-        },
-        {
-          key: 'method', label: this.$t('ui.token.method'), sortable: true,
-        },
-        {
-          key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
-        },
-        {
-          key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
-        },
-        {
-          key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
-        },
-        {
-          key: 'quantity', label: this.$t('ui.token.quantity'), sortable: true,
-        },
+        { key: 'id', label: this.$t('ui.tx.transaction'), sortable: true },
+        { key: 'method', label: this.$t('ui.token.method'), sortable: true },
+        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true },
+        { key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true },
+        { key: 'quantity', label: this.$t('ui.token.quantity'), sortable: true },
       ];
     },
     tableHeadersHolders() {
       return [
-        {
-          key: 'id', label: this.$t('ui.token.rank'), sortable: true,
-        },
-        {
-          key: 'address', label: this.$t('ui.token.address'), sortable: true,
-        },
-        {
-          key: 'quantity', label: this.$t('ui.token.quantity'), sortable: true,
-        },
-        {
-          key: 'percentage', label: this.$t('ui.token.percentage'), sortable: true,
-        },
-        {
-          key: 'value', label: this.$t('ui.tx.value'), sortable: true,
-        },
+        { key: 'id', label: this.$t('ui.token.rank'), sortable: true },
+        { key: 'address', label: this.$t('ui.token.address'), sortable: true },
+        { key: 'quantity', label: this.$t('ui.token.quantity'), sortable: true },
+        { key: 'percentage', label: this.$t('ui.token.percentage'), sortable: true },
+        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
       ];
     },
   },
   async mounted() {
-    this.SetLoader(true);
+    await this.SetLoader(true);
     this.params = this.$route.params.id;
-    this.SetLoader(false);
+    await this.SetLoader(false);
   },
   methods: {
     onClick(tab) {
       this.activeTab = tab;
     },
     onClickContract(event) {
-      if (this.activePoint !== '') {
-        this.activePoint = '';
-      } else if (event.target.className === ('icon-chevron_down' || 'icon-chevron_up')) {
-        this.activePoint = event.path[1].className;
-      } else {
-        this.activePoint = event.target.className;
-      }
+      if (this.activePoint !== '') this.activePoint = '';
+      else if (event.target.className === ('icon-chevron_down' || 'icon-chevron_up')) this.activePoint = event.path[1].className;
+      else this.activePoint = event.target.className;
     },
   },
 };
 </script>
 <style lang="scss" scoped>
 .token {
+  animation: show 1s 1;
   @include container;
+
   &__search {
     margin: 25px 0;
+
     &_mobile {
       display: none;
     }
   }
+
   &__header {
     display: flex;
     grid-gap: 10px;
     align-items: center;
     margin-bottom: 25px;
   }
+
   &__title {
     @include text-simple;
     @include normal-font-size;
     font-weight: 600;
     font-size: 28px;
   }
+
   &__info {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -387,30 +342,37 @@ export default {
     margin-bottom: 25px;
   }
 }
+
 .tables {
   background: $white;
   border-radius: 6px;
   padding-top: 20px;
+
   &__menu {
     margin: 0 0 27px 20px
   }
+
   &__tab {
     @include text-simple;
     margin-right: 20px;
     padding-bottom: 12px;
     color: $black500;
     cursor: pointer;
+
     &_active {
-        @include text-simple;
-        border-bottom: 2px solid $blue;
+      @include text-simple;
+      border-bottom: 2px solid $blue;
     }
   }
+
   &__item {
     display: none;
   }
 }
+
 .token-info {
   padding: 0 0 10px 20px;
+
   &__title {
     @include text-simple;
     @include normal-font-size;
@@ -418,32 +380,39 @@ export default {
     font-size: 18px;
     margin: 10px 0;
   }
+
   &__subtitle {
     @include text-simple;
     @include normal-font-size;
     font-weight: 500;
   }
+
   &__description {
     @include text-simple;
     @include normal-font-size;
     margin-bottom: 10px;
   }
 }
+
 .contract {
   padding: 0 20px 20px 20px;
   display: grid;
   grid-gap: 15px;
+
   &__wrap {
     background: $black0;
     border-radius: 5px;
     padding: 20px;
   }
+
   &__description {
     margin-top: 20px;
   }
+
   &__note {
     color: $black500;
   }
+
   &__submit {
     width: 120px;
     display: flex;
@@ -451,9 +420,11 @@ export default {
     margin-bottom: 20px;
   }
 }
+
 .name, .deprecated, .balances {
   cursor: pointer;
 }
+
 .icon-chevron_up::before, .icon-chevron_down::before {
   color: $blue;
   float: right;
@@ -465,8 +436,10 @@ export default {
       grid-template-columns: 1fr;
       grid-gap: 0;
     }
+
     &__search {
       display: none;
+
       &_mobile {
         display: block;
         background: $white;
@@ -475,9 +448,11 @@ export default {
         margin: 25px 16px;
       }
     }
+
     &__pager {
       margin: 16px;
     }
+
     &__header {
       margin: 0 0 25px 16px;
     }
@@ -487,15 +462,18 @@ export default {
   }
   .tables {
     padding: 16px;
+
     &__menu {
       margin: 0 0 15px 0;
     }
+
     &__info, &__contract {
       padding: 0;
       margin-top: 30px;
     }
+
     &__item {
-    display: block;
+      display: block;
     }
   }
   .contract {

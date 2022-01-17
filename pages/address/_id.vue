@@ -12,51 +12,33 @@
       <h4 class="address__title">
         {{ $t('ui.token.address') }}
       </h4>
-      <p
-        class="address__address"
-      >
+      <p class="address__address">
         {{ address }}
-        <span class="icon-copy" />
+        <button
+          v-clipboard:copy="address"
+          v-clipboard:success="ClipboardSuccessHandler"
+          v-clipboard:error="ClipboardErrorHandler"
+          class="btn__copy"
+          type="button"
+        >
+          <span class="icon-copy" />
+        </button>
       </p>
     </div>
     <div class="address__info">
-      <Overview />
+      <overview />
     </div>
-    <div
-      class="address__txs"
-    >
-      <TableTxs
+    <div class="address__txs">
+      <table-txs
         class="address__table"
         :title="$t('ui.txs')"
         :items="txs"
-        :fields="[
-          {
-            key: 'id', label: this.$t('ui.tx.transaction'), sortable: true,
-          },
-          {
-            key: 'blockNumber', label: this.$t('ui.block.blockNumber'), sortable: true,
-          },
-          {
-            key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
-          },
-          {
-            key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true,
-          },
-          {
-            key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true,
-          },
-          {
-            key: 'value', label: this.$t('ui.tx.value'), sortable: true,
-          },
-          {
-            key: 'gasUsed', label: this.$t('ui.tx.fee'), sortable: true,
-          }
-        ]"
+        :fields="tableFields"
       />
       <p class="address__subtitle">
         {{ $t('ui.txs') }}
       </p>
-      <Transaction
+      <transaction
         v-for="(item, i) in txs"
         :key="i"
         class="address__transaction"
@@ -65,86 +47,111 @@
       />
     </div>
     <base-pager
-      v-if="totalPagesValue > 1"
-      v-model="currentPage"
+      v-if="totalPages > 1"
+      v-model="page"
       class="address__pager"
-      :total-pages="totalPagesValue"
+      :total-pages="totalPages"
     />
   </div>
 </template>
 
 <script>
-import BigNumber from 'bignumber.js';
-import Transaction from '~/components/mobile/transaction.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'AddressId',
-  components: {
-    Transaction,
-  },
   data() {
     return {
-      addressInfo: {},
-      address: '',
+      address: this.$route.params.id,
       search: '',
-      currentPage: 1,
-      txs: [
-        {
-          blockNumber: 17102304,
-          id: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-          fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-          toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-          value: 7746000000000000,
-          gasUsed: '0.00012719',
-          timestamp: '2021-11-23T09:19:08.000Z',
-        },
-        {
-          blockNumber: 17102305,
-          id: '0xa7849bd1f330be133ce5665535fc7758669fdb0abbfcaf102b3083481c8b62345',
-          fromAddress: '0xe24f99419d788003c0d5212f05f47b1572cdc38a',
-          toAddress: '0x917dc1a9e858deb0a5bdcb44c7601f655f728dfe',
-          value: 7749000000000000,
-          gasUsed: '0.00012712',
-          timestamp: '2021-11-21T09:19:08.000Z',
-        },
-      ],
+      page: 1,
+      limit: 10,
+      offset: 0,
     };
   },
   computed: {
-    totalPagesValue() {
-      return this.setTotalPages(this.txs.length, 20);
+    ...mapGetters({
+      isLoading: 'main/getIsLoading',
+      txs: 'tx/getTxsByAccount',
+      txsCount: 'tx/getTxsByAccountCount',
+      accountInfo: 'account/getAccountInfo',
+    }),
+    payload() {
+      return {
+        address: this.address,
+        limit: this.limit,
+        offset: this.offset,
+      };
+    },
+    totalPages() {
+      return Math.ceil(this.txsCount / this.limit);
+    },
+    tableFields() {
+      return [
+        { key: 'id', label: this.$t('ui.tx.transaction'), sortable: true },
+        { key: 'blockNumber', label: this.$t('ui.block.blockNumber'), sortable: true },
+        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true },
+        { key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true },
+        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
+        { key: 'gasUsed', label: this.$t('ui.tx.fee'), sortable: true },
+      ];
+    },
+  },
+  watch: {
+    async page() {
+      await this.SetLoader(true);
+      this.offset = (this.page - 1) * this.limit;
+      await this.$store.dispatch('tx/getTxsByAccount', this.payload);
+      await this.SetLoader(false);
     },
   },
   async mounted() {
-    this.SetLoader(true);
-    this.address = this.$route.params.id;
-    const res = await this.$axios(`/v1/account/${this.address}`);
-    this.addressInfo = res.data.result;
-    this.SetLoader(false);
-  },
-  methods: {
-    formatAmount(amount, precision) {
-      return new BigNumber(amount).shiftedBy(-precision).toFixed(6);
-    },
+    await this.SetLoader(true);
+    await this.$store.dispatch('tx/getTxsByAccount', this.payload);
+    await this.$store.dispatch('account/getAccountByAddress', this.address);
+    await this.SetLoader(false);
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.address {
-  @include container;
-  &__search {
-    margin: 25px 0;
-    &_mobile {
-        display: none;
+.btn {
+  &__copy {
+    height: 35px;
+    width: 35px;
+    align-items: center;
+    justify-items: center;
+    background: $white;
+    border: 1px solid $black0;
+    padding: 5px;
+    border-radius: 6px;
+    transition: .5s;
+
+    &:hover {
+      background: $black100;
     }
   }
+}
+
+.address {
+  @include container;
+
+  &__search {
+    margin: 25px 0;
+
+    &_mobile {
+      display: none;
+    }
+  }
+
   &__header {
     display: flex;
     grid-gap: 10px;
     align-items: center;
     margin-bottom: 25px;
   }
+
   &__info {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -152,13 +159,16 @@ export default {
     margin-bottom: 25px;
     background: $white;
   }
+
   &__table {
     min-height: 450px;
   }
+
   &__subtitle, &__transaction {
     display: none;
   }
 }
+
 .icon-copy::before {
   color: $blue;
   font-size: 20px;
@@ -170,20 +180,25 @@ export default {
     &__table {
       display: none;
     }
+
     &__header {
       display: block;
       word-wrap: break-word;
       max-width: 700px;
     }
+
     &__address, &__title {
       margin-left: 16px;
     }
+
     &__txs {
       background: $white;
       padding: 16px;
     }
+
     &__search {
       display: none;
+
       &_mobile {
         display: block;
         background: $white;
@@ -192,14 +207,17 @@ export default {
         margin: 25px 16px;
       }
     }
+
     &__subtitle, &__transaction {
       display: block;
     }
+
     &__pager {
       margin: 16px;
     }
   }
 }
+
 @include _575 {
   .address {
     &__header {
@@ -207,6 +225,7 @@ export default {
     }
   }
 }
+
 @include _480 {
   .address {
     &__header {
@@ -214,6 +233,7 @@ export default {
     }
   }
 }
+
 @include _380 {
   .address {
     &__header {

@@ -9,7 +9,15 @@
       sort-icon-right
       :responsive="true"
       tbody-tr-class="table__row"
+      :busy="isLoading"
+      :empty-text="$t('ui.block.noBlocks')"
+      show-empty
     >
+      <template #table-busy>
+        <div class="text-center">
+          <strong>{{ $t('ui.loading') }}</strong>
+        </div>
+      </template>
       <template
         #table-caption
       >
@@ -34,7 +42,7 @@
       <template #cell(txsCount)="el">
         <nuxt-link
           class="table__link"
-          :to="{ path: '/transactions', query: { block: 13542487 }}"
+          :to="{ path: '/transactions', query: { block: el.item.id }}"
         >
           {{ el.item.txsCount }} txns
         </nuxt-link>
@@ -48,6 +56,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   props: {
     title: {
@@ -72,12 +82,9 @@ export default {
     },
   },
   computed: {
-  },
-  methods: {
+    ...mapGetters({
+      isLoading: 'main/getIsLoading',
+    }),
   },
 };
 </script>
-
-<style lang="scss">
-
-</style>
