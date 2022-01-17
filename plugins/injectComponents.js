@@ -17,6 +17,7 @@ import TableTokens from '~/components/TableTokens';
 import Holder from '~/components/mobile/holder';
 import InfoItem from '~/components/InfoItem';
 import Block from '~/components/mobile/block';
+import EmptyData from '~/components/ui/EmptyData';
 
 Vue.component('ctm-modal', CtmModal);
 Vue.component('base-btn', BaseButton);
@@ -35,3 +36,4 @@ Vue.component('table-tokens', TableTokens);
 Vue.component('holder', Holder);
 Vue.component('info-item', InfoItem);
 Vue.component('block', Block);
+Vue.component('empty-data', EmptyData);

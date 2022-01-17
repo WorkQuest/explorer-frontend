@@ -10,6 +10,8 @@
       :responsive="true"
       tbody-tr-class="table__row"
       :busy="isLoading"
+      :empty-text="$t('ui.block.noBlocks')"
+      show-empty
     >
       <template #table-busy>
         <div class="text-center">

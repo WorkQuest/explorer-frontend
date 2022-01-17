@@ -10,6 +10,8 @@
       sort-icon-right
       :responsive="true"
       tbody-tr-class="table__row"
+      :empty-text="$t('ui.token.noToken')"
+      show-empty
     >
       <template
         v-if="$props.title"
