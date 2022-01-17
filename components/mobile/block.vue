@@ -34,7 +34,7 @@
       >
         {{ block.txsCount }} txns
       </nuxt-link>
-      <span class="block__timestamp">(10 sec ago)</span>
+      <span class="block__timestamp">({{ formatDataFromNow(block.timestamp) }})</span>
     </div>
     <div
       v-if="block.gasUsed"
