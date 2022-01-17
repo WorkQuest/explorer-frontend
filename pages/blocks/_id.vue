@@ -12,13 +12,13 @@
       v-if="currentBlock"
       class="block__content"
     >
-      <nuxt-link
-        to="/blocks"
+      <button
         class="block__back"
+        @click="$router.go(-1)"
       >
         <span class="icon-short_left" />
         {{ $t('ui.back') }}
-      </nuxt-link>
+      </button>
       <h3 class="block__title">
         {{ $t('ui.block.blockInfo') }}
       </h3>

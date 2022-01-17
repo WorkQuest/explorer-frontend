@@ -12,7 +12,7 @@
       <button
         class="txs__back"
         type="button"
-        @click="goBack()"
+        @click="$router.go(-1)"
       >
         <span class="icon-short_left" />
         {{ $t('ui.back') }}
@@ -266,9 +266,6 @@ export default {
     await this.SetLoader(false);
   },
   methods: {
-    goBack() {
-      this.$router.go(-1);
-    },
     onClick(tab) {
       this.activeElement = tab;
     },
