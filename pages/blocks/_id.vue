@@ -9,7 +9,7 @@
       :placeholder="$t('ui.forms.searchPlaceholder')"
     />
     <div
-      v-if="block"
+      v-if="currentBlock"
       class="block__content"
     >
       <nuxt-link
@@ -27,19 +27,19 @@
           <button
             :disabled="isLoading"
             type="button"
-            @click="turnLeft"
+            @click="changeBlock(currentBlock.id - 1)"
           >
             <span class="icon-caret_left" />
             <span class="block__block">{{ $t('ui.block.block') }}</span>
           </button>
           <span
-            v-if="block.id"
+            v-if="currentBlock.id"
             class="block__number"
-          >#{{ block.id }}</span>
+          >#{{ currentBlock.id }}</span>
           <button
             type="button"
             :disabled="isLoading"
-            @click="turnRight"
+            @click="changeBlock(currentBlock.id + 1)"
           >
             <span class="icon-caret_right" />
           </button>
@@ -57,13 +57,13 @@
         <div class="block__columns_mobile columns">
           <div class="columns__time">
             <span class="columns__timestamp">
-              {{ formatDataFromNow(block.timestamp) }}
+              {{ formatDataFromNow(currentBlock.timestamp) }}
             </span>
             <div class="columns__subtitle">
               {{ $t('ui.timestamp') }}
             </div>
             <span class="columns__info">
-              {{ formatData(block.timestamp) }}
+              {{ formatData(currentBlock.timestamp) }}
             </span>
           </div>
           <p class="columns__subtitle">
@@ -78,9 +78,9 @@
           </p>
           <nuxt-link
             class="columns__link_small"
-            :to="{ path: '/transactions', query: { block: block.id }}"
+            :to="{ path: '/transactions', query: { block: currentBlock.id }}"
           >
-            {{ block.txsCount }} txns
+            {{ currentBlock.txsCount }} txns
           </nuxt-link>
           <p class="columns__info_grey">
             {{ $t('ui.block.inThisBlock') }}
@@ -89,22 +89,22 @@
             {{ $t('ui.block.gasUsed') }}
             <span class="columns__info">
               <!--        TODO: Вывести проценты -->
-              {{ block.gasUsed }} (99,5%)
+              {{ currentBlock.gasUsed }} (99,5%)
             </span>
           </p>
           <p class="columns__subtitle">
             {{ $t('ui.block.gasLimit') }}
-            <span class="columns__info">{{ block.gasLimit }}</span>
+            <span class="columns__info">{{ currentBlock.gasLimit }}</span>
           </p>
           <p class="columns__subtitle">
             {{ $t('ui.block.size') }}
-            <span class="columns__info">{{ block.size }} {{ $t('ui.block.bytes') }}</span>
+            <span class="columns__info">{{ currentBlock.size }} {{ $t('ui.block.bytes') }}</span>
           </p>
           <p class="columns__subtitle">
             {{ $t('ui.block.hash') }}
           </p>
           <p class="columns__info">
-            {{ block.hash }}
+            {{ currentBlock.hash }}
           </p>
         </div>
       </div>
@@ -122,35 +122,31 @@ export default {
       limit: 10,
       offset: 0,
       index: 0,
-      block: {},
-      currentBlockId: +this.$route.params.id,
     };
   },
   computed: {
     ...mapGetters({
       currentBlock: 'blocks/getCurrentBlock',
-      blocks: 'blocks/getBlocks',
-      blocksCount: 'blocks/getBlocksCount',
       isLoading: 'main/getIsLoading',
     }),
     blockColumns() {
       return [
         {
           title: this.$t('ui.timestamp'),
-          info: this.formatDataFromNow(this.block.timestamp),
-          note: this.block.timestamp,
+          info: this.formatDataFromNow(this.currentBlock.timestamp),
+          note: this.currentBlock.timestamp,
         },
         {
           title: this.$t('ui.txs'),
-          info: this.block.txsCount,
+          info: this.currentBlock.txsCount,
           note: this.$t('ui.block.inThisBlock'),
           item: 'transaction',
         },
         { title: this.$t('ui.block.reward'), info: '0.316538333801617818 MATIC' },
-        { title: this.$t('ui.block.gasUsed'), info: this.block.gasUsed },
-        { title: this.$t('ui.block.gasLimit'), info: this.block.gasLimit },
-        { title: this.$t('ui.block.size'), info: this.block.size },
-        { title: this.$t('ui.block.hash'), info: this.block.hash },
+        { title: this.$t('ui.block.gasUsed'), info: this.currentBlock.gasUsed },
+        { title: this.$t('ui.block.gasLimit'), info: this.currentBlock.gasLimit },
+        { title: this.$t('ui.block.size'), info: this.currentBlock.size },
+        { title: this.$t('ui.block.hash'), info: this.currentBlock.hash },
       ];
     },
     payload() {
@@ -160,27 +156,15 @@ export default {
       };
     },
   },
-  async beforeCreate() {
-    await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
-  },
   async mounted() {
     await this.SetLoader(true);
-    if (Object.keys(this.block).length === 0) {
-      this.block = this.currentBlock;
-    }
+    await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
     await this.SetLoader(false);
   },
   methods: {
-    async turnLeft() {
+    async changeBlock(blockId) {
       await this.SetLoader(true);
-      await this.$store.dispatch('blocks/getBlockById', this.currentBlockId -= 1);
-      await this.$router.replace(`${this.block.id -= 1}`);
-      await this.SetLoader(false);
-    },
-    async turnRight() {
-      await this.SetLoader(true);
-      await this.$store.dispatch('blocks/getBlockById', this.currentBlockId += 1);
-      await this.$router.replace(`${this.block.id += 1}`);
+      await this.$router.push(`${blockId}`);
       await this.SetLoader(false);
     },
   },
