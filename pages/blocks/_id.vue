@@ -134,7 +134,7 @@ export default {
         {
           title: this.$t('ui.timestamp'),
           info: this.formatDataFromNow(this.currentBlock.timestamp),
-          note: this.$moment(this.currentBlock.timestamp).format('MMM-DD-YYYY HH:mm:SS A +UTC'),
+          note: this.$moment(this.currentBlock.timestamp).format('MMM-DD-YYYY HH:MM:SS A +UTC'),
         },
         {
           title: this.$t('ui.txs'),

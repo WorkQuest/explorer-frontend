@@ -231,7 +231,7 @@ export default {
           class: 'columns__item_two-one',
           title: this.$t('ui.timestamp'),
           info: this.formatDataFromNow(this.tx.timestamp),
-          note: this.$moment(this.tx.timestamp).format('MMM-DD-YYYY HH:mm:SS A +UTC'),
+          note: this.$moment(this.tx.timestamp).format('MMM-DD-YYYY HH:MM:SS A +UTC'),
         },
         {
           class: 'columns__item_two-two', title: this.$t('ui.tx.status'), info: this.tx.status, item: 'status',
