@@ -2,7 +2,7 @@ export default {
   async getBlockById({ commit }, blockId) {
     try {
       const response = await this.$axios.$get(`/block/${blockId}`);
-      commit('setBlock', response.result);
+      if (response.ok) commit('setBlock', response.result);
       return response;
     } catch (e) {
       return console.log(e);

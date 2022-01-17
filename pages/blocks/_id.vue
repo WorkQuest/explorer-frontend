@@ -119,10 +119,11 @@ export default {
   data() {
     return {
       search: '',
-      limit: 100,
+      limit: 10,
       offset: 0,
       index: 0,
       block: {},
+      currentBlockId: +this.$route.params.id,
     };
   },
   computed: {
@@ -159,37 +160,27 @@ export default {
       };
     },
   },
+  async beforeCreate() {
+    await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
+  },
   async mounted() {
     await this.SetLoader(true);
     if (Object.keys(this.block).length === 0) {
-      await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
       this.block = this.currentBlock;
     }
-    if (this.index === 0) await this.$store.dispatch('blocks/getBlocks', this.payload);
-    this.index = this.currentBlockIndex();
     await this.SetLoader(false);
   },
   methods: {
-    currentBlockIndex() {
-      if (this.index === 0) return this.blocks.findIndex((block) => block.id === this.currentBlock.id);
-      return this.currentBlock.id;
-    },
     async turnLeft() {
       await this.SetLoader(true);
-      if (this.index !== 0) {
-        this.block = this.blocks[this.index - 1];
-        await this.$router.replace(`${this.block.id}`).catch(() => {
-        });
-      }
+      await this.$store.dispatch('blocks/getBlockById', this.currentBlockId -= 1);
+      await this.$router.replace(`${this.block.id -= 1}`);
       await this.SetLoader(false);
     },
     async turnRight() {
       await this.SetLoader(true);
-      if (this.index !== this.blocksCount - 1) {
-        this.block = this.blocks[this.index + 1];
-        await this.$router.replace(`${this.block.id}`).catch(() => {
-        });
-      }
+      await this.$store.dispatch('blocks/getBlockById', this.currentBlockId += 1);
+      await this.$router.replace(`${this.block.id += 1}`);
       await this.SetLoader(false);
     },
   },
