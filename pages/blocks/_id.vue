@@ -170,8 +170,10 @@ export default {
     },
     async turnLeft() {
       await this.SetLoader(this.isLoading);
-      if (this.index !== 0) this.block = this.blocks[this.index - 1];
-      await this.$router.replace(`${this.block.id}`);
+      if (this.index !== 0) {
+        this.block = this.blocks[this.index - 1];
+        await this.$router.replace(`${this.block.id}`);
+      }
       await this.SetLoader(this.isLoading);
     },
     async turnRight() {
