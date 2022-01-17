@@ -63,7 +63,7 @@
               {{ $t('ui.timestamp') }}
             </div>
             <span class="columns__info">
-              {{ formatData(currentBlock.timestamp) }}
+              {{ ($moment(currentBlock.timestamp).format('MMM-DD-YYYY, h:mm')) }}
             </span>
           </div>
           <p class="columns__subtitle">
@@ -134,7 +134,7 @@ export default {
         {
           title: this.$t('ui.timestamp'),
           info: this.formatDataFromNow(this.currentBlock.timestamp),
-          note: this.currentBlock.timestamp,
+          note: this.$moment(this.currentBlock.timestamp).format('MMM-DD-YYYY HH:mm:SS A +UTC'),
         },
         {
           title: this.$t('ui.txs'),
