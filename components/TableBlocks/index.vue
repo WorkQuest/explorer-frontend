@@ -51,6 +51,9 @@
         <span>{{ el.item.gasUsed }} </span>
         <span class="table__grey">95,5%</span>
       </template>
+      <template #cell(size)="el">
+        <span>{{ el.item.size }} WUSD</span>
+      </template>
     </b-table>
   </div>
 </template>

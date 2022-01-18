@@ -23,7 +23,7 @@
       "noBlocks": "There is no blocks...",
       "block": "Block",
       "blockNumber": "Block Number",
-      "txsCount": "Transctions in the block",
+      "txsCount": "Transactions in the block",
       "age": "Age",
       "reward": "Block reward",
       "txn": "Txn",

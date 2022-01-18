@@ -189,12 +189,12 @@ export default {
           path: '/home',
         },
         {
-          title: this.$t('ui.blocks'),
-          path: '/blocks',
-        },
-        {
           title: this.$t('ui.txs'),
           path: '/transactions',
+        },
+        {
+          title: this.$t('ui.blocks'),
+          path: '/blocks',
         },
         // TODO: Вернуть когда будет логика
         // {
