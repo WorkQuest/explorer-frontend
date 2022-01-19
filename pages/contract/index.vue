@@ -583,6 +583,8 @@ export default {
 
     &__menu {
       margin: 0;
+      display: flex;
+      gap: 5px;
     }
 
     &__tab {

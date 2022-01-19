@@ -50,7 +50,7 @@
       class="item__info"
       :class="{'item__info_green': info === 1, 'item__info_red': info === 2}"
     >
-      {{ info === 1 ? 'Success' : 'Fail' }}
+      {{ info === 1 ? this.$t('ui.tx.transactionSuccess') : this.$t('ui.tx.transactionSuccess') }}
     </p>
     <p
       v-else

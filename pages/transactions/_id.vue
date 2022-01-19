@@ -61,7 +61,7 @@
             v-if="tx.logs.length > 0"
             class="logs__hash"
           >
-            {{ $t('ui.tx.transaction') }}
+            {{ $t('ui.tx.transactionFull') }}
             <span
               v-for="(item, i) in txsLogs"
               :key="i"
@@ -136,7 +136,7 @@
               class="overview__status"
               :class="{'overview__status_green': tx.status === 1, 'overview__status_red': tx.status === 2}"
             >
-              {{ tx.status }}
+              {{ tx.status === 1 ? this.$t('ui.tx.transactionSuccess') : this.$t('ui.tx.transactionSuccess') }}
             </p>
           </div>
           <div class="overview__subtitle">
@@ -226,7 +226,7 @@ export default {
     }),
     txsColumns() {
       return [
-        { class: 'columns__item_six', title: this.$t('ui.tx.transaction'), info: this.tx.id },
+        { class: 'columns__item_six', title: this.$t('ui.tx.transactionFull'), info: this.tx.id },
         {
           class: 'columns__item_two-one',
           title: this.$t('ui.timestamp'),
@@ -246,9 +246,10 @@ export default {
           class: 'columns__item_three-two', title: this.$t('ui.tx.to'), info: this.tx.toAddress, item: 'address',
         },
         { class: 'columns__item_three-one', title: this.$t('ui.tx.value'), info: this.tx.value },
-        { class: 'columns__item_three-two', title: this.$t('ui.tx.fee'), info: this.tx.gasPrice },
-        { class: 'columns__item_three-one', title: this.$t('ui.block.gasUsed'), info: this.tx.gasUsed },
-        { class: 'columns__item_three-two', title: this.$t('ui.block.gasLimit'), info: this.tx.gasLimit },
+        { class: 'columns__item_three-two', title: this.$t('ui.tx.feeFull'), info: this.tx.gasPrice },
+        { class: 'columns__item_four-one', title: this.$t('ui.block.gasLimit'), info: this.tx.gasLimit },
+        { class: 'columns__item_four-two', title: this.$t('ui.tx.gasUsed'), info: this.tx.gasUsed },
+        { class: 'columns__item_four-three', title: this.$t('ui.tx.feeFull'), info: this.tx.gasPrice },
       ];
     },
     txsLogs() {
@@ -362,6 +363,20 @@ export default {
   &__item {
     &_six {
       grid-column: 1 / span 6;
+    }
+
+    &_four {
+      &-one {
+        grid-column: 1 / span 2;
+      }
+
+      &-two {
+        grid-column: 3 / span 2;
+      }
+
+      &-three {
+        grid-column: 5 / span 2;
+      }
     }
 
     &_three {
@@ -516,6 +531,8 @@ export default {
     }
 
     &__subtitle {
+      display: flex;
+      gap: 10px;
       font-weight: 600;
       grid-column: 1/3;
       margin-top: 11px;
@@ -539,20 +556,23 @@ export default {
     }
 
     &__status {
+      @include text-simple;
+      word-break: break-all;
+      padding: 4px 5px;
+      font-size: 12px;
+      line-height: 130%;
+      border-radius: 6px;
+      width: 61px;
       &_green {
         background: rgba(34, 204, 20, 0.1);
-        border-radius: 3px;
         color: $default-green;
-        width: 58px;
         text-align: center;
         display: inline-block;
       }
 
       &_red {
         background: rgba(223, 51, 51, 0.1);
-        border-radius: 3px;
         color: $red;
-        width: 58px;
         text-align: center;
         display: inline-block;
       }

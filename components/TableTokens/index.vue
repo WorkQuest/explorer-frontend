@@ -47,11 +47,11 @@
 
       <template #cell(volume)="el">
         <p>
-          {{ el.item.volume }}
+          {{ NumberFormat(el.item.volume) }}
         </p>
       </template>
       <template #cell(holders)="el">
-        <span>{{ el.item.holders }} </span>
+        <span>{{ NumberFormat(el.item.holders) }} </span>
       </template>
       <template #cell(address)="el">
         <nuxt-link
