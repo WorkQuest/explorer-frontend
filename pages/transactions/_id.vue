@@ -245,8 +245,8 @@ export default {
         {
           class: 'columns__item_three-two', title: this.$t('ui.tx.to'), info: this.tx.toAddress, item: 'address',
         },
-        { class: 'columns__item_three-one', title: this.$t('ui.tx.value'), info: this.tx.value },
-        { class: 'columns__item_three-two', title: this.$t('ui.tx.feeFull'), info: this.tx.gasPrice },
+        { class: 'columns__item_three-one', title: this.$t('ui.tx.value'), info: this.NumberFormat(this.tx.value) },
+        { class: 'columns__item_three-two', title: this.$t('ui.tx.feeFull'), info: this.NumberFormat(this.tx.gasPrice) },
         { class: 'columns__item_four-one', title: this.$t('ui.block.gasLimit'), info: this.tx.gasLimit },
         { class: 'columns__item_four-two', title: this.$t('ui.tx.gasUsed'), info: this.tx.gasUsed },
         { class: 'columns__item_four-three', title: this.$t('ui.tx.feeFull'), info: this.tx.gasPrice },
