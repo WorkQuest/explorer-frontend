@@ -50,7 +50,7 @@
       class="item__info"
       :class="{'item__info_green': info === 1, 'item__info_red': info === 2}"
     >
-      {{ info }}
+      {{ info === 1 ? this.$t('ui.tx.transactionSuccess') : this.$t('ui.tx.transactionFail') }}
     </p>
     <p
       v-else
@@ -126,7 +126,9 @@ export default {
   &__info {
     @include text-simple;
     word-break: break-all;
-
+    padding: 4px 5px;
+    font-size: 12px;
+    line-height: 130%;
     &_blue {
       color: $blue;
     }

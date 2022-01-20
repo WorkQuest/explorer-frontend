@@ -168,7 +168,8 @@ export default {
   &__cloud {
     @include btn-filter;
     @include text-simple;
-    width: 40px;
+    padding: 0px 4px;
+    min-width: 43px;
     height: 40px;
     display: flex;
     align-items: center;

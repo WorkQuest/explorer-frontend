@@ -23,7 +23,7 @@
       "noBlocks": "There is no blocks...",
       "block": "Block",
       "blockNumber": "Block Number",
-      "txsCount": "Transctions in the block",
+      "txsCount": "Transactions in the block",
       "age": "Age",
       "reward": "Block reward",
       "txn": "Txn",
@@ -37,12 +37,16 @@
     },
     "tx": {
       "transaction": "Txn hash",
+      "transactionFull": "Transaction Hash",
+      "transactionSuccess": "Success",
+      "transactionFail": "Fail",
       "from": "From",
       "to": "To",
       "noLogs": "There is no logs...",
       "amount": "Amount",
       "value": "Value",
       "fee": "Txn Fee",
+      "feeFull": "Transaction Fee",
       "txDetails": "Transaction Details",
       "status": "Status",
       "logs": "Transaction Receipt Event Logs",
@@ -51,7 +55,8 @@
       "forBlock": "For Block",
       "total": "A total of",
       "found": "transactions found",
-      "noTxs": "There is no transactions..."
+      "noTxs": "There is no transactions...",
+      "gasUsed": "Gas Used by Transaction"
     },
     "forms": {
       "searchPlaceholder": "Search by Address / Txn Hash / Block / Token",

@@ -120,11 +120,11 @@
         <div class="contract__wrap">
           <p
             class="name"
-            @click="onClickContract"
+            @click="onClickContract('name')"
           >
             1. {{ $t('ui.token.name') }}
             <span
-              v-if="activePoint === 'name'"
+              v-if="activePoint.includes('name')"
               class="icon-chevron_up"
             />
             <span
@@ -133,7 +133,7 @@
             />
           </p>
           <p
-            v-if="activePoint === 'name'"
+            v-if="activePoint.includes('name')"
             class="contract__description"
           >
             some description
@@ -142,11 +142,11 @@
         <div class="contract__wrap">
           <p
             class="deprecated"
-            @click="onClickContract"
+            @click="onClickContract('deprecated')"
           >
             2. {{ $t('ui.token.deprecated') }}
             <span
-              v-if="activePoint === 'deprecated'"
+              v-if="activePoint.includes('deprecated')"
               class="icon-chevron_up"
             />
             <span
@@ -155,7 +155,7 @@
             />
           </p>
           <p
-            v-if="activePoint === 'deprecated'"
+            v-if="activePoint.includes('deprecated')"
             class="contract__description"
           >
             False
@@ -165,11 +165,11 @@
         <div class="contract__wrap">
           <p
             class="balances"
-            @click="onClickContract"
+            @click="onClickContract('balances')"
           >
             3. {{ $t('ui.token.balances') }}
             <span
-              v-if="activePoint === 'balances'"
+              v-if="activePoint.includes('balances')"
               class="icon-chevron_up"
             />
             <span
@@ -178,7 +178,7 @@
             />
           </p>
           <div
-            v-if="activePoint === 'balances'"
+            v-if="activePoint.includes('balances')"
             class="contract__description"
           >
             <!-- validation observer -->
@@ -211,7 +211,7 @@ export default {
       params: '',
       address: '',
       activeTab: 'transfers',
-      activePoint: '',
+      activePoint: [],
       search: '',
       currentPage: 1,
       tabs: ['transfers', 'holders', 'info', 'contract'],
@@ -300,10 +300,13 @@ export default {
     onClick(tab) {
       this.activeTab = tab;
     },
-    onClickContract(event) {
-      if (this.activePoint !== '') this.activePoint = '';
-      else if (event.target.className === ('icon-chevron_down' || 'icon-chevron_up')) this.activePoint = event.path[1].className;
-      else this.activePoint = event.target.className;
+    onClickContract(elem) {
+      if (this.activePoint.includes(elem)) {
+        const index = this.activePoint.indexOf(elem);
+        this.activePoint.splice(index, 1);
+      } else {
+        this.activePoint.push(elem);
+      }
     },
   },
 };
@@ -390,6 +393,8 @@ export default {
   &__description {
     @include text-simple;
     @include normal-font-size;
+    display: flex;
+    gap: 10px;
     margin-bottom: 10px;
   }
 }

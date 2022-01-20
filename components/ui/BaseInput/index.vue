@@ -224,7 +224,7 @@ export default {
   }
   &_search {
     .ctm-field__input {
-      padding: 0 20px 0 50px;
+      padding: 0 50px 0 50px;
       background: transparent !important;
       &:hover {
         border: 1px solid #E6EAEE !important;

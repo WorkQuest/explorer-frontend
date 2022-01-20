@@ -134,7 +134,7 @@ export default {
         {
           title: this.$t('ui.timestamp'),
           info: this.formatDataFromNow(this.currentBlock.timestamp),
-          note: this.$moment(this.currentBlock.timestamp).format('MMM-DD-YYYY HH:MM:SS A +UTC'),
+          note: `(${this.$moment(this.currentBlock.timestamp).format('MMM-DD-YYYY HH:MM:SS A +UTC')})`,
         },
         {
           title: this.$t('ui.txs'),
@@ -144,8 +144,8 @@ export default {
         },
         { title: this.$t('ui.block.reward'), info: '0.316538333801617818 MATIC' },
         { title: this.$t('ui.block.gasUsed'), info: this.currentBlock.gasUsed },
-        { title: this.$t('ui.block.gasLimit'), info: this.currentBlock.gasLimit },
-        { title: this.$t('ui.block.size'), info: this.currentBlock.size },
+        { title: this.$t('ui.block.gasLimit'), info: this.NumberFormat(this.currentBlock.gasLimit) },
+        { title: this.$t('ui.block.size'), info: `${this.currentBlock.size} bytes` },
         { title: this.$t('ui.block.hash'), info: this.currentBlock.hash },
       ];
     },
@@ -227,11 +227,10 @@ export default {
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 23px;
     margin-top: 25px;
-
-    &:last-child {
-      grid-column-start: 1;
-      grid-column-end: 2;
-    }
+  }
+  &__columns > :last-child {
+    grid-column-start: 1;
+    grid-column-end: 4;
   }
 }
 

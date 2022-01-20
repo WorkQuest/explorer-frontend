@@ -44,12 +44,15 @@
           class="table__link"
           :to="{ path: '/transactions', query: { block: el.item.id }}"
         >
-          {{ el.item.txsCount }} txns
+          {{ el.item.txsCount }}
         </nuxt-link>
       </template>
       <template #cell(gasUsed)="el">
         <span>{{ el.item.gasUsed }} </span>
         <span class="table__grey">95,5%</span>
+      </template>
+      <template #cell(size)="el">
+        <span>{{ el.item.size }} WUSD</span>
       </template>
     </b-table>
   </div>
