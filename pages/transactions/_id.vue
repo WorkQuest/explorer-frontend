@@ -136,7 +136,7 @@
               class="overview__status"
               :class="{'overview__status_green': tx.status === 1, 'overview__status_red': tx.status === 2}"
             >
-              {{ tx.status === 1 ? this.$t('ui.tx.transactionSuccess') : this.$t('ui.tx.transactionSuccess') }}
+              {{ tx.status === 1 ? this.$t('ui.tx.transactionSuccess') : this.$t('ui.tx.transactionFail') }}
             </p>
           </div>
           <div class="overview__subtitle">
