@@ -28,12 +28,12 @@
         <p class="blocks__title">
           {{ $t('ui.latestBlocks') }}
         </p>
-        <base-btn
+        <router-link
           class="blocks__link"
-          @click="$router.replace({path: '/blocks'})"
+          to="/blocks"
         >
           {{ $t('ui.allBlocks') }}
-        </base-btn>
+        </router-link>
       </div>
       <block
         v-for="(item, i) in blocks"
@@ -56,12 +56,12 @@
         <p class="blocks__title">
           {{ $t('ui.latestTxs') }}
         </p>
-        <base-btn
+        <router-link
           class="blocks__link"
-          @click="$router.replace({path: '/transactions'})"
+          to="/transactions"
         >
           {{ $t('ui.allTxs') }}
-        </base-btn>
+        </router-link>
       </div>
       <transaction
         v-for="(item, i) in txs"
