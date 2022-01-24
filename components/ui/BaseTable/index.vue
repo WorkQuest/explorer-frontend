@@ -23,7 +23,7 @@
           <span class="table__title">{{ $props.title }}</span>
           <nuxt-link
             class="table__link"
-            :to="`${type}`"
+            :to="type === 'blocks' ? 'blocks' : 'transactions'"
           >
             {{ headerlink }}
           </nuxt-link>
