@@ -50,22 +50,18 @@ export default {
     'cookie-universal-nuxt',
   ],
   router: {
-    productionSourceMap: false,
-    productionGzip: true,
-    productionGzipExtensions: ['js', 'css', 'svg'],
-    extend(config) {
-      config.node = {
-        fs: 'empty',
-      };
-    },
     scrollBehavior() {
       return { x: 0, y: 0 };
     },
   },
   build: {
-    transpile: [
-      'vee-validate/dist/rules',
-    ],
+    productionSourceMap: false,
+    productionGzip: true,
+    productionGzipExtensions: ['js', 'css', 'svg'],
+    extend(config) {
+      config.node = { fs: 'empty' };
+    },
+    transpile: ['vee-validate/dist/rules'],
     babel: {
       compact: false,
     },
