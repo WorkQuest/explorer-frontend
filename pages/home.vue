@@ -28,12 +28,12 @@
         <p class="blocks__title">
           {{ $t('ui.latestBlocks') }}
         </p>
-        <router-link
+        <base-btn
           class="blocks__link"
-          to="/blocks"
+          @click="toAllBlocks"
         >
           {{ $t('ui.allBlocks') }}
-        </router-link>
+        </base-btn>
       </div>
       <block
         v-for="(item, i) in blocks"
@@ -56,12 +56,12 @@
         <p class="blocks__title">
           {{ $t('ui.latestTxs') }}
         </p>
-        <router-link
+        <base-btn
           class="blocks__link"
-          to="/transactions"
+          @click="toAllTxs"
         >
           {{ $t('ui.allTxs') }}
-        </router-link>
+        </base-btn>
       </div>
       <transaction
         v-for="(item, i) in txs"
@@ -124,6 +124,16 @@ export default {
     await this.$store.dispatch('blocks/getBlocks', this.payload);
     await this.$store.dispatch('tx/getTxs', this.payload);
     await this.SetLoader(false);
+  },
+  methods: {
+    async toAllBlocks() {
+      await this.$router.replace({ path: '/' });
+      await this.$router.push({ path: '/blocks' });
+    },
+    async toAllTxs() {
+      await this.$router.replace({ path: '/' });
+      await this.$router.push({ path: '/transactions' });
+    },
   },
 };
 </script>
