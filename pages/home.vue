@@ -28,12 +28,12 @@
         <p class="blocks__title">
           {{ $t('ui.latestBlocks') }}
         </p>
-        <nuxt-link
+        <base-btn
           class="blocks__link"
-          to="blocks"
+          @click="$router.push('/blocks')"
         >
           {{ $t('ui.allBlocks') }}
-        </nuxt-link>
+        </base-btn>
       </div>
       <block
         v-for="(item, i) in blocks"
@@ -56,12 +56,12 @@
         <p class="blocks__title">
           {{ $t('ui.latestTxs') }}
         </p>
-        <nuxt-link
+        <base-btn
           class="blocks__link"
-          to="transactions"
+          @click="$router.push('/transactions')"
         >
           {{ $t('ui.allTxs') }}
-        </nuxt-link>
+        </base-btn>
       </div>
       <transaction
         v-for="(item, i) in txs"
