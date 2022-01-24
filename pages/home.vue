@@ -30,7 +30,7 @@
         </p>
         <base-btn
           class="blocks__link"
-          @click="$router.push('/blocks')"
+          @click="$router.push({path: 'blocks'})"
         >
           {{ $t('ui.allBlocks') }}
         </base-btn>
@@ -58,7 +58,7 @@
         </p>
         <base-btn
           class="blocks__link"
-          @click="$router.push('/transactions')"
+          @click="$router.push({path: 'transactions'})"
         >
           {{ $t('ui.allTxs') }}
         </base-btn>
