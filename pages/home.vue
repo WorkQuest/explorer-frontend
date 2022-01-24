@@ -128,11 +128,11 @@ export default {
   methods: {
     async toAllBlocks() {
       await this.$router.replace({ path: '/' });
-      await this.$router.push({ path: '/blocks' });
+      await this.$router.push({ path: '/blocks/' });
     },
     async toAllTxs() {
       await this.$router.replace({ path: '/' });
-      await this.$router.push({ path: '/transactions' });
+      await this.$router.push({ path: '/transactions/' });
     },
   },
 };
