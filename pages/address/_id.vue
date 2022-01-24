@@ -109,7 +109,7 @@ export default {
   async mounted() {
     await this.SetLoader(true);
     await this.$store.dispatch('tx/getTxsByAccount', this.payload);
-    await this.$store.dispatch('account/getAccountByAddress', this.address);
+    await this.$store.dispatch('account/getAccountByAddress', this.address.toLowerCase());
     await this.SetLoader(false);
   },
 };
