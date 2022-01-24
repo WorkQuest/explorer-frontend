@@ -49,19 +49,12 @@ export default {
     'nuxt-i18n',
     'cookie-universal-nuxt',
   ],
-  router: {
-    scrollBehavior() {
-      return { x: 0, y: 0 };
-    },
-  },
   build: {
-    productionSourceMap: false,
     productionGzip: true,
     productionGzipExtensions: ['js', 'css', 'svg'],
     extend(config) {
       config.node = { fs: 'empty' };
     },
-    transpile: ['vee-validate/dist/rules'],
     babel: {
       compact: false,
     },
