@@ -30,7 +30,7 @@
         </p>
         <base-btn
           class="blocks__link"
-          @click="toAllBlocks"
+          @click="this.$router.push('/blocks')"
         >
           {{ $t('ui.allBlocks') }}
         </base-btn>
@@ -58,7 +58,7 @@
         </p>
         <base-btn
           class="blocks__link"
-          @click="toAllTxs"
+          @click="this.$router.push('/transactions');"
         >
           {{ $t('ui.allTxs') }}
         </base-btn>
@@ -124,16 +124,6 @@ export default {
     await this.$store.dispatch('blocks/getBlocks', this.payload);
     await this.$store.dispatch('tx/getTxs', this.payload);
     await this.SetLoader(false);
-  },
-  methods: {
-    async toAllBlocks() {
-      await this.$router.replace({ path: '/' });
-      await this.$router.push({ path: '/blocks/' });
-    },
-    async toAllTxs() {
-      await this.$router.replace({ path: '/' });
-      await this.$router.push({ path: '/transactions/' });
-    },
   },
 };
 </script>
