@@ -30,7 +30,7 @@
         </p>
         <nuxt-link
           class="blocks__link"
-          to="/blocks"
+          to="blocks"
         >
           {{ $t('ui.allBlocks') }}
         </nuxt-link>
@@ -58,7 +58,7 @@
         </p>
         <nuxt-link
           class="blocks__link"
-          to="/transactions"
+          to="transactions"
         >
           {{ $t('ui.allTxs') }}
         </nuxt-link>
