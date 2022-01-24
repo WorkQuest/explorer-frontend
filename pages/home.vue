@@ -80,6 +80,10 @@ import { mapGetters } from 'vuex';
 export default {
   name: 'Home',
   layout: 'default',
+  fetch({ redirect, route }) {
+    if (route.path === 'home/blocks') redirect('/blocks');
+    if (route.path === 'home/transactions') redirect('/transactions');
+  },
   data() {
     return {
       search: '',
