@@ -49,6 +49,19 @@ export default {
     'nuxt-i18n',
     'cookie-universal-nuxt',
   ],
+  router: {
+    productionSourceMap: false,
+    productionGzip: true,
+    productionGzipExtensions: ['js', 'css', 'svg'],
+    extend(config) {
+      config.node = {
+        fs: 'empty',
+      };
+    },
+    scrollBehavior() {
+      return { x: 0, y: 0 };
+    },
+  },
   build: {
     transpile: [
       'vee-validate/dist/rules',
@@ -80,7 +93,7 @@ export default {
   },
   moment: {
     defaultLocale: 'en',
-    locales: ['ru'],
+    locales: ['ru', 'en'],
   },
   env: {
     BASE_URL: process.env.BASE_URL,
