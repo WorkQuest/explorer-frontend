@@ -30,7 +30,7 @@
         </p>
         <base-btn
           class="blocks__link"
-          @click="$router.push({path: 'blocks'})"
+          @click="$router.push({path: `${process.env.BASE_URL.slice(0,7)}/blocks`})"
         >
           {{ $t('ui.allBlocks') }}
         </base-btn>
@@ -58,7 +58,7 @@
         </p>
         <base-btn
           class="blocks__link"
-          @click="$router.push({path: 'transactions'})"
+          @click="$router.push({path: `${process.env.BASE_URL.slice(0,7)}/transactions`})"
         >
           {{ $t('ui.allTxs') }}
         </base-btn>
