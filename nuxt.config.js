@@ -82,7 +82,7 @@ export default {
   },
   moment: {
     defaultLocale: 'en',
-    locales: ['ru', 'en'],
+    locales: ['ru'],
   },
   env: {
     BASE_URL: process.env.BASE_URL,
