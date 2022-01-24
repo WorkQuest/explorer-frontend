@@ -42,9 +42,6 @@ export default {
   styleResources: {
     scss: ['./assets/scss/resources.scss'],
   },
-  serverMiddleware: [
-    '~/middleware/redirects.js',
-  ],
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
