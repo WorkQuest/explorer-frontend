@@ -120,6 +120,7 @@ export default {
   },
   async mounted() {
     await this.SetLoader(true);
+    this.$route.fullPath.slice(0, 1);
     await this.$store.dispatch('blocks/getBlocks', this.payload);
     await this.$store.dispatch('tx/getTxs', this.payload);
     await this.SetLoader(false);
