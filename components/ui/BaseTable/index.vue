@@ -138,8 +138,7 @@ export default {
   methods: {
     async toPage() {
       await this.$router.push('/');
-      if (this.type === 'blocks') await this.$router.push('/blocks');
-      if (this.type === 'transactions') await this.$router.push('/transactions');
+      if (this.type) await this.$router.push(`/${this.type}`);
     },
     cutValueData(value) {
       return new BigNumber(value).shiftedBy(-18).toString();
