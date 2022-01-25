@@ -137,9 +137,9 @@ export default {
   },
   methods: {
     toPage() {
-      if (type === 'blocks') this.$router.push('/');
-      this.$router.push('blocks');
-      this.$router.push('transactions');
+      this.$router.push('/');
+      if (type === 'blocks') this.$router.push('blocks');
+      if (type === 'transactions') this.$router.push('transactions');
     },
     cutValueData(value) {
       return new BigNumber(value).shiftedBy(-18).toString();
