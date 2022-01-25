@@ -137,11 +137,11 @@ export default {
   },
   methods: {
     async toPage() {
-      if (type === 'blocks') {
+      if (this.type === 'blocks') {
         await this.$router.push('/');
         await this.$router.push('/blocks');
       }
-      if (type === 'transactions') {
+      if (this.type === 'transactions') {
         await this.$router.push('/');
         await this.$router.push('/transactions');
       }
