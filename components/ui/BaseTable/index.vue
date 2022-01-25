@@ -136,14 +136,14 @@ export default {
     }),
   },
   methods: {
-    toPage() {
+    async toPage() {
       if (type === 'blocks') {
-        this.$router.push('/');
-        this.$router.push('/blocks');
+        await this.$router.push('/');
+        await this.$router.push('/blocks');
       }
       if (type === 'transactions') {
-        this.$router.push('/');
-        this.$router.push('/transactions');
+        await this.$router.push('/');
+        await this.$router.push('/transactions');
       }
     },
     cutValueData(value) {
