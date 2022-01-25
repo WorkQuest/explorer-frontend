@@ -23,7 +23,7 @@
           <span class="table__title">{{ $props.title }}</span>
           <base-btn
             class="table__link"
-            @click="type === 'blocks' ? $router.push('https://dev-explorer.workquest.co/blocks') : $router.push('https://dev-explorer.workquest.co/transactions')"
+            @click="type === 'blocks' ? $router.push('/blocks') : $router.push('/transactions')"
           >
             {{ headerlink }}
           </base-btn>
