@@ -137,9 +137,14 @@ export default {
   },
   methods: {
     toPage() {
-      this.$router.push('/');
-      if (type === 'blocks') this.$router.push('blocks');
-      if (type === 'transactions') this.$router.push('transactions');
+      if (type === 'blocks') {
+        this.$router.push('/');
+        this.$router.push('/blocks');
+      }
+      if (type === 'transactions') {
+        this.$router.push('/');
+        this.$router.push('/transactions');
+      }
     },
     cutValueData(value) {
       return new BigNumber(value).shiftedBy(-18).toString();
