@@ -23,7 +23,7 @@
           <span class="table__title">{{ $props.title }}</span>
           <nuxt-link
             class="table__link"
-            :to="type === 'blocks' ? `${process.env.BASE_URL.slice(0, -7)}/blocks` : `${process.env.BASE_URL.slice(0, -7)}/transactions`"
+            :to="type === 'blocks' ? 'https://dev-explorer.workquest.co/blocks' : 'https://dev-explorer.workquest.co/transactions'"
           >
             {{ headerlink }}
           </nuxt-link>
