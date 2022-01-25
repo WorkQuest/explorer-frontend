@@ -21,12 +21,12 @@
       >
         <div class="table__titles">
           <span class="table__title">{{ $props.title }}</span>
-          <a
+          <nuxt-link
             class="table__link"
-            :href="type === 'blocks' ? 'blocks' : 'transactions'"
+            :to="type === 'blocks' ? `${process.env.BASE_URL.slice(0, -7)}/blocks` : `${process.env.BASE_URL.slice(0, -7)}/transactions`"
           >
             {{ headerlink }}
-          </a>
+          </nuxt-link>
         </div>
       </template>
       <!-- common -->
