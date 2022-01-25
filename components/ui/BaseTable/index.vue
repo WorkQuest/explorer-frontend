@@ -21,12 +21,12 @@
       >
         <div class="table__titles">
           <span class="table__title">{{ $props.title }}</span>
-          <nuxt-link
+          <base-btn
             class="table__link"
-            :to="type === 'blocks' ? 'https://dev-explorer.workquest.co/blocks' : 'https://dev-explorer.workquest.co/transactions'"
+            @click="type === 'blocks' ? $router.push('https://dev-explorer.workquest.co/blocks') : $router.push('https://dev-explorer.workquest.co/transactions')"
           >
             {{ headerlink }}
-          </nuxt-link>
+          </base-btn>
         </div>
       </template>
       <!-- common -->
