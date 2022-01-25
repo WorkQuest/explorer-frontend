@@ -23,7 +23,7 @@
           <span class="table__title">{{ $props.title }}</span>
           <base-btn
             class="table__link"
-            @click="type === 'blocks' ? $router.push('blocks') : $router.push('transactions')"
+            @click="toPage()"
           >
             {{ headerlink }}
           </base-btn>
@@ -136,6 +136,11 @@ export default {
     }),
   },
   methods: {
+    toPage() {
+      if (type === 'blocks') this.$router.push('/');
+      this.$router.push('blocks');
+      this.$router.push('transactions');
+    },
     cutValueData(value) {
       return new BigNumber(value).shiftedBy(-18).toString();
     },
