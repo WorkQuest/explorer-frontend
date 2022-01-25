@@ -1,8 +1,8 @@
 {
   "ui": {
     "home": "Home",
-    "txs": "Transactions",
-    "blocks": "Blocks",
+    "txs": "Транзакции",
+    "blocks": "Блоки",
     "transfers": "View ERC-20 Transfers",
     "tokens": "ERC20 Top Tokens",
     "latestBlocks": "Latest Blocks",

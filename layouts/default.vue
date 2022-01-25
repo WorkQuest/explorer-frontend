@@ -290,10 +290,10 @@ export default {
       this.closeAnother('locale');
       this.isShowLocale = !this.isShowLocale;
     },
-    changeLocale(newLocale) {
+    changeLocale() {
       this.closeAnother('locale');
       this.isShowLocale = !this.isShowLocale;
-      this.$i18n.setLocale(newLocale);
+      this.$i18n.setLocale(this.currentLocale);
     },
     closeAnother(value) {
       switch (value) {
@@ -335,6 +335,7 @@ export default {
     },
     setLocale(item) {
       this.currentLocale = item;
+      this.changeLocale();
     },
   },
 };
