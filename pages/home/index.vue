@@ -124,14 +124,6 @@ export default {
     await this.$store.dispatch('tx/getTxs', this.payload);
     await this.SetLoader(false);
   },
-  methods: {
-    toTxs() {
-      this.$router.push('/transactions');
-    },
-    toBlocks() {
-      this.$router.push('/blocks');
-    },
-  },
 };
 </script>
 <style lang="scss" scoped>

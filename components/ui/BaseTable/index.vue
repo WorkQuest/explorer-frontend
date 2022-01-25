@@ -137,14 +137,9 @@ export default {
   },
   methods: {
     async toPage() {
-      if (this.type === 'blocks') {
-        await this.$router.push('/');
-        await this.$router.push('/blocks');
-      }
-      if (this.type === 'transactions') {
-        await this.$router.push('/');
-        await this.$router.push('/transactions');
-      }
+      await this.$router.push('/');
+      if (this.type === 'blocks') await this.$router.push('/blocks');
+      if (this.type === 'transactions') await this.$router.push('/transactions');
     },
     cutValueData(value) {
       return new BigNumber(value).shiftedBy(-18).toString();
@@ -174,7 +169,14 @@ export default {
   }
 
   &__link {
-    @include link;
+    color: $blue !important;
+    border: none !important;
+    background: $white !important;
+    width: 200px !important;
+
+    &:hover {
+      color: $blue;
+    }
   }
 
   &__success {
