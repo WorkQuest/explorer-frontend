@@ -142,24 +142,25 @@
           <div class="overview__subtitle">
             {{ $t('ui.block.blockNumber') }}
             <nuxt-link
-              v-if="tx.blockNumber"
+              v-if="tx.block_number"
               class="overview__link_small"
-              :to="`/blocks/${tx.blockNumber}`"
+              :to="`/blocks/${tx.block_number}`"
             >
-              {{ tx.blockNumber }}
+              {{ tx.block_number }}
             </nuxt-link>
           </div>
           <div class="overview__subtitle">
             {{ $t('ui.tx.from') }}
             <nuxt-link
-              v-if="tx.fromAddress"
+              v-if="tx.from_address_hash"
               class="overview__link_small"
-              :to="`/address/${tx.fromAddress}`"
+              :to="`/address/${tx.from_address_hash.hex}`"
             >
-              {{ formatItem(tx.fromAddress, 7, 6) }}
+              {{ formatItem(tx.from_address_hash.hex, 7, 6) }}
             </nuxt-link>
             <button
-              v-clipboard:copy="tx.fromAddress"
+              v-if="tx.from_address_hash"
+              v-clipboard:copy="tx.from_address_hash.hex"
               v-clipboard:success="ClipboardSuccessHandler"
               v-clipboard:error="ClipboardErrorHandler"
               class="btn__copy"
@@ -171,14 +172,15 @@
           <div class="overview__subtitle">
             {{ $t('ui.tx.to') }}
             <nuxt-link
-              v-if="tx.toAddress"
+              v-if="tx.to_address_hash"
               class="overview__link_small"
-              :to="`/address/${tx.toAddress}`"
+              :to="`/address/${tx.to_address_hash.hex}`"
             >
-              {{ formatItem(tx.toAddress, 7, 6) }}
+              {{ formatItem(tx.to_address_hash.hex, 7, 6) }}
             </nuxt-link>
             <button
-              v-clipboard:copy="tx.toAddress"
+              v-if="tx.to_address_hash"
+              v-clipboard:copy="tx.to_address_hash.hex"
               v-clipboard:success="ClipboardSuccessHandler"
               v-clipboard:error="ClipboardErrorHandler"
               class="btn__copy"
@@ -193,15 +195,15 @@
           </div>
           <div class="overview__subtitle  overview__subtitle_underlined">
             {{ $t('ui.tx.fee') }}
-            <span class="overview__info">{{ tx.gasUsed }}</span>
+            <span class="overview__info">{{ tx.gas_used }}</span>
           </div>
           <div class="overview__subtitle">
             {{ $t('ui.block.gasUsed') }}
-            <span class="overview__info">{{ tx.gasUsed }}</span>
+            <span class="overview__info">{{ tx.gas_used }}</span>
           </div>
           <div class="overview__subtitle">
             {{ $t('ui.block.gasLimit') }}
-            <span class="overview__info">{{ tx.gasLimit }}</span>
+            <span class="overview__info">{{ tx.gas_limit }}</span>
           </div>
         </div>
       </div>
@@ -210,6 +212,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import BigNumber from 'bignumber.js';
 
 export default {
   name: 'Block',
@@ -225,6 +228,9 @@ export default {
       tx: 'tx/getTxsByHash',
     }),
     txsColumns() {
+      const fee = new BigNumber(this.tx.gas_price * this.tx.gas_price).shiftedBy(-18).toString();
+      const gasLimit = this.tx.block.gas_limit;
+      const gasUsed = this.tx.gas_used;
       return [
         { class: 'columns__item_six', title: this.$t('ui.tx.transactionFull'), info: this.tx.id },
         {
@@ -237,19 +243,19 @@ export default {
           class: 'columns__item_two-two', title: this.$t('ui.tx.status'), info: this.tx.status, item: 'status',
         },
         {
-          class: 'columns__item_two-three', title: this.$t('ui.block.block'), info: '17102304', item: 'link',
+          class: 'columns__item_two-three', title: this.$t('ui.block.block'), info: this.tx.block_number, item: 'link',
         },
         {
-          class: 'columns__item_three-one', title: this.$t('ui.tx.from'), info: this.tx.fromAddress, item: 'address',
+          class: 'columns__item_three-one', title: this.$t('ui.tx.from'), info: this.tx.from_address_hash.hex, item: 'address',
         },
         {
-          class: 'columns__item_three-two', title: this.$t('ui.tx.to'), info: this.tx.toAddress, item: 'address',
+          class: 'columns__item_three-two', title: this.$t('ui.tx.to'), info: this.tx.to_address_hash.hex, item: 'address',
         },
         { class: 'columns__item_three-one', title: this.$t('ui.tx.value'), info: this.NumberFormat(this.tx.value) },
-        { class: 'columns__item_three-two', title: this.$t('ui.tx.feeFull'), info: this.NumberFormat(this.tx.gasPrice) },
-        { class: 'columns__item_four-one', title: this.$t('ui.block.gasLimit'), info: this.tx.gasLimit },
-        { class: 'columns__item_four-two', title: this.$t('ui.tx.gasUsed'), info: this.tx.gasUsed },
-        { class: 'columns__item_four-three', title: this.$t('ui.tx.feeFull'), info: this.tx.gasPrice },
+        { class: 'columns__item_three-two', title: this.$t('ui.tx.feeFull'), info: this.NumberFormat(this.tx.gas_price) },
+        { class: 'columns__item_four-one', title: this.$t('ui.block.gasLimit'), info: this.tx.block.gas_limit },
+        { class: 'columns__item_four-two', title: this.$t('ui.tx.gasUsed'), info: `${gasUsed} (${(gasUsed / gasLimit) * 100}%)` },
+        { class: 'columns__item_four-three', title: this.$t('ui.tx.feeFull'), info: `${fee} WUSD` },
       ];
     },
     txsLogs() {

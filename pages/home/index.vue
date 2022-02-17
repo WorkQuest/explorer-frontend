@@ -83,7 +83,7 @@ export default {
   data() {
     return {
       search: '',
-      limit: 2,
+      limit: 5,
       offset: 0,
     };
   },
@@ -103,17 +103,17 @@ export default {
     },
     tableHeadersBlocks() {
       return [
-        { key: 'id', label: this.$t('ui.block.blockNumber'), sortable: true },
+        { key: 'number', label: this.$t('ui.block.blockNumber'), sortable: true },
         { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'txsCount', label: this.$t('ui.block.txsCount'), sortable: true },
+        { key: 'transactions', label: this.$t('ui.block.txsCount'), sortable: true },
         { key: 'reward', label: this.$t('ui.block.reward'), sortable: true },
       ];
     },
     tableHeadersTxs() {
       return [
         { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true },
+        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
+        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
         { key: 'value', label: this.$t('ui.tx.amount'), sortable: true },
       ];
     },
@@ -155,6 +155,7 @@ export default {
     font-weight: 600;
     font-size: 34px;
     color: $white;
+    font-family: 'Inter', sans-serif;
   }
 
   &__header-button {

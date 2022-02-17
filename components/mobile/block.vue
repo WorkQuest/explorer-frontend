@@ -4,16 +4,16 @@
     :class="{block__separator: isLast}"
   >
     <div
-      v-if="block.id"
+      v-if="block.number"
       class="block__number"
     >
       <p>{{ $t('ui.block.blockNumber') }}</p>
       <p>
         <nuxt-link
           class="block__link"
-          :to="`/blocks/${block.id}`"
+          :to="`/blocks/${block.number}`"
         >
-          {{ block.id }}
+          {{ block.number }}
         </nuxt-link>
       </p>
     </div>
@@ -24,31 +24,31 @@
       {{ formatDataFromNow(block.timestamp) }}
     </p>
     <div
-      v-if="block.txsCount >= 0"
+      v-if="Array.isArray(block.transactions) && block.transactions.length >= 0"
       class="block__subtitle"
     >
       {{ $t('ui.txs') }}
       <nuxt-link
         class="block__link_small"
-        :to="{ path: '/transactions', query: { block: block.id }}"
+        :to="{ path: '/transactions', query: { block: block.number }}"
       >
-        {{ block.txsCount }} txns
+        {{ block.transactions.length }} txns
       </nuxt-link>
       <span class="block__timestamp">({{ formatDataFromNow(block.timestamp) }})</span>
     </div>
     <div
-      v-if="block.gasUsed"
+      v-if="block.gas_used"
       class="block__subtitle"
     >
       {{ $t('ui.block.gasUsed') }}
-      <span class="block__info">{{ block.gasUsed }}</span>
+      <span class="block__info">{{ block.gas_used }}</span>
     </div>
     <div
-      v-if="block.gasLimit"
+      v-if="block.gas_limit"
       class="block__subtitle"
     >
       {{ $t('ui.block.gasLimit') }}
-      <span class="block__info">{{ block.gasLimit }}</span>
+      <span class="block__info">{{ block.gas_limit }}</span>
     </div>
     <div
       v-if="block.reward"

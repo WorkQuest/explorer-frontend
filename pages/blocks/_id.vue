@@ -27,19 +27,19 @@
           <button
             :disabled="isLoading"
             type="button"
-            @click="changeBlock(currentBlock.id - 1)"
+            @click="changeBlock(+currentBlock.number - 1)"
           >
             <span class="icon-caret_left" />
             <span class="block__block">{{ $t('ui.block.block') }}</span>
           </button>
           <span
-            v-if="currentBlock.id"
+            v-if="currentBlock.number"
             class="block__number"
-          >#{{ currentBlock.id }}</span>
+          >#{{ currentBlock.number }}</span>
           <button
             type="button"
             :disabled="isLoading"
-            @click="changeBlock(currentBlock.id + 1)"
+            @click="changeBlock(+currentBlock.number + 1)"
           >
             <span class="icon-caret_right" />
           </button>
@@ -78,9 +78,9 @@
           </p>
           <nuxt-link
             class="columns__link_small"
-            :to="{ path: '/transactions', query: { block: currentBlock.id }}"
+            :to="{ path: '/transactions', query: { block: currentBlock.number }}"
           >
-            {{ currentBlock.txsCount }} txns
+            {{ currentBlock.transactions.length }} txns
           </nuxt-link>
           <p class="columns__info_grey">
             {{ $t('ui.block.inThisBlock') }}
@@ -89,12 +89,12 @@
             {{ $t('ui.block.gasUsed') }}
             <span class="columns__info">
               <!--        TODO: Вывести проценты -->
-              {{ currentBlock.gasUsed }} (99,5%)
+              {{ currentBlock.gas_used }} (99,5%)
             </span>
           </p>
           <p class="columns__subtitle">
             {{ $t('ui.block.gasLimit') }}
-            <span class="columns__info">{{ currentBlock.gasLimit }}</span>
+            <span class="columns__info">{{ currentBlock.gas_limit }}</span>
           </p>
           <p class="columns__subtitle">
             {{ $t('ui.block.size') }}
@@ -113,6 +113,9 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import BigNumber from 'bignumber.js';
+
+BigNumber.config({ EXPONENTIAL_AT: 60 });
 
 export default {
   name: 'Block',
@@ -130,6 +133,7 @@ export default {
       isLoading: 'main/getIsLoading',
     }),
     blockColumns() {
+      const fee = new BigNumber(this.currentBlock.base_fee_per_gas).multipliedBy(this.currentBlock.gas_used).shiftedBy(-18).toString();
       return [
         {
           title: this.$t('ui.timestamp'),
@@ -138,13 +142,14 @@ export default {
         },
         {
           title: this.$t('ui.txs'),
-          info: this.currentBlock.txsCount,
+          info: Array.isArray(this.currentBlock.transactions) ? this.currentBlock.transactions.length : 0,
           note: this.$t('ui.block.inThisBlock'),
           item: 'transaction',
         },
-        { title: this.$t('ui.block.reward'), info: '0.316538333801617818 MATIC' },
-        { title: this.$t('ui.block.gasUsed'), info: this.currentBlock.gasUsed },
-        { title: this.$t('ui.block.gasLimit'), info: this.NumberFormat(this.currentBlock.gasLimit) },
+        // TODO Rewards
+        { title: this.$t('ui.block.reward'), info: `${fee} WUSD` },
+        { title: this.$t('ui.block.gasUsed'), info: this.currentBlock.gas_used },
+        { title: this.$t('ui.block.gasLimit'), info: this.NumberFormat(this.currentBlock.gas_limit) },
         { title: this.$t('ui.block.size'), info: `${this.currentBlock.size} bytes` },
         { title: this.$t('ui.block.hash'), info: this.currentBlock.hash },
       ];

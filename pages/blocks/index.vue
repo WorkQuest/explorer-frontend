@@ -36,9 +36,11 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import TableBlocks from '~/components/TableBlocks';
 
 export default {
   name: 'Blocks',
+  components: { TableBlocks },
   data() {
     return {
       limit: 20,
@@ -57,12 +59,12 @@ export default {
     },
     tableHeaders() {
       return [
-        { key: 'id', label: this.$t('ui.block.blockNumber'), sortable: true },
+        { key: 'number', label: this.$t('ui.block.blockNumber'), sortable: true },
         { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'txsCount', label: this.$t('ui.block.txn'), sortable: true },
-        { key: 'gasUsed', label: this.$t('ui.block.gasUsed'), sortable: true },
-        { key: 'gasLimit', label: this.$t('ui.block.gasLimit'), sortable: true },
-        { key: 'size', label: this.$t('ui.block.reward'), sortable: true },
+        { key: 'transactions', label: this.$t('ui.block.txn'), sortable: true },
+        { key: 'gas_used', label: this.$t('ui.block.gasUsed'), sortable: true },
+        { key: 'gas_limit', label: this.$t('ui.block.gasLimit'), sortable: true },
+        { key: 'reward', label: this.$t('ui.block.reward'), sortable: true },
       ];
     },
     payload() {

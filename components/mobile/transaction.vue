@@ -18,16 +18,16 @@
       </p>
     </div>
     <div
-      v-if="transaction.blockNumber && internal"
+      v-if="transaction.block_number && internal"
       class="transaction__hash"
     >
       <p>{{ $t('ui.block.blockNumber') }}</p>
       <p>
         <nuxt-link
           class="transaction__link"
-          :to="`/blocks/${(transaction.blockNumber)}`"
+          :to="`/blocks/${(transaction.block_number)}`"
         >
-          {{ transaction.blockNumber }}
+          {{ transaction.block_number }}
         </nuxt-link>
       </p>
     </div>
@@ -42,40 +42,41 @@
       <span class="transaction__info">{{ transaction.method }}</span>
     </div>
     <div
-      v-if="transaction.fromAddress"
+      v-if="transaction.from_address_hash && Object.keys(transaction.from_address_hash).length > 0"
       class="transaction__subtitle"
     >
       {{ $t('ui.tx.from') }}
       <nuxt-link
+        v-if="transaction.from_address_hash && transaction.from_address_hash.hex"
         class="transaction__link_small"
-        :to="`/address/${transaction.fromAddress}`"
+        :to="`/address/${transaction.from_address_hash.hex}`"
       >
-        {{ formatItem(transaction.fromAddress, 7, 6) }}
+        {{ formatItem(transaction.from_address_hash.hex, 7, 6) }}
       </nuxt-link>
     </div>
     <div
-      v-if="transaction.blockNumber && !internal"
+      v-if="transaction.block_number && !internal"
       class="transaction__subtitle"
     >
       {{ $t('ui.block.blockNumber') }}
       <nuxt-link
         class="transaction__link_small"
-        :to="`/blocks/${transaction.blockNumber}`"
+        :to="`/blocks/${transaction.block_number}`"
       >
-        {{ transaction.blockNumber }}
+        {{ transaction.block_number }}
       </nuxt-link>
     </div>
     <div
-      v-if="transaction.toAddress"
+      v-if="transaction.to_address_hash && Object.keys(transaction.to_address_hash).length > 0"
       class="transaction__subtitle"
     >
       {{ $t('ui.tx.to') }}
       <nuxt-link
-        v-if="transaction.toAddress"
+        v-if="transaction.to_address_hash && transaction.to_address_hash.hex"
         class="transaction__link_small"
-        :to="`/address/${transaction.toAddress}`"
+        :to="`/address/${transaction.to_address_hash.hex}`"
       >
-        {{ formatItem(transaction.toAddress, 7, 6) }}
+        {{ formatItem(transaction.to_address_hash.hex, 7, 6) }}
       </nuxt-link>
     </div>
     <div
@@ -93,11 +94,11 @@
       <span class="transaction__info">{{ transaction.value }} {{ transaction.symbol }}</span>
     </div>
     <div
-      v-if="transaction.gasUsed"
+      v-if="transaction.gas_used"
       class="transaction__subtitle"
     >
       {{ $t('ui.tx.fee') }}
-      <span class="transaction__info">{{ transaction.gasUsed }}</span>
+      <span class="transaction__info">{{ transaction.gas_used }}</span>
     </div>
     <div
       v-if="transaction.quantity"
@@ -129,13 +130,11 @@ export default {
   props: {
     transaction: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     tokens: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     isLast: {
       type: Boolean,
