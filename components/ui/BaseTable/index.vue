@@ -51,7 +51,7 @@
       </template>
       <!-- blocks -->
       <template #cell(reward)="el">
-        <span>{{ el.item.size }} {{ el.item.symbol }}</span>
+        <span>{{ +el.item.base_fee_per_gas * +el.item.gas_used }} WUSD</span>
       </template>
       <template #cell(transactions)="el">
         <nuxt-link

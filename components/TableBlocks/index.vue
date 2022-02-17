@@ -37,7 +37,7 @@
         <span>{{ formatDataFromNow(el.item.timestamp) }}</span>
       </template>
       <template #cell(reward)="el">
-        <span>{{ el.item.reward }} {{ el.item.symbol }}</span>
+        <span>{{ +el.item.base_fee_per_gas * +el.item.gas_used }} WUSD</span>
       </template>
       <template #cell(transactions)="el">
         <nuxt-link
