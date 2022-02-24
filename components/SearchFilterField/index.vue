@@ -6,7 +6,8 @@
         class="fields__input"
         :is-search="true"
         :is-hide-error="true"
-        :placeholder="$t('ui.forms.searchPlaceholder')"
+        :placeholder="$tc('ui.forms.searchPlaceholder')"
+        @input="$emit('onInput', $event)"
       />
       <div class="fields__buttons-field">
         <div class="fields__filters">
@@ -18,7 +19,8 @@
         <div class="fields__button-field">
           <base-btn
             class="fields__search-button"
-            :text="$t('ui.forms.search')"
+            :text="$tc('ui.forms.search')"
+            @click="$emit('searchClicked')"
           />
         </div>
       </div>

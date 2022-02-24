@@ -5,4 +5,7 @@ export default {
   setBlocks(state, data) {
     state.blocksInfo = data;
   },
+  resetBlock(state) {
+    state.block = {};
+  },
 };

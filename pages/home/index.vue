@@ -5,20 +5,24 @@
         <h3 class="home__title">
           {{ $t('home.title') }}
         </h3>
-        <search-filter class="home__search" />
+        <search-filter
+          class="home__search"
+          @onInput="onSearchInput"
+          @searchClicked="searchHandler"
+        />
         <base-field
           v-model="search"
           class="home__search_mobile"
           :is-search="true"
           :is-hide-error="true"
-          :placeholder="$t('ui.forms.searchPlaceholder')"
+          :placeholder="$tc('ui.forms.searchPlaceholder')"
         />
       </div>
     </div>
     <div class="home__content home__content_mobile">
       <base-table
-        :title="$t('ui.latestBlocks')"
-        :headerlink="$t('ui.allBlocks')"
+        :title="$tc('ui.latestBlocks')"
+        :headerlink="$tc('ui.allBlocks')"
         type="blocks"
         class="home__table"
         :items="blocks"
@@ -45,9 +49,9 @@
     </div>
     <div class="home__content home__content_mobile">
       <base-table
-        :title="$t('ui.latestTxs')"
+        :title="$tc('ui.latestTxs')"
         :items="txs"
-        :headerlink="$t('ui.allTxs')"
+        :headerlink="$tc('ui.allTxs')"
         type="transactions"
         class="home__table"
         :fields="tableHeadersTxs"
@@ -123,6 +127,30 @@ export default {
     await this.$store.dispatch('blocks/getBlocks', this.payload);
     await this.$store.dispatch('tx/getTxs', this.payload);
     await this.SetLoader(false);
+  },
+  methods: {
+    onSearchInput(e) {
+      this.search = e;
+    },
+    searchHandler() {
+      console.log('search');
+      const hashReg = /^0x([A-Fa-f0-9]{64})$/;
+      const blockReg = /^[0-9]+$/;
+      try {
+        if (hashReg.test(this.search)) {
+          console.log('hash: ', this.search);
+          this.$router.push(`transactions/${this.search}`);
+        } else if (blockReg.test(this.search)) {
+          console.log('block: ', this.search);
+          this.$router.push(`blocks/${this.search}`);
+        }
+      } catch (e) {
+        console.log('error: ', e);
+      }
+      // hash 66
+      // address 42
+      // block min 6
+    },
   },
 };
 </script>

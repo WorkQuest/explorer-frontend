@@ -3,10 +3,7 @@ export default () => ({
     count: 0,
     txs: [],
   },
-  txsByHash: {
-    count: 0,
-    txs: [],
-  },
+  txsByHash: {},
   txs: {
     count: 0,
     txs: [],
