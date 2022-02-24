@@ -6,7 +6,7 @@
       class="address__search_mobile"
       :is-search="true"
       :is-hide-error="true"
-      :placeholder="$t('ui.forms.searchPlaceholder')"
+      :placeholder="$tc('ui.forms.searchPlaceholder')"
     />
     <div class="address__header">
       <h4 class="address__title">
@@ -31,7 +31,7 @@
     <div class="address__txs">
       <table-txs
         class="address__table"
-        :title="$t('ui.txs')"
+        :title="$tc('ui.txs')"
         :items="txs"
         :fields="tableFields"
       />
