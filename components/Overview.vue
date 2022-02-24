@@ -9,11 +9,11 @@
     <div class="overview-wrap">
       <p class="overview__info">
         <span class="overview__title">{{ $t('ui.token.balance') }}</span>
-        {{ Floor(balanceWusd) }} {{ name }}
+        {{ Floor(balanceWusd) }} {{ symbol }}
       </p>
       <p class="overview__info">
-        <span class="overview__title">WUSD {{ $t('ui.tx.value') }}</span>
-        ${{ Floor(balanceWusd) }} (@ $1.00/{{ name }})
+        <span class="overview__title">{{ symbol }} {{ $t('ui.tx.value') }}</span>
+        ${{ Floor(balanceWusd) }} (@ $1.00/{{ symbol }})
       </p>
       <div class="overview__token">
         {{ $t('ui.token.token') }}
@@ -43,6 +43,9 @@ import { mapGetters } from 'vuex';
 import BigNumber from 'bignumber.js';
 import ChoiceToken from '~/components/ChoiceToken.vue';
 
+/** @param { Object } accountInfo */
+/** @param {{ string }} accountInfo.fetched_coin_balance */
+
 export default {
   name: 'Overview',
   components: {
@@ -56,7 +59,7 @@ export default {
       address: this.$route.params.id,
       isChoosing: false,
       decimals: process.env.BASE_TOKEN_DECIMALS,
-      name: process.env.BASE_TOKEN_NAME,
+      symbol: process.env.BASE_TOKEN_SYMBOL,
     };
   },
   computed: {
@@ -66,10 +69,6 @@ export default {
       accountBalancesCount: 'account/getAccountBalancesCount',
       accountInfo: 'account/getAccountInfo',
     }),
-    tokenName() {
-      // if (this.accountBalancesCount > 0) return this.accountBalances[0].tokenId.toUpperCase();
-      return '';
-    },
     balanceWusd() {
       if (this.accountBalancesCount > 0) {
         return new BigNumber(this.accountInfo.fetched_coin_balance).shiftedBy(-this.decimals);

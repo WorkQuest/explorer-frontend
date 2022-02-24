@@ -45,7 +45,7 @@
               :item="item.item"
             />
           </div>
-          <!-- logs       -->
+          <!-- logs -->
           <div
             v-if="tx && activeElement === 'logs'"
             class="txs__logs logs"
@@ -84,13 +84,13 @@
                 >
                   <template v-if="item.first_topic">
                     <p
-                      :key="index+'title'"
+                      :key="index+'_title'"
                       class="table__title"
                     >
                       {{ $t('ui.tx.topics') }}
                     </p>
                     <div
-                      :key="index+'topic'"
+                      :key="index+'_firstTopic'"
                       class="table__topic"
                     >
                       <div
@@ -108,7 +108,7 @@
                       </div>
                       <div
                         v-if="item.second_topic"
-                        :key="index+'topic'"
+                        :key="index+'_secondTopic'"
                         class="topic"
                       >
                         <p class="topic__index">
@@ -123,7 +123,7 @@
                       </div>
                       <div
                         v-if="item.third_topic"
-                        :key="index+'topic'"
+                        :key="index+'_thirdTopic'"
                         class="topic"
                       >
                         <p class="topic__index">
@@ -138,7 +138,7 @@
                       </div>
                       <div
                         v-if="item.fourth_topic"
-                        :key="index+'topic'"
+                        :key="index+'_fourthTopic'"
                         class="topic"
                       >
                         <p class="topic__index">
@@ -153,13 +153,13 @@
                       </div>
                     </div>
                     <p
-                      :key="index+'data'"
+                      :key="index+'_dataTitle'"
                       class="table__title"
                     >
                       {{ $t('ui.tx.data') }}
                     </p>
                     <div
-                      :key="index+'data'"
+                      :key="index+'_dataContent'"
                       class="table__data"
                     >
                       <div
@@ -263,19 +263,19 @@
       </div>
       <div class="overview__subtitle">
         {{ $t('ui.tx.amount') }}
-        <span class="overview__info">{{ tx.value }} {{ tx.symbol }}</span>
+        <span class="overview__info">{{ tx.value }} {{ symbol }}</span>
       </div>
       <div class="overview__subtitle  overview__subtitle_underlined">
         {{ $t('ui.tx.fee') }}
-        <span class="overview__info">{{ tx.gas_used }}</span>
+        <span class="overview__info">{{ fee }}</span>
       </div>
       <div class="overview__subtitle">
         {{ $t('ui.block.gasUsed') }}
-        <span class="overview__info">{{ tx.gas_used }}</span>
+        <span class="overview__info">{{ gasUsed }}</span>
       </div>
       <div class="overview__subtitle">
         {{ $t('ui.block.gasLimit') }}
-        <span class="overview__info">{{ tx.gas_limit }}</span>
+        <span class="overview__info">{{ gasLimit }}</span>
       </div>
     </div>
   </div>
@@ -301,6 +301,7 @@ export default {
       tabs: ['overview', 'logs'],
       activeElement: 'overview',
       search: '',
+      symbol: process.env.BASE_TOKEN_SYMBOL,
     };
   },
   computed: {
@@ -308,12 +309,19 @@ export default {
       tx: 'tx/getTxsByHash',
       isLoading: 'main/getIsLoading',
     }),
+    gasLimit() {
+      return Object.keys(this.tx).length > 0 && Object.keys(this.tx.block).length > 0 ? +this.tx.block.gas_limit : 0;
+    },
+    gasUsed() {
+      return Object.keys(this.tx).length > 0 ? +this.tx.gas_used : 0;
+    },
+    fee() {
+      return Object.keys(this.tx).length > 0 ? new BigNumber(this.tx.gas_price * this.gasUsed)
+        .shiftedBy(-18)
+        .toString() : 0;
+    },
     txsColumns() {
       if (Object.keys(this.tx).length > 0) {
-        const gasLimit = Object.keys(this.tx).length > 0 && Object.keys(this.tx.block).length > 0 ? +this.tx.block.gas_limit : 0;
-        const gasUsed = Object.keys(this.tx).length > 0 ? +this.tx.gas_used : 0;
-        const fee = Object.keys(this.tx).length > 0 ? new BigNumber(this.tx.gas_price * gasUsed).shiftedBy(-18)
-          .toString() : 0;
         return [
           {
             class: 'columns__item_six',
@@ -364,17 +372,17 @@ export default {
           {
             class: 'columns__item_four-one',
             title: this.$t('ui.block.gasLimit'),
-            info: gasLimit,
+            info: this.gasLimit,
           },
           {
             class: 'columns__item_four-two',
             title: this.$t('ui.tx.gasUsed'),
-            info: `${gasUsed} (${(gasUsed / gasLimit) * 100}%)`,
+            info: `${this.gasUsed} (${(this.gasUsed / this.gasLimit) * 100}%)`,
           },
           {
             class: 'columns__item_four-three',
             title: this.$t('ui.tx.feeFull'),
-            info: `${fee} WUSD`,
+            info: `${this.fee} WUSD`,
           },
         ];
       }

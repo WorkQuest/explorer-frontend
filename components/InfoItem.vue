@@ -26,7 +26,7 @@
       </nuxt-link>
     </p>
     <p
-      v-else-if="item === 'address'"
+      v-else-if="info && item === 'address'"
       class="item__info item__info_blue"
     >
       <nuxt-link

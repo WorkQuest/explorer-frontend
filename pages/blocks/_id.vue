@@ -80,7 +80,7 @@
             class="columns__link_small"
             :to="{ path: '/transactions', query: { block: currentBlock.number }}"
           >
-            {{ currentBlock.transactions.length }} txns
+            {{ Array.isArray(currentBlock.transactions) ? currentBlock.transactions.length : 0 }} txns
           </nuxt-link>
           <p class="columns__info_grey">
             {{ $t('ui.block.inThisBlock') }}
@@ -88,8 +88,7 @@
           <p class="columns__subtitle">
             {{ $t('ui.block.gasUsed') }}
             <span class="columns__info">
-              <!--        TODO: Вывести проценты -->
-              {{ currentBlock.gas_used }} (99,5%)
+              {{ currentBlock.gas_used }} ({{ (currentBlock.gas_used / currentBlock.gas_limit) * 100 }}%)
             </span>
           </p>
           <p class="columns__subtitle">
@@ -103,8 +102,11 @@
           <p class="columns__subtitle">
             {{ $t('ui.block.hash') }}
           </p>
-          <p class="columns__info">
+          <p class="columns__info columns__info_desktop">
             {{ currentBlock.hash }}
+          </p>
+          <p class="columns__info columns__info_mobile">
+            {{ formatItem(currentBlock.hash, 9, 6) }}
           </p>
         </div>
       </div>
@@ -114,6 +116,13 @@
 <script>
 import { mapGetters } from 'vuex';
 import BigNumber from 'bignumber.js';
+
+/** @param  { Object } currentBlock  */
+/** @param  {{ string }} currentBlock.size  */
+/** @param  {{ string }} currentBlock.gas_limit  */
+/** @param  {{ string }} currentBlock.gas_used  */
+/** @param  {{ array }} currentBlock.transactions  */
+/** @param  {{ string }} currentBlock.base_fee_per_gas  */
 
 BigNumber.config({ EXPONENTIAL_AT: 60 });
 
@@ -125,6 +134,7 @@ export default {
       limit: 10,
       offset: 0,
       index: 0,
+      symbol: process.env.BASE_TOKEN_SYMBOL,
     };
   },
   computed: {
@@ -133,26 +143,49 @@ export default {
       isLoading: 'main/getIsLoading',
     }),
     blockColumns() {
-      const fee = new BigNumber(this.currentBlock.base_fee_per_gas).multipliedBy(this.currentBlock.gas_used).shiftedBy(-18).toString();
-      return [
-        {
-          title: this.$t('ui.timestamp'),
-          info: this.formatDataFromNow(this.currentBlock.timestamp),
-          note: `(${this.$moment(this.currentBlock.timestamp).format('MMM-DD-YYYY HH:MM:SS A +UTC')})`,
-        },
-        {
-          title: this.$t('ui.txs'),
-          info: Array.isArray(this.currentBlock.transactions) ? this.currentBlock.transactions.length : 0,
-          note: this.$t('ui.block.inThisBlock'),
-          item: 'transaction',
-        },
-        // TODO Rewards
-        { title: this.$t('ui.block.reward'), info: `${fee} WUSD` },
-        { title: this.$t('ui.block.gasUsed'), info: this.currentBlock.gas_used },
-        { title: this.$t('ui.block.gasLimit'), info: this.NumberFormat(this.currentBlock.gas_limit) },
-        { title: this.$t('ui.block.size'), info: `${this.currentBlock.size} bytes` },
-        { title: this.$t('ui.block.hash'), info: this.currentBlock.hash },
-      ];
+      if (Object.keys(this.currentBlock).length > 0) {
+        const fee = new BigNumber(this.currentBlock.base_fee_per_gas).multipliedBy(this.currentBlock.gas_used)
+          .shiftedBy(-18)
+          .toString();
+        const gasUsed = `${this.currentBlock.gas_used} (${(this.currentBlock.gas_used / this.currentBlock.gas_limit) * 100}%)`;
+        const rewards = '...';
+        return [
+          {
+            title: this.$t('ui.timestamp'),
+            info: this.formatDataFromNow(this.currentBlock.timestamp),
+            note: `(${this.$moment(this.currentBlock.timestamp)
+              .format('MMM-DD-YYYY HH:MM:SS A +UTC')})`,
+          },
+          {
+            title: this.$t('ui.txs'),
+            info: Array.isArray(this.currentBlock.transactions) ? this.currentBlock.transactions.length : 0,
+            note: this.$t('ui.block.inThisBlock'),
+            item: 'transaction',
+          },
+          // TODO Rewards
+          {
+            title: this.$t('ui.block.reward'),
+            info: `${rewards} ${this.symbol}`,
+          },
+          {
+            title: this.$t('ui.block.gasUsed'),
+            info: gasUsed,
+          },
+          {
+            title: this.$t('ui.block.gasLimit'),
+            info: this.NumberFormat(this.currentBlock.gas_limit),
+          },
+          {
+            title: this.$t('ui.block.size'),
+            info: `${this.currentBlock.size} bytes`,
+          },
+          {
+            title: this.$t('ui.block.hash'),
+            info: this.currentBlock.hash,
+          },
+        ];
+      }
+      return [];
     },
     payload() {
       return {
@@ -332,6 +365,18 @@ export default {
         color: $black400;
         padding-bottom: 15px;
         border-bottom: 1px solid $black100;
+      }
+
+      &_desktop {
+        @include _767 {
+          display: none;
+        }
+      }
+      &_mobile {
+        display: none;
+        @include _767 {
+          display: block;
+        }
       }
     }
   }

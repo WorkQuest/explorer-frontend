@@ -87,6 +87,6 @@ export default {
   env: {
     BASE_URL: process.env.BASE_URL,
     BASE_TOKEN_DECIMALS: process.env.BASE_TOKEN_DECIMALS,
-    BASE_TOKEN_NAME: process.env.BASE_TOKEN_NAME,
+    BASE_TOKEN_SYMBOL: process.env.BASE_TOKEN_SYMBOL,
   },
 };
