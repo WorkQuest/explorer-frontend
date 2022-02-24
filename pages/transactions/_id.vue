@@ -309,40 +309,76 @@ export default {
       isLoading: 'main/getIsLoading',
     }),
     txsColumns() {
-      // if (this.isLoading) {
-      //   console.log('is loading');
-      //   return [];
-      // }
-
-      const fee = new BigNumber(this.tx.gas_price * this.tx.gas_price).shiftedBy(-18).toString();
-      const gasLimit = this.isLoading ? 0 : +this.tx.block.gas_limit;
-      const gasUsed = this.isLoading ? 0 : +this.tx.gas_used;
-      return [
-        { class: 'columns__item_six', title: this.$t('ui.tx.transactionFull'), info: this.tx.id },
-        {
-          class: 'columns__item_two-one',
-          title: this.$t('ui.timestamp'),
-          info: this.formatDataFromNow(this.tx.timestamp),
-          note: this.$moment(this.tx.timestamp).format('MMM-DD-YYYY HH:MM:SS A +UTC'),
-        },
-        {
-          class: 'columns__item_two-two', title: this.$t('ui.tx.status'), info: this.tx.status, item: 'status',
-        },
-        {
-          class: 'columns__item_two-three', title: this.$t('ui.block.block'), info: this.tx.block_number, item: 'link',
-        },
-        {
-          class: 'columns__item_three-one', title: this.$t('ui.tx.from'), info: this.tx.from_address_hash.hex, item: 'address',
-        },
-        {
-          class: 'columns__item_three-two', title: this.$t('ui.tx.to'), info: this.tx.to_address_hash ? this.tx.to_address_hash.hex : null, item: 'address',
-        },
-        { class: 'columns__item_three-one', title: this.$t('ui.tx.value'), info: this.NumberFormat(this.tx.value) },
-        { class: 'columns__item_three-two', title: this.$t('ui.tx.feeFull'), info: this.NumberFormat(this.tx.gas_price) },
-        { class: 'columns__item_four-one', title: this.$t('ui.block.gasLimit'), info: this.tx.block.gas_limit },
-        { class: 'columns__item_four-two', title: this.$t('ui.tx.gasUsed'), info: `${gasUsed} (${(gasUsed / gasLimit) * 100}%)` },
-        { class: 'columns__item_four-three', title: this.$t('ui.tx.feeFull'), info: `${fee} WUSD` },
-      ];
+      if (Object.keys(this.tx).length > 0) {
+        const gasLimit = Object.keys(this.tx).length > 0 && Object.keys(this.tx.block).length > 0 ? +this.tx.block.gas_limit : 0;
+        const gasUsed = Object.keys(this.tx).length > 0 ? +this.tx.gas_used : 0;
+        const fee = Object.keys(this.tx).length > 0 ? new BigNumber(this.tx.gas_price * gasUsed).shiftedBy(-18)
+          .toString() : 0;
+        return [
+          {
+            class: 'columns__item_six',
+            title: this.$t('ui.tx.transactionFull'),
+            info: this.tx.id,
+          },
+          {
+            class: 'columns__item_two-one',
+            title: this.$t('ui.timestamp'),
+            info: this.formatDataFromNow(this.tx.timestamp),
+            note: this.$moment(this.tx.timestamp)
+              .format('MMM-DD-YYYY HH:MM:SS A +UTC'),
+          },
+          {
+            class: 'columns__item_two-two',
+            title: this.$t('ui.tx.status'),
+            info: this.tx.status,
+            item: 'status',
+          },
+          {
+            class: 'columns__item_two-three',
+            title: this.$t('ui.block.block'),
+            info: this.tx.block_number,
+            item: 'link',
+          },
+          {
+            class: 'columns__item_three-one',
+            title: this.$t('ui.tx.from'),
+            info: this.tx.from_address_hash.hex,
+            item: 'address',
+          },
+          {
+            class: 'columns__item_three-two',
+            title: this.$t('ui.tx.to'),
+            info: this.tx.to_address_hash ? this.tx.to_address_hash.hex : null,
+            item: 'address',
+          },
+          {
+            class: 'columns__item_three-one',
+            title: this.$t('ui.tx.value'),
+            info: this.NumberFormat(this.tx.value),
+          },
+          {
+            class: 'columns__item_three-two',
+            title: this.$t('ui.tx.feeFull'),
+            info: this.NumberFormat(this.tx.gas_price),
+          },
+          {
+            class: 'columns__item_four-one',
+            title: this.$t('ui.block.gasLimit'),
+            info: gasLimit,
+          },
+          {
+            class: 'columns__item_four-two',
+            title: this.$t('ui.tx.gasUsed'),
+            info: `${gasUsed} (${(gasUsed / gasLimit) * 100}%)`,
+          },
+          {
+            class: 'columns__item_four-three',
+            title: this.$t('ui.tx.feeFull'),
+            info: `${fee} WUSD`,
+          },
+        ];
+      }
+      return [];
     },
     txsLogs() {
       return [
