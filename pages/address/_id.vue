@@ -75,6 +75,7 @@ export default {
       txs: 'tx/getTxsByAccount',
       txsCount: 'tx/getTxsByAccountCount',
       accountInfo: 'account/getAccountInfo',
+      wqtTokenData: 'main/getWQTTokenData',
     }),
     payload() {
       return {

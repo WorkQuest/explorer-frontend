@@ -30,6 +30,7 @@
       {{ $t('ui.txs') }}
       <nuxt-link
         class="block__link_small"
+        :class="block.transactions.length === 0 ? 'block__link_disabled' : ''"
         :to="{ path: '/transactions', query: { block: block.number }}"
       >
         {{ block.transactions.length }} txns
@@ -116,11 +117,16 @@ export default {
     margin-top: 11px;
   }
 
-  &__link_small {
-    @include text-simple;
-    @include normal-font-size;
-    @include link;
-    margin-left: 10px;
+  &__link {
+    &_small {
+      @include text-simple;
+      @include normal-font-size;
+      @include link;
+      margin-left: 10px;
+    }
+    &_disabled {
+      pointer-events: none;
+    }
   }
 
   &__info {

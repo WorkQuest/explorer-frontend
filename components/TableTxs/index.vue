@@ -67,7 +67,7 @@
         </nuxt-link>
       </template>
       <template #cell(value)="el">
-        <span>{{ Floor(cutValueData(el.item.value)) }} WUSD</span>
+        <span>{{ Floor(cutValueData(el.item.value)) }} {{ symbol }}</span>
       </template>
       <template #cell(gas_used)="el">
         <span class="table__grey">{{ el.item.gas_used }}</span>
@@ -122,7 +122,11 @@ export default {
   computed: {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
+      wqtTokenData: 'main/getWQTTokenData',
     }),
+    symbol() {
+      return Object.keys(this.wqtTokenData).length > 0 ? this.wqtTokenData.symbol : '';
+    },
   },
   methods: {
     cutValueData(value) {

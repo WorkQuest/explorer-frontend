@@ -301,14 +301,19 @@ export default {
       tabs: ['overview', 'logs'],
       activeElement: 'overview',
       search: '',
-      symbol: process.env.BASE_TOKEN_SYMBOL,
     };
   },
   computed: {
     ...mapGetters({
       tx: 'tx/getTxsByHash',
-      isLoading: 'main/getIsLoading',
+      wqtTokenData: 'main/getWQTTokenData',
     }),
+    symbol() {
+      return Object.keys(this.wqtTokenData).length > 0 ? this.wqtTokenData.symbol : 0;
+    },
+    decimals() {
+      return Object.keys(this.wqtTokenData).length > 0 ? this.wqtTokenData.decimals : 0;
+    },
     gasLimit() {
       return Object.keys(this.tx).length > 0 && Object.keys(this.tx.block).length > 0 ? +this.tx.block.gas_limit : 0;
     },
@@ -317,7 +322,7 @@ export default {
     },
     fee() {
       return Object.keys(this.tx).length > 0 ? new BigNumber(this.tx.gas_price * this.gasUsed)
-        .shiftedBy(-18)
+        .shiftedBy(-this.decimals)
         .toString() : 0;
     },
     txsColumns() {
@@ -382,7 +387,7 @@ export default {
           {
             class: 'columns__item_four-three',
             title: this.$t('ui.tx.feeFull'),
-            info: `${this.fee} WUSD`,
+            info: `${this.fee} ${this.symbol}`,
           },
         ];
       }

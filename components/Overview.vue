@@ -1,7 +1,6 @@
 <template>
   <div class="overview">
     <div class="overview-wrap">
-      <!--  TODO: Вывести реальные данные -->
       <p class="overview__header">
         {{ $t('ui.token.overview') }}
       </p>
@@ -9,11 +8,11 @@
     <div class="overview-wrap">
       <p class="overview__info">
         <span class="overview__title">{{ $t('ui.token.balance') }}</span>
-        {{ Floor(balanceWusd) }} {{ symbol }}
+        {{ Floor(balanceWQT) }} {{ symbol }}
       </p>
       <p class="overview__info">
         <span class="overview__title">{{ symbol }} {{ $t('ui.tx.value') }}</span>
-        ${{ Floor(balanceWusd) }} (@ $1.00/{{ symbol }})
+        ${{ Floor(balanceWQT) }} (@ $1.00/{{ symbol }})
       </p>
       <div class="overview__token">
         {{ $t('ui.token.token') }}
@@ -58,8 +57,6 @@ export default {
     return {
       address: this.$route.params.id,
       isChoosing: false,
-      decimals: process.env.BASE_TOKEN_DECIMALS,
-      symbol: process.env.BASE_TOKEN_SYMBOL,
     };
   },
   computed: {
@@ -68,8 +65,15 @@ export default {
       accountBalances: 'account/getAccountBalances',
       accountBalancesCount: 'account/getAccountBalancesCount',
       accountInfo: 'account/getAccountInfo',
+      wqtTokenData: 'main/getWQTTokenData',
     }),
-    balanceWusd() {
+    symbol() {
+      return Object.keys(this.wqtTokenData).length > 0 ? this.wqtTokenData.symbol : '';
+    },
+    decimals() {
+      return Object.keys(this.wqtTokenData).length > 0 ? this.wqtTokenData.decimals : 0;
+    },
+    balanceWQT() {
       if (this.accountBalancesCount > 0) {
         return new BigNumber(this.accountInfo.fetched_coin_balance).shiftedBy(-this.decimals);
       }

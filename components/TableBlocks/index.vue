@@ -37,11 +37,12 @@
         <span>{{ formatDataFromNow(el.item.timestamp) }}</span>
       </template>
       <template #cell(reward)="el">
-        <span>{{ +el.item.base_fee_per_gas * +el.item.gas_used }} WUSD</span>
+        <span>{{ +el.item.base_fee_per_gas * +el.item.gas_used }} {{ symbol }}</span>
       </template>
       <template #cell(transactions)="el">
         <nuxt-link
           class="table__link"
+          :class="el.item.transactions.length === 0 ? 'table__link_disabled' : ''"
           :to="{ path: '/transactions', query: { block: el.item.number }}"
         >
           {{ Array.isArray(el.item.transactions) ? el.item.transactions.length : '' }}
@@ -51,7 +52,7 @@
         <span>{{ el.item.gas_used }} </span>
       </template>
       <template #cell(reward)="el">
-        <span>{{ +el.item.base_fee_per_gas * +el.item.gas_used }} WUSD</span>
+        <span>{{ +el.item.base_fee_per_gas * +el.item.gas_used }} {{ symbol }}</span>
       </template>
     </b-table>
   </div>
@@ -96,7 +97,11 @@ export default {
   computed: {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
+      wqtTokenData: 'main/getWQTTokenData',
     }),
+    symbol() {
+      return Object.keys(this.wqtTokenData).length > 0 ? this.wqtTokenData.symbol : '';
+    },
   },
 };
 </script>

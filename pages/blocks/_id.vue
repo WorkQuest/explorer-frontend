@@ -134,18 +134,24 @@ export default {
       limit: 10,
       offset: 0,
       index: 0,
-      symbol: process.env.BASE_TOKEN_SYMBOL,
     };
   },
   computed: {
     ...mapGetters({
       currentBlock: 'blocks/getCurrentBlock',
       isLoading: 'main/getIsLoading',
+      wqtTokenData: 'main/getWQTTokenData',
     }),
+    symbol() {
+      return Object.keys(this.wqtTokenData).length > 0 ? this.wqtTokenData.symbol : 0;
+    },
+    decimals() {
+      return Object.keys(this.wqtTokenData).length > 0 ? this.wqtTokenData.decimals : 0;
+    },
     blockColumns() {
       if (Object.keys(this.currentBlock).length > 0) {
         const fee = new BigNumber(this.currentBlock.base_fee_per_gas).multipliedBy(this.currentBlock.gas_used)
-          .shiftedBy(-18)
+          .shiftedBy(-this.decimals)
           .toString();
         const gasUsed = `${this.currentBlock.gas_used} (${(this.currentBlock.gas_used / this.currentBlock.gas_limit) * 100}%)`;
         const rewards = '...';

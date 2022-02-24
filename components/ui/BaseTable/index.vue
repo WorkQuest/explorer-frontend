@@ -51,11 +51,12 @@
       </template>
       <!-- blocks -->
       <template #cell(reward)="el">
-        <span>{{ +el.item.base_fee_per_gas * +el.item.gas_used }} WUSD</span>
+        <span>{{ +el.item.base_fee_per_gas * +el.item.gas_used }} {{ symbol }}</span>
       </template>
       <template #cell(transactions)="el">
         <nuxt-link
           class="table__link"
+          :class="el.item.transactions.length === 0 ? 'table__link_disabled' : ''"
           :to="{ path: '/transactions', query: { block: el.item.number }}"
         >
           {{ Array.isArray(el.item.transactions) ? el.item.transactions.length : '' }} txns
@@ -96,7 +97,7 @@
         </nuxt-link>
       </template>
       <template #cell(value)="el">
-        <span>{{ Floor(cutValueData(el.item.value)) }} WUSD</span>
+        <span>{{ Floor(cutValueData(el.item.value)) }} {{ symbol }}</span>
       </template>
       <template #cell(status)="el">
         <span
@@ -150,7 +151,11 @@ export default {
   computed: {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
+      wqtTokenData: 'main/getWQTTokenData',
     }),
+    symbol() {
+      return Object.keys(this.wqtTokenData).length > 0 ? this.wqtTokenData.symbol : '';
+    },
   },
   methods: {
     async toPage() {
@@ -192,6 +197,10 @@ export default {
 
     &:hover {
       color: $blue;
+    }
+
+    &_disabled {
+      pointer-events: none;
     }
   }
 

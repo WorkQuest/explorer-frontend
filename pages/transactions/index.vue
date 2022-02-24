@@ -75,7 +75,7 @@ export default {
     }),
     isLast() {
       if (this.query) {
-        return this.currentBlock.txs.forEach((i) => i === this.currentBlock.txs[this.currentBlock.txs.length - 1]);
+        return Object.keys(this.currentBlock).length > 0 ? this.currentBlock.transactions.forEach((i) => i === this.currentBlock.transactions[this.currentBlock.transactions.length - 1]) : true;
       }
       return this.txs.forEach((i) => i === this.txs[this.txs.length - 1]);
     },
@@ -83,8 +83,7 @@ export default {
       return this.$route.query.block;
     },
     txsTable() {
-      if (this.query) return this.currentBlock.txs;
-      return this.txs;
+      return this.query && Object.keys(this.currentBlock).length > 0 ? this.currentBlock.transactions : this.txs;
     },
     payload() {
       return {
@@ -93,7 +92,11 @@ export default {
       };
     },
     totalPages() {
-      return Math.ceil(this.query ? this.currentBlock.txs.length : this.txsCount / this.limit);
+      return Object.keys(this.currentBlock).length > 0
+        ? Math.ceil(this.query && Array.isArray(this.currentBlock.transactions)
+          ? this.currentBlock.transactions.length
+          : this.txsCount / this.limit)
+        : 0;
     },
     tableHeaders() {
       return [
@@ -117,8 +120,11 @@ export default {
   },
   async mounted() {
     await this.SetLoader(true);
-    if (this.query) await this.$store.dispatch('blocks/getBlockById', this.$route.query.block);
-    if (!this.query) await this.$store.dispatch('tx/getTxs', this.payload);
+    if (this.query) {
+      await this.$store.dispatch('blocks/getBlockById', this.$route.query.block);
+    } else {
+      await this.$store.dispatch('tx/getTxs', this.payload);
+    }
     await this.SetLoader(false);
   },
 };
