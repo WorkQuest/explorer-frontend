@@ -151,11 +151,9 @@ export default {
   computed: {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
-      wusdTokenData: 'main/getWUSDTokenData',
+      symbol: 'main/getWUSDTokenSymbol',
+      decimals: 'main/getWUSDTokenDecimals',
     }),
-    symbol() {
-      return Object.keys(this.wusdTokenData).length > 0 ? this.wusdTokenData.symbol : '';
-    },
   },
   methods: {
     async toPage() {
@@ -163,7 +161,7 @@ export default {
       if (this.type) await this.$router.push(`/${this.type}`);
     },
     cutValueData(value) {
-      return new BigNumber(value).shiftedBy(-18).toString();
+      return new BigNumber(value).shiftedBy(-this.decimals).toString();
     },
   },
 };

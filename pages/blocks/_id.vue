@@ -138,14 +138,9 @@ export default {
     ...mapGetters({
       currentBlock: 'blocks/getCurrentBlock',
       isLoading: 'main/getIsLoading',
-      wusdTokenData: 'main/getWUSDTokenData',
+      symbol: 'main/getWUSDTokenSymbol',
+      decimals: 'main/getWUSDTokenDecimals',
     }),
-    symbol() {
-      return Object.keys(this.wusdTokenData).length > 0 ? this.wusdTokenData.symbol : 0;
-    },
-    decimals() {
-      return Object.keys(this.wusdTokenData).length > 0 ? this.wusdTokenData.decimals : 0;
-    },
     blockColumns() {
       if (Object.keys(this.currentBlock).length > 0) {
         const fee = new BigNumber(this.currentBlock.base_fee_per_gas).multipliedBy(this.currentBlock.gas_used)

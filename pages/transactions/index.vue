@@ -75,7 +75,10 @@ export default {
     }),
     isLast() {
       if (this.query) {
-        return Object.keys(this.currentBlock).length > 0 ? this.currentBlock.transactions.forEach((i) => i === this.currentBlock.transactions[this.currentBlock.transactions.length - 1]) : true;
+        return Object.keys(this.currentBlock).length > 0 && this.currentBlock?.transactions
+          ? this.currentBlock.transactions
+            .forEach((i) => i === this.currentBlock.transactions[this.currentBlock.transactions.length - 1])
+          : true;
       }
       return this.txs.forEach((i) => i === this.txs[this.txs.length - 1]);
     },
@@ -83,7 +86,9 @@ export default {
       return this.$route.query.block;
     },
     txsTable() {
-      return this.query && Object.keys(this.currentBlock).length > 0 ? this.currentBlock.transactions : this.txs;
+      return this.query && Object.keys(this.currentBlock).length > 0
+        ? this.currentBlock.transactions
+        : this.txs;
     },
     payload() {
       return {
@@ -93,7 +98,9 @@ export default {
     },
     totalPages() {
       if (Object.keys(this.currentBlock).length > 0) {
-        return this.query && Array.isArray(this.currentBlock.transactions) ? Math.ceil(this.currentBlock.transactions.length / this.limit) : 0;
+        return this.query && Array.isArray(this.currentBlock.transactions)
+          ? Math.ceil(this.currentBlock.transactions.length / this.limit)
+          : 0;
       }
       return Math.ceil(this.txsCount / this.limit);
     },

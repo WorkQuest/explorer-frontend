@@ -65,14 +65,9 @@ export default {
       accountBalances: 'account/getAccountBalances',
       accountBalancesCount: 'account/getAccountBalancesCount',
       accountInfo: 'account/getAccountInfo',
-      wusdTokenData: 'main/getWUSDTokenData',
+      symbol: 'main/getWUSDTokenSymbol',
+      decimals: 'main/getWUSDTokenDecimals',
     }),
-    symbol() {
-      return Object.keys(this.wusdTokenData).length > 0 ? this.wusdTokenData.symbol : '';
-    },
-    decimals() {
-      return Object.keys(this.wusdTokenData).length > 0 ? this.wusdTokenData.decimals : 0;
-    },
     balanceWUSD() {
       if (this.accountBalancesCount > 0) {
         return new BigNumber(this.accountInfo.fetched_coin_balance).shiftedBy(-this.decimals);

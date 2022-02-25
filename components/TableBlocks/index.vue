@@ -97,11 +97,8 @@ export default {
   computed: {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
-      wusdTokenData: 'main/getWUSDTokenData',
+      symbol: 'main/getWUSDTokenSymbol',
     }),
-    symbol() {
-      return Object.keys(this.wusdTokenData).length > 0 ? this.wusdTokenData.symbol : '';
-    },
   },
 };
 </script>

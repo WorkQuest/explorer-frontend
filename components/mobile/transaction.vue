@@ -41,12 +41,12 @@
       <span class="transaction__info">{{ transaction.method }}</span>
     </div>
     <div
-      v-if="transaction.from_address_hash && Object.keys(transaction.from_address_hash).length > 0"
+      v-if="isFromAddressExist"
       class="transaction__subtitle"
     >
       {{ $t('ui.tx.from') }}
       <nuxt-link
-        v-if="transaction.from_address_hash && transaction.from_address_hash.hex"
+        v-if="transaction.from_address_hash.hex"
         class="transaction__link_small"
         :to="`/address/${transaction.from_address_hash.hex}`"
       >
@@ -66,12 +66,12 @@
       </nuxt-link>
     </div>
     <div
-      v-if="transaction.to_address_hash && Object.keys(transaction.to_address_hash).length > 0"
+      v-if="isToAddressExist"
       class="transaction__subtitle"
     >
       {{ $t('ui.tx.to') }}
       <nuxt-link
-        v-if="transaction.to_address_hash && transaction.to_address_hash.hex"
+        v-if="transaction.to_address_hash.hex"
         class="transaction__link_small"
         :to="`/address/${transaction.to_address_hash.hex}`"
       >
@@ -150,6 +150,14 @@ export default {
     internal: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    isToAddressExist() {
+      return this.transaction.to_address_hash && Object.keys(this.transaction.to_address_hash).length > 0;
+    },
+    isFromAddressExist() {
+      return this.transaction.from_address_hash && Object.keys(this.transaction.from_address_hash).length > 0;
     },
   },
 };

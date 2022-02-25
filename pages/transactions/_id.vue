@@ -297,16 +297,11 @@ export default {
   computed: {
     ...mapGetters({
       tx: 'tx/getTxsByHash',
-      wusdTokenData: 'main/getWUSDTokenData',
+      symbol: 'main/getWUSDTokenSymbol',
+      decimals: 'main/getWUSDTokenDecimals',
     }),
-    symbol() {
-      return Object.keys(this.wusdTokenData).length > 0 ? this.wusdTokenData.symbol : 0;
-    },
-    decimals() {
-      return Object.keys(this.wusdTokenData).length > 0 ? this.wusdTokenData.decimals : 0;
-    },
     gasLimit() {
-      return Object.keys(this.tx).length > 0 && Object.keys(this.tx.block).length > 0 ? +this.tx.block.gas_limit : 0;
+      return Object.keys(this.tx).length > 0 && Object.keys(this.tx.block).length > 0 ? +this.tx.block?.gas_limit : 0;
     },
     gasUsed() {
       return Object.keys(this.tx).length > 0 ? +this.tx.gas_used : 0;
