@@ -301,15 +301,15 @@ export default {
       decimals: 'main/getWUSDTokenDecimals',
     }),
     gasLimit() {
-      return Object.keys(this.tx).length > 0 && Object.keys(this.tx.block).length > 0 ? +this.tx.block?.gas_limit : 0;
+      return +this.tx?.block?.gas_limit || 0;
     },
     gasUsed() {
-      return Object.keys(this.tx).length > 0 ? +this.tx.gas_used : 0;
+      return +this.tx?.gas_used || 0;
     },
     fee() {
-      return Object.keys(this.tx).length > 0 ? new BigNumber(this.tx.gas_price * this.gasUsed)
+      return new BigNumber(this.tx.gas_price * this.gasUsed)
         .shiftedBy(-this.decimals)
-        .toString() : 0;
+        .toString();
     },
     txsColumns() {
       if (Object.keys(this.tx).length > 0) {
