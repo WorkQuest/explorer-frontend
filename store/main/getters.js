@@ -5,6 +5,5 @@ export default {
   getLoaderProgress: (state) => state.loaderProgress,
   getProjects: (state) => state.projects,
   getIsLoaderBackgroundHider: (state) => state.isLoaderBackgroundHider,
-  getWQTTokenData: (state) => state.wqt,
   getWUSDTokenData: (state) => state.wusd,
 };

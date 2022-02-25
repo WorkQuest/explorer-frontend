@@ -1,7 +1,5 @@
 import loaderModes from '~/store/main/loaderModes';
 
-const { WQT_TOKEN_ADDRESS } = process.env;
-
 export default {
   setLoading({ commit }, value) {
     commit('setLoading', value);
@@ -36,10 +34,5 @@ export default {
       toaster: 'b-toaster-bottom-right',
       appendToast: true,
     });
-  },
-  async getWQTTokenData({ commit }) {
-    const response = await this.$axios.$get(`/token/${WQT_TOKEN_ADDRESS}`);
-    commit('setWqtTokenData', response.result);
-    return response;
   },
 };

@@ -11,5 +11,4 @@ export default () => ({
     symbol: 'WUSD',
     decimals: 18,
   },
-  wqt: {},
 });

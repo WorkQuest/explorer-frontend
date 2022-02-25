@@ -86,6 +86,5 @@ export default {
   },
   env: {
     BASE_URL: process.env.BASE_URL,
-    WQT_TOKEN_ADDRESS: process.env.WQT_TOKEN_ADDRESS,
   },
 };

@@ -249,11 +249,10 @@ export default {
       ];
     },
   },
-  async mounted() {
+  mounted() {
     this.currentLocale = this.$i18n.locale;
     this.locales = this.$i18n.locales;
     moment.locale(this.currentLocale);
-    await this.tokenData();
   },
   methods: {
     toRoute(path) {
@@ -337,9 +336,6 @@ export default {
     setLocale(item) {
       this.currentLocale = item;
       this.changeLocale();
-    },
-    async tokenData() {
-      await this.$store.dispatch('main/getWQTTokenData');
     },
   },
 };
