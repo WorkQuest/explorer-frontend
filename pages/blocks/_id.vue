@@ -27,19 +27,19 @@
           <button
             :disabled="isLoading"
             type="button"
-            @click="changeBlock(currentBlock.id - 1)"
+            @click="changeBlock(+currentBlock.number - 1)"
           >
             <span class="icon-caret_left" />
             <span class="block__block">{{ $t('ui.block.block') }}</span>
           </button>
           <span
-            v-if="currentBlock.id"
+            v-if="currentBlock.number"
             class="block__number"
-          >#{{ currentBlock.id }}</span>
+          >#{{ currentBlock.number }}</span>
           <button
             type="button"
             :disabled="isLoading"
-            @click="changeBlock(currentBlock.id + 1)"
+            @click="changeBlock(+currentBlock.number + 1)"
           >
             <span class="icon-caret_right" />
           </button>
@@ -78,9 +78,9 @@
           </p>
           <nuxt-link
             class="columns__link_small"
-            :to="{ path: '/transactions', query: { block: currentBlock.id }}"
+            :to="{ path: '/transactions', query: { block: currentBlock.number }}"
           >
-            {{ currentBlock.txsCount }} txns
+            {{ Array.isArray(currentBlock.transactions) ? currentBlock.transactions.length : 0 }} txns
           </nuxt-link>
           <p class="columns__info_grey">
             {{ $t('ui.block.inThisBlock') }}
@@ -88,13 +88,12 @@
           <p class="columns__subtitle">
             {{ $t('ui.block.gasUsed') }}
             <span class="columns__info">
-              <!--        TODO: Вывести проценты -->
-              {{ currentBlock.gasUsed }} (99,5%)
+              {{ currentBlock.gas_used }} ({{ (currentBlock.gas_used / currentBlock.gas_limit) * 100 }}%)
             </span>
           </p>
           <p class="columns__subtitle">
             {{ $t('ui.block.gasLimit') }}
-            <span class="columns__info">{{ currentBlock.gasLimit }}</span>
+            <span class="columns__info">{{ currentBlock.gas_limit }}</span>
           </p>
           <p class="columns__subtitle">
             {{ $t('ui.block.size') }}
@@ -103,8 +102,11 @@
           <p class="columns__subtitle">
             {{ $t('ui.block.hash') }}
           </p>
-          <p class="columns__info">
+          <p class="columns__info columns__info_desktop">
             {{ currentBlock.hash }}
+          </p>
+          <p class="columns__info columns__info_mobile">
+            {{ formatItem(currentBlock.hash, 9, 6) }}
           </p>
         </div>
       </div>
@@ -113,6 +115,14 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import BigNumber from 'bignumber.js';
+
+/** @param  { Object } currentBlock  */
+/** @param  {{ string }} currentBlock.size  */
+/** @param  {{ string }} currentBlock.gas_limit  */
+/** @param  {{ string }} currentBlock.gas_used  */
+/** @param  {{ array }} currentBlock.transactions  */
+/** @param  {{ string }} currentBlock.base_fee_per_gas  */
 
 export default {
   name: 'Block',
@@ -128,26 +138,53 @@ export default {
     ...mapGetters({
       currentBlock: 'blocks/getCurrentBlock',
       isLoading: 'main/getIsLoading',
+      symbol: 'main/getWUSDTokenSymbol',
+      decimals: 'main/getWUSDTokenDecimals',
     }),
     blockColumns() {
-      return [
-        {
-          title: this.$t('ui.timestamp'),
-          info: this.formatDataFromNow(this.currentBlock.timestamp),
-          note: `(${this.$moment(this.currentBlock.timestamp).format('MMM-DD-YYYY HH:MM:SS A +UTC')})`,
-        },
-        {
-          title: this.$t('ui.txs'),
-          info: this.currentBlock.txsCount,
-          note: this.$t('ui.block.inThisBlock'),
-          item: 'transaction',
-        },
-        { title: this.$t('ui.block.reward'), info: '0.316538333801617818 MATIC' },
-        { title: this.$t('ui.block.gasUsed'), info: this.currentBlock.gasUsed },
-        { title: this.$t('ui.block.gasLimit'), info: this.NumberFormat(this.currentBlock.gasLimit) },
-        { title: this.$t('ui.block.size'), info: `${this.currentBlock.size} bytes` },
-        { title: this.$t('ui.block.hash'), info: this.currentBlock.hash },
-      ];
+      if (Object.keys(this.currentBlock).length > 0) {
+        const fee = new BigNumber(this.currentBlock.base_fee_per_gas).multipliedBy(this.currentBlock.gas_used)
+          .shiftedBy(-this.decimals)
+          .toString();
+        const gasUsed = `${this.currentBlock.gas_used} (${(this.currentBlock.gas_used / this.currentBlock.gas_limit) * 100}%)`;
+        const rewards = '...';
+        return [
+          {
+            title: this.$t('ui.timestamp'),
+            info: this.formatDataFromNow(this.currentBlock.timestamp),
+            note: `(${this.$moment(this.currentBlock.timestamp)
+              .format('MMM-DD-YYYY HH:MM:SS A +UTC')})`,
+          },
+          {
+            title: this.$t('ui.txs'),
+            info: Array.isArray(this.currentBlock.transactions) ? this.currentBlock.transactions.length : 0,
+            note: this.$t('ui.block.inThisBlock'),
+            item: 'transaction',
+          },
+          // TODO Rewards
+          {
+            title: this.$t('ui.block.reward'),
+            info: `${rewards} ${this.symbol}`,
+          },
+          {
+            title: this.$t('ui.block.gasUsed'),
+            info: gasUsed,
+          },
+          {
+            title: this.$t('ui.block.gasLimit'),
+            info: this.NumberFormat(this.currentBlock.gas_limit),
+          },
+          {
+            title: this.$t('ui.block.size'),
+            info: `${this.currentBlock.size} bytes`,
+          },
+          {
+            title: this.$t('ui.block.hash'),
+            info: this.currentBlock.hash,
+          },
+        ];
+      }
+      return [];
     },
     payload() {
       return {
@@ -161,6 +198,9 @@ export default {
     await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
     await this.SetLoader(false);
   },
+  beforeDestroy() {
+    this.$store.commit('blocks/resetBlock');
+  },
   methods: {
     async changeBlock(blockId) {
       await this.SetLoader(true);
@@ -171,6 +211,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+
 .block {
   @include container;
   transition: .5s ease-in;
@@ -250,6 +291,11 @@ export default {
 
 .columns {
   display: none;
+  &__info {
+    &_mobile {
+      display: none;
+    }
+  }
 }
 
 @include _767 {
@@ -281,6 +327,15 @@ export default {
   .columns {
     padding: 20px 0;
     display: block;
+
+    &__info {
+      &_desktop {
+        display: none;
+      }
+      &_mobile {
+          display: block;
+      }
+    }
 
     &__separator {
       border: none;
@@ -328,4 +383,5 @@ export default {
     }
   }
 }
+
 </style>

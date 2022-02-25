@@ -5,20 +5,24 @@
         <h3 class="home__title">
           {{ $t('home.title') }}
         </h3>
-        <search-filter class="home__search" />
+        <search-filter
+          class="home__search"
+          @onInput="onSearchInput"
+          @searchClicked="searchHandler"
+        />
         <base-field
           v-model="search"
           class="home__search_mobile"
           :is-search="true"
           :is-hide-error="true"
-          :placeholder="$t('ui.forms.searchPlaceholder')"
+          :placeholder="$tc('ui.forms.searchPlaceholder')"
         />
       </div>
     </div>
     <div class="home__content home__content_mobile">
       <base-table
-        :title="$t('ui.latestBlocks')"
-        :headerlink="$t('ui.allBlocks')"
+        :title="$tc('ui.latestBlocks')"
+        :headerlink="$tc('ui.allBlocks')"
         type="blocks"
         class="home__table"
         :items="blocks"
@@ -45,9 +49,9 @@
     </div>
     <div class="home__content home__content_mobile">
       <base-table
-        :title="$t('ui.latestTxs')"
+        :title="$tc('ui.latestTxs')"
         :items="txs"
-        :headerlink="$t('ui.allTxs')"
+        :headerlink="$tc('ui.allTxs')"
         type="transactions"
         class="home__table"
         :fields="tableHeadersTxs"
@@ -76,6 +80,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import Web3 from 'web3';
 
 export default {
   name: 'Home',
@@ -83,7 +88,7 @@ export default {
   data() {
     return {
       search: '',
-      limit: 2,
+      limit: 5,
       offset: 0,
     };
   },
@@ -103,17 +108,17 @@ export default {
     },
     tableHeadersBlocks() {
       return [
-        { key: 'id', label: this.$t('ui.block.blockNumber'), sortable: true },
+        { key: 'number', label: this.$t('ui.block.blockNumber'), sortable: true },
         { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'txsCount', label: this.$t('ui.block.txsCount'), sortable: true },
+        { key: 'transactions', label: this.$t('ui.block.txsCount'), sortable: true },
         { key: 'reward', label: this.$t('ui.block.reward'), sortable: true },
       ];
     },
     tableHeadersTxs() {
       return [
         { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true },
+        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
+        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
         { key: 'value', label: this.$t('ui.tx.amount'), sortable: true },
       ];
     },
@@ -123,6 +128,26 @@ export default {
     await this.$store.dispatch('blocks/getBlocks', this.payload);
     await this.$store.dispatch('tx/getTxs', this.payload);
     await this.SetLoader(false);
+  },
+  methods: {
+    onSearchInput(e) {
+      this.search = e;
+    },
+    searchHandler() {
+      const hashReg = /^0x([A-Fa-f0-9]{64})$/;
+      const blockReg = /^[0-9]+$/;
+      try {
+        if (hashReg.test(this.search)) {
+          this.$router.push(`transactions/${this.search}`);
+        } else if (blockReg.test(this.search)) {
+          this.$router.push(`blocks/${this.search}`);
+        } else if (Web3.utils.isAddress(this.search)) {
+          this.$router.push(`address/${this.search}`);
+        }
+      } catch (e) {
+        console.log('error: ', e);
+      }
+    },
   },
 };
 </script>
@@ -155,6 +180,7 @@ export default {
     font-weight: 600;
     font-size: 34px;
     color: $white;
+    font-family: 'Inter', sans-serif;
   }
 
   &__header-button {

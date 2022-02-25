@@ -38,24 +38,33 @@
           {{ el.item.id }}
         </nuxt-link>
       </template>
+      <template #cell(number)="el">
+        <nuxt-link
+          class="table__link"
+          :to="`/blocks/${el.item.number}`"
+        >
+          {{ el.item.number }}
+        </nuxt-link>
+      </template>
       <template #cell(timestamp)="el">
         <span>{{ formatDataFromNow(el.item.timestamp) }}</span>
       </template>
       <!-- blocks -->
       <template #cell(reward)="el">
-        <span>{{ el.item.size }} {{ el.item.symbol }}</span>
+        <span>{{ +el.item.base_fee_per_gas * +el.item.gas_used }} {{ symbol }}</span>
       </template>
-      <template #cell(txsCount)="el">
+      <template #cell(transactions)="el">
         <nuxt-link
           class="table__link"
-          :to="{ path: '/transactions', query: { block: el.item.id }}"
+          :class="el.item.transactions.length === 0 ? 'table__link_disabled' : ''"
+          :to="{ path: '/transactions', query: { block: el.item.number }}"
         >
-          {{ el.item.txsCount }} txns
+          {{ Array.isArray(el.item.transactions) ? el.item.transactions.length : '' }} txns
         </nuxt-link>
       </template>
-      <template #cell(gasUsed)="el">
-        <span>{{ el.item.gasUsed }} </span>
-        <span class="table__grey">95,5%</span>
+      <template #cell(gas_used)="el">
+        <span>{{ el.item.gas_used }} </span>
+        <span class="table__grey">{{ `(${((el.item.gas_used / el.item.gas_limit) * 100).toFixed(2)}%)` }}</span>
       </template>
       <!-- transaction -->
       <template #cell(hash)="el">
@@ -70,24 +79,25 @@
           class="table__grey"
         >{{ formatDataFromNow(el.item.timestamp) }}</span>
       </template>
-      <template #cell(fromAddress)="el">
+      <template #cell(from_address_hash.hex)="el">
         <nuxt-link
           class="table__link"
-          :to="`/address/${el.item.fromAddress}`"
+          :to="`/address/${el.item.from_address_hash.hex}`"
         >
-          {{ formatItem(el.item.fromAddress, 9, 6) }}
+          {{ formatItem(el.item.from_address_hash.hex, 9, 6) }}
         </nuxt-link>
       </template>
-      <template #cell(toAddress)="el">
+      <template #cell(to_address_hash.hex)="el">
         <nuxt-link
+          v-if="el.item.to_address_hash"
           class="table__link"
-          :to="`/address/${el.item.toAddress}`"
+          :to="`/address/${el.item.to_address_hash.hex}`"
         >
-          {{ formatItem(el.item.toAddress, 9, 6) }}
+          {{ formatItem(el.item.to_address_hash.hex, 9, 6) }}
         </nuxt-link>
       </template>
       <template #cell(value)="el">
-        <span>{{ Floor(cutValueData(el.item.value)) }} WUSD</span>
+        <span>{{ Floor(cutValueData(el.item.value)) }} {{ symbol }}</span>
       </template>
       <template #cell(status)="el">
         <span
@@ -106,6 +116,14 @@
 <script>
 import { mapGetters } from 'vuex';
 import BigNumber from 'bignumber.js';
+
+/** @param {array} items[] */
+/** @param {Object} item */
+/** @param {string} item.gas_used  */
+/** @param {number} item.block_number  */
+/** @param {array} item.transactions  */
+/** @param {{ hex: string, bech32: string }=} [item.to_address_hash]  */
+/** @param {{ hex: string, bech32: string }} item.from_address_hash  */
 
 export default {
   props: {
@@ -133,6 +151,8 @@ export default {
   computed: {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
+      symbol: 'main/getWUSDTokenSymbol',
+      decimals: 'main/getWUSDTokenDecimals',
     }),
   },
   methods: {
@@ -141,7 +161,7 @@ export default {
       if (this.type) await this.$router.push(`/${this.type}`);
     },
     cutValueData(value) {
-      return new BigNumber(value).shiftedBy(-18).toString();
+      return new BigNumber(value).shiftedBy(-this.decimals).toString();
     },
   },
 };
@@ -176,6 +196,10 @@ export default {
     &:hover {
       color: $blue;
     }
+
+    &_disabled {
+      pointer-events: none;
+    }
   }
 
   &__success {
@@ -199,9 +223,13 @@ export default {
     @include text-simple;
     @include normal-font-size;
     background: rgba(0, 131, 199, 0.1);
+    font-weight: 500;
     height: 27px;
     color: $blue;
     word-break: break-word;
+    & > tr > th {
+      font-weight: 500;
+    }
   }
 }
 

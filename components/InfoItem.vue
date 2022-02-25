@@ -20,13 +20,13 @@
     >
       <nuxt-link
         class="item__link"
-        :to="{ path: '/transactions', query: { block: currentBlock.id }}"
+        :to="{ path: '/transactions', query: { block: currentBlock.number }}"
       >
         {{ info }} {{ $t('ui.txs') }}
       </nuxt-link>
     </p>
     <p
-      v-else-if="item === 'address'"
+      v-else-if="info && item === 'address'"
       class="item__info item__info_blue"
     >
       <nuxt-link
@@ -90,10 +90,6 @@ export default {
       currentBlock: 'blocks/getCurrentBlock',
     }),
   },
-  async mounted() {
-    await this.SetLoader(true);
-    await this.SetLoader(false);
-  },
 };
 </script>
 <style lang="scss" scoped>
@@ -121,16 +117,17 @@ export default {
     @include text-simple;
     font-weight: 600;
     font-size: 18px;
+    margin-bottom: 10px;
   }
 
   &__info {
     @include text-simple;
     word-break: break-all;
-    padding: 4px 5px;
-    font-size: 12px;
+    font-size: 16px;
     line-height: 130%;
     &_blue {
       color: $blue;
+      font-size: 12px;
     }
 
     &_green {
@@ -138,6 +135,7 @@ export default {
       border-radius: 3px;
       color: $default-green;
       width: 58px;
+      font-size: 12px;
       text-align: center;
     }
 
@@ -146,6 +144,7 @@ export default {
       border-radius: 3px;
       color: $red;
       width: 58px;
+      font-size: 12px;
       text-align: center;
     }
   }
@@ -159,6 +158,7 @@ export default {
   &__link {
     @include text-simple;
     @include link;
+    font-size: 16px;
     color: $blue;
   }
 }

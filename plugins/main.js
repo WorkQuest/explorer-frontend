@@ -1,10 +1,12 @@
 import Vue from 'vue';
 import moment from 'moment';
 import VueTippy, { TippyComponent } from 'vue-tippy';
+import BigNumber from 'bignumber.js';
 import modals from '~/store/modals/modals';
 
 Vue.use(VueTippy);
 Vue.component('tippy', TippyComponent);
+BigNumber.config({ EXPONENTIAL_AT: 60 });
 
 Vue.mixin({
 

@@ -1,31 +1,18 @@
 <template>
   <div class="overview">
     <div class="overview-wrap">
-      <!--  TODO: Вывести реальные данные -->
       <p class="overview__header">
         {{ $t('ui.token.overview') }}
       </p>
-      <!--      <p class="overview__info">-->
-      <!--        <span class="overview__title">{{ $t('ui.token.maxSupply') }}</span>-->
-      <!--        30 910 401 959,97513 {{ token }}-->
-      <!--      </p>-->
-      <!--      <p class="overview__info">-->
-      <!--        <span class="overview__title">{{ $t('ui.token.holders') }}</span>-->
-      <!--        3 321 050-->
-      <!--      </p>-->
-      <!--      <p class="overview__info">-->
-      <!--        <span class="overview__title">{{ $t('ui.token.transfers') }}</span>-->
-      <!--        115 777 329-->
-      <!--      </p>-->
     </div>
     <div class="overview-wrap">
       <p class="overview__info">
         <span class="overview__title">{{ $t('ui.token.balance') }}</span>
-        {{ Floor(balanceWusd) }} {{ tokenName }}
+        {{ Floor(balanceWUSD) }} {{ symbol }}
       </p>
       <p class="overview__info">
-        <span class="overview__title">WUSD {{ $t('ui.tx.value') }}</span>
-        ${{ Floor(balanceWusd) }} (@ $0.89/WUSD)
+        <span class="overview__title">{{ symbol }} {{ $t('ui.tx.value') }}</span>
+        ${{ Floor(balanceWUSD) }} (@ $1.00/{{ symbol }})
       </p>
       <div class="overview__token">
         {{ $t('ui.token.token') }}
@@ -55,6 +42,9 @@ import { mapGetters } from 'vuex';
 import BigNumber from 'bignumber.js';
 import ChoiceToken from '~/components/ChoiceToken.vue';
 
+/** @param { Object } accountInfo */
+/** @param {{ string }} accountInfo.fetched_coin_balance */
+
 export default {
   name: 'Overview',
   components: {
@@ -74,14 +64,13 @@ export default {
       isLoading: 'main/getIsLoading',
       accountBalances: 'account/getAccountBalances',
       accountBalancesCount: 'account/getAccountBalancesCount',
+      accountInfo: 'account/getAccountInfo',
+      symbol: 'main/getWUSDTokenSymbol',
+      decimals: 'main/getWUSDTokenDecimals',
     }),
-    tokenName() {
-      if (this.accountBalancesCount > 0) return this.accountBalances[0].tokenId.toUpperCase();
-      return '';
-    },
-    balanceWusd() {
+    balanceWUSD() {
       if (this.accountBalancesCount > 0) {
-        return new BigNumber(this.accountBalances[0].amount).shiftedBy(-this.accountBalances[0].token.decimals);
+        return new BigNumber(this.accountInfo.fetched_coin_balance).shiftedBy(-this.decimals);
       }
       return 0;
     },

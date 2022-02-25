@@ -6,4 +6,9 @@ export default () => ({
   loaderMode: loaderModes.default,
   isLoaderBackgroundHider: true,
   loaderProgress: 0,
+  tokensData: [],
+  wusd: {
+    symbol: 'WUSD',
+    decimals: 18,
+  },
 });

@@ -25,34 +25,34 @@
           <span class="table__title">{{ $props.title }}</span>
         </div>
       </template>
-      <template #cell(id)="el">
+      <template #cell(number)="el">
         <nuxt-link
           class="table__link"
-          :to="`blocks/${el.item.id}`"
+          :to="`blocks/${el.item.number}`"
         >
-          {{ el.item.id }}
+          {{ el.item.number }}
         </nuxt-link>
       </template>
       <template #cell(timestamp)="el">
         <span>{{ formatDataFromNow(el.item.timestamp) }}</span>
       </template>
       <template #cell(reward)="el">
-        <span>{{ el.item.reward }} {{ el.item.symbol }}</span>
+        <span>{{ +el.item.base_fee_per_gas * +el.item.gas_used }} {{ symbol }}</span>
       </template>
-      <template #cell(txsCount)="el">
+      <template #cell(transactions)="el">
         <nuxt-link
           class="table__link"
-          :to="{ path: '/transactions', query: { block: el.item.id }}"
+          :class="el.item.transactions.length === 0 ? 'table__link_disabled' : ''"
+          :to="{ path: '/transactions', query: { block: el.item.number }}"
         >
-          {{ el.item.txsCount }}
+          {{ Array.isArray(el.item.transactions) ? el.item.transactions.length : '' }}
         </nuxt-link>
       </template>
-      <template #cell(gasUsed)="el">
-        <span>{{ el.item.gasUsed }} </span>
-        <span class="table__grey">95,5%</span>
+      <template #cell(gas_used)="el">
+        <span>{{ el.item.gas_used }} </span>
       </template>
-      <template #cell(size)="el">
-        <span>{{ el.item.size }} WUSD</span>
+      <template #cell(reward)="el">
+        <span>{{ +el.item.base_fee_per_gas * +el.item.gas_used }} {{ symbol }}</span>
       </template>
     </b-table>
   </div>
@@ -61,7 +61,17 @@
 <script>
 import { mapGetters } from 'vuex';
 
+// TODO reward
+/** @param {array} items[] */
+/** @param {Object} item */
+/** @param {string} item.gas_used  */
+/** @param {number} item.block_number  */
+/** @param {string} item.base_fee_per_gas  */
+/** @param {{ hex: string, bech32: string }=} [item.to_address_hash]  */
+/** @param {{ hex: string, bech32: string }} item.from_address_hash  */
+
 export default {
+  name: 'TableBlocks',
   props: {
     title: {
       type: String,
@@ -87,6 +97,7 @@ export default {
   computed: {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
+      symbol: 'main/getWUSDTokenSymbol',
     }),
   },
 };

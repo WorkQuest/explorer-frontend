@@ -75,7 +75,10 @@ export default {
     }),
     isLast() {
       if (this.query) {
-        return this.currentBlock.txs.forEach((i) => i === this.currentBlock.txs[this.currentBlock.txs.length - 1]);
+        return Object.keys(this.currentBlock).length > 0 && this.currentBlock?.transactions
+          ? this.currentBlock.transactions
+            .forEach((i) => i === this.currentBlock.transactions[this.currentBlock.transactions.length - 1])
+          : true;
       }
       return this.txs.forEach((i) => i === this.txs[this.txs.length - 1]);
     },
@@ -83,8 +86,9 @@ export default {
       return this.$route.query.block;
     },
     txsTable() {
-      if (this.query) return this.currentBlock.txs;
-      return this.txs;
+      return this.query && Object.keys(this.currentBlock).length > 0
+        ? this.currentBlock.transactions
+        : this.txs;
     },
     payload() {
       return {
@@ -93,17 +97,22 @@ export default {
       };
     },
     totalPages() {
-      return Math.ceil(this.query ? this.currentBlock.txs.length : this.txsCount / this.limit);
+      if (Object.keys(this.currentBlock).length > 0) {
+        return this.query && Array.isArray(this.currentBlock.transactions)
+          ? Math.ceil(this.currentBlock.transactions.length / this.limit)
+          : 0;
+      }
+      return Math.ceil(this.txsCount / this.limit);
     },
     tableHeaders() {
       return [
-        { key: 'id', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'blockNumber', label: this.$t('ui.block.blockNumber'), sortable: true },
+        { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
+        { key: 'block_number', label: this.$t('ui.block.blockNumber'), sortable: true },
         { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true },
+        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
+        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
         { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
-        { key: 'gasUsed', label: this.$t('ui.tx.fee'), sortable: true },
+        { key: 'gas_used', label: this.$t('ui.tx.fee'), sortable: true },
       ];
     },
   },
@@ -117,8 +126,11 @@ export default {
   },
   async mounted() {
     await this.SetLoader(true);
-    if (this.query) await this.$store.dispatch('blocks/getBlockById', this.$route.query.block);
-    if (!this.query) await this.$store.dispatch('tx/getTxs', this.payload);
+    if (this.query) {
+      await this.$store.dispatch('blocks/getBlockById', this.$route.query.block);
+    } else {
+      await this.$store.dispatch('tx/getTxs', this.payload);
+    }
     await this.SetLoader(false);
   },
 };

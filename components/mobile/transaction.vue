@@ -7,29 +7,28 @@
       v-if="(transaction.hash || transaction.id)"
       class="transaction__hash"
     >
-      <p>{{ $t('ui.tx.transaction') }}</p>
-      <p>
-        <nuxt-link
-          class="transaction__link"
-          :to="`/transactions/${(transaction.hash || transaction.id)}`"
-        >
-          {{ formatItem((transaction.hash || transaction.id), 9, 6) }}
-        </nuxt-link>
+      <p class="transaction__title">
+        {{ $t('ui.tx.transaction') }}
       </p>
+
+      <nuxt-link
+        class="transaction__link"
+        :to="`/transactions/${(transaction.hash || transaction.id)}`"
+      >
+        {{ formatItem((transaction.hash || transaction.id), 9, 6) }}
+      </nuxt-link>
     </div>
     <div
-      v-if="transaction.blockNumber && internal"
+      v-if="transaction.block_number && internal"
       class="transaction__hash"
     >
-      <p>{{ $t('ui.block.blockNumber') }}</p>
-      <p>
-        <nuxt-link
-          class="transaction__link"
-          :to="`/blocks/${(transaction.blockNumber)}`"
-        >
-          {{ transaction.blockNumber }}
-        </nuxt-link>
-      </p>
+      {{ $t('ui.block.blockNumber') }}
+      <nuxt-link
+        class="transaction__link"
+        :to="`/blocks/${(transaction.block_number)}`"
+      >
+        {{ transaction.block_number }}
+      </nuxt-link>
     </div>
     <p class="transaction__timestamp">
       {{ formatDataFromNow(transaction.timestamp) }}
@@ -42,40 +41,41 @@
       <span class="transaction__info">{{ transaction.method }}</span>
     </div>
     <div
-      v-if="transaction.fromAddress"
+      v-if="isFromAddressExist"
       class="transaction__subtitle"
     >
       {{ $t('ui.tx.from') }}
       <nuxt-link
+        v-if="transaction.from_address_hash.hex"
         class="transaction__link_small"
-        :to="`/address/${transaction.fromAddress}`"
+        :to="`/address/${transaction.from_address_hash.hex}`"
       >
-        {{ formatItem(transaction.fromAddress, 7, 6) }}
+        {{ formatItem(transaction.from_address_hash.hex, 7, 6) }}
       </nuxt-link>
     </div>
     <div
-      v-if="transaction.blockNumber && !internal"
+      v-if="transaction.block_number && !internal"
       class="transaction__subtitle"
     >
       {{ $t('ui.block.blockNumber') }}
       <nuxt-link
         class="transaction__link_small"
-        :to="`/blocks/${transaction.blockNumber}`"
+        :to="`/blocks/${transaction.block_number}`"
       >
-        {{ transaction.blockNumber }}
+        {{ transaction.block_number }}
       </nuxt-link>
     </div>
     <div
-      v-if="transaction.toAddress"
+      v-if="isToAddressExist"
       class="transaction__subtitle"
     >
       {{ $t('ui.tx.to') }}
       <nuxt-link
-        v-if="transaction.toAddress"
+        v-if="transaction.to_address_hash.hex"
         class="transaction__link_small"
-        :to="`/address/${transaction.toAddress}`"
+        :to="`/address/${transaction.to_address_hash.hex}`"
       >
-        {{ formatItem(transaction.toAddress, 7, 6) }}
+        {{ formatItem(transaction.to_address_hash.hex, 7, 6) }}
       </nuxt-link>
     </div>
     <div
@@ -93,11 +93,11 @@
       <span class="transaction__info">{{ transaction.value }} {{ transaction.symbol }}</span>
     </div>
     <div
-      v-if="transaction.gasUsed"
+      v-if="transaction.gas_used"
       class="transaction__subtitle"
     >
       {{ $t('ui.tx.fee') }}
-      <span class="transaction__info">{{ transaction.gasUsed }}</span>
+      <span class="transaction__info">{{ transaction.gas_used }}</span>
     </div>
     <div
       v-if="transaction.quantity"
@@ -129,13 +129,11 @@ export default {
   props: {
     transaction: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     tokens: {
       type: Object,
-      default: () => {
-      },
+      default: () => {},
     },
     isLast: {
       type: Boolean,
@@ -152,6 +150,14 @@ export default {
     internal: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    isToAddressExist() {
+      return this.transaction.to_address_hash && Object.keys(this.transaction.to_address_hash).length > 0;
+    },
+    isFromAddressExist() {
+      return this.transaction.from_address_hash && Object.keys(this.transaction.from_address_hash).length > 0;
     },
   },
 };

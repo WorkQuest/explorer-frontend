@@ -6,7 +6,7 @@
       class="address__search_mobile"
       :is-search="true"
       :is-hide-error="true"
-      :placeholder="$t('ui.forms.searchPlaceholder')"
+      :placeholder="$tc('ui.forms.searchPlaceholder')"
     />
     <div class="address__header">
       <h4 class="address__title">
@@ -31,7 +31,7 @@
     <div class="address__txs">
       <table-txs
         class="address__table"
-        :title="$t('ui.txs')"
+        :title="$tc('ui.txs')"
         :items="txs"
         :fields="tableFields"
       />
@@ -88,13 +88,13 @@ export default {
     },
     tableFields() {
       return [
-        { key: 'id', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'blockNumber', label: this.$t('ui.block.blockNumber'), sortable: true },
+        { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
+        { key: 'block_number', label: this.$t('ui.block.blockNumber'), sortable: true },
         { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true },
+        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
+        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
         { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
-        { key: 'gasUsed', label: this.$t('ui.tx.fee'), sortable: true },
+        { key: 'gas_used', label: this.$t('ui.tx.fee'), sortable: true },
       ];
     },
   },
