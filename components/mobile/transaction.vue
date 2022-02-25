@@ -7,29 +7,28 @@
       v-if="(transaction.hash || transaction.id)"
       class="transaction__hash"
     >
-      <p>{{ $t('ui.tx.transaction') }}</p>
-      <p>
-        <nuxt-link
-          class="transaction__link"
-          :to="`/transactions/${(transaction.hash || transaction.id)}`"
-        >
-          {{ formatItem((transaction.hash || transaction.id), 9, 6) }}
-        </nuxt-link>
+      <p class="transaction__title">
+        {{ $t('ui.tx.transaction') }}
       </p>
+
+      <nuxt-link
+        class="transaction__link"
+        :to="`/transactions/${(transaction.hash || transaction.id)}`"
+      >
+        {{ formatItem((transaction.hash || transaction.id), 9, 6) }}
+      </nuxt-link>
     </div>
     <div
       v-if="transaction.block_number && internal"
       class="transaction__hash"
     >
-      <p>{{ $t('ui.block.blockNumber') }}</p>
-      <p>
-        <nuxt-link
-          class="transaction__link"
-          :to="`/blocks/${(transaction.block_number)}`"
-        >
-          {{ transaction.block_number }}
-        </nuxt-link>
-      </p>
+      {{ $t('ui.block.blockNumber') }}
+      <nuxt-link
+        class="transaction__link"
+        :to="`/blocks/${(transaction.block_number)}`"
+      >
+        {{ transaction.block_number }}
+      </nuxt-link>
     </div>
     <p class="transaction__timestamp">
       {{ formatDataFromNow(transaction.timestamp) }}

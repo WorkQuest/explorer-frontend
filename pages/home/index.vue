@@ -80,6 +80,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import Web3 from 'web3';
 
 export default {
   name: 'Home',
@@ -133,23 +134,19 @@ export default {
       this.search = e;
     },
     searchHandler() {
-      console.log('search');
       const hashReg = /^0x([A-Fa-f0-9]{64})$/;
       const blockReg = /^[0-9]+$/;
       try {
         if (hashReg.test(this.search)) {
-          console.log('hash: ', this.search);
           this.$router.push(`transactions/${this.search}`);
         } else if (blockReg.test(this.search)) {
-          console.log('block: ', this.search);
           this.$router.push(`blocks/${this.search}`);
+        } else if (Web3.utils.isAddress(this.search)) {
+          this.$router.push(`address/${this.search}`);
         }
       } catch (e) {
         console.log('error: ', e);
       }
-      // hash 66
-      // address 42
-      // block min 6
     },
   },
 };

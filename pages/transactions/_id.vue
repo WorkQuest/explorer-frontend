@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="transaction-wrapper">
     <div class="txs">
       <search-filter class="txs__search" />
       <base-field
@@ -79,23 +79,19 @@
                 >
                   {{ item.text }}
                 </span>
-                <template
-                  v-for="(item, index) in tx.logs"
-                >
+                <template v-for="(item, index) in tx.logs">
                   <template v-if="item.first_topic">
                     <p
-                      :key="index+'_title'"
+                      :key="`${index}_title`"
                       class="table__title"
                     >
                       {{ $t('ui.tx.topics') }}
                     </p>
                     <div
-                      :key="index+'_firstTopic'"
+                      :key="`${index}_firstTopic`"
                       class="table__topic"
                     >
-                      <div
-                        class="topic"
-                      >
+                      <div class="topic">
                         <p class="topic__index">
                           0
                         </p>
@@ -108,7 +104,7 @@
                       </div>
                       <div
                         v-if="item.second_topic"
-                        :key="index+'_secondTopic'"
+                        :key="`${index}_secondTopic`"
                         class="topic"
                       >
                         <p class="topic__index">
@@ -123,7 +119,7 @@
                       </div>
                       <div
                         v-if="item.third_topic"
-                        :key="index+'_thirdTopic'"
+                        :key="`${index}_thirdTopic`"
                         class="topic"
                       >
                         <p class="topic__index">
@@ -138,7 +134,7 @@
                       </div>
                       <div
                         v-if="item.fourth_topic"
-                        :key="index+'_fourthTopic'"
+                        :key="`${index}_fourthTopic`"
                         class="topic"
                       >
                         <p class="topic__index">
@@ -153,23 +149,19 @@
                       </div>
                     </div>
                     <p
-                      :key="index+'_dataTitle'"
+                      :key="`${index}_dataTitle`"
                       class="table__title"
                     >
                       {{ $t('ui.tx.data') }}
                     </p>
                     <div
-                      :key="index+'_dataContent'"
+                      :key="`${index}_dataContent`"
                       class="table__data"
                     >
-                      <div
-                        class="table__data_desktop"
-                      >
+                      <div class="table__data_desktop">
                         {{ item.data }}
                       </div>
-                      <div
-                        class="table__data_mobile"
-                      >
+                      <div class="table__data_mobile">
                         {{ formatItem(item.data, 9, 6) }}
                       </div>
                     </div>
@@ -189,14 +181,13 @@
     >
       <div class="overview__hash">
         <p>{{ $t('ui.tx.transaction') }}</p>
-        <p>
-          <nuxt-link
-            class="overview__link"
-            :to="`/transactions/${(tx.id)}`"
-          >
-            {{ formatItem(tx.id, 9, 6) }}
-          </nuxt-link>
-        </p>
+
+        <nuxt-link
+          class="overview__link"
+          :to="`/transactions/${(tx.hash)}`"
+        >
+          {{ formatItem(tx.hash, 9, 6) }}
+        </nuxt-link>
       </div>
       <p class="overview__timestamp">
         {{ formatDataFromNow(tx.timestamp) }}
@@ -306,13 +297,13 @@ export default {
   computed: {
     ...mapGetters({
       tx: 'tx/getTxsByHash',
-      nativeTokenData: 'main/getNativeTokenData',
+      wusdTokenData: 'main/getWUSDTokenData',
     }),
     symbol() {
-      return Object.keys(this.nativeTokenData).length > 0 ? this.nativeTokenData.symbol : 0;
+      return Object.keys(this.wusdTokenData).length > 0 ? this.wusdTokenData.symbol : 0;
     },
     decimals() {
-      return Object.keys(this.nativeTokenData).length > 0 ? this.nativeTokenData.decimals : 0;
+      return Object.keys(this.wusdTokenData).length > 0 ? this.wusdTokenData.decimals : 0;
     },
     gasLimit() {
       return Object.keys(this.tx).length > 0 && Object.keys(this.tx.block).length > 0 ? +this.tx.block.gas_limit : 0;
@@ -331,7 +322,7 @@ export default {
           {
             class: 'columns__item_six',
             title: this.$t('ui.tx.transactionFull'),
-            info: this.tx.id,
+            info: this.tx.hash,
           },
           {
             class: 'columns__item_two-one',
@@ -395,8 +386,8 @@ export default {
     },
     txsLogs() {
       return [
-        { class: 'table__number_desktop', text: this.tx.logs[0].transaction_hash },
-        { class: 'table__number_mobile', text: this.formatItem(this.tx.logs[0].transaction_hash, 9, 6) },
+        { class: 'table__number_desktop', text: this.tx.hash },
+        { class: 'table__number_mobile', text: this.formatItem(this.tx.hash, 9, 6) },
       ];
     },
   },
@@ -415,6 +406,19 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@mixin adaptive {
+  &_desktop {
+    @include _767 {
+      display: none;
+    }
+  }
+  &_mobile {
+    display: none;
+    @include _767 {
+      display: block;
+    }
+  }
+}
 .btn {
   &__copy {
     height: 35px;
@@ -558,12 +562,7 @@ export default {
 
   &__info {
     margin-left: 10px;
-    &_desktop {
-      overflow-wrap: anywhere;
-    }
-    &_mobile {
-      display: none;
-    }
+    @include adaptive
   }
 
   &__title {
@@ -680,17 +679,7 @@ export default {
   }
   &__item {
     @include text-simple;
-    &_mobile {
-      display: none;
-      @include _767 {
-        display: block;
-      }
-    }
-    &_desktop {
-      @include _767 {
-        display: none;
-      }
-    }
+    @include adaptive;
   }
 }
 

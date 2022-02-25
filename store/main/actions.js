@@ -37,7 +37,7 @@ export default {
       appendToast: true,
     });
   },
-  async getBaseTokenData({ commit }) {
+  async getWQTTokenData({ commit }) {
     const response = await this.$axios.$get(`/token/${WQT_TOKEN_ADDRESS}`);
     commit('setWqtTokenData', response.result);
     return response;

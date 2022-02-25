@@ -124,8 +124,6 @@ import BigNumber from 'bignumber.js';
 /** @param  {{ array }} currentBlock.transactions  */
 /** @param  {{ string }} currentBlock.base_fee_per_gas  */
 
-BigNumber.config({ EXPONENTIAL_AT: 60 });
-
 export default {
   name: 'Block',
   data() {
@@ -140,13 +138,13 @@ export default {
     ...mapGetters({
       currentBlock: 'blocks/getCurrentBlock',
       isLoading: 'main/getIsLoading',
-      nativeTokenData: 'main/getNativeTokenData',
+      wusdTokenData: 'main/getWUSDTokenData',
     }),
     symbol() {
-      return Object.keys(this.nativeTokenData).length > 0 ? this.nativeTokenData.symbol : 0;
+      return Object.keys(this.wusdTokenData).length > 0 ? this.wusdTokenData.symbol : 0;
     },
     decimals() {
-      return Object.keys(this.nativeTokenData).length > 0 ? this.nativeTokenData.decimals : 0;
+      return Object.keys(this.wusdTokenData).length > 0 ? this.wusdTokenData.decimals : 0;
     },
     blockColumns() {
       if (Object.keys(this.currentBlock).length > 0) {
@@ -218,6 +216,21 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+
+@mixin adaptive {
+  &_desktop {
+    @include _767 {
+      display: none;
+    }
+  }
+  &_mobile {
+    display: none;
+    @include _767 {
+      display: block;
+    }
+  }
+}
+
 .block {
   @include container;
   transition: .5s ease-in;
@@ -297,6 +310,9 @@ export default {
 
 .columns {
   display: none;
+  &__info {
+    @include adaptive
+  }
 }
 
 @include _767 {
@@ -372,19 +388,8 @@ export default {
         padding-bottom: 15px;
         border-bottom: 1px solid $black100;
       }
-
-      &_desktop {
-        @include _767 {
-          display: none;
-        }
-      }
-      &_mobile {
-        display: none;
-        @include _767 {
-          display: block;
-        }
-      }
     }
   }
 }
+
 </style>

@@ -8,11 +8,11 @@
     <div class="overview-wrap">
       <p class="overview__info">
         <span class="overview__title">{{ $t('ui.token.balance') }}</span>
-        {{ Floor(balanceNative) }} {{ symbol }}
+        {{ Floor(balanceWUSD) }} {{ symbol }}
       </p>
       <p class="overview__info">
         <span class="overview__title">{{ symbol }} {{ $t('ui.tx.value') }}</span>
-        ${{ Floor(balanceNative) }} (@ $1.00/{{ symbol }})
+        ${{ Floor(balanceWUSD) }} (@ $1.00/{{ symbol }})
       </p>
       <div class="overview__token">
         {{ $t('ui.token.token') }}
@@ -65,15 +65,15 @@ export default {
       accountBalances: 'account/getAccountBalances',
       accountBalancesCount: 'account/getAccountBalancesCount',
       accountInfo: 'account/getAccountInfo',
-      nativeTokenData: 'main/getNativeTokenData',
+      wusdTokenData: 'main/getWUSDTokenData',
     }),
     symbol() {
-      return Object.keys(this.nativeTokenData).length > 0 ? this.nativeTokenData.symbol : '';
+      return Object.keys(this.wusdTokenData).length > 0 ? this.wusdTokenData.symbol : '';
     },
     decimals() {
-      return Object.keys(this.nativeTokenData).length > 0 ? this.nativeTokenData.decimals : 0;
+      return Object.keys(this.wusdTokenData).length > 0 ? this.wusdTokenData.decimals : 0;
     },
-    balanceNative() {
+    balanceWUSD() {
       if (this.accountBalancesCount > 0) {
         return new BigNumber(this.accountInfo.fetched_coin_balance).shiftedBy(-this.decimals);
       }

@@ -18,6 +18,6 @@ export default {
     state.isLoaderBackgroundHider = value;
   },
   setWqtTokenData(state, value) {
-    state.tokensData.wqt = value;
+    state.wqt = value;
   },
 };

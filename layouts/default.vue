@@ -339,7 +339,7 @@ export default {
       this.changeLocale();
     },
     async tokenData() {
-      await this.$store.dispatch('main/getBaseTokenData');
+      await this.$store.dispatch('main/getWQTTokenData');
     },
   },
 };

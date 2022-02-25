@@ -6,11 +6,10 @@ export default () => ({
   loaderMode: loaderModes.default,
   isLoaderBackgroundHider: true,
   loaderProgress: 0,
-  tokensData: {
-    wqt: {},
-    nativeToken: {
-      symbol: 'WUSD',
-      decimals: 18,
-    },
+  tokensData: [],
+  wusd: {
+    symbol: 'WUSD',
+    decimals: 18,
   },
+  wqt: {},
 });
