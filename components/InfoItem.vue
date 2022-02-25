@@ -90,10 +90,6 @@ export default {
       currentBlock: 'blocks/getCurrentBlock',
     }),
   },
-  async mounted() {
-    await this.SetLoader(true);
-    await this.SetLoader(false);
-  },
 };
 </script>
 <style lang="scss" scoped>
