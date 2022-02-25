@@ -217,20 +217,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-@mixin adaptive {
-  &_desktop {
-    @include _767 {
-      display: none;
-    }
-  }
-  &_mobile {
-    display: none;
-    @include _767 {
-      display: block;
-    }
-  }
-}
-
 .block {
   @include container;
   transition: .5s ease-in;
@@ -311,7 +297,9 @@ export default {
 .columns {
   display: none;
   &__info {
-    @include adaptive
+    &_mobile {
+      display: none;
+    }
   }
 }
 
@@ -344,6 +332,15 @@ export default {
   .columns {
     padding: 20px 0;
     display: block;
+
+    &__info {
+      &_desktop {
+        display: none;
+      }
+      &_mobile {
+          display: block;
+      }
+    }
 
     &__separator {
       border: none;

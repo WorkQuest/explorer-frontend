@@ -406,19 +406,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@mixin adaptive {
-  &_desktop {
-    @include _767 {
-      display: none;
-    }
-  }
-  &_mobile {
-    display: none;
-    @include _767 {
-      display: block;
-    }
-  }
-}
+
 .btn {
   &__copy {
     height: 35px;
@@ -562,7 +550,14 @@ export default {
 
   &__info {
     margin-left: 10px;
-    @include adaptive
+
+    &_desktop {
+      display: block;
+    }
+
+    &_mobile {
+      display: none;
+    }
   }
 
   &__title {
@@ -571,6 +566,10 @@ export default {
   }
 
   &__item {
+    &_desktop {
+      display: block;
+    }
+
     &_mobile {
       display: none;
     }
@@ -603,9 +602,6 @@ export default {
     display: grid;
     grid-template-columns: max-content 1fr;
     grid-gap: 10px;
-    @include _767 {
-      grid-template-columns: 1fr
-    }
   }
 }
 
@@ -615,9 +611,6 @@ export default {
     font-weight: 600;
     text-align: right;
     margin: 0;
-    @include _767 {
-      text-align: left;
-    }
   }
   &__topic {
     display: flex;
@@ -630,15 +623,9 @@ export default {
       overflow-wrap: anywhere;
       width: 600px;
       text-align: justify;
-      @include _767 {
-        display: none;
-      }
     }
     &_mobile {
      display: none;
-      @include _767 {
-        display: block;
-      }
     }
   }
   &__number {
@@ -647,15 +634,10 @@ export default {
     font-weight: 600;
     margin-bottom: 5px;
     &_desktop {
-      @include _767 {
-        display: none;
-      }
+      display: block;
     }
     &_mobile {
       display: none;
-      @include _767 {
-        display: block;
-      }
     }
   }
 }
@@ -679,7 +661,12 @@ export default {
   }
   &__item {
     @include text-simple;
-    @include adaptive;
+    &_desktop {
+      display: block;
+    }
+    &_mobile {
+      display: none;
+    }
   }
 }
 
@@ -839,10 +826,46 @@ export default {
   .columns {
     display: none;
   }
+  .content {
+    &__table {
+      grid-template-columns: 1fr
+    }
+  }
+  .table {
+    &__title {
+      text-align: left;
+    }
+    &__data {
+      &_desktop {
+        display: none;
+      }
+      &_mobile {
+        display: block;
+      }
+    }
+    &__number {
+      &_desktop {
+        display: none;
+      }
+      &_mobile {
+        display: block;
+      }
+    }
+  }
   .icon-copy::before {
     color: $blue;
     font-size: 20px;
     cursor: pointer;
+  }
+  .topic {
+    &__item {
+      &_desktop {
+        display: none;
+      }
+      &_mobile {
+        display: block;
+      }
+    }
   }
 }
 </style>
