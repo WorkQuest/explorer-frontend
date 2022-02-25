@@ -17,7 +17,7 @@ export default {
   setIsLoaderBackgroundHider(state, value) {
     state.isLoaderBackgroundHider = value;
   },
-  setTokenData(state, value) {
+  setWqtTokenData(state, value) {
     state.tokensData.wqt = value;
   },
 };

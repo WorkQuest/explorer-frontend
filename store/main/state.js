@@ -8,5 +8,9 @@ export default () => ({
   loaderProgress: 0,
   tokensData: {
     wqt: {},
+    nativeToken: {
+      symbol: 'WUSD',
+      decimals: 18,
+    },
   },
 });

@@ -306,13 +306,13 @@ export default {
   computed: {
     ...mapGetters({
       tx: 'tx/getTxsByHash',
-      wqtTokenData: 'main/getWQTTokenData',
+      nativeTokenData: 'main/getNativeTokenData',
     }),
     symbol() {
-      return Object.keys(this.wqtTokenData).length > 0 ? this.wqtTokenData.symbol : 0;
+      return Object.keys(this.nativeTokenData).length > 0 ? this.nativeTokenData.symbol : 0;
     },
     decimals() {
-      return Object.keys(this.wqtTokenData).length > 0 ? this.wqtTokenData.decimals : 0;
+      return Object.keys(this.nativeTokenData).length > 0 ? this.nativeTokenData.decimals : 0;
     },
     gasLimit() {
       return Object.keys(this.tx).length > 0 && Object.keys(this.tx.block).length > 0 ? +this.tx.block.gas_limit : 0;

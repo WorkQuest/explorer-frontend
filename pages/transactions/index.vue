@@ -92,11 +92,10 @@ export default {
       };
     },
     totalPages() {
-      return Object.keys(this.currentBlock).length > 0
-        ? Math.ceil(this.query && Array.isArray(this.currentBlock.transactions)
-          ? this.currentBlock.transactions.length
-          : this.txsCount / this.limit)
-        : 0;
+      if (Object.keys(this.currentBlock).length > 0) {
+        return this.query && Array.isArray(this.currentBlock.transactions) ? Math.ceil(this.currentBlock.transactions.length / this.limit) : 0;
+      }
+      return Math.ceil(this.txsCount / this.limit);
     },
     tableHeaders() {
       return [

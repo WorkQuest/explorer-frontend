@@ -140,13 +140,13 @@ export default {
     ...mapGetters({
       currentBlock: 'blocks/getCurrentBlock',
       isLoading: 'main/getIsLoading',
-      wqtTokenData: 'main/getWQTTokenData',
+      nativeTokenData: 'main/getNativeTokenData',
     }),
     symbol() {
-      return Object.keys(this.wqtTokenData).length > 0 ? this.wqtTokenData.symbol : 0;
+      return Object.keys(this.nativeTokenData).length > 0 ? this.nativeTokenData.symbol : 0;
     },
     decimals() {
-      return Object.keys(this.wqtTokenData).length > 0 ? this.wqtTokenData.decimals : 0;
+      return Object.keys(this.nativeTokenData).length > 0 ? this.nativeTokenData.decimals : 0;
     },
     blockColumns() {
       if (Object.keys(this.currentBlock).length > 0) {

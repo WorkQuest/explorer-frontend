@@ -122,10 +122,10 @@ export default {
   computed: {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
-      wqtTokenData: 'main/getWQTTokenData',
+      nativeTokenData: 'main/getNativeTokenData',
     }),
     symbol() {
-      return Object.keys(this.wqtTokenData).length > 0 ? this.wqtTokenData.symbol : '';
+      return Object.keys(this.nativeTokenData).length > 0 ? this.nativeTokenData.symbol : '';
     },
   },
   methods: {
