@@ -4,17 +4,10 @@
     <search-filter class="tokens__search" />
     <table-tokens
       class="tokens__table"
-      :title="$t('ui.token.tracker')"
+      :title="$tc('ui.token.tracker')"
       :items="tracker"
       :tokens="tokens"
       :fields="tableHeaders"
-    />
-    <base-field
-      v-model="search"
-      class="tokens__search_mobile"
-      :is-search="true"
-      :is-hide-error="true"
-      :placeholder="$t('ui.forms.searchPlaceholder')"
     />
     <div class="tokens__content">
       <p class="tokens__title">
@@ -34,6 +27,7 @@
             :src="require(`~/assets/img/tokens/${token.token}.svg`)"
             width="15"
             class="token__image"
+            :alt="token.token"
           >
           <nuxt-link
             :to="{ path: `tokens/`+token.token, params: { token: token.token }}"
@@ -132,13 +126,10 @@ export default {
 <style lang="scss" scoped>
 .tokens {
   animation: show 1s 1;
+  margin: 0 auto;
 
   &__search {
     margin: 25px 0;
-
-    &_mobile {
-      display: none;
-    }
   }
 
   &__table {
@@ -160,18 +151,6 @@ export default {
       display: block;
       background: $white;
       padding: 16px;
-    }
-
-    &__search {
-      display: none;
-
-      &_mobile {
-        display: block;
-        background: $white;
-        border-radius: 6px;
-        padding: 10px 14px;
-        margin: 25px 16px;
-      }
     }
 
     &__title {

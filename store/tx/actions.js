@@ -7,7 +7,7 @@ export default {
       commit('setTxsByAccount', response.result);
       return response;
     } catch (e) {
-      return console.log(e);
+      throw new Error(e);
     }
   },
   async getTxsByHash({ commit }, hash) {
@@ -16,7 +16,7 @@ export default {
       commit('setTxsByHash', response.result);
       return response;
     } catch (e) {
-      return console.log(e);
+      throw new Error(e);
     }
   },
   async getTxs({ commit }, queries) {
@@ -27,7 +27,7 @@ export default {
       commit('setTxs', response.result);
       return response;
     } catch (e) {
-      return console.log(e);
+      throw new Error(e);
     }
   },
 };

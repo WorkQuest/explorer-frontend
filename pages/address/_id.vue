@@ -1,13 +1,6 @@
 <template>
   <div class="address">
     <search-filter class="address__search" />
-    <base-field
-      v-model="search"
-      class="address__search_mobile"
-      :is-search="true"
-      :is-hide-error="true"
-      :placeholder="$tc('ui.forms.searchPlaceholder')"
-    />
     <div class="address__header">
       <h4 class="address__title">
         {{ $t('ui.token.address') }}
@@ -108,8 +101,12 @@ export default {
   },
   async mounted() {
     await this.SetLoader(true);
-    await this.$store.dispatch('tx/getTxsByAccount', this.payload);
-    await this.$store.dispatch('account/getAccountByAddress', this.address.toLowerCase());
+    try {
+      await this.$store.dispatch('tx/getTxsByAccount', this.payload);
+      await this.$store.dispatch('account/getAccountByAddress', this.address.toLowerCase());
+    } catch (e) {
+      this.$nuxt.error({ statusCode: 404, message: e.message });
+    }
     await this.SetLoader(false);
   },
 };
@@ -139,10 +136,6 @@ export default {
 
   &__search {
     margin: 25px 0;
-
-    &_mobile {
-      display: none;
-    }
   }
 
   &__header {
@@ -194,18 +187,6 @@ export default {
     &__txs {
       background: $white;
       padding: 16px;
-    }
-
-    &__search {
-      display: none;
-
-      &_mobile {
-        display: block;
-        background: $white;
-        border-radius: 6px;
-        padding: 10px 14px;
-        margin: 25px 16px;
-      }
     }
 
     &__subtitle, &__transaction {

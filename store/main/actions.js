@@ -1,4 +1,5 @@
 import loaderModes from '~/store/main/loaderModes';
+import { searchResponseTypes } from '~/utils';
 
 export default {
   setLoading({ commit }, value) {
@@ -34,5 +35,32 @@ export default {
       toaster: 'b-toaster-bottom-right',
       appendToast: true,
     });
+  },
+  async searchHandler({ dispatch, commit }, { q, type }) {
+    try {
+      const response = await this.$axios.$get('search', { params: { q, type } });
+      /** @property  { object } response  */
+      /** @property  { boolean } response.ok  */
+      /** @property  { object } response.result  */
+      /** @property  { number } response.result.searchType  */
+      /** @property  { object } [response.result.searchResult]  */
+      /** @property  { string } [response.result.searchResult.number]  */
+      if (response.ok && response.result.searchResult) {
+        const { searchType } = response.result;
+        if (searchType === 0) {
+          return {
+            ok: true,
+            result: searchResponseTypes(searchType, response.result.searchResult.number),
+          };
+        }
+        return {
+          ok: true,
+          result: searchResponseTypes(searchType, q),
+        };
+      }
+      return response;
+    } catch (e) {
+      throw new Error(e);
+    }
   },
 };

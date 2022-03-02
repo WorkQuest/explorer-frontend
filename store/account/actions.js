@@ -5,7 +5,7 @@ export default {
       commit('setAccountInfo', response.result);
       return response;
     } catch (e) {
-      return console.log(e);
+      throw new Error(e);
     }
   },
   async getAccountBalances({ commit }, address) {
@@ -14,7 +14,7 @@ export default {
       commit('setAccountBalances', response.result);
       return response;
     } catch (e) {
-      return console.log(e);
+      throw new Error(e);
     }
   },
 };

@@ -1,16 +1,9 @@
 <template>
   <div class="blocks blocks__container">
     <search-filter class="blocks__search" />
-    <base-field
-      v-model="search"
-      class="blocks__search_mobile"
-      :is-search="true"
-      :is-hide-error="true"
-      :placeholder="$t('ui.forms.searchPlaceholder')"
-    />
     <table-blocks
       class="blocks__table"
-      :title="$t('ui.blocks')"
+      :title="$tc('ui.blocks')"
       :items="blocks"
       :fields="tableHeaders"
     />
@@ -100,10 +93,6 @@ export default {
 
   &__search {
     margin: 25px 0;
-
-    &_mobile {
-      display: none;
-    }
   }
 
   &__grey {
@@ -117,18 +106,6 @@ export default {
 
 @include _767 {
   .blocks {
-    &__search {
-      display: none;
-
-      &_mobile {
-        display: block;
-        background: $white;
-        border-radius: 6px;
-        padding: 10px 14px;
-        margin: 25px 16px;
-      }
-    }
-
     &__table {
       display: none;
     }

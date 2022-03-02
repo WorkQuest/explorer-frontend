@@ -7,7 +7,7 @@
       class="transfer__search_mobile"
       :is-search="true"
       :is-hide-error="true"
-      :placeholder="$t('ui.forms.searchPlaceholder')"
+      :placeholder="$tc('ui.forms.searchPlaceholder')"
     />
     <table-txs
       class="transfer__table"
@@ -112,10 +112,6 @@ export default {
 
   &__search {
     margin: 25px 0;
-
-    &_mobile {
-      display: none;
-    }
   }
 
   &__table {
@@ -147,18 +143,6 @@ export default {
   .transfer {
     &__table {
       display: none;
-    }
-
-    &__search {
-      display: none;
-
-      &_mobile {
-        display: block;
-        background: $white;
-        border-radius: 6px;
-        padding: 10px 14px;
-        margin: 25px 16px;
-      }
     }
 
     &__pager {

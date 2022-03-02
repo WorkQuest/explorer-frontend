@@ -43,7 +43,7 @@ import BigNumber from 'bignumber.js';
 import ChoiceToken from '~/components/ChoiceToken.vue';
 
 /** @param { Object } accountInfo */
-/** @param {{ string }} accountInfo.fetched_coin_balance */
+/** @property { string } accountInfo.fetched_coin_balance */
 
 export default {
   name: 'Overview',
@@ -70,7 +70,7 @@ export default {
     }),
     balanceWUSD() {
       if (this.accountBalancesCount > 0) {
-        return new BigNumber(this.accountInfo.fetched_coin_balance).shiftedBy(-this.decimals);
+        return new BigNumber(this.accountInfo?.fetched_coin_balance || 0).shiftedBy(-this.decimals);
       }
       return 0;
     },

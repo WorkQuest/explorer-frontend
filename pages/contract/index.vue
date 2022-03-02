@@ -6,7 +6,7 @@
       class="contract__search_mobile"
       :is-search="true"
       :is-hide-error="true"
-      :placeholder="$t('ui.forms.searchPlaceholder')"
+      :placeholder="$tc('ui.forms.searchPlaceholder')"
     />
     <div class="contract__header">
       <h4 class="contract__title">
@@ -46,7 +46,7 @@
       >
         <table-txs
           class="tables__table"
-          :title="$t('ui.txs')"
+          :title="$tc('ui.txs')"
           :is-only="false"
           :items="txs"
           :fields="tableHeadersTxs"
@@ -453,7 +453,7 @@ export default {
   async mounted() {
     await this.SetLoader(true);
     // TODO: Переписать
-    const txsRes = await this.$axios.get('/v1/txs');
+    const txsRes = await this.$axios.get('txs');
     this.txs = txsRes.data.result.txs;
     await this.SetLoader(false);
   },
@@ -490,10 +490,6 @@ export default {
 
   &__search {
     margin: 25px 0;
-
-    &_mobile {
-      display: none;
-    }
   }
 
   &__header {
@@ -560,18 +556,6 @@ export default {
     &__info {
       grid-template-columns: 1fr;
       grid-gap: 0;
-    }
-
-    &__search {
-      display: none;
-
-      &_mobile {
-        display: block;
-        background: $white;
-        border-radius: 6px;
-        padding: 10px 14px;
-        margin: 25px 16px;
-      }
     }
 
     &__pager {

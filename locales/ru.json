@@ -61,6 +61,13 @@
     "forms": {
       "searchPlaceholder": "Search by Address / Txn Hash / Block / Token",
       "search": "Search",
+      "filterTypes": {
+        "all": "All filters",
+        "address": "Address",
+        "txnHash": "Txn Hash",
+        "block": "Block",
+        "token": "Token"
+      },
       "filters": "All filters"
     },
     "token": {
@@ -103,6 +110,13 @@
   },
   "home": {
     "title": "WorkQuest Chain Explorer"
+  },
+  "errors": {
+    "pageNotFound": "Страница не найдена",
+    "other": "Произошла ошибка"
+  },
+  "messages": {
+    "required": "The {_field_} field is required"
   }
 }
 

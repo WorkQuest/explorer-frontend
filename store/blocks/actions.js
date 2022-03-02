@@ -5,7 +5,7 @@ export default {
       if (response.ok) commit('setBlock', response.result);
       return response;
     } catch (e) {
-      return console.log(e);
+      throw new Error(e);
     }
   },
   async getBlocks({ commit }, queries) {
@@ -16,7 +16,7 @@ export default {
       commit('setBlocks', response.result);
       return response;
     } catch (e) {
-      return console.log(e);
+      throw new Error(e);
     }
   },
 };

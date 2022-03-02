@@ -6,16 +6,8 @@
           {{ $t('home.title') }}
         </h3>
         <search-filter
+          :include-filter="false"
           class="home__search"
-          @onInput="onSearchInput"
-          @searchClicked="searchHandler"
-        />
-        <base-field
-          v-model="search"
-          class="home__search_mobile"
-          :is-search="true"
-          :is-hide-error="true"
-          :placeholder="$tc('ui.forms.searchPlaceholder')"
         />
       </div>
     </div>
@@ -80,7 +72,6 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import Web3 from 'web3';
 
 export default {
   name: 'Home',
@@ -90,6 +81,8 @@ export default {
       search: '',
       limit: 5,
       offset: 0,
+      type: '',
+      types: {},
     };
   },
   computed: {
@@ -129,35 +122,11 @@ export default {
     await this.$store.dispatch('tx/getTxs', this.payload);
     await this.SetLoader(false);
   },
-  methods: {
-    onSearchInput(e) {
-      this.search = e;
-    },
-    searchHandler() {
-      const hashReg = /^0x([A-Fa-f0-9]{64})$/;
-      const blockReg = /^[0-9]+$/;
-      try {
-        if (hashReg.test(this.search)) {
-          this.$router.push(`transactions/${this.search}`);
-        } else if (blockReg.test(this.search)) {
-          this.$router.push(`blocks/${this.search}`);
-        } else if (Web3.utils.isAddress(this.search)) {
-          this.$router.push(`address/${this.search}`);
-        }
-      } catch (e) {
-        console.log('error: ', e);
-      }
-    },
-  },
 };
 </script>
 <style lang="scss" scoped>
 .home {
   animation: show 1s 1;
-
-  &__search_mobile {
-    display: none;
-  }
 
   &__header {
     background: $darkblue;
@@ -201,18 +170,6 @@ export default {
 
 @include _767 {
   .home {
-    &__search {
-      display: none;
-    }
-
-    &__search_mobile {
-      display: block;
-      background: $white;
-      border-radius: 6px;
-      padding: 10px 14px;
-      margin: 0 16px;
-    }
-
     &__header {
       height: 228px;
     }

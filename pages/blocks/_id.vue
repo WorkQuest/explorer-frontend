@@ -1,13 +1,13 @@
 <template>
   <div class="block">
     <search-filter class="block__search" />
-    <base-field
-      v-model="search"
-      class="block__search_mobile"
-      :is-search="true"
-      :is-hide-error="true"
-      :placeholder="$t('ui.forms.searchPlaceholder')"
-    />
+    <!--    <base-field-->
+    <!--      v-model="search"-->
+    <!--      class="block__search_mobile"-->
+    <!--      :is-search="true"-->
+    <!--      :is-hide-error="true"-->
+    <!--      :placeholder="$t('ui.forms.searchPlaceholder')"-->
+    <!--    />-->
     <div
       v-if="currentBlock"
       class="block__content"
@@ -195,7 +195,11 @@ export default {
   },
   async mounted() {
     await this.SetLoader(true);
-    await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
+    try {
+      await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
+    } catch (e) {
+      this.$nuxt.error({ statusCode: 404, message: e.message });
+    }
     await this.SetLoader(false);
   },
   beforeDestroy() {
@@ -204,7 +208,11 @@ export default {
   methods: {
     async changeBlock(blockId) {
       await this.SetLoader(true);
-      await this.$router.push(`${blockId}`);
+      try {
+        await this.$router.push(`${blockId}`);
+      } catch (e) {
+        this.$nuxt.error({ statusCode: 404, message: e.message });
+      }
       await this.SetLoader(false);
     },
   },
@@ -218,10 +226,6 @@ export default {
 
   &__search {
     margin: 25px 0;
-
-    &_mobile {
-      display: none;
-    }
   }
 
   &__back {
@@ -300,18 +304,6 @@ export default {
 
 @include _767 {
   .block {
-    &__search {
-      display: none;
-
-      &_mobile {
-        display: block;
-        background: $white;
-        border-radius: 6px;
-        padding: 10px 14px;
-        margin: 25px 16px;
-      }
-    }
-
     &__columns {
       display: none;
     }

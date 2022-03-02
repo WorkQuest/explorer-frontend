@@ -2,13 +2,6 @@
   <div class="transaction-wrapper">
     <div class="txs">
       <search-filter class="txs__search" />
-      <base-field
-        v-model="search"
-        class="txs__search_mobile"
-        :is-search="true"
-        :is-hide-error="true"
-        :placeholder="$tc('ui.forms.searchPlaceholder')"
-      />
       <div class="txs__content">
         <button
           class="txs__back"
@@ -387,7 +380,11 @@ export default {
     },
   },
   async beforeCreate() {
-    await this.$store.dispatch('tx/getTxsByHash', this.$route.params.id);
+    try {
+      await this.$store.dispatch('tx/getTxsByHash', this.$route.params.id);
+    } catch (e) {
+      this.$nuxt.error({ statusCode: 404, message: e.message });
+    }
   },
   async mounted() {
     await this.SetLoader(true);
@@ -426,10 +423,6 @@ export default {
 
   &__search {
     margin: 30px 0;
-
-    &_mobile {
-      display: none;
-    }
   }
 
   &__back {
@@ -689,18 +682,6 @@ export default {
 
     &__back {
       margin-left: 16px;
-    }
-
-    &__search {
-      display: none;
-
-      &_mobile {
-        display: block;
-        background: $white;
-        border-radius: 6px;
-        padding: 10px 14px;
-        margin: 25px 16px;
-      }
     }
   }
   .overview {
