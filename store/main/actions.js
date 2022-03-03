@@ -1,5 +1,5 @@
 import loaderModes from '~/store/main/loaderModes';
-import { searchResponseTypes } from '~/utils';
+import { error, output, searchResponseTypes } from '~/utils';
 
 export default {
   setLoading({ commit }, value) {
@@ -48,19 +48,14 @@ export default {
       if (response.ok && response.result.searchResult) {
         const { searchType } = response.result;
         if (searchType === 0) {
-          return {
-            ok: true,
-            result: searchResponseTypes(searchType, response.result.searchResult.number),
-          };
+          return output(searchResponseTypes(searchType, response.result.searchResult.number));
         }
-        return {
-          ok: true,
-          result: searchResponseTypes(searchType, q),
-        };
+        return output(searchResponseTypes(searchType, q));
       }
       return response;
     } catch (e) {
-      throw new Error(e);
+      console.log('searchHandler: ', e);
+      return error(500, 'searchHandler', e);
     }
   },
 };

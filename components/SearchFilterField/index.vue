@@ -1,64 +1,69 @@
 <template>
-  <div class="fields">
-    <validation-observer v-slot="{ handleSubmit }">
-      <form @submit.prevent>
-        <div class="fields__search-field">
-          <base-field
-            v-model="search"
-            class="fields__input"
-            :class="includeFilter ? 'fields__input_filtered' : ''"
-            :is-search="true"
-            :is-hide-error="true"
-            :rules="'required'"
-            :placeholder="$tc('ui.forms.searchPlaceholder')"
-          />
-          <div class="fields__buttons-field">
-            <div
-              v-if="includeFilter"
-              v-click-outside="closeAll"
-              class="fields__filters"
-            >
-              <button
-                class="fields__filter"
-                @click="showFilters()"
-              >
-                {{ currentType.name }}
-                <span class="icon-caret_down" />
-                <transition name="fade">
-                  <div
-                    v-if="isShowFilters"
-                    class="filter"
-                  >
-                    <div
-                      v-for="(item, i) in types"
-                      :key="i"
-                      class="filter__container"
-                    >
-                      <div
-                        class="filter__items"
-                        @click="setFilter(item)"
-                      >
-                        <span class="filter__text">
-                          {{ item.name }}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </transition>
-              </button>
-            </div>
-            <div class="fields__button-field">
-              <base-btn
-                class="fields__search-button"
-                :text="$tc('ui.forms.search')"
-                @click="handleSubmit(onSearch)"
-              />
-            </div>
+  <validation-observer
+    v-slot="{ handleSubmit }"
+    tag="div"
+    class="fields"
+  >
+    <form @submit.prevent>
+      <div class="fields__search-field">
+        <base-field
+          v-model="search"
+          class="fields__input"
+          :class="includeFilter ? 'fields__input_filtered' : ''"
+          :is-search="true"
+          :is-hide-error="true"
+          :rules="'required'"
+          :placeholder="$tc('ui.forms.searchPlaceholder')"
+        />
+        <div class="fields__buttons-field">
+          <div
+            v-if="includeFilter"
+            class="fields__filters"
+          >
+            <!--            <button-->
+            <!--              class="fields__filter"-->
+            <!--              @click="showFilters()"-->
+            <!--            >-->
+            <!--              {{ currentType.name }}-->
+            <!--              <span class="icon-caret_down" />-->
+            <!--              <transition name="fade">-->
+            <!--                <div-->
+            <!--                  v-if="isShowFilters"-->
+            <!--                  class="filter"-->
+            <!--                >-->
+            <!--                  <div-->
+            <!--                    v-for="(item, i) in types"-->
+            <!--                    :key="i"-->
+            <!--                    class="filter__container"-->
+            <!--                  >-->
+            <!--                    <div-->
+            <!--                      class="filter__items"-->
+            <!--                      @click="setFilter(item)"-->
+            <!--                    >-->
+            <!--                      <span class="filter__text">-->
+            <!--                        {{ item.name }}-->
+            <!--                      </span>-->
+            <!--                    </div>-->
+            <!--                  </div>-->
+            <!--                </div>-->
+            <!--              </transition>-->
+            <!--            </button>-->
+            <base-dd
+              v-model="currentType"
+              :items="types"
+            />
+          </div>
+          <div class="fields__button-field">
+            <base-btn
+              class="fields__search-button"
+              :text="$tc('ui.forms.search')"
+              @click="handleSubmit(onSearch)"
+            />
           </div>
         </div>
-      </form>
-    </validation-observer>
-  </div>
+      </div>
+    </form>
+  </validation-observer>
 </template>
 <script>
 
@@ -81,32 +86,35 @@ export default {
   data() {
     return {
       search: '',
-      isShowFilters: false,
-      currentType: {
-        value: 'all',
-        name: this.$t('ui.forms.filterTypes.all'),
-      },
+      currentType: 0,
+      // types: [
+      //   {
+      //     value: 'all',
+      //     name: this.$t('ui.forms.filterTypes.all'),
+      //   },
+      //   {
+      //     value: 'address',
+      //     name: this.$t('ui.forms.filterTypes.address'),
+      //   },
+      //   {
+      //     value: 'txnHash',
+      //     name: this.$t('ui.forms.filterTypes.txnHash'),
+      //   },
+      //   {
+      //     value: 'block',
+      //     name: this.$t('ui.forms.filterTypes.block'),
+      //   },
+      //   {
+      //     value: 'token',
+      //     name: this.$t('ui.forms.filterTypes.token'),
+      //   },
+      // ],
       types: [
-        {
-          value: 'all',
-          name: this.$t('ui.forms.filterTypes.all'),
-        },
-        {
-          value: 'address',
-          name: this.$t('ui.forms.filterTypes.address'),
-        },
-        {
-          value: 'txnHash',
-          name: this.$t('ui.forms.filterTypes.txnHash'),
-        },
-        {
-          value: 'block',
-          name: this.$t('ui.forms.filterTypes.block'),
-        },
-        {
-          value: 'token',
-          name: this.$t('ui.forms.filterTypes.token'),
-        },
+        this.$t('ui.forms.filterTypes.all'),
+        this.$t('ui.forms.filterTypes.address'),
+        this.$t('ui.forms.filterTypes.txnHash'),
+        this.$t('ui.forms.filterTypes.block'),
+        this.$t('ui.forms.filterTypes.token'),
       ],
     };
   },
@@ -114,23 +122,14 @@ export default {
     ...mapActions({
       searchHandler: 'main/searchHandler',
     }),
-    showFilters() {
-      this.isShowFilters = !this.isShowFilters;
-    },
-    closeAll() {
-      this.isShowFilters = false;
-    },
-    setFilter(item) {
-      this.currentType = item;
-    },
     async onSearch() {
       if (this.search) {
         const q = this.search.trim();
         let type = null;
         if (this.includeFilter) {
-          type = /^[A-Za-z]+$/.test(q) && this.currentType.value === 'all'
+          type = /^[A-Za-z]+$/.test(q) && this.currentType === 0
             ? searchTypes.tokens
-            : searchTypes[this.currentType.value];
+            : Object.values(searchTypes)[this.currentType];
         }
         try {
           const payload = { q, type };
@@ -138,10 +137,10 @@ export default {
           if (response.ok) {
             await this.$router.push(response.result);
           } else {
-            this.$nuxt.error({ statusCode: 404, message: e.message });
+            console.log('search error');
           }
         } catch (e) {
-          this.$nuxt.error({ statusCode: 500, message: e.message });
+          console.log('search ', e);
         }
       }
     },
@@ -240,10 +239,8 @@ export default {
     &__buttons-field {
       display: none;
     }
-    &__input {
-      &_filtered {
-        flex-basis: 100%;
-      }
+    &__input_filtered {
+      flex-basis: 100%;
     }
   }
 }

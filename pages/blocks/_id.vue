@@ -1,13 +1,6 @@
 <template>
   <div class="block">
     <search-filter class="block__search" />
-    <!--    <base-field-->
-    <!--      v-model="search"-->
-    <!--      class="block__search_mobile"-->
-    <!--      :is-search="true"-->
-    <!--      :is-hide-error="true"-->
-    <!--      :placeholder="$t('ui.forms.searchPlaceholder')"-->
-    <!--    />-->
     <div
       v-if="currentBlock"
       class="block__content"
@@ -198,7 +191,7 @@ export default {
     try {
       await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
     } catch (e) {
-      this.$nuxt.error({ statusCode: 404, message: e.message });
+      console.log('blocks getBlockById', e);
     }
     await this.SetLoader(false);
   },
@@ -211,7 +204,7 @@ export default {
       try {
         await this.$router.push(`${blockId}`);
       } catch (e) {
-        this.$nuxt.error({ statusCode: 404, message: e.message });
+        console.log('blocks changeBlock', e);
       }
       await this.SetLoader(false);
     },

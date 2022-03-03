@@ -11,7 +11,9 @@
       </h1>
     </template>
 
-    <div class="error__content" />
+    <div class="error__content">
+      {{ error.message }}
+    </div>
 
     <div class="error__footer">
       <base-btn
@@ -63,27 +65,4 @@ export default {
   }
 }
 
-@include _1199 {
-
-}
-
-@include _991 {
-
-}
-
-@include _767 {
-
-}
-
-@include _575 {
-
-}
-
-@include _480 {
-
-}
-
-@include _380 {
-
-}
 </style>

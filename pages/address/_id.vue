@@ -105,7 +105,7 @@ export default {
       await this.$store.dispatch('tx/getTxsByAccount', this.payload);
       await this.$store.dispatch('account/getAccountByAddress', this.address.toLowerCase());
     } catch (e) {
-      this.$nuxt.error({ statusCode: 404, message: e.message });
+      console.log('address ', e);
     }
     await this.SetLoader(false);
   },

@@ -383,7 +383,7 @@ export default {
     try {
       await this.$store.dispatch('tx/getTxsByHash', this.$route.params.id);
     } catch (e) {
-      this.$nuxt.error({ statusCode: 404, message: e.message });
+      console.log('transactions getTxsByHash', e);
     }
   },
   async mounted() {
