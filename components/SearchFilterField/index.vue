@@ -20,34 +20,6 @@
             v-if="includeFilter"
             class="fields__filters"
           >
-            <!--            <button-->
-            <!--              class="fields__filter"-->
-            <!--              @click="showFilters()"-->
-            <!--            >-->
-            <!--              {{ currentType.name }}-->
-            <!--              <span class="icon-caret_down" />-->
-            <!--              <transition name="fade">-->
-            <!--                <div-->
-            <!--                  v-if="isShowFilters"-->
-            <!--                  class="filter"-->
-            <!--                >-->
-            <!--                  <div-->
-            <!--                    v-for="(item, i) in types"-->
-            <!--                    :key="i"-->
-            <!--                    class="filter__container"-->
-            <!--                  >-->
-            <!--                    <div-->
-            <!--                      class="filter__items"-->
-            <!--                      @click="setFilter(item)"-->
-            <!--                    >-->
-            <!--                      <span class="filter__text">-->
-            <!--                        {{ item.name }}-->
-            <!--                      </span>-->
-            <!--                    </div>-->
-            <!--                  </div>-->
-            <!--                </div>-->
-            <!--              </transition>-->
-            <!--            </button>-->
             <base-dd
               v-model="currentType"
               :items="types"
@@ -87,28 +59,6 @@ export default {
     return {
       search: '',
       currentType: 0,
-      // types: [
-      //   {
-      //     value: 'all',
-      //     name: this.$t('ui.forms.filterTypes.all'),
-      //   },
-      //   {
-      //     value: 'address',
-      //     name: this.$t('ui.forms.filterTypes.address'),
-      //   },
-      //   {
-      //     value: 'txnHash',
-      //     name: this.$t('ui.forms.filterTypes.txnHash'),
-      //   },
-      //   {
-      //     value: 'block',
-      //     name: this.$t('ui.forms.filterTypes.block'),
-      //   },
-      //   {
-      //     value: 'token',
-      //     name: this.$t('ui.forms.filterTypes.token'),
-      //   },
-      // ],
       types: [
         this.$t('ui.forms.filterTypes.all'),
         this.$t('ui.forms.filterTypes.address'),
