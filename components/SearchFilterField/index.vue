@@ -59,14 +59,18 @@ export default {
     return {
       search: '',
       currentType: 0,
-      types: [
+    };
+  },
+  computed: {
+    types() {
+      return [
         this.$t('ui.forms.filterTypes.all'),
         this.$t('ui.forms.filterTypes.address'),
         this.$t('ui.forms.filterTypes.txnHash'),
         this.$t('ui.forms.filterTypes.block'),
         this.$t('ui.forms.filterTypes.token'),
-      ],
-    };
+      ];
+    },
   },
   methods: {
     ...mapActions({
