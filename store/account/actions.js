@@ -7,7 +7,6 @@ export default {
       commit('setAccountInfo', response.result);
       return response;
     } catch (e) {
-      console.log('getAccountByAddress: ', e);
       return error(500, 'getAccountByAddress', e);
     }
   },
@@ -17,7 +16,6 @@ export default {
       commit('setAccountBalances', response.result);
       return response;
     } catch (e) {
-      console.log('getAccountBalances: ', e);
       return error(500, 'getAccountBalances', e);
     }
   },

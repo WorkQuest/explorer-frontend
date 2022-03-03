@@ -85,16 +85,10 @@ export default {
             ? searchTypes.tokens
             : Object.values(searchTypes)[this.currentType];
         }
-        try {
-          const payload = { q, type };
-          const response = await this.searchHandler(payload);
-          if (response.ok) {
-            await this.$router.push(response.result);
-          } else {
-            console.log('search error');
-          }
-        } catch (e) {
-          console.log('search ', e);
+        const payload = { q, type };
+        const response = await this.searchHandler(payload);
+        if (response.ok) {
+          await this.$router.push(response.result);
         }
       }
     },

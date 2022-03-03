@@ -54,7 +54,6 @@ export default {
       }
       return response;
     } catch (e) {
-      console.log('searchHandler: ', e);
       return error(500, 'searchHandler', e);
     }
   },

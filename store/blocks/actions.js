@@ -7,7 +7,6 @@ export default {
       if (response.ok) commit('setBlock', response.result);
       return response;
     } catch (e) {
-      console.log('getBlockById: ', e);
       return error(500, 'getBlockById', e);
     }
   },
@@ -19,7 +18,6 @@ export default {
       commit('setBlocks', response.result);
       return response;
     } catch (e) {
-      console.log('getBlocks: ', e);
       return error(500, 'getBlocks', e);
     }
   },

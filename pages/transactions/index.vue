@@ -113,26 +113,17 @@ export default {
     async page() {
       await this.SetLoader(true);
       this.offset = (this.page - 1) * this.limit;
-      try {
-        await this.$store.dispatch('tx/getTxs', this.payload);
-      } catch (e) {
-        console.log('transactions getTxs: ', e);
-      }
+      await this.$store.dispatch('tx/getTxs', this.payload);
       await this.SetLoader(false);
     },
   },
   async mounted() {
     await this.SetLoader(true);
-    try {
-      if (this.query) {
-        await this.$store.dispatch('blocks/getBlockById', this.$route.query.block);
-      } else {
-        await this.$store.dispatch('tx/getTxs', this.payload);
-      }
-    } catch (e) {
-      console.log('transactions: ', e);
+    if (this.query) {
+      await this.$store.dispatch('blocks/getBlockById', this.$route.query.block);
+    } else {
+      await this.$store.dispatch('tx/getTxs', this.payload);
     }
-
     await this.SetLoader(false);
   },
 };

@@ -188,11 +188,7 @@ export default {
   },
   async mounted() {
     await this.SetLoader(true);
-    try {
-      await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
-    } catch (e) {
-      console.log('blocks getBlockById', e);
-    }
+    await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
     await this.SetLoader(false);
   },
   beforeDestroy() {
@@ -201,11 +197,7 @@ export default {
   methods: {
     async changeBlock(blockId) {
       await this.SetLoader(true);
-      try {
-        await this.$router.push(`${blockId}`);
-      } catch (e) {
-        console.log('blocks changeBlock', e);
-      }
+      await this.$router.push(`${blockId}`);
       await this.SetLoader(false);
     },
   },

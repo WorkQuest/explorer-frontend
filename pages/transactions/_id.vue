@@ -380,11 +380,7 @@ export default {
     },
   },
   async beforeCreate() {
-    try {
-      await this.$store.dispatch('tx/getTxsByHash', this.$route.params.id);
-    } catch (e) {
-      console.log('transactions getTxsByHash', e);
-    }
+    await this.$store.dispatch('tx/getTxsByHash', this.$route.params.id);
   },
   async mounted() {
     await this.SetLoader(true);

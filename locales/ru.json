@@ -113,6 +113,11 @@
   },
   "errors": {
     "pageNotFound": "Страница не найдена",
+    "blockNotFound": "Блок не найден",
+    "transactionNotFound": "Транзакция не найдена",
+    "addressNotFound": "Адрес не найден",
+    "contractNotFound": "Контракт не найден",
+    "tokenNotFound": "Токен не найден",
     "other": "Произошла ошибка"
   },
   "messages": {

@@ -9,7 +9,6 @@ export default {
       commit('setTxsByAccount', response.result);
       return response;
     } catch (e) {
-      console.log('getTxsByAccount: ', e);
       return error(500, 'getTxsByAccount', e);
     }
   },
@@ -19,7 +18,6 @@ export default {
       commit('setTxsByHash', response.result);
       return response;
     } catch (e) {
-      console.log('getTxsByHash: ', e);
       return error(500, 'getTxsByHash', e);
     }
   },
@@ -31,7 +29,6 @@ export default {
       commit('setTxs', response.result);
       return response;
     } catch (e) {
-      console.log('getTxs: ', e);
       return error(500, 'getTxs', e);
     }
   },

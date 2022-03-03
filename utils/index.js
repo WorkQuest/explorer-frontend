@@ -1,3 +1,5 @@
+import { SERVER_MESSAGES } from '~/utils/serverMessages';
+
 // eslint-disable-next-line import/prefer-default-export
 export const searchResponseTypes = (type, value) => {
   const types = {
@@ -33,3 +35,23 @@ export const error = (code, msg, data) => ({
   msg,
   data,
 });
+
+export const serverErrorMessage = (app, locale, serverMessage) => {
+  if (!locale) {
+    return app.i18n.messages[locale].errors.other;
+  }
+  switch (serverMessage) {
+    case SERVER_MESSAGES.BLOCK_NOT_FOUND: {
+      return app.i18n.messages[locale].errors.blockNotFound;
+    }
+    case SERVER_MESSAGES.TRANSACTION_NOT_FOUND: {
+      return app.i18n.messages[locale].errors.transactionNotFound;
+    }
+    case SERVER_MESSAGES.VALIDATION_ERROR: {
+      return app.i18n.messages[locale].errors.other;
+    }
+    default: {
+      return app.i18n.messages[locale].errors.pageNotFound;
+    }
+  }
+};

@@ -1,5 +1,8 @@
 <template>
-  <div class="error">
+  <div
+    v-if="error"
+    class="error"
+  >
     <template v-if="error.statusCode === 404">
       <h1 class="error__title error__notFound">
         {{ $t('errors.pageNotFound') }}
@@ -18,7 +21,7 @@
     <div class="error__footer">
       <base-btn
         class="error__btn"
-        :text="$tc('ui.back')"
+        :text="$tc('ui.home')"
         @click="toMain"
       />
     </div>
@@ -28,7 +31,6 @@
 
 export default {
   name: 'Error',
-  layout: 'error',
   props: {
     error: {
       type: Object,
@@ -45,8 +47,9 @@ export default {
 <style lang="scss" scoped>
 
 .error {
-  margin: 0 auto;
+  margin: auto auto;
   width: 1180px;
+  text-align: center;
   &__title {
     font-family: 'Inter', sans-serif;
     font-style: normal;
@@ -60,7 +63,7 @@ export default {
     margin-top: 20px;
   }
   &__footer {
-    margin-top: 20px;
+    margin: 20px auto;
     width: 220px;
   }
 }

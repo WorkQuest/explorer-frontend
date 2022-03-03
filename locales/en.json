@@ -113,6 +113,11 @@
   },
   "errors": {
     "pageNotFound": "Page not found",
+    "blockNotFound": "Block not found",
+    "transactionNotFound": "Transaction not found",
+    "addressNotFound": "Address not found",
+    "contractNotFound": "Contract not found",
+    "tokenNotFound": "Token not found",
     "other": "An error occurred"
   },
   "messages": {

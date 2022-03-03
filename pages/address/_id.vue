@@ -101,12 +101,8 @@ export default {
   },
   async mounted() {
     await this.SetLoader(true);
-    try {
-      await this.$store.dispatch('tx/getTxsByAccount', this.payload);
-      await this.$store.dispatch('account/getAccountByAddress', this.address.toLowerCase());
-    } catch (e) {
-      console.log('address ', e);
-    }
+    await this.$store.dispatch('tx/getTxsByAccount', this.payload);
+    await this.$store.dispatch('account/getAccountByAddress', this.address.toLowerCase());
     await this.SetLoader(false);
   },
 };
