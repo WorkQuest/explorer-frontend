@@ -47,10 +47,8 @@ export default {
       /** @property  { string } [response.result.searchResult.number]  */
       if (response.ok && response.result.searchResult) {
         const { searchType } = response.result;
-        if (searchType === 0) {
-          return output(searchResponseTypes(searchType, response.result.searchResult.number));
-        }
-        return output(searchResponseTypes(searchType, q));
+        const result = searchType === 0 ? response.result.searchResult.number : q;
+        return output(searchResponseTypes(searchType, result));
       }
       return response;
     } catch (e) {

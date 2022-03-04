@@ -70,7 +70,6 @@ export default {
       isLoading: 'main/getIsLoading',
       txs: 'tx/getTxsByAccount',
       txsCount: 'tx/getTxsByAccountCount',
-      accountInfo: 'account/getAccountInfo',
     }),
     payload() {
       return {

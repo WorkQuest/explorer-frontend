@@ -38,20 +38,21 @@ export const error = (code, msg, data) => ({
 
 export const serverErrorMessage = (app, locale, serverMessage) => {
   if (!locale) {
-    return app.i18n.messages[locale].errors.other;
+    return app.i18n.messages.en.errors.other;
   }
+  const { errors } = app.i18n.messages[locale];
   switch (serverMessage) {
     case SERVER_MESSAGES.BLOCK_NOT_FOUND: {
-      return app.i18n.messages[locale].errors.blockNotFound;
+      return errors.blockNotFound;
     }
     case SERVER_MESSAGES.TRANSACTION_NOT_FOUND: {
-      return app.i18n.messages[locale].errors.transactionNotFound;
+      return errors.transactionNotFound;
     }
     case SERVER_MESSAGES.VALIDATION_ERROR: {
-      return app.i18n.messages[locale].errors.other;
+      return errors.other;
     }
     default: {
-      return app.i18n.messages[locale].errors.pageNotFound;
+      return errors.pageNotFound;
     }
   }
 };

@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!isLoading"
+    v-if="!isLoading && Object.keys(currentBlock).length > 0"
     class="block"
   >
     <search-filter class="block__search" />
@@ -194,8 +194,10 @@ export default {
     await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
     await this.SetLoader(false);
   },
-  beforeDestroy() {
+  async beforeDestroy() {
+    await this.SetLoader(true);
     this.$store.commit('blocks/resetBlock');
+    await this.SetLoader(false);
   },
   methods: {
     async changeBlock(blockId) {
