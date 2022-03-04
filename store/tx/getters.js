@@ -1,7 +1,7 @@
 export default {
-  getTxsByAccount: (state) => state.txsByAccount.txs,
+  getTxsByAccount: (state) => state.txsByAccount.transactions,
   getTxsByAccountCount: (state) => state.txsByAccount.count,
   getTxsByHash: (state) => state.txsByHash,
-  getTxs: (state) => state.txs.txs,
+  getTxs: (state) => state.txs.transactions,
   getTxsCount: (state) => state.txs.count,
 };

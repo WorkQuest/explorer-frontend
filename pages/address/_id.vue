@@ -1,13 +1,9 @@
 <template>
-  <div class="address">
+  <div
+    v-if="!isLoading"
+    class="address"
+  >
     <search-filter class="address__search" />
-    <base-field
-      v-model="search"
-      class="address__search_mobile"
-      :is-search="true"
-      :is-hide-error="true"
-      :placeholder="$tc('ui.forms.searchPlaceholder')"
-    />
     <div class="address__header">
       <h4 class="address__title">
         {{ $t('ui.token.address') }}
@@ -74,7 +70,6 @@ export default {
       isLoading: 'main/getIsLoading',
       txs: 'tx/getTxsByAccount',
       txsCount: 'tx/getTxsByAccountCount',
-      accountInfo: 'account/getAccountInfo',
     }),
     payload() {
       return {
@@ -139,10 +134,6 @@ export default {
 
   &__search {
     margin: 25px 0;
-
-    &_mobile {
-      display: none;
-    }
   }
 
   &__header {
@@ -194,18 +185,6 @@ export default {
     &__txs {
       background: $white;
       padding: 16px;
-    }
-
-    &__search {
-      display: none;
-
-      &_mobile {
-        display: block;
-        background: $white;
-        border-radius: 6px;
-        padding: 10px 14px;
-        margin: 25px 16px;
-      }
     }
 
     &__subtitle, &__transaction {

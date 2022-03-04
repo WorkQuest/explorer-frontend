@@ -1,13 +1,9 @@
 <template>
-  <div class="transactions">
+  <div
+    v-if="!isLoading"
+    class="transactions"
+  >
     <search-filter class="transactions__search" />
-    <base-field
-      v-model="search"
-      class="transactions__search_mobile"
-      :is-search="true"
-      :is-hide-error="true"
-      :placeholder="$t('ui.forms.searchPlaceholder')"
-    />
     <div class="transactions__wrap">
       <div
         v-if="query"
@@ -72,6 +68,7 @@ export default {
       txs: 'tx/getTxs',
       txsCount: 'tx/getTxsCount',
       currentBlock: 'blocks/getCurrentBlock',
+      isLoading: 'main/getIsLoading',
     }),
     isLast() {
       if (this.query) {
@@ -143,10 +140,6 @@ export default {
 
   &__search {
     margin: 25px 0;
-
-    &_mobile {
-      display: none;
-    }
   }
 
   &__header {
@@ -201,18 +194,6 @@ export default {
   .transactions {
     &__table {
       display: none;
-    }
-
-    &__search {
-      display: none;
-
-      &_mobile {
-        display: block;
-        background: $white;
-        border-radius: 6px;
-        padding: 10px 14px;
-        margin: 25px 16px;
-      }
     }
 
     &__wrap {

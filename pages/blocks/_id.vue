@@ -1,13 +1,9 @@
 <template>
-  <div class="block">
+  <div
+    v-if="!isLoading && Object.keys(currentBlock).length > 0"
+    class="block"
+  >
     <search-filter class="block__search" />
-    <base-field
-      v-model="search"
-      class="block__search_mobile"
-      :is-search="true"
-      :is-hide-error="true"
-      :placeholder="$t('ui.forms.searchPlaceholder')"
-    />
     <div
       v-if="currentBlock"
       class="block__content"
@@ -218,10 +214,6 @@ export default {
 
   &__search {
     margin: 25px 0;
-
-    &_mobile {
-      display: none;
-    }
   }
 
   &__back {
@@ -300,18 +292,6 @@ export default {
 
 @include _767 {
   .block {
-    &__search {
-      display: none;
-
-      &_mobile {
-        display: block;
-        background: $white;
-        border-radius: 6px;
-        padding: 10px 14px;
-        margin: 25px 16px;
-      }
-    }
-
     &__columns {
       display: none;
     }

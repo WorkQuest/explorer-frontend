@@ -1,3 +1,5 @@
+import { error } from '~/utils';
+
 export default {
   async getBlockById({ commit }, blockId) {
     try {
@@ -5,7 +7,7 @@ export default {
       if (response.ok) commit('setBlock', response.result);
       return response;
     } catch (e) {
-      return console.log(e);
+      return error(e.code || 500, 'getBlockById', e);
     }
   },
   async getBlocks({ commit }, queries) {
@@ -16,7 +18,7 @@ export default {
       commit('setBlocks', response.result);
       return response;
     } catch (e) {
-      return console.log(e);
+      return error(e.code || 500, 'getBlocks', e);
     }
   },
 };

@@ -1,14 +1,10 @@
 <template>
-  <div class="transaction-wrapper">
+  <div
+    v-if="!isLoading"
+    class="transaction-wrapper"
+  >
     <div class="txs">
       <search-filter class="txs__search" />
-      <base-field
-        v-model="search"
-        class="txs__search_mobile"
-        :is-search="true"
-        :is-hide-error="true"
-        :placeholder="$tc('ui.forms.searchPlaceholder')"
-      />
       <div class="txs__content">
         <button
           class="txs__back"
@@ -299,6 +295,7 @@ export default {
       tx: 'tx/getTxsByHash',
       symbol: 'main/getWUSDTokenSymbol',
       decimals: 'main/getWUSDTokenDecimals',
+      isLoading: 'main/getIsLoading',
     }),
     gasLimit() {
       return +this.tx?.block?.gas_limit || 0;
@@ -426,10 +423,6 @@ export default {
 
   &__search {
     margin: 30px 0;
-
-    &_mobile {
-      display: none;
-    }
   }
 
   &__back {
@@ -689,18 +682,6 @@ export default {
 
     &__back {
       margin-left: 16px;
-    }
-
-    &__search {
-      display: none;
-
-      &_mobile {
-        display: block;
-        background: $white;
-        border-radius: 6px;
-        padding: 10px 14px;
-        margin: 25px 16px;
-      }
     }
   }
   .overview {

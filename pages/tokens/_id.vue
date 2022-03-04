@@ -10,13 +10,14 @@
       class="token__search_mobile"
       :is-search="true"
       :is-hide-error="true"
-      :placeholder="$t('ui.forms.searchPlaceholder')"
+      :placeholder="$tc('ui.forms.searchPlaceholder')"
     />
     <div class="token__header">
       <img
         :src="require(`~/assets/img/tokens/${params}.svg`)"
         width="30"
         class="token__image"
+        :alt="params"
       >
       <h4 class="token__title">
         {{ $t('ui.token.token') }}
@@ -184,8 +185,8 @@
             <!-- validation observer -->
             <base-field
               v-model="address"
-              :placeholder="$t('ui.token.input')"
-              :label="$t('ui.token.input')"
+              :placeholder="$tc('ui.token.input')"
+              :label="$tc('ui.token.input')"
               :is-hide-error="true"
               mode="white"
               labelcolor="black"
@@ -193,7 +194,7 @@
             <base-btn
               class="contract__submit"
               mode="borderless-left"
-              :text="$t('ui.token.query')"
+              :text="$tc('ui.token.query')"
             />
             <!-- /validation observer -->
             <span class="contract__note">uint256</span>
@@ -318,10 +319,6 @@ export default {
 
   &__search {
     margin: 25px 0;
-
-    &_mobile {
-      display: none;
-    }
   }
 
   &__header {
@@ -440,18 +437,6 @@ export default {
     &__info {
       grid-template-columns: 1fr;
       grid-gap: 0;
-    }
-
-    &__search {
-      display: none;
-
-      &_mobile {
-        display: block;
-        background: $white;
-        border-radius: 6px;
-        padding: 10px 14px;
-        margin: 25px 16px;
-      }
     }
 
     &__pager {

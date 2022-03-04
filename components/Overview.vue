@@ -43,7 +43,6 @@ import BigNumber from 'bignumber.js';
 import ChoiceToken from '~/components/ChoiceToken.vue';
 
 /** @param { Object } accountInfo */
-/** @param {{ string }} accountInfo.fetched_coin_balance */
 
 export default {
   name: 'Overview',
@@ -63,22 +62,13 @@ export default {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
       accountBalances: 'account/getAccountBalances',
-      accountBalancesCount: 'account/getAccountBalancesCount',
       accountInfo: 'account/getAccountInfo',
       symbol: 'main/getWUSDTokenSymbol',
       decimals: 'main/getWUSDTokenDecimals',
     }),
     balanceWUSD() {
-      if (this.accountBalancesCount > 0) {
-        return new BigNumber(this.accountInfo.fetched_coin_balance).shiftedBy(-this.decimals);
-      }
-      return 0;
+      return new BigNumber(this.accountBalances || 0).shiftedBy(-this.decimals);
     },
-  },
-  async mounted() {
-    await this.SetLoader(true);
-    await this.$store.dispatch('account/getAccountBalances', this.address);
-    await this.SetLoader(false);
   },
   methods: {
     toggleChoice() {
