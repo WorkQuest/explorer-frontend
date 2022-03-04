@@ -1,5 +1,8 @@
 <template>
-  <div class="transaction-wrapper">
+  <div
+    v-if="!isLoading"
+    class="transaction-wrapper"
+  >
     <div class="txs">
       <search-filter class="txs__search" />
       <div class="txs__content">
@@ -292,6 +295,7 @@ export default {
       tx: 'tx/getTxsByHash',
       symbol: 'main/getWUSDTokenSymbol',
       decimals: 'main/getWUSDTokenDecimals',
+      isLoading: 'main/getIsLoading',
     }),
     gasLimit() {
       return +this.tx?.block?.gas_limit || 0;

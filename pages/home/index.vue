@@ -1,5 +1,8 @@
 <template>
-  <div class="home">
+  <div
+    v-if="!isLoading"
+    class="home"
+  >
     <div class="home__header">
       <div class="home__content">
         <h3 class="home__title">

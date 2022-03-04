@@ -1,5 +1,8 @@
 <template>
-  <div class="contract">
+  <div
+    v-if="!isLoading"
+    class="contract"
+  >
     <search-filter class="contract__search" />
     <base-field
       v-model="search"
@@ -122,6 +125,8 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'Contract',
   data() {
@@ -413,6 +418,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      isLoading: 'main/getIsLoading',
+    }),
     totalPagesValue() {
       if (this.activeTab === 'txs') return this.setTotalPages(this.txs.length, 20);
       if (this.activeTab === 'internal') return this.setTotalPages(this.internal.length, 20);

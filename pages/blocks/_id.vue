@@ -1,5 +1,8 @@
 <template>
-  <div class="block">
+  <div
+    v-if="!isLoading"
+    class="block"
+  >
     <search-filter class="block__search" />
     <div
       v-if="currentBlock"

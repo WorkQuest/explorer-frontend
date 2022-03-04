@@ -1,5 +1,8 @@
 <template>
-  <div class="address">
+  <div
+    v-if="!isLoading"
+    class="address"
+  >
     <search-filter class="address__search" />
     <div class="address__header">
       <h4 class="address__title">

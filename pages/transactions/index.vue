@@ -1,5 +1,8 @@
 <template>
-  <div class="transactions">
+  <div
+    v-if="!isLoading"
+    class="transactions"
+  >
     <search-filter class="transactions__search" />
     <div class="transactions__wrap">
       <div
@@ -65,6 +68,7 @@ export default {
       txs: 'tx/getTxs',
       txsCount: 'tx/getTxsCount',
       currentBlock: 'blocks/getCurrentBlock',
+      isLoading: 'main/getIsLoading',
     }),
     isLast() {
       if (this.query) {
