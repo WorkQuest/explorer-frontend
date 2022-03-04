@@ -253,7 +253,6 @@ export default {
     this.currentLocale = this.$i18n.locale;
     this.locales = this.$i18n.locales;
     moment.locale(this.currentLocale);
-    this.SetLoader(false);
   },
   methods: {
     toRoute(path) {

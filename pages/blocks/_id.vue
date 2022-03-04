@@ -194,10 +194,8 @@ export default {
     await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
     await this.SetLoader(false);
   },
-  async beforeDestroy() {
-    await this.SetLoader(true);
+  beforeDestroy() {
     this.$store.commit('blocks/resetBlock');
-    await this.SetLoader(false);
   },
   methods: {
     async changeBlock(blockId) {
