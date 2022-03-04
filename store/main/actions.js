@@ -52,7 +52,7 @@ export default {
       }
       return response;
     } catch (e) {
-      return error(500, 'searchHandler', e);
+      return error(e.code || 500, 'searchHandler', e);
     }
   },
 };

@@ -9,7 +9,7 @@ export default {
       commit('setTxsByAccount', response.result);
       return response;
     } catch (e) {
-      return error(500, 'getTxsByAccount', e);
+      return error(e.code || 500, 'getTxsByAccount', e);
     }
   },
   async getTxsByHash({ commit }, hash) {
@@ -18,7 +18,7 @@ export default {
       commit('setTxsByHash', response.result);
       return response;
     } catch (e) {
-      return error(500, 'getTxsByHash', e);
+      return error(e.code || 500, 'getTxsByHash', e);
     }
   },
   async getTxs({ commit }, queries) {
@@ -29,7 +29,7 @@ export default {
       commit('setTxs', response.result);
       return response;
     } catch (e) {
-      return error(500, 'getTxs', e);
+      return error(e.code || 500, 'getTxs', e);
     }
   },
 };

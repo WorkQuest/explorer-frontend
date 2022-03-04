@@ -7,7 +7,7 @@ export default {
       commit('setAccountInfo', response.result);
       return response;
     } catch (e) {
-      return error(500, 'getAccountByAddress', e);
+      return error(e.code || 500, 'getAccountByAddress', e);
     }
   },
 };
