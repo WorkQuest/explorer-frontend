@@ -1,5 +1,8 @@
 <template>
-  <div class="blocks blocks__container">
+  <div
+    v-if="!isLoading"
+    class="blocks blocks__container"
+  >
     <search-filter class="blocks__search" />
     <table-blocks
       class="blocks__table"
@@ -46,6 +49,7 @@ export default {
     ...mapGetters({
       blocks: 'blocks/getBlocks',
       blocksCount: 'blocks/getBlocksCount',
+      isLoading: 'main/getIsLoading',
     }),
     totalPages() {
       return Math.ceil(this.blocksCount / this.limit);

@@ -14,7 +14,7 @@ export default {
   },
   async getTxsByHash({ commit }, hash) {
     try {
-      const response = await this.$axios.$get(`/transaction/${hash}`); // /v1/transaction/{hash}
+      const response = await this.$axios.$get(`/transaction/${hash}`);
       commit('setTxsByHash', response.result);
       return response;
     } catch (e) {
