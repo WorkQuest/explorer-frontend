@@ -1,14 +1,17 @@
 <template>
-  <!--        TODO: Вывести токены -->
-  <div class="tokens">
+  <div
+    v-if="!isLoading"
+    class="tokens"
+  >
     <search-filter class="tokens__search" />
     <table-tokens
       class="tokens__table"
       :title="$tc('ui.token.tracker')"
-      :items="tracker"
-      :tokens="tokens"
+      :items="tokens"
       :fields="tableHeaders"
     />
+
+    <!--    mobile-->
     <div class="tokens__content">
       <p class="tokens__title">
         {{ $t('ui.token.tracker') }}
@@ -61,33 +64,63 @@
     </div>
 
     <base-pager
-      v-if="totalPagesValue > 1"
-      v-model="currentPage"
+      v-if="totalPages > 1"
+      v-model="page"
       class="tokens__pager"
-      :total-pages="totalPagesValue"
+      :total-pages="totalPages"
     />
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import TableTokens from '~/components/TableTokens';
+
 export default {
   name: 'TokensTracker',
+  components: { TableTokens },
   data() {
     return {
-      currentPage: 1,
-      search: '',
-      tracker: [
-        {
-          number: 1, token: 'USDT', volume: 43369072176.00, holders: 3320602,
-        },
-        {
-          number: 2, token: 'BUSD', volume: 43369072177.00, holders: 3320603,
-        },
-        {
-          number: 3, token: 'GHST', volume: 43369072179.00, holders: 3320600,
-        },
-      ],
-      tokens: {
+      page: 1,
+      limit: 10,
+      offset: 0,
+    };
+  },
+  computed: {
+    ...mapGetters({
+      allTokensCount: 'tokens/getAllTokensCount',
+      allTokens: 'tokens/getAllTokens',
+      isLoading: 'main/getIsLoading',
+    }),
+    totalPages() {
+      return this.setTotalPages(this.allTokensCount, 20);
+    },
+    payload() {
+      return {
+        limit: this.limit,
+        offset: this.offset,
+      };
+    },
+    tokens() {
+      // {
+      //   number: 1,
+      //     token: 'USDT',
+      //   volume: 43369072176.00,
+      //   holders: 3320602,
+      // },
+      // {
+      //   number: 2,
+      //     token: 'BUSD',
+      //   volume: 43369072177.00,
+      //   holders: 3320603,
+      // },
+      // {
+      //   number: 3,
+      //     token: 'GHST',
+      //   volume: 43369072179.00,
+      //   holders: 3320600,
+      // },
+      return {
         USDT: {
           name: 'Tether USD',
           description: 'Tether gives you the joint benefits of open blockchain technology and traditional currency by converting your cash into a stable digital currency equivalent.',
@@ -100,12 +133,7 @@ export default {
           name: 'Aavegotchi Ghost Token',
           description: 'Aavegotchis are crypto-collectibles living on the Ethereum blockchain, backed by the ERC721 standard used in popular blockchain games. $GHST is the official utility token of the Aavegotchi ecosystem and can be used to purchase portals, wearables, and consumables.',
         },
-      },
-    };
-  },
-  computed: {
-    totalPagesValue() {
-      return this.setTotalPages(this.tokens.length, 20);
+      };
     },
     tableHeaders() {
       return [
@@ -118,10 +146,28 @@ export default {
   },
   async mounted() {
     await this.SetLoader(true);
+    await this.$store.dispatch('tokens/getAllTokens', this.payload);
     await this.SetLoader(false);
   },
 };
 </script>
+
+<!--{
+   "contract_address_hash":{
+      "hex":"0x75fc17d0c358f19528d5c24f29b37fa2aa725b1e",
+      "bech32":"wq1wh7p05xrtrce22x4cf8jnvml5248ykc7ke2ldp"
+   },
+   "name":"WQ Ethereum wrapped",
+   "symbol":"ETH",
+   "total_supply":"1050000000000000000000",
+   "decimals":"18",
+   "type":"ERC-20",
+   "inserted_at":"2022-02-16T16:30:36.447Z",
+   "updated_at":"2022-03-04T08:07:25.535Z",
+   "holder_count":22,
+   "bridged":null,
+   "skip_metadata":null
+}-->
 
 <style lang="scss" scoped>
 .tokens {

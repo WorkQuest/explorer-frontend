@@ -81,11 +81,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    tokens: {
-      type: Object,
-      default: () => {
-      },
-    },
   },
 };
 </script>
