@@ -76,7 +76,7 @@
             class="columns__link_small"
             :to="{ path: '/transactions', query: { block: currentBlock.number }}"
           >
-            {{ Array.isArray(currentBlock.transactions) ? currentBlock.transactions.length : 0 }} txns
+            {{ currentBlock.transactionsCount }} txns
           </nuxt-link>
           <p class="columns__info_grey">
             {{ $t('ui.block.inThisBlock') }}
@@ -153,9 +153,9 @@ export default {
           },
           {
             title: this.$t('ui.txs'),
-            info: Array.isArray(this.currentBlock.transactions) ? this.currentBlock.transactions.length : 0,
+            info: this.currentBlock.transactionsCount,
             note: this.$t('ui.block.inThisBlock'),
-            item: 'transaction',
+            item: 'transactionsCount',
           },
           // TODO Rewards
           {

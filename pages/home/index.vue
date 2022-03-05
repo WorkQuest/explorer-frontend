@@ -106,7 +106,7 @@ export default {
       return [
         { key: 'number', label: this.$t('ui.block.blockNumber'), sortable: true },
         { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'transactions', label: this.$t('ui.block.txsCount'), sortable: true },
+        { key: 'transactionsCount', label: this.$t('ui.block.txsCount'), sortable: true },
         { key: 'reward', label: this.$t('ui.block.reward'), sortable: true },
       ];
     },

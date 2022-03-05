@@ -39,13 +39,13 @@
       <template #cell(reward)="el">
         <span>{{ +el.item.base_fee_per_gas * +el.item.gas_used }} {{ symbol }}</span>
       </template>
-      <template #cell(transactions)="el">
+      <template #cell(transactionsCount)="el">
         <nuxt-link
           class="table__link"
-          :class="el.item.transactions.length === 0 ? 'table__link_disabled' : ''"
+          :class="el.item.transactionsCount === 0 ? 'table__link_disabled' : ''"
           :to="{ path: '/transactions', query: { block: el.item.number }}"
         >
-          {{ Array.isArray(el.item.transactions) ? el.item.transactions.length : '' }}
+          {{ el.item.transactionsCount }}
         </nuxt-link>
       </template>
       <template #cell(gas_used)="el">
@@ -67,6 +67,7 @@ import { mapGetters } from 'vuex';
 /** @param {string} item.gas_used  */
 /** @param {number} item.block_number  */
 /** @param {string} item.base_fee_per_gas  */
+/** @param {string} item.transactionsCount  */
 /** @param {{ hex: string, bech32: string }=} [item.to_address_hash]  */
 /** @param {{ hex: string, bech32: string }} item.from_address_hash  */
 
