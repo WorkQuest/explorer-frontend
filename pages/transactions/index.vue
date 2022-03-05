@@ -115,27 +115,25 @@ export default {
     },
   },
   async mounted() {
+    await this.SetLoader(true);
     if (this.query) {
-      await this.SetLoader(true);
       await this.$store.dispatch('blocks/getBlockById', this.query);
-      await this.SetLoader(false);
     }
     await this.getTransactions();
+    await this.SetLoader(false);
   },
   async beforeDestroy() {
     await this.$store.commit('blocks/resetBlockTransactions');
   },
   methods: {
     async getTransactions() {
+      await this.SetLoader(true);
       if (this.query) {
-        await this.SetLoader(true);
         await this.$store.dispatch('blocks/getBlockTransactions', { blockId: this.query, ...this.payload });
-        await this.SetLoader(false);
       } else {
-        await this.SetLoader(true);
         await this.$store.dispatch('tx/getTxs', this.payload);
-        await this.SetLoader(false);
       }
+      await this.SetLoader(false);
     },
   },
 };
