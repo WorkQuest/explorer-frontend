@@ -105,27 +105,22 @@ export default {
   },
   watch: {
     async page() {
-      await this.SetLoader(true);
       this.offset = (this.page - 1) * this.limit;
       await this.getTransactions();
-      await this.SetLoader(false);
     },
     async query(current, previous) {
-      await this.SetLoader(true);
       if (!current && current !== previous) {
         await this.getTransactions();
       }
-      await this.SetLoader(false);
     },
   },
   async mounted() {
-    await this.SetLoader(true);
     if (this.query) {
-      const blockId = this.$route.query.block;
-      await this.$store.dispatch('blocks/getBlockById', blockId);
-      await this.getTransactions();
+      await this.SetLoader(true);
+      await this.$store.dispatch('blocks/getBlockById', this.query);
+      await this.SetLoader(false);
     }
-    await this.SetLoader(false);
+    await this.getTransactions();
   },
   async beforeDestroy() {
     await this.$store.commit('blocks/resetBlockTransactions');
@@ -133,10 +128,13 @@ export default {
   methods: {
     async getTransactions() {
       if (this.query) {
-        const blockId = this.$route.query.block;
-        await this.$store.dispatch('blocks/getBlockTransactions', { blockId, ...this.payload });
+        await this.SetLoader(true);
+        await this.$store.dispatch('blocks/getBlockTransactions', { blockId: this.query, ...this.payload });
+        await this.SetLoader(false);
       } else {
+        await this.SetLoader(true);
         await this.$store.dispatch('tx/getTxs', this.payload);
+        await this.SetLoader(false);
       }
     },
   },
