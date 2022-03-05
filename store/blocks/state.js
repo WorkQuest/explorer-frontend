@@ -4,4 +4,8 @@ export default () => ({
     count: 0,
     blocks: [],
   },
+  blockTransactions: {
+    count: 0,
+    transactions: [],
+  },
 });
