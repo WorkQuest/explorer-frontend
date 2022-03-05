@@ -21,38 +21,44 @@
           <span class="table__title">{{ $props.title }}</span>
         </div>
       </template>
+
       <template #cell(number)="el">
         <p>
           {{ el.item.number }}
         </p>
       </template>
-      <template #cell(token)="el">
+
+      <template #cell(contract_address_hash.hex)="el">
         <div class="token__header">
           <img
-            :src="require(`~/assets/img/tokens/${el.item.token}.svg`)"
+            :src="Require(`tokens/${el.item.symbol}.svg`)"
             width="15"
             class="token__image"
+            alt=""
+            @error="handleError()"
           >
           <nuxt-link
             :to="{ path: `tokens/`+el.item.token, params: { token: el.item.token }}"
             class="token__title table__link"
           >
-            {{ tokens[`${el.item.token}`].name }} ({{ el.item.token }})
+            {{ el.item.name }} ({{ el.item.symbol }})
           </nuxt-link>
         </div>
         <p class="token__description">
-          {{ tokens[`${el.item.token}`].description }}
+          {{ el.item.description }}
         </p>
       </template>
 
-      <template #cell(volume)="el">
+      <template #cell(total_supply)="el">
         <p>
-          {{ NumberFormat(el.item.volume) }}
+          {{ NumberFormat(el.item.total_supply) }}
         </p>
       </template>
+
       <template #cell(holders)="el">
-        <span>{{ NumberFormat(el.item.holders) }} </span>
+        <span>{{ NumberFormat(el.item.holder_count) }} </span>
       </template>
+
       <template #cell(address)="el">
         <nuxt-link
           class="table__link"
@@ -80,6 +86,15 @@ export default {
     fields: {
       type: Array,
       default: () => [],
+    },
+  },
+  mounted() {
+    console.log('this.items: ', this.items);
+  },
+  methods: {
+    handleError(e) {
+      console.log('e: ', e);
+      return '';
     },
   },
 };

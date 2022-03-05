@@ -201,10 +201,10 @@ export default {
         //   title: this.$t('ui.transfers'),
         //   path: '/transfers',
         // },
-        // {
-        //   title: this.$t('ui.tokens'),
-        //   path: '/tokens',
-        // },
+        {
+          title: this.$t('ui.tokens'),
+          path: '/tokens',
+        },
       ];
     },
     mobileMenuLinks1() {
@@ -230,10 +230,10 @@ export default {
         //   title: this.$t('ui.transfers'),
         //   path: '/transfers',
         // },
-        // {
-        //   title: this.$t('ui.tokens'),
-        //   path: '/tokens',
-        // },
+        {
+          title: this.$t('ui.tokens'),
+          path: '/tokens',
+        },
       ];
     },
     footerLinks() {
