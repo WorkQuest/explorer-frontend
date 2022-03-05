@@ -58,7 +58,7 @@ export default {
       return [
         { key: 'number', label: this.$t('ui.block.blockNumber'), sortable: true },
         { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'transactions', label: this.$t('ui.block.txn'), sortable: true },
+        { key: 'transactionsCount', label: this.$t('ui.block.txn'), sortable: true },
         { key: 'gas_used', label: this.$t('ui.block.gasUsed'), sortable: true },
         { key: 'gas_limit', label: this.$t('ui.block.gasLimit'), sortable: true },
         { key: 'reward', label: this.$t('ui.block.reward'), sortable: true },

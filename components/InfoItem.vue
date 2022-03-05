@@ -15,7 +15,7 @@
       </nuxt-link>
     </p>
     <p
-      v-else-if="item === 'transaction'"
+      v-else-if="item === 'transactionsCount'"
       class="item__link"
     >
       <nuxt-link

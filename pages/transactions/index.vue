@@ -10,7 +10,7 @@
         class="transactions__header"
       >
         <h5 class="transactions__title">
-          {{ $t('ui.tx.total') }} {{ txsTable.length }} {{ $t('ui.tx.found') }}
+          {{ $t('ui.tx.total') }} {{ currentBlockTransactionsCount }} {{ $t('ui.tx.found') }}
         </h5>
         <p class="transactions__block">
           {{ $t('ui.tx.forBlock') }}
@@ -39,7 +39,7 @@
         :key="i"
         class="transactions__transaction"
         :transaction="item"
-        :is-last="isLast"
+        :is-last="txsTable[i] === txsTable[txsTable.length - 1]"
       />
       <base-pager
         v-if="totalPages > 1"
@@ -68,23 +68,16 @@ export default {
       txs: 'tx/getTxs',
       txsCount: 'tx/getTxsCount',
       currentBlock: 'blocks/getCurrentBlock',
+      currentBlockTransactions: 'blocks/getCurrentBlockTransactions',
+      currentBlockTransactionsCount: 'blocks/getCurrentBlockTransactionsCount',
       isLoading: 'main/getIsLoading',
     }),
-    isLast() {
-      if (this.query) {
-        return Object.keys(this.currentBlock).length > 0 && this.currentBlock?.transactions
-          ? this.currentBlock.transactions
-            .forEach((i) => i === this.currentBlock.transactions[this.currentBlock.transactions.length - 1])
-          : true;
-      }
-      return this.txs.forEach((i) => i === this.txs[this.txs.length - 1]);
-    },
     query() {
       return this.$route.query.block;
     },
     txsTable() {
-      return this.query && Object.keys(this.currentBlock).length > 0
-        ? this.currentBlock.transactions
+      return this.query && this.currentBlockTransactionsCount > 0
+        ? this.currentBlockTransactions || []
         : this.txs;
     },
     payload() {
@@ -94,12 +87,9 @@ export default {
       };
     },
     totalPages() {
-      if (Object.keys(this.currentBlock).length > 0) {
-        return this.query && Array.isArray(this.currentBlock.transactions)
-          ? Math.ceil(this.currentBlock.transactions.length / this.limit)
-          : 0;
-      }
-      return Math.ceil(this.txsCount / this.limit);
+      return this.query && this.currentBlockTransactionsCount > 0
+        ? Math.ceil(this.currentBlockTransactionsCount / this.limit)
+        : Math.ceil(this.txsCount / this.limit);
     },
     tableHeaders() {
       return [
@@ -117,18 +107,38 @@ export default {
     async page() {
       await this.SetLoader(true);
       this.offset = (this.page - 1) * this.limit;
-      await this.$store.dispatch('tx/getTxs', this.payload);
+      await this.getTransactions();
+      await this.SetLoader(false);
+    },
+    async query(current, previous) {
+      await this.SetLoader(true);
+      if (!current && current !== previous) {
+        await this.getTransactions();
+      }
       await this.SetLoader(false);
     },
   },
   async mounted() {
     await this.SetLoader(true);
     if (this.query) {
-      await this.$store.dispatch('blocks/getBlockById', this.$route.query.block);
-    } else {
-      await this.$store.dispatch('tx/getTxs', this.payload);
+      const blockId = this.$route.query.block;
+      await this.$store.dispatch('blocks/getBlockById', blockId);
+      await this.getTransactions();
     }
     await this.SetLoader(false);
+  },
+  async beforeDestroy() {
+    await this.$store.commit('blocks/resetBlockTransactions');
+  },
+  methods: {
+    async getTransactions() {
+      if (this.query) {
+        const blockId = this.$route.query.block;
+        await this.$store.dispatch('blocks/getBlockTransactions', { blockId, ...this.payload });
+      } else {
+        await this.$store.dispatch('tx/getTxs', this.payload);
+      }
+    },
   },
 };
 </script>

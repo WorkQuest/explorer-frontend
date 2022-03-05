@@ -21,4 +21,17 @@ export default {
       return error(e.code || 500, 'getBlocks', e);
     }
   },
+  async getBlockTransactions({ commit }, { blockId, limit, offset }) {
+    try {
+      const response = await this.$axios.$get(`/block/${blockId}/transactions`, {
+        params: { limit, offset },
+      });
+      if (response.ok) {
+        commit('setBlockTransactions', response.result);
+      }
+      return response;
+    } catch (e) {
+      return error(e.code || 500, 'getTransactionsByBlock', e);
+    }
+  },
 };
