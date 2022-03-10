@@ -4,25 +4,29 @@
       v-model="search"
       :is-search="true"
       :is-hide-error="true"
-      :placeholder="$t('ui.forms.search')"
+      :placeholder="$tc('ui.forms.search')"
       class="tokens__search"
     />
     <div class="token-wrapper">
       <div
-        v-for="n in 10"
-        :key="n"
+        v-for="(token, index) in tokensArray"
+        :key="index"
         class="token"
+        @click="onClick(token)"
       >
-        <p class="token__uniswap">
+        <p class="token__item">
+          <!--          TODO base64 -->
           <img
             class="token__image"
-            src="~/assets/img/app/question.svg"
+            :src="require(`~/assets/img/tokens/empty-token.svg`)"
+            width="15"
+            height="15"
             alt="question"
           >
-          Uniswap V2 (UNI-V2)
+          {{ token.name }} ({{ token.symbol }})
         </p>
         <p class="token__code">
-          0.58479491 UNI-V2
+          {{ NumberFormat(ConvertFromDecimals(token.value, token.decimals)) }} {{ token.symbol }}
         </p>
       </div>
     </div>
@@ -32,10 +36,28 @@
 <script>
 export default {
   name: 'ChoiceToken',
+  props: {
+    tokens: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       search: '',
     };
+  },
+  computed: {
+    tokensArray() {
+      return this.search
+        ? this.tokens.filter((token) => `${token.name} ${token.symbol}`.toLowerCase().includes(this.search.toLowerCase()))
+        : this.tokens;
+    },
+  },
+  methods: {
+    async onClick(token) {
+      await this.$router.push(`/tokens/${token.token_contract_address_hash.hex}`);
+    },
   },
 };
 </script>
@@ -61,16 +83,18 @@ export default {
 
   &:hover {
     background: $black0;
+    cursor: pointer;
   }
 
   &-wrapper {
-    height: 394px;
+    height: auto;
+    max-height: 200px;
     overflow-y: scroll;
     overflow-x: hidden;
     overscroll-behavior: contain;
   }
 
-  &__uniswap {
+  &__item {
     @include text-simple;
     @include normal-font-size;
     display: flex;
@@ -78,6 +102,10 @@ export default {
 
   &__image {
     margin-right: 10px;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    overflow: hidden;
   }
 
   &__code {

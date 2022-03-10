@@ -107,6 +107,10 @@ export default {
     await this.$store.dispatch('account/getAccountByAddress', this.address.toLowerCase());
     await this.SetLoader(false);
   },
+  beforeDestroy() {
+    this.$store.commit('account/resetAccountInfo');
+    this.$store.commit('tx/resetTxsByAccount');
+  },
 };
 </script>
 
@@ -117,7 +121,6 @@ export default {
     width: 35px;
     align-items: center;
     justify-items: center;
-    background: $white;
     border: 1px solid $black0;
     padding: 5px;
     border-radius: 6px;
@@ -149,6 +152,7 @@ export default {
     grid-gap: 25px;
     margin-bottom: 25px;
     background: $white;
+    border-radius: 6px;
   }
 
   &__table {

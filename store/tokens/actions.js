@@ -12,4 +12,22 @@ export default {
       return error(e.code || 500, 'getAllTokens', e);
     }
   },
+  async getToken({ commit }, address) {
+    try {
+      const response = await this.$axios.$get(`/token/${address}`);
+      commit('setCurrentToken', response.result);
+      return response;
+    } catch (e) {
+      return error(e.code || 500, 'getToken', e);
+    }
+  },
+  async getTokenTransfers({ commit }, { address, limit, offset }) {
+    try {
+      const response = await this.$axios.$get(`/token/${address}/transfers`, { params: { limit, offset } });
+      commit('setCurrentTokenTransfers', response.result);
+      return response.result;
+    } catch (e) {
+      return error(e.code || 500, 'getTokenTransfers', e);
+    }
+  },
 };

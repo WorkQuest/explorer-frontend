@@ -1,3 +1,5 @@
+import { txs, txsByAccount, txsByHash } from '~/store/tx/state';
+
 export default {
   setTxsByAccount(state, data) {
     state.txsByAccount = data;
@@ -7,5 +9,14 @@ export default {
   },
   setTxs(state, data) {
     state.txs = data;
+  },
+  resetTxsByAccount(state) {
+    Object.assign(state.txsByAccount, txsByAccount);
+  },
+  resetTxsByHash(state) {
+    Object.assign(state.txsByHash, txsByHash);
+  },
+  resetTxs(state) {
+    Object.assign(state.txs, txs);
   },
 };

@@ -11,57 +11,59 @@
       :fields="tableHeaders"
     />
 
-    <!--    mobile-->
-    <!--    <div class="tokens__content">-->
-    <!--      <p class="tokens__title">-->
-    <!--        {{ $t('ui.token.tracker') }}-->
-    <!--      </p>-->
-    <!--      <div-->
-    <!--        v-for="(token, index) in tracker"-->
-    <!--        :key="index"-->
-    <!--        class="token"-->
-    <!--        :class="{token__separator: (index === tracker.length - 1)}"-->
-    <!--      >-->
-    <!--        <p class="token__token">-->
-    <!--          {{ $t('ui.token.token') }}-->
-    <!--        </p>-->
-    <!--        <div class="token__header">-->
-    <!--          <img-->
-    <!--            :src="require(`~/assets/img/tokens/${token.token}.svg`)"-->
-    <!--            width="15"-->
-    <!--            class="token__image"-->
-    <!--            :alt="token.token"-->
-    <!--          >-->
-    <!--          <nuxt-link-->
-    <!--            :to="{ path: `tokens/`+token.token, params: { token: token.token }}"-->
-    <!--            class="token__title table__link"-->
-    <!--          >-->
-    <!--            {{ tokens[`${token.token}`].name }} ({{ token.token }})-->
-    <!--          </nuxt-link>-->
-    <!--        </div>-->
-    <!--        <p class="token__description">-->
-    <!--          {{ tokens[`${token.token}`].description }}-->
-    <!--        </p>-->
-    <!--        <div-->
-    <!--          v-if="token.volume"-->
-    <!--          class="token__subtitle"-->
-    <!--        >-->
-    <!--          {{ $t('ui.token.volume') }}-->
-    <!--          <span class="token__info">-->
-    <!--            $ {{ token.volume }}-->
-    <!--          </span>-->
-    <!--        </div>-->
-    <!--        <div-->
-    <!--          v-if="token.holders"-->
-    <!--          class="token__subtitle"-->
-    <!--        >-->
-    <!--          {{ $t('ui.token.holders') }}-->
-    <!--          <span class="token__info">-->
-    <!--            {{ token.holders }}-->
-    <!--          </span>-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </div>-->
+    <!--        mobile-->
+    <div class="tokens__content">
+      <p class="tokens__title">
+        {{ $t('ui.token.tracker') }}
+      </p>
+      <div
+        v-for="(token, index) in tokens"
+        :key="index"
+        class="token"
+        :class="{token__separator: (index === tokens.length - 1)}"
+      >
+        <p class="token__token">
+          {{ $t('ui.token.token') }}
+        </p>
+        <div class="token__header">
+          <!--              TODO base64-->
+          <img
+            :src="require(`~/assets/img/tokens/empty-token.svg`)"
+            width="15"
+            height="15"
+            class="token__image"
+            :alt="token.symbol"
+          >
+          <nuxt-link
+            :to="{ path: `tokens/`+token.contract_address_hash.hex, params: { token: token.contract_address_hash.hex }}"
+            class="token__title table__link"
+          >
+            {{ token.name }} ({{ token.symbol }})
+          </nuxt-link>
+        </div>
+        <p class="token__description">
+          {{ token.description ? token.description : '' }}
+        </p>
+        <div
+          v-if="token.total_supply"
+          class="token__subtitle"
+        >
+          {{ $t('ui.token.volume') }}
+          <span class="token__info">
+            $ {{ token.total_supply }}
+          </span>
+        </div>
+        <div
+          v-if="token.holder_count"
+          class="token__subtitle"
+        >
+          {{ $t('ui.token.holders') }}
+          <span class="token__info">
+            {{ token.holder_count }}
+          </span>
+        </div>
+      </div>
+    </div>
 
     <base-pager
       v-if="totalPages > 1"
@@ -74,6 +76,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import BigNumber from 'bignumber.js';
 import TableTokens from '~/components/TableTokens';
 
 export default {
@@ -109,10 +112,20 @@ export default {
     },
     tableHeaders() {
       return [
-        { key: 'number', label: '#', sortable: true },
+        { key: 'number', label: '#', sortable: false },
         { key: 'contract_address_hash.hex', label: this.$t('ui.token.token'), sortable: true },
-        { key: 'total_supply', label: this.$t('ui.token.volume'), sortable: true },
-        { key: 'holder_count', label: this.$t('ui.token.holders'), sortable: true },
+        {
+          key: 'total_supply',
+          label: this.$t('ui.token.volume'),
+          sortable: true,
+          formatter: (value, key, item) => this.NumberFormat(this.ConvertFromDecimals(value, item.decimals)),
+        },
+        {
+          key: 'holder_count',
+          label: this.$t('ui.token.holders'),
+          sortable: true,
+          formatter: (value) => this.NumberFormat(value),
+        },
       ];
     },
   },
@@ -123,23 +136,6 @@ export default {
   },
 };
 </script>
-
-<!--{
-   "contract_address_hash":{
-      "hex":"0x75fc17d0c358f19528d5c24f29b37fa2aa725b1e",
-      "bech32":"wq1wh7p05xrtrce22x4cf8jnvml5248ykc7ke2ldp"
-   },
-   "name":"WQ Ethereum wrapped",
-   "symbol":"ETH",
-   "total_supply":"1050000000000000000000",
-   "decimals":"18",
-   "type":"ERC-20",
-   "inserted_at":"2022-02-16T16:30:36.447Z",
-   "updated_at":"2022-03-04T08:07:25.535Z",
-   "holder_count":22,
-   "bridged":null,
-   "skip_metadata":null
-}-->
 
 <style lang="scss" scoped>
 .tokens {
@@ -199,6 +195,7 @@ export default {
 
     &__header {
       display: flex;
+      align-items: center;
     }
 
     &__title {
@@ -228,6 +225,15 @@ export default {
       font-weight: normal;
       margin-left: 10px;
     }
+    &__image {
+      border-radius: 50%;
+      width: 15px;
+      height: 15px;
+      overflow: hidden;
+    }
+  }
+  .table__link {
+    width: auto !important;
   }
 }
 </style>

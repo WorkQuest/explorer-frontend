@@ -7,32 +7,51 @@
     </div>
     <div class="overview-wrap">
       <p class="overview__info">
-        <span class="overview__title">{{ $t('ui.token.balance') }}</span>
-        {{ Floor(balanceWUSD) }} {{ symbol }}
+        <span class="overview__title">{{ isToken ? $t('ui.token.maxSupply') : $t('ui.token.balance') }}</span>
+        {{ isToken ? NumberFormat(balance) : Floor(balance) }} {{ symbol }}
+      </p>
+      <p
+        v-if="isToken"
+        class="overview__info"
+      >
+        <span class="overview__title"> {{ $t('ui.token.holders') }}  </span>
+        {{ NumberFormat(token.holder_count) }}
       </p>
       <p class="overview__info">
-        <span class="overview__title">{{ symbol }} {{ $t('ui.tx.value') }}</span>
-        ${{ Floor(balanceWUSD) }} (@ $1.00/{{ symbol }})
+        <template v-if="isToken">
+          <span class="overview__title"> {{ $t('ui.token.transfers') }}  </span>
+          {{ NumberFormat(transfersCount) }}
+        </template>
+        <template v-else>
+          <span class="overview__title">{{ symbol }} {{ $t('ui.tx.value') }}</span>
+          ${{ Floor(balance) }} (@ $1.00/{{ symbol }})
+        </template>
       </p>
-      <div class="overview__token">
-        {{ $t('ui.token.token') }}
-      </div>
-      <div
-        v-click-outside="hideChoice"
-        class="overview__select-field"
-      >
-        <div class="overview__input">
-          {{ $t('ui.token.placeholder') }}
-          <span
-            class="icon-caret_down"
-            @click="toggleChoice"
+      <template v-if="!isToken">
+        <div class="overview__token">
+          {{ $t('ui.token.token') }}
+        </div>
+        <div
+          v-click-outside="hideChoice"
+          class="overview__select-field"
+        >
+          <div
+            class="overview__input"
+            :class="accountTokens.length === 0 ? 'overview__input_disabled' :''"
+          >
+            {{ $t('ui.token.selectToken') }}
+            <span
+              class="icon-caret_down"
+              @click="toggleChoice"
+            />
+          </div>
+          <ChoiceToken
+            v-if="isChoosing"
+            class="overview__select"
+            :tokens="accountTokens"
           />
         </div>
-        <ChoiceToken
-          v-if="isChoosing"
-          class="overview__select"
-        />
-      </div>
+      </template>
     </div>
   </div>
 </template>
@@ -52,22 +71,41 @@ export default {
   directives: {
     ClickOutside,
   },
+  props: {
+    address: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
-      address: this.$route.params.id,
       isChoosing: false,
     };
   },
   computed: {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
-      accountBalances: 'account/getAccountBalances',
+      nativeBalance: 'account/getNativeBalance',
       accountInfo: 'account/getAccountInfo',
-      symbol: 'main/getWUSDTokenSymbol',
-      decimals: 'main/getWUSDTokenDecimals',
+      accountTokens: 'account/getAccountTokens',
+      nativeSymbol: 'tokens/getWUSDTokenSymbol',
+      nativeDecimals: 'tokens/getWUSDTokenDecimals',
+      token: 'tokens/getCurrentToken',
+      transfersCount: 'tokens/getCurrentTokenTransfersCount',
     }),
-    balanceWUSD() {
-      return new BigNumber(this.accountBalances || 0).shiftedBy(-this.decimals);
+    isToken() {
+      return Object.keys(this.token).length > 0;
+    },
+    decimals() {
+      return this.isToken && this.address ? this.token.decimals : this.nativeDecimals;
+    },
+    symbol() {
+      return this.isToken && this.address ? this.token.symbol : this.nativeSymbol;
+    },
+    balance() {
+      return new BigNumber(this.isToken && this.address
+        ? this.token.total_supply
+        : this.nativeBalance).shiftedBy(-this.decimals).toString();
     },
   },
   methods: {
@@ -125,6 +163,10 @@ export default {
     background: $black0;
     border-radius: 6px;
     color: $black200;
+    &_disabled {
+      pointer-events: none;
+      color: $black100;
+    }
   }
 
   &__select {

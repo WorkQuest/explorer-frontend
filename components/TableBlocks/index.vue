@@ -98,7 +98,7 @@ export default {
   computed: {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
-      symbol: 'main/getWUSDTokenSymbol',
+      symbol: 'tokens/getWUSDTokenSymbol',
     }),
   },
 };

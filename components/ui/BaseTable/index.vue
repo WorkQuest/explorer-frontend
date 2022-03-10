@@ -151,8 +151,8 @@ export default {
   computed: {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
-      symbol: 'main/getWUSDTokenSymbol',
-      decimals: 'main/getWUSDTokenDecimals',
+      symbol: 'tokens/getWUSDTokenSymbol',
+      decimals: 'tokens/getWUSDTokenDecimals',
     }),
   },
   methods: {

@@ -293,8 +293,8 @@ export default {
   computed: {
     ...mapGetters({
       tx: 'tx/getTxsByHash',
-      symbol: 'main/getWUSDTokenSymbol',
-      decimals: 'main/getWUSDTokenDecimals',
+      symbol: 'tokens/getWUSDTokenSymbol',
+      decimals: 'tokens/getWUSDTokenDecimals',
       isLoading: 'main/getIsLoading',
     }),
     gasLimit() {
@@ -389,6 +389,9 @@ export default {
   async mounted() {
     await this.SetLoader(true);
     await this.SetLoader(false);
+  },
+  beforeDestroy() {
+    this.$store.commit('tx/resetTxsByHash');
   },
   methods: {
     onClick(tab) {

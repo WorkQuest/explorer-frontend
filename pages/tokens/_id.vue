@@ -1,35 +1,30 @@
 <template>
-  <!--        TODO: Вывести токены -->
   <div
-    v-if="params"
+    v-if="!isLoading && Object.keys(token).length > 0"
     class="token"
   >
     <search-filter class="token__search" />
-    <base-field
-      v-model="search"
-      class="token__search_mobile"
-      :is-search="true"
-      :is-hide-error="true"
-      :placeholder="$tc('ui.forms.searchPlaceholder')"
-    />
+
     <div class="token__header">
       <img
-        :src="require(`~/assets/img/tokens/${params}.svg`)"
+        :src="require(`~/assets/img/tokens/empty-token.svg`)"
         width="30"
         class="token__image"
-        :alt="params"
+        :alt="token.name"
       >
       <h4 class="token__title">
         {{ $t('ui.token.token') }}
       </h4>
       <p class="token__token">
-        {{ tokens[`${params}`].name }}
+        {{ token.name }}
       </p>
     </div>
+
     <div class="token__info">
-      <overview :token="params" />
-      <more-info :token="params" />
+      <overview :address="address" />
+      <more-info :address="address" />
     </div>
+
     <div class="token__tables tables">
       <div class="tables__menu">
         <span
@@ -40,6 +35,7 @@
           @click="onClick(tab)"
         >{{ $t(`ui.token.${tab}`) }}</span>
       </div>
+
       <div
         v-if="activeTab === 'transfers'"
         class="tables__tf"
@@ -47,23 +43,24 @@
         <table-txs
           class="tables__table"
           :is-only="false"
-          :items="transfers"
+          :items="tokenTransfers"
           :fields="tableHeadersTransfers"
         />
         <transaction
-          v-for="(item, i) in transfers"
+          v-for="(item, i) in tokenTransfers"
           :key="i"
           class="tables__item"
           :transaction="item"
-          :is-last="transfers[i] === transfers[transfers.length - 1]"
+          :is-last="tokenTransfers[i] === tokenTransfers[tokenTransfers.length - 1]"
         />
         <base-pager
           v-if="totalPagesValue > 1"
-          v-model="currentPage"
+          v-model="page"
           class="token__pager"
           :total-pages="totalPagesValue"
         />
       </div>
+
       <div
         v-if="activeTab === 'holders'"
         class="tables__holders"
@@ -71,23 +68,24 @@
         <table-tokens
           class="tables__table"
           :is-only="false"
-          :items="holders"
+          :items="tokenHolders"
           :fields="tableHeadersHolders"
         />
         <holder
-          v-for="(item, i) in holders"
+          v-for="(item, i) in tokenHolders"
           :key="i"
           class="tables__item"
           :holder="item"
-          :is-last="holders[i] === holders[holders.length - 1]"
+          :is-last="tokenHolders[i] === tokenHolders[tokenHolders.length - 1]"
         />
         <base-pager
           v-if="totalPagesValue > 1"
-          v-model="currentPage"
+          v-model="page"
           class="token__pager"
           :total-pages="totalPagesValue"
         />
       </div>
+      <!--      TODO update when server response changes    -->
       <div
         v-if="activeTab === 'info'"
         class="tables__info token-info"
@@ -114,6 +112,7 @@
           61 992 333 258.00 USDT
         </p>
       </div>
+
       <div
         v-if="activeTab === 'contract'"
         class="tables__contract contract"
@@ -205,97 +204,86 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'Token',
   data() {
     return {
       params: '',
-      address: '',
       activeTab: 'transfers',
       activePoint: [],
       search: '',
-      currentPage: 1,
+      page: 1,
+      limit: 10,
+      offset: 0,
       tabs: ['transfers', 'holders', 'info', 'contract'],
-      tokens: {
-        USDT: {
-          name: 'Tether USD',
-          description: 'Tether gives you the joint benefits of open blockchain technology and traditional currency by converting your cash into a stable digital currency equivalent.',
-        },
-        BUSD: {
-          name: 'Binance USD',
-          description: 'Binance USD (BUSD) is a dollar-backed stablecoin issued and custodied by Paxos Trust Company, and regulated by the New York State Department of Financial Services. BUSD is available directly for sale 1:1 with USD on Paxos.com and will be listed for trading on Binance.',
-        },
-        GHST: {
-          name: 'Aavegotchi Ghost Token',
-          description: 'Aavegotchis are crypto-collectibles living on the Ethereum blockchain, backed by the ERC721 standard used in popular blockchain games. $GHST is the official utility token of the Aavegotchi ecosystem and can be used to purchase portals, wearables, and consumables.',
-        },
-      },
-      transfers: [
-        {
-          id: '0xdd3be9a7b1c18bd28188c51f8734b907264cd7de7aa4b68d8ba6e823da46e778',
-          method: 'Transfer',
-          timestamp: '2021-11-23T09:19:08.000Z',
-          fromAddress: '0x2cba9372edb012769d67d45b62ddd63ac654910a',
-          toAddress: '0xd26114cd6ee289accf82350c8d8487fedb8a0c07',
-          quantity: 1092.814502,
-        },
-        {
-          id: '0xdd3be9a7b1c18bd28188c51f8734b907264cd7de7aa4b68d8ba6e823da46e778',
-          method: 'Approve',
-          timestamp: '2021-11-24T09:19:08.000Z',
-          fromAddress: '0x2cba9372edb012769d67d45b62ddd63ac654910a',
-          toAddress: '0xd26114cd6ee289accf82350c8d8487fedb8a0c07',
-          quantity: 1092.814503,
-        },
-      ],
-      holders: [
-        {
-          id: '1',
-          address: '0xa929022c9107643515f5c777ce9a910f0d1e490c',
-          quantity: 1092.814502,
-          percentage: '6.1728%',
-          value: '$ 1 908 040 490,00',
-        },
-        {
-          id: '2',
-          address: '0xa929022c9107643515f5c777ce9a910f0d1e490c',
-          quantity: 1092.814502,
-          percentage: '6.1728%',
-          value: '$ 1 908 040 490,00',
-        },
-      ],
     };
   },
   computed: {
+    ...mapGetters({
+      token: 'tokens/getCurrentToken',
+      tokenTransfers: 'tokens/getCurrentTokenTransfers',
+      tokenTransfersCount: 'tokens/getCurrentTokenTransfersCount',
+      tokenHolders: 'tokens/getCurrentTokenHolders',
+      tokenHoldersCount: 'tokens/getCurrentTokenHoldersCount',
+      isLoading: 'main/getIsLoading',
+    }),
+    address() {
+      return this.$route.params.id;
+    },
     totalPagesValue() {
-      if (this.activeTab === 'transfers') return this.setTotalPages(this.transfers.length, 20);
-      if (this.activeTab === 'holders') return this.setTotalPages(this.holders.length, 20);
+      if (this.activeTab === 'transfers') return this.setTotalPages(this.tokenTransfersCount, 20);
+      if (this.activeTab === 'holders') return this.setTotalPages(this.tokenHoldersCount, 20);
       return 1;
+    },
+    payload() {
+      return {
+        address: this.address,
+        limit: this.limit,
+        offset: this.offset,
+      };
     },
     tableHeadersTransfers() {
       return [
-        { key: 'id', label: this.$t('ui.tx.transaction'), sortable: true },
+        { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
         { key: 'method', label: this.$t('ui.token.method'), sortable: true },
-        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true },
-        { key: 'quantity', label: this.$t('ui.token.quantity'), sortable: true },
+        { key: 'age', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
+        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
+        { key: 'amount', label: this.$t('ui.token.quantity'), sortable: true },
       ];
     },
     tableHeadersHolders() {
       return [
-        { key: 'id', label: this.$t('ui.token.rank'), sortable: true },
-        { key: 'address', label: this.$t('ui.token.address'), sortable: true },
-        { key: 'quantity', label: this.$t('ui.token.quantity'), sortable: true },
+        'rank',
+        { key: 'address_hash.hex', label: this.$t('ui.token.address'), sortable: true },
+        {
+          key: 'value',
+          label: this.$t('ui.token.quantity'),
+          sortable: true,
+          formatter: (value) => this.NumberFormat(this.ConvertFromDecimals(value, this.token.decimals)),
+        },
         { key: 'percentage', label: this.$t('ui.token.percentage'), sortable: true },
         { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
       ];
     },
   },
+  watch: {
+    async page() {
+      await this.SetLoader(true);
+      this.offset = (this.page - 1) * this.limit;
+      await this.$store.dispatch('tokens/getTokenTransfers', this.payload);
+      await this.SetLoader(false);
+    },
+  },
   async mounted() {
     await this.SetLoader(true);
-    this.params = this.$route.params.id;
+    await this.$store.dispatch('tokens/getToken', this.address);
     await this.SetLoader(false);
+  },
+  beforeDestroy() {
+    this.$store.commit('tokens/resetCurrentToken');
   },
   methods: {
     onClick(tab) {
@@ -340,6 +328,13 @@ export default {
     grid-template-columns: 1fr 1fr;
     grid-gap: 25px;
     margin-bottom: 25px;
+  }
+
+  &__image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
   }
 }
 

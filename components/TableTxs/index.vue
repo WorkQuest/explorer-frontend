@@ -18,6 +18,7 @@
           <strong>{{ $t('ui.loading') }}</strong>
         </div>
       </template>
+
       <template
         v-if="isOnly"
         #table-caption
@@ -26,16 +27,26 @@
           <span class="table__title">{{ $props.title }}</span>
         </div>
       </template>
+
       <template #cell(hash)="el">
         <nuxt-link
           class="table__link"
-          :to="`/transactions/${el.item.hash}`"
+          :to="`/transactions/${el.item.hash || el.item.transaction_hash}`"
         >
-          {{ formatItem(el.item.hash, 9, 6) }}
+          {{ formatItem(el.item.hash || el.item.transaction_hash, 9, 6) }}
         </nuxt-link>
       </template>
+
+      <template #cell(method)="">
+        <span> {{ $t('ui.token.transfer') }} </span>
+      </template>
+
       <template #cell(timestamp)="el">
         <span>{{ formatDataFromNow(el.item.timestamp) }}</span>
+      </template>
+
+      <template #cell(age)="el">
+        <span v-if="el.item.block && el.item.block.timestamp">{{ formatDataFromNow(el.item.block.timestamp) }}</span>
       </template>
 
       <template #cell(block_number)="el">
@@ -46,9 +57,11 @@
           {{ el.item.block_number }}
         </nuxt-link>
       </template>
+
       <template #cell(gas_used)="el">
         <span>{{ el.item.gas_used }} </span>
       </template>
+
       <template #cell(from_address_hash.hex)="el">
         <nuxt-link
           class="table__link"
@@ -57,6 +70,7 @@
           {{ formatItem(el.item.from_address_hash.hex, 9, 6) }}
         </nuxt-link>
       </template>
+
       <template #cell(to_address_hash.hex)="el">
         <nuxt-link
           v-if="el.item.to_address_hash"
@@ -66,12 +80,19 @@
           {{ formatItem(el.item.to_address_hash.hex, 9, 6) }}
         </nuxt-link>
       </template>
+
       <template #cell(value)="el">
         <span>{{ Floor(cutValueData(el.item.value)) }} {{ symbol }}</span>
       </template>
+
+      <template #cell(amount)="el">
+        <span>{{ Floor(cutValueData(el.item.amount)) }} {{ symbol }}</span>
+      </template>
+
       <template #cell(gas_used)="el">
         <span class="table__grey">{{ el.item.gas_used }}</span>
       </template>
+
       <template #cell(token)="el">
         <nuxt-link
           class="table__link"
@@ -122,9 +143,19 @@ export default {
   computed: {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
-      symbol: 'main/getWUSDTokenSymbol',
-      decimals: 'main/getWUSDTokenDecimals',
+      nativeSymbol: 'tokens/getWUSDTokenSymbol',
+      nativeDecimals: 'tokens/getWUSDTokenDecimals',
+      token: 'tokens/getCurrentToken',
     }),
+    isToken() {
+      return Object.keys(this.token).length > 0;
+    },
+    symbol() {
+      return this.isToken ? this.token.symbol : this.nativeSymbol;
+    },
+    decimals() {
+      return this.isToken ? this.token.decimals : this.nativeDecimals;
+    },
   },
   methods: {
     cutValueData(value) {

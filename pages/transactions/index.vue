@@ -122,8 +122,9 @@ export default {
     await this.getTransactions();
     await this.SetLoader(false);
   },
-  async beforeDestroy() {
-    await this.$store.commit('blocks/resetBlockTransactions');
+  beforeDestroy() {
+    this.$store.commit('blocks/resetBlockTransactions');
+    this.$store.commit('tx/resetTxs');
   },
   methods: {
     async getTransactions() {

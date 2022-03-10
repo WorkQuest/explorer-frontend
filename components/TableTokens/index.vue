@@ -10,7 +10,7 @@
       sort-icon-right
       :responsive="true"
       tbody-tr-class="table__row"
-      :empty-text="$t('ui.token.noToken')"
+      :empty-text="$t('ui.token.noTokens')"
       show-empty
     >
       <template
@@ -24,25 +24,33 @@
 
       <template #cell(number)="el">
         <p>
-          {{ el.item.number }}
+          {{ el.index + 1 }}
+        </p>
+      </template>
+
+      <template #cell(rank)="el">
+        <p>
+          {{ el.index + 1 }}
         </p>
       </template>
 
       <template #cell(contract_address_hash.hex)="el">
         <div class="token__header">
-          <img
-            :src="Require(`tokens/${el.item.symbol}.svg`)"
-            width="15"
-            class="token__image"
-            alt=""
-            @error="handleError()"
-          >
-          <nuxt-link
-            :to="{ path: `tokens/`+el.item.token, params: { token: el.item.token }}"
-            class="token__title table__link"
-          >
-            {{ el.item.name }} ({{ el.item.symbol }})
-          </nuxt-link>
+          <template v-if="el.item.symbol">
+            <img
+              :src="require(`~/assets/img/tokens/empty-token.svg`)"
+              width="15"
+              height="15"
+              class="token__image"
+              :alt="el.item.symbol"
+            >
+            <nuxt-link
+              :to="{ path: `tokens/`+el.item.contract_address_hash.hex, params: { token: el.item.contract_address_hash.hex }}"
+              class="token__title table__link"
+            >
+              {{ el.item.name }} ({{ el.item.symbol }})
+            </nuxt-link>
+          </template>
         </div>
         <p class="token__description">
           {{ el.item.description }}
@@ -51,20 +59,20 @@
 
       <template #cell(total_supply)="el">
         <p>
-          {{ NumberFormat(el.item.total_supply) }}
+          {{ el.value }}
         </p>
       </template>
 
-      <template #cell(holders)="el">
-        <span>{{ NumberFormat(el.item.holder_count) }} </span>
+      <template #cell(holder_count)="el">
+        <span>{{ el.value }} </span>
       </template>
 
-      <template #cell(address)="el">
+      <template #cell(address_hash.hex)="el">
         <nuxt-link
           class="table__link"
-          :to="{ path: '/address/'+el.item.address }"
+          :to="{ path: '/address/'+el.item.address_hash.hex }"
         >
-          {{ el.item.address }}
+          {{ el.item.address_hash.hex }}
         </nuxt-link>
       </template>
     </b-table>
@@ -88,19 +96,10 @@ export default {
       default: () => [],
     },
   },
-  mounted() {
-    console.log('this.items: ', this.items);
-  },
-  methods: {
-    handleError(e) {
-      console.log('e: ', e);
-      return '';
-    },
-  },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .token {
   &__header {
     display: flex;
@@ -109,7 +108,7 @@ export default {
   &__title {
     @include text-simple;
     @include normal-font-size;
-    margin: 5px;
+    margin-left: 5px;
   }
 
   &__description {
@@ -119,6 +118,13 @@ export default {
     color: $black300;
     max-width: 273px;
     margin-left: 22px;
+  }
+  &__image {
+    border-radius: 50%;
+    margin-top: 5px;
+    width: 15px;
+    height: 15px;
+    overflow: hidden;
   }
 }
 </style>
