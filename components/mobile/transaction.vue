@@ -31,7 +31,7 @@
       </nuxt-link>
     </div>
     <p class="transaction__timestamp">
-      {{ formatDataFromNow(transaction.block.timestamp) }}
+      {{ transaction.block && transaction.block.timestamp ? formatDataFromNow(transaction.block.timestamp) : '' }}
     </p>
     <div
       v-if="transaction.method"
