@@ -279,7 +279,7 @@ export default {
   },
   async mounted() {
     await this.SetLoader(true);
-    await this.$store.dispatch('tokens/getToken', this.address);
+    await this.$store.dispatch('tokens/getToken', { address: this.address, commonLimit: this.limit });
     await this.SetLoader(false);
   },
   beforeDestroy() {

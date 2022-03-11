@@ -1,4 +1,4 @@
-import { currentToken } from '~/store/tokens/state';
+import { allTokens, currentToken } from '~/store/tokens/state';
 
 export default {
   setAllTokens(state, data) {
@@ -13,6 +13,13 @@ export default {
   setCurrentTokenTransfers(state, data) {
     state.currentToken.transfersList.count = data.count;
     state.currentToken.transfersList.rows = data.txs;
+  },
+  setSearchResult(state, data) {
+    state.allTokens.count = data.count;
+    state.allTokens.tokens = data.rows.map((item) => item.token);
+  },
+  resetTokens(state) {
+    Object.assign(state.allTokens, allTokens);
   },
   resetCurrentToken(state) {
     Object.assign(state.currentToken, currentToken);

@@ -111,6 +111,7 @@ export default {
   }
   &__input {
     flex-basis: 100%;
+    margin-right: 20px;
     &_filtered {
       flex-basis: 60%;
     }
@@ -187,8 +188,11 @@ export default {
     &__buttons-field {
       display: none;
     }
-    &__input_filtered {
-      flex-basis: 100%;
+    &__input {
+      margin-right: 0;
+      &_filtered {
+        flex-basis: 100%;
+      }
     }
   }
 }

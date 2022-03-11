@@ -45,7 +45,7 @@
               :alt="el.item.symbol"
             >
             <nuxt-link
-              :to="{ path: `tokens/`+el.item.contract_address_hash.hex, params: { token: el.item.contract_address_hash.hex }}"
+              :to="{ path: `/tokens/`+el.item.contract_address_hash.hex, params: { token: el.item.contract_address_hash.hex }}"
               class="token__title table__link"
             >
               {{ el.item.name }} ({{ el.item.symbol }})

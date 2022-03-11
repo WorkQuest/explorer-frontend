@@ -58,7 +58,6 @@ export default {
   name: 'AddressId',
   data() {
     return {
-      address: this.$route.params.id,
       search: '',
       page: 1,
       limit: 10,
@@ -70,6 +69,7 @@ export default {
       isLoading: 'main/getIsLoading',
       txs: 'tx/getTxsByAccount',
       txsCount: 'tx/getTxsByAccountCount',
+      accountInfo: 'account/getAccountInfo',
     }),
     payload() {
       return {
@@ -77,6 +77,9 @@ export default {
         limit: this.limit,
         offset: this.offset,
       };
+    },
+    address() {
+      return Object.keys(this.accountInfo).length > 0 && this.accountInfo.hash?.hex ? this.accountInfo.hash.hex : this.$route.params.id;
     },
     totalPages() {
       return Math.ceil(this.txsCount / this.limit);

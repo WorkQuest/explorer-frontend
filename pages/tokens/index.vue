@@ -35,7 +35,7 @@
             :alt="token.symbol"
           >
           <nuxt-link
-            :to="{ path: `tokens/`+token.contract_address_hash.hex, params: { token: token.contract_address_hash.hex }}"
+            :to="{ path: `/tokens/`+token.contract_address_hash.hex, params: { token: token.contract_address_hash.hex }}"
             class="token__title table__link"
           >
             {{ token.name }} ({{ token.symbol }})
@@ -76,7 +76,6 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import BigNumber from 'bignumber.js';
 import TableTokens from '~/components/TableTokens';
 
 export default {
@@ -130,9 +129,15 @@ export default {
     },
   },
   async mounted() {
-    await this.SetLoader(true);
-    await this.$store.dispatch('tokens/getAllTokens', this.payload);
-    await this.SetLoader(false);
+    const isSearch = this.$route.query?.search;
+    if (!isSearch || !this.allTokensCount) {
+      await this.SetLoader(true);
+      await this.$store.dispatch('tokens/getAllTokens', this.payload);
+      await this.SetLoader(false);
+    }
+  },
+  beforeDestroy() {
+    this.$store.commit('tokens/resetTokens');
   },
 };
 </script>

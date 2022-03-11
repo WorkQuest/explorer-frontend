@@ -55,12 +55,12 @@
         <p class="blocks__title">
           {{ $t('ui.latestTxs') }}
         </p>
-        <nuxt
+        <nuxt-link
           class="blocks__link"
           :to="'transactions'"
         >
           {{ $t('ui.allTxs') }}
-        </nuxt>
+        </nuxt-link>
       </div>
       <transaction
         v-for="(item, i) in txs"

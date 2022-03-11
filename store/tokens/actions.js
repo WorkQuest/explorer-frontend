@@ -12,9 +12,11 @@ export default {
       return error(e.code || 500, 'getAllTokens', e);
     }
   },
-  async getToken({ commit }, address) {
+  async getToken({ commit }, { address, commonLimit }) {
     try {
-      const response = await this.$axios.$get(`/token/${address}`);
+      const response = await this.$axios.$get(`/token/${address}`, {
+        params: { commonLimit },
+      });
       commit('setCurrentToken', response.result);
       return response;
     } catch (e) {

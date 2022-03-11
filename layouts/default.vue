@@ -492,7 +492,7 @@ export default {
 
   &__right {
     display: grid;
-    grid-template-columns: repeat(5, auto);
+    grid-template-columns: repeat(2, auto);
     grid-gap: 10px;
     align-items: center;
   }
