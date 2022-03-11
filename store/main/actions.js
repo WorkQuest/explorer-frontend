@@ -21,12 +21,6 @@ export default {
   setLoaderProgress({ commit }, value) {
     commit('setLoaderProgress', value);
   },
-  setProjects({ commit }, value) {
-    commit('setProjects', value);
-  },
-  async getApiData({ dispatch }) {
-    await dispatch('rate/getRate', null, { root: true });
-  },
   showToast(app, value) {
     this._vm.$bvToast.toast(value.text, {
       title: value.title || 'Error',
