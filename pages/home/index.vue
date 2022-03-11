@@ -125,6 +125,9 @@ export default {
     await this.$store.dispatch('tx/getTxs', this.payload);
     await this.SetLoader(false);
   },
+  beforeDestroy() {
+    this.$store.commit('tx/resetTxs');
+  },
 };
 </script>
 <style lang="scss" scoped>
