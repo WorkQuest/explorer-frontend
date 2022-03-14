@@ -14,6 +14,10 @@ export default {
     state.currentToken.transfersList.count = data.count;
     state.currentToken.transfersList.rows = data.txs;
   },
+  setCurrentTokenHolders(state, data) {
+    state.currentToken.holdersList.count = data.count;
+    state.currentToken.holdersList.rows = data.holders;
+  },
   setSearchResult(state, data) {
     state.allTokens.count = data.count;
     state.allTokens.tokens = data.rows.map((item) => item.token);

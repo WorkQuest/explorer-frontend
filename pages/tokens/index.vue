@@ -235,6 +235,7 @@ export default {
       width: 15px;
       height: 15px;
       overflow: hidden;
+      object-fit: cover;
     }
   }
   .table__link {
