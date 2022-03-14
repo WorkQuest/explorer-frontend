@@ -1,106 +1,131 @@
 <template>
-  <!--        TODO: Вывести трансферы -->
   <div class="transfer transfer__container">
     <search-filter class="transfer__search" />
-    <base-field
-      v-model="search"
-      class="transfer__search_mobile"
-      :is-search="true"
-      :is-hide-error="true"
-      :placeholder="$tc('ui.forms.searchPlaceholder')"
-    />
     <table-txs
       class="transfer__table"
       :title="$t('ui.token.token')+' '+$t('ui.token.transfers')"
-      :items="transfers"
-      :tokens="tokens"
+      :items="allTokenTransfers"
       :fields="tableHeaders"
     />
     <div class="tables__transactions">
       <p class="tables__title">
         {{ $t('ui.token.token') + ' ' + $t('ui.token.transfers') }}
       </p>
-      <transaction
-        v-for="(item, i) in transfers"
-        :key="i"
-        class="tables__transaction"
-        :transaction="item"
-        :is-last="transfers[i] === transfers[transfers.length - 1]"
-        :is-home="true"
-        :tokens="tokens"
-        :is-token="true"
-      />
+      <!--      <transaction-->
+      <!--        v-for="(item, i) in allTokenTransfers"-->
+      <!--        :key="i"-->
+      <!--        class="tables__transaction"-->
+      <!--        :transaction="item"-->
+      <!--        :is-last="allTokenTransfers[i] === allTokenTransfers[allTokenTransfers.length - 1]"-->
+      <!--        :is-home="true"-->
+      <!--        :is-token="true"-->
+      <!--      />-->
     </div>
     <base-pager
       v-if="totalPagesValue > 1"
-      v-model="currentPage"
+      v-model="page"
       class="transfer__pager"
       :total-pages="totalPagesValue"
     />
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'Transfer',
   data() {
     return {
-      currentPage: 1,
-      search: '',
-      transfers: [
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '2021-11-24T09:19:08.000Z',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '2021-11-24T09:19:08.000Z',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-      ],
-      tokens: {
-        USDT: {
-          name: 'Tether USD',
-          description: 'Tether gives you the joint benefits of open blockchain technology and traditional currency by converting your cash into a stable digital currency equivalent.',
-        },
-        BUSD: {
-          name: 'Binance USD',
-          description: 'Binance USD (BUSD) is a dollar-backed stablecoin issued and custodied by Paxos Trust Company, and regulated by the New York State Department of Financial Services. BUSD is available directly for sale 1:1 with USD on Paxos.com and will be listed for trading on Binance.',
-        },
-        GHST: {
-          name: 'Aavegotchi Ghost Token',
-          description: 'Aavegotchis are crypto-collectibles living on the Ethereum blockchain, backed by the ERC721 standard used in popular blockchain games. $GHST is the official utility token of the Aavegotchi ecosystem and can be used to purchase portals, wearables, and consumables.',
-        },
-      },
+      page: 1,
+      limit: 20,
+      offset: 0,
     };
   },
   computed: {
+    ...mapGetters({
+      allTokenTransfers: 'tokens/getAllTokenTransfers',
+      allTokenTransfersCount: 'tokens/getAllTokenTransfersCount',
+      isLoading: 'main/getIsLoading',
+    }),
+    payload() {
+      return {
+        limit: this.limit,
+        offset: this.offset,
+      };
+    },
     totalPagesValue() {
-      return this.setTotalPages(this.transfers.length, 20);
+      return this.setTotalPages(this.allTokenTransfersCount, this.limit);
     },
     tableHeaders() {
       return [
-        { key: 'id', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'fromAddress', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'toAddress', label: this.$t('ui.tx.to'), sortable: true },
-        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
-        { key: 'token', label: this.$t('ui.token.token'), sortable: true },
+        { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
+        { key: 'age', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
+        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
+        {
+          key: 'transfer_amount',
+          label: this.$t('ui.tx.value'),
+          sortable: true,
+          formatter: (value, key, item) => this.ConvertFromDecimals(item.amount, item.decimals || 18),
+        },
+        {
+          key: 'tokenContractAddress',
+          abel: this.$t('ui.token.token'),
+          sortable: true,
+          formatter: (value, key, item) => `${item.tokenContractAddress.token.name} (${item.tokenContractAddress.token.symbol})`,
+        },
       ];
     },
   },
+  watch: {
+    async page() {
+      this.offset = (this.page - 1) * this.limit;
+      await this.getTokenTransfers();
+    },
+  },
   async mounted() {
-    await this.SetLoader(true);
-    await this.SetLoader(false);
+    await this.getTokenTransfers();
+  },
+  methods: {
+    async getTokenTransfers() {
+      await this.SetLoader(true);
+      await this.$store.dispatch('tokens/getAllTokensTransfers', this.payload);
+      await this.SetLoader(false);
+    },
   },
 };
 </script>
+
+<!--
+{
+        "transaction_hash": "0xb606fa187c5cd71beb30d9f3b9ae207c3cd3254ff824e798dbe3a9a72960752e",
+        "from_address_hash": {
+          "hex": "0x20966b2da806a2daf74ef049678a5569e9e1f2c9",
+          "bech32": "wq1yztxktdgq63d4a6w7pyk0zj4d857rukfmpfqgt"
+        },
+        "to_address_hash": {
+          "hex": "0x60716ce1ad79d2489b937a3d2df4327095cffbb3",
+          "bech32": "wq1vpckecdd08fy3xun0g7jmapjwz2ul7anp5aep3"
+        },
+        "token_contract_address_hash": {
+          "hex": "0x9c9fe9a77a3b0ed1d3584afadd5873843baf0e12",
+          "bech32": "wq1nj07nfm68v8dr56cftad6krnssa67rsj6sceac"
+        },
+        "amount": "1000000000000000000",
+        "block": {
+          "timestamp": "2022-03-12T18:55:10.000Z"
+        },
+        "tokenContractAddress": {
+          "hash": {
+            "hex": "0x9c9fe9a77a3b0ed1d3584afadd5873843baf0e12",
+            "bech32": "wq1nj07nfm68v8dr56cftad6krnssa67rsj6sceac"
+          },
+          "token": {
+            "name": "WQ Binance wrapped",
+            "symbol": "BNB"
+          }
+        }
+-->
 
 <style lang="scss" scoped>
 .transfer {

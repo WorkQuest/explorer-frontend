@@ -90,7 +90,6 @@
       class="transaction__subtitle"
     >
       {{ $t('ui.tx.value') }}
-      <!--      TODO decimals-->
       <span class="transaction__info">{{ ConvertFromDecimals(transaction.value, decimals) }} {{ symbol }}</span>
     </div>
     <div

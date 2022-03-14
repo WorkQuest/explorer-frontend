@@ -36,10 +36,16 @@ export const accountTokens = {
   tokens: [],
 };
 
+export const allTokenTransfers = {
+  count: 0,
+  transfers: [],
+};
+
 export default () => ({
   allTokens,
   currentToken,
   accountTokens,
+  allTokenTransfers,
   wusd: {
     symbol: 'WUSD',
     decimals: 18,

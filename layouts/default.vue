@@ -196,11 +196,10 @@ export default {
           title: this.$t('ui.blocks'),
           path: '/blocks',
         },
-        // TODO: Вернуть когда будет логика
-        // {
-        //   title: this.$t('ui.transfers'),
-        //   path: '/transfers',
-        // },
+        {
+          title: this.$t('ui.transfers'),
+          path: '/transfers',
+        },
         {
           title: this.$t('ui.tokens'),
           path: '/tokens',
@@ -225,11 +224,10 @@ export default {
     },
     mobileMenuLinks2() {
       return [
-        // TODO: Вернуть когда будет логика
-        // {
-        //   title: this.$t('ui.transfers'),
-        //   path: '/transfers',
-        // },
+        {
+          title: this.$t('ui.transfers'),
+          path: '/transfers',
+        },
         {
           title: this.$t('ui.tokens'),
           path: '/tokens',
