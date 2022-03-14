@@ -205,6 +205,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import BigNumber from 'bignumber.js';
 
 export default {
   name: 'Token',
@@ -264,7 +265,14 @@ export default {
           sortable: true,
           formatter: (value) => this.NumberFormat(this.ConvertFromDecimals(value, this.token.decimals)),
         },
-        { key: 'percentage', label: this.$t('ui.token.percentage'), sortable: true },
+        {
+          key: 'percentage',
+          label: this.$t('ui.token.percentage'),
+          sortable: true,
+          formatter: (
+            (value, key, item) => new BigNumber(item.value).dividedBy(this.token.total_supply).multipliedBy(100).decimalPlaces(4)
+          ),
+        },
         { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
       ];
     },
@@ -273,11 +281,15 @@ export default {
     async page() {
       await this.SetLoader(true);
       this.offset = (this.page - 1) * this.limit;
+
       if (this.activeTab === 'transfers') {
         await this.$store.dispatch('tokens/getTokenTransfers', this.payload);
-      } else {
+      }
+
+      if (this.activeTab === 'holders') {
         await this.$store.dispatch('tokens/getTokenHolders', this.payload);
       }
+
       await this.SetLoader(false);
     },
   },

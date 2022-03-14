@@ -75,6 +75,10 @@
           {{ el.item.address_hash.hex }}
         </nuxt-link>
       </template>
+
+      <template #cell(percentage)="el">
+        {{ el.value }} %
+      </template>
     </b-table>
   </div>
 </template>
