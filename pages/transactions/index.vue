@@ -95,7 +95,7 @@ export default {
       return [
         { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
         { key: 'block_number', label: this.$t('ui.block.blockNumber'), sortable: true },
-        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'block.timestamp', label: this.$t('ui.block.age'), sortable: true },
         { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
         { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
         { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
