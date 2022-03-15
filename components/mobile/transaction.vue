@@ -91,7 +91,7 @@
     >
       {{ $t('ui.tx.amount') }}
       <span class="transaction__info">
-        {{ ConvertFromDecimals(transaction.amount, transaction.tokenContractAddress.token.decimals || 18, 6) }} {{ transaction.tokenContractAddress.token.symbol }}
+        {{ ConvertFromDecimals(transaction.amount, transaction.tokenContractAddress.token.decimals, 6) }} {{ transaction.tokenContractAddress.token.symbol }}
       </span>
     </div>
     <div

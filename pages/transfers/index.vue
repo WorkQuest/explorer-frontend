@@ -66,7 +66,7 @@ export default {
           key: 'transfer_amount',
           label: this.$t('ui.tx.value'),
           sortable: true,
-          formatter: (value, key, item) => this.ConvertFromDecimals(item.amount, item.decimals || 18, 6),
+          formatter: (value, key, item) => this.ConvertFromDecimals(item.amount, item.tokenContractAddress.token.decimals, 6),
         },
         {
           key: 'tokenContractAddress',
