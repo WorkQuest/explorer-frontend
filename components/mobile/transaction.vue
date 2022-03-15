@@ -86,6 +86,15 @@
       <span class="transaction__info">{{ transaction.value }} {{ transaction.symbol }}</span>
     </div>
     <div
+      v-if="isTransfer"
+      class="transaction__subtitle"
+    >
+      {{ $t('ui.tx.amount') }}
+      <span class="transaction__info">
+        {{ ConvertFromDecimals(transaction.amount, transaction.tokenContractAddress.token.decimals || 18, 6) }} {{ transaction.tokenContractAddress.token.symbol }}
+      </span>
+    </div>
+    <div
       v-else-if="transaction.value"
       class="transaction__subtitle"
     >
@@ -114,9 +123,9 @@
       <span class="transaction__info">
         <nuxt-link
           class="transaction__link_small"
-          :to="{ path: `tokens/`+transaction.token, params: { token: transaction.token }}"
+          :to="{ path: `tokens/`+transaction.tokenContractAddress.hash.hex, params: { token: transaction.tokenContractAddress.hash.hex }}"
         >
-          {{ formatItem(tokens[`${transaction.token}`].name, 10, 0) }} ({{ transaction.token }})
+          {{ transaction.tokenContractAddress.token.name }} ({{ transaction.tokenContractAddress.token.symbol }})
         </nuxt-link>
       </span>
     </div>
@@ -146,6 +155,10 @@ export default {
       default: false,
     },
     isToken: {
+      type: Boolean,
+      default: false,
+    },
+    isTransfer: {
       type: Boolean,
       default: false,
     },

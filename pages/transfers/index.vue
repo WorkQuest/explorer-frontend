@@ -11,15 +11,15 @@
       <p class="tables__title">
         {{ $t('ui.token.token') + ' ' + $t('ui.token.transfers') }}
       </p>
-      <!--      <transaction-->
-      <!--        v-for="(item, i) in allTokenTransfers"-->
-      <!--        :key="i"-->
-      <!--        class="tables__transaction"-->
-      <!--        :transaction="item"-->
-      <!--        :is-last="allTokenTransfers[i] === allTokenTransfers[allTokenTransfers.length - 1]"-->
-      <!--        :is-home="true"-->
-      <!--        :is-token="true"-->
-      <!--      />-->
+      <transaction
+        v-for="(item, i) in allTokenTransfers"
+        :key="i"
+        class="tables__transaction"
+        :transaction="item"
+        :is-last="allTokenTransfers[i] === allTokenTransfers[allTokenTransfers.length - 1]"
+        :is-token="true"
+        :is-transfer="true"
+      />
     </div>
     <base-pager
       v-if="totalPagesValue > 1"
@@ -66,13 +66,12 @@ export default {
           key: 'transfer_amount',
           label: this.$t('ui.tx.value'),
           sortable: true,
-          formatter: (value, key, item) => this.ConvertFromDecimals(item.amount, item.decimals || 18),
+          formatter: (value, key, item) => this.ConvertFromDecimals(item.amount, item.decimals || 18, 6),
         },
         {
           key: 'tokenContractAddress',
-          abel: this.$t('ui.token.token'),
+          label: this.$t('ui.token.token'),
           sortable: true,
-          formatter: (value, key, item) => `${item.tokenContractAddress.token.name} (${item.tokenContractAddress.token.symbol})`,
         },
       ];
     },
@@ -95,37 +94,6 @@ export default {
   },
 };
 </script>
-
-<!--
-{
-        "transaction_hash": "0xb606fa187c5cd71beb30d9f3b9ae207c3cd3254ff824e798dbe3a9a72960752e",
-        "from_address_hash": {
-          "hex": "0x20966b2da806a2daf74ef049678a5569e9e1f2c9",
-          "bech32": "wq1yztxktdgq63d4a6w7pyk0zj4d857rukfmpfqgt"
-        },
-        "to_address_hash": {
-          "hex": "0x60716ce1ad79d2489b937a3d2df4327095cffbb3",
-          "bech32": "wq1vpckecdd08fy3xun0g7jmapjwz2ul7anp5aep3"
-        },
-        "token_contract_address_hash": {
-          "hex": "0x9c9fe9a77a3b0ed1d3584afadd5873843baf0e12",
-          "bech32": "wq1nj07nfm68v8dr56cftad6krnssa67rsj6sceac"
-        },
-        "amount": "1000000000000000000",
-        "block": {
-          "timestamp": "2022-03-12T18:55:10.000Z"
-        },
-        "tokenContractAddress": {
-          "hash": {
-            "hex": "0x9c9fe9a77a3b0ed1d3584afadd5873843baf0e12",
-            "bech32": "wq1nj07nfm68v8dr56cftad6krnssa67rsj6sceac"
-          },
-          "token": {
-            "name": "WQ Binance wrapped",
-            "symbol": "BNB"
-          }
-        }
--->
 
 <style lang="scss" scoped>
 .transfer {

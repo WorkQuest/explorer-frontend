@@ -105,12 +105,6 @@
           <span class="table__token token token__name"> {{ el.item.tokenContractAddress.token.name }}</span>
           <span class="table__token token token__symbol"> ({{ el.item.tokenContractAddress.token.symbol }}) </span>
         </nuxt-link>
-        <!--        <nuxt-link-->
-        <!--          class="table__link"-->
-        <!--          :to="{ path: `tokens/`+el.item.token, params: { token: el.item.token }}"-->
-        <!--        >-->
-        <!--          {{ formatItem(tokens[`${el.item.token}`].name, 10, 0) }} ({{ el.item.token }})-->
-        <!--        </nuxt-link>-->
       </template>
     </b-table>
   </div>
