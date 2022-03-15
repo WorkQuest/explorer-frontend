@@ -15,11 +15,20 @@ export default function ({ $axios, app, error: nuxtError }) {
     throw config;
   });
   $axios.onResponse(async (config) => {
-    if (config.request.responseURL.includes('search') && !config.data.result.searchResult) {
-      console.dir(config.request.responseURL);
-      const serverMessage = config.data?.result?.msg || '';
-      nuxtError({ statusCode: 404, message: serverErrorMessage(app, locale, serverMessage) });
-      throw config;
+    if (config.request.responseURL.includes('search')) {
+      const isSearchResultExist = !!config.data.result.searchResult;
+      const emptyResult = Array.isArray(config.data.result.searchResult?.rows) && config.data.result.searchResult?.rows.length === 0;
+      let serverMessage;
+      if ((isSearchResultExist && emptyResult) || !isSearchResultExist) {
+        console.dir(config.request.responseURL);
+        serverMessage = config.data?.result?.msg || '';
+        nuxtError({
+          statusCode: 404,
+          message: serverErrorMessage(app, locale, serverMessage),
+        });
+        throw config;
+      }
+      return config;
     }
     return config;
   });

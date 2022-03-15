@@ -8,7 +8,7 @@ export const searchResponseTypes = (type, value) => {
     2: `/blocks/${value || ''}`,
     3: `/contracts/${value || ''}`,
     4: `/address/${value || ''}`,
-    5: `/tokens/${value || ''}`,
+    5: `/tokens/?search=${value || ''}`,
     6: `/tokens/${value || ''}`,
     7: null,
   };
@@ -49,6 +49,9 @@ export const serverErrorMessage = (app, locale, serverMessage) => {
       return errors.transactionNotFound;
     }
     case SERVER_MESSAGES.VALIDATION_ERROR: {
+      return errors.other;
+    }
+    case SERVER_MESSAGES.OTHER: {
       return errors.other;
     }
     default: {

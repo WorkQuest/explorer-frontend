@@ -201,10 +201,10 @@ export default {
         //   title: this.$t('ui.transfers'),
         //   path: '/transfers',
         // },
-        // {
-        //   title: this.$t('ui.tokens'),
-        //   path: '/tokens',
-        // },
+        {
+          title: this.$t('ui.tokens'),
+          path: '/tokens',
+        },
       ];
     },
     mobileMenuLinks1() {
@@ -230,10 +230,10 @@ export default {
         //   title: this.$t('ui.transfers'),
         //   path: '/transfers',
         // },
-        // {
-        //   title: this.$t('ui.tokens'),
-        //   path: '/tokens',
-        // },
+        {
+          title: this.$t('ui.tokens'),
+          path: '/tokens',
+        },
       ];
     },
     footerLinks() {
@@ -492,7 +492,7 @@ export default {
 
   &__right {
     display: grid;
-    grid-template-columns: repeat(5, auto);
+    grid-template-columns: repeat(2, auto);
     grid-gap: 10px;
     align-items: center;
   }

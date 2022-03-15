@@ -55,12 +55,12 @@
         <p class="blocks__title">
           {{ $t('ui.latestTxs') }}
         </p>
-        <nuxt
+        <nuxt-link
           class="blocks__link"
           :to="'transactions'"
         >
           {{ $t('ui.allTxs') }}
-        </nuxt>
+        </nuxt-link>
       </div>
       <transaction
         v-for="(item, i) in txs"
@@ -124,6 +124,9 @@ export default {
     await this.$store.dispatch('blocks/getBlocks', this.payload);
     await this.$store.dispatch('tx/getTxs', this.payload);
     await this.SetLoader(false);
+  },
+  beforeDestroy() {
+    this.$store.commit('tx/resetTxs');
   },
 };
 </script>

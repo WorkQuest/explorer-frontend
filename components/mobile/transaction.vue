@@ -31,7 +31,7 @@
       </nuxt-link>
     </div>
     <p class="transaction__timestamp">
-      {{ formatDataFromNow(transaction.timestamp) }}
+      {{ transaction.block && transaction.block.timestamp ? formatDataFromNow(transaction.block.timestamp) : '' }}
     </p>
     <div
       v-if="transaction.method"
@@ -90,7 +90,8 @@
       class="transaction__subtitle"
     >
       {{ $t('ui.tx.value') }}
-      <span class="transaction__info">{{ transaction.value }} {{ transaction.symbol }}</span>
+      <!--      TODO decimals-->
+      <span class="transaction__info">{{ ConvertFromDecimals(transaction.value, decimals) }} {{ symbol }}</span>
     </div>
     <div
       v-if="transaction.gas_used"
@@ -124,6 +125,8 @@
 </template>
 <script>
 
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'Transaction',
   props: {
@@ -153,11 +156,22 @@ export default {
     },
   },
   computed: {
+    ...mapGetters({
+      nativeSymbol: 'tokens/getWUSDTokenSymbol',
+      nativeDecimals: 'tokens/getWUSDTokenDecimals',
+      token: 'tokens/getCurrentToken',
+    }),
     isToAddressExist() {
       return this.transaction.to_address_hash && Object.keys(this.transaction.to_address_hash).length > 0;
     },
     isFromAddressExist() {
       return this.transaction.from_address_hash && Object.keys(this.transaction.from_address_hash).length > 0;
+    },
+    symbol() {
+      return this.isToken ? this.token.symbol : this.nativeSymbol;
+    },
+    decimals() {
+      return this.isToken ? this.token.decimals : this.nativeDecimals;
     },
   },
 };

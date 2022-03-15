@@ -250,7 +250,7 @@
       </div>
       <div class="overview__subtitle">
         {{ $t('ui.tx.amount') }}
-        <span class="overview__info">{{ tx.value }} {{ symbol }}</span>
+        <span class="overview__info">{{ ConvertFromDecimals(tx.value, decimals) }} {{ symbol }}</span>
       </div>
       <div class="overview__subtitle  overview__subtitle_underlined">
         {{ $t('ui.tx.fee') }}
@@ -293,8 +293,8 @@ export default {
   computed: {
     ...mapGetters({
       tx: 'tx/getTxsByHash',
-      symbol: 'main/getWUSDTokenSymbol',
-      decimals: 'main/getWUSDTokenDecimals',
+      symbol: 'tokens/getWUSDTokenSymbol',
+      decimals: 'tokens/getWUSDTokenDecimals',
       isLoading: 'main/getIsLoading',
     }),
     gasLimit() {
@@ -350,7 +350,7 @@ export default {
           {
             class: 'columns__item_three-one',
             title: this.$t('ui.tx.value'),
-            info: this.NumberFormat(this.tx.value),
+            info: this.ConvertFromDecimals(this.tx.value, this.decimals),
           },
           {
             class: 'columns__item_three-two',
@@ -389,6 +389,9 @@ export default {
   async mounted() {
     await this.SetLoader(true);
     await this.SetLoader(false);
+  },
+  beforeDestroy() {
+    this.$store.commit('tx/resetTxsByHash');
   },
   methods: {
     onClick(tab) {

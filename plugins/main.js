@@ -66,7 +66,7 @@ Vue.mixin({
     },
     Require(img) {
       // eslint-disable-next-line global-require
-      // return require(`assets/img/${img}`);
+      return require(`~/assets/img/${img}`);
     },
     NumberFormat(value, fixed) {
       return (+value && new Intl.NumberFormat('ru', { maximumFractionDigits: fixed || 8 }).format(value || 0)) || 0;
@@ -83,6 +83,12 @@ Vue.mixin({
     },
     formatDataFromNow(data) {
       return moment(data).startOf('hour').fromNow();
+    },
+    ConvertFromDecimals(value, decimals) {
+      if (!value || !decimals) {
+        return 0;
+      }
+      return new BigNumber(value).shiftedBy(-decimals).toString();
     },
   },
 });

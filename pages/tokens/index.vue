@@ -1,124 +1,143 @@
 <template>
-  <!--        TODO: Вывести токены -->
-  <div class="tokens">
+  <div
+    v-if="!isLoading"
+    class="tokens"
+  >
     <search-filter class="tokens__search" />
     <table-tokens
       class="tokens__table"
       :title="$tc('ui.token.tracker')"
-      :items="tracker"
-      :tokens="tokens"
+      :items="tokens"
       :fields="tableHeaders"
     />
+
+    <!--        mobile-->
     <div class="tokens__content">
       <p class="tokens__title">
         {{ $t('ui.token.tracker') }}
       </p>
       <div
-        v-for="(token, index) in tracker"
+        v-for="(token, index) in tokens"
         :key="index"
         class="token"
-        :class="{token__separator: (index === tracker.length - 1)}"
+        :class="{token__separator: (index === tokens.length - 1)}"
       >
         <p class="token__token">
           {{ $t('ui.token.token') }}
         </p>
         <div class="token__header">
+          <!--              TODO base64-->
           <img
-            :src="require(`~/assets/img/tokens/${token.token}.svg`)"
+            :src="require(`~/assets/img/tokens/empty-token.svg`)"
             width="15"
+            height="15"
             class="token__image"
-            :alt="token.token"
+            :alt="token.symbol"
           >
           <nuxt-link
-            :to="{ path: `tokens/`+token.token, params: { token: token.token }}"
+            :to="{ path: `/tokens/`+token.contract_address_hash.hex, params: { token: token.contract_address_hash.hex }}"
             class="token__title table__link"
           >
-            {{ tokens[`${token.token}`].name }} ({{ token.token }})
+            {{ token.name }} ({{ token.symbol }})
           </nuxt-link>
         </div>
         <p class="token__description">
-          {{ tokens[`${token.token}`].description }}
+          {{ token.description ? token.description : '' }}
         </p>
         <div
-          v-if="token.volume"
+          v-if="token.total_supply"
           class="token__subtitle"
         >
           {{ $t('ui.token.volume') }}
           <span class="token__info">
-            $ {{ token.volume }}
+            $ {{ token.total_supply }}
           </span>
         </div>
         <div
-          v-if="token.holders"
+          v-if="token.holder_count"
           class="token__subtitle"
         >
           {{ $t('ui.token.holders') }}
           <span class="token__info">
-            {{ token.holders }}
+            {{ token.holder_count }}
           </span>
         </div>
       </div>
     </div>
 
     <base-pager
-      v-if="totalPagesValue > 1"
-      v-model="currentPage"
+      v-if="totalPages > 1"
+      v-model="page"
       class="tokens__pager"
-      :total-pages="totalPagesValue"
+      :total-pages="totalPages"
     />
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import TableTokens from '~/components/TableTokens';
+
 export default {
   name: 'TokensTracker',
+  components: { TableTokens },
   data() {
     return {
-      currentPage: 1,
-      search: '',
-      tracker: [
-        {
-          number: 1, token: 'USDT', volume: 43369072176.00, holders: 3320602,
-        },
-        {
-          number: 2, token: 'BUSD', volume: 43369072177.00, holders: 3320603,
-        },
-        {
-          number: 3, token: 'GHST', volume: 43369072179.00, holders: 3320600,
-        },
-      ],
-      tokens: {
-        USDT: {
-          name: 'Tether USD',
-          description: 'Tether gives you the joint benefits of open blockchain technology and traditional currency by converting your cash into a stable digital currency equivalent.',
-        },
-        BUSD: {
-          name: 'Binance USD',
-          description: 'Binance USD (BUSD) is a dollar-backed stablecoin issued and custodied by Paxos Trust Company, and regulated by the New York State Department of Financial Services. BUSD is available directly for sale 1:1 with USD on Paxos.com and will be listed for trading on Binance.',
-        },
-        GHST: {
-          name: 'Aavegotchi Ghost Token',
-          description: 'Aavegotchis are crypto-collectibles living on the Ethereum blockchain, backed by the ERC721 standard used in popular blockchain games. $GHST is the official utility token of the Aavegotchi ecosystem and can be used to purchase portals, wearables, and consumables.',
-        },
-      },
+      page: 1,
+      limit: 10,
+      offset: 0,
     };
   },
   computed: {
-    totalPagesValue() {
-      return this.setTotalPages(this.tokens.length, 20);
+    ...mapGetters({
+      allTokensCount: 'tokens/getAllTokensCount',
+      allTokens: 'tokens/getAllTokens',
+      isLoading: 'main/getIsLoading',
+    }),
+    totalPages() {
+      return this.setTotalPages(this.allTokensCount, 20);
+    },
+    payload() {
+      return {
+        limit: this.limit,
+        offset: this.offset,
+      };
+    },
+    tokens() {
+      if (this.allTokensCount > 0) {
+        return this.allTokens;
+      }
+      return [];
     },
     tableHeaders() {
       return [
-        { key: 'number', label: '#', sortable: true },
-        { key: 'token', label: this.$t('ui.token.token'), sortable: true },
-        { key: 'volume', label: this.$t('ui.token.volume'), sortable: true },
-        { key: 'holders', label: this.$t('ui.token.holders'), sortable: true },
+        { key: 'number', label: '#', sortable: false },
+        { key: 'contract_address_hash.hex', label: this.$t('ui.token.token'), sortable: true },
+        {
+          key: 'total_supply',
+          label: this.$t('ui.token.volume'),
+          sortable: true,
+          formatter: (value, key, item) => this.NumberFormat(this.ConvertFromDecimals(value, item.decimals)),
+        },
+        {
+          key: 'holder_count',
+          label: this.$t('ui.token.holders'),
+          sortable: true,
+          formatter: (value) => this.NumberFormat(value),
+        },
       ];
     },
   },
   async mounted() {
-    await this.SetLoader(true);
-    await this.SetLoader(false);
+    const isSearch = this.$route.query?.search;
+    if (!isSearch || !this.allTokensCount) {
+      await this.SetLoader(true);
+      await this.$store.dispatch('tokens/getAllTokens', this.payload);
+      await this.SetLoader(false);
+    }
+  },
+  beforeDestroy() {
+    this.$store.commit('tokens/resetTokens');
   },
 };
 </script>
@@ -181,6 +200,7 @@ export default {
 
     &__header {
       display: flex;
+      align-items: center;
     }
 
     &__title {
@@ -210,6 +230,16 @@ export default {
       font-weight: normal;
       margin-left: 10px;
     }
+    &__image {
+      border-radius: 50%;
+      width: 15px;
+      height: 15px;
+      overflow: hidden;
+      object-fit: cover;
+    }
+  }
+  .table__link {
+    width: auto !important;
   }
 }
 </style>

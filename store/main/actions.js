@@ -47,7 +47,21 @@ export default {
       /** @property  { string } [response.result.searchResult.number]  */
       if (response.ok && response.result.searchResult) {
         const { searchType } = response.result;
-        const result = searchType === 0 ? response.result.searchResult.number : q;
+        const { locale } = this.$i18n;
+        let result;
+        switch (searchType) {
+          case 0:
+            result = response.result.searchResult.number;
+            break;
+          case 5:
+            result = q;
+            commit('tokens/setSearchResult', response.result.searchResult, { root: true });
+            break;
+          default: {
+            result = q;
+            break;
+          }
+        }
         return output(searchResponseTypes(searchType, result));
       }
       return response;

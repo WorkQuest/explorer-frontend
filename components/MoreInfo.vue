@@ -1,7 +1,7 @@
 <template>
   <div class="info">
     <div
-      v-if="token !== ''"
+      v-if="isToken"
       class="info-wrap"
     >
       <p class="info__header">
@@ -13,10 +13,10 @@
           class="info__link"
           :to="'/contract'"
         >
-          0xdac17f958d2ee523a2206206994597c13d831ec7
+          {{ token.contract_address_hash.hex }}
         </nuxt-link>
         <button
-          v-clipboard:copy="0xdac17f958d2ee523a2206206994597c13d831ec7"
+          v-clipboard:copy="token.contract_address_hash.hex"
           v-clipboard:success="ClipboardSuccessHandler"
           v-clipboard:error="ClipboardErrorHandler"
           class="btn__copy"
@@ -27,7 +27,7 @@
       </p>
       <p class="info__info">
         <span class="info__title">{{ $t('ui.token.decimals') }}</span>
-        6
+        {{ token.decimals }}
       </p>
     </div>
     <div
@@ -67,12 +67,23 @@
 </template>
 <script>
 
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'Info',
   props: {
-    token: {
+    address: {
       type: String,
       default: '',
+    },
+  },
+  computed: {
+    ...mapGetters({
+      isLoading: 'main/getIsLoading',
+      token: 'tokens/getCurrentToken',
+    }),
+    isToken() {
+      return Object.keys(this.token).length > 0;
     },
   },
 };

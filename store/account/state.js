@@ -1,27 +1,34 @@
+export const account = {
+  fetched_coin_balance: '',
+  addressTokensBalances: [],
+  addressCoinBalance: {},
+  hash: {},
+};
+
+export const addressLogsList = {
+  count: 0,
+  rows: [],
+};
+
+export const internalTransactionsList = {
+  count: 0,
+  rows: [],
+};
+
+export const tokenTransfersList = {
+  count: 0,
+  rows: [],
+};
+
+export const transactionsList = {
+  count: 0,
+  rows: [],
+};
+
 export default () => ({
-  accountInfo: {
-    account: {
-      fetched_coin_balance: '',
-    },
-    addressLogsList: {
-      count: 0,
-      rows: [],
-    },
-    internalTransactionsList: {
-      count: 0,
-      rows: [],
-    },
-    tokenTransfersList: {
-      count: 0,
-      rows: [],
-    },
-    transactionsList: {
-      count: 0,
-      rows: [],
-    },
-  },
-  accountBalances: {
-    count: 0,
-    balances: [],
-  },
+  account,
+  addressLogsList,
+  internalTransactionsList,
+  tokenTransfersList,
+  transactionsList,
 });

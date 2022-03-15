@@ -58,7 +58,6 @@ export default {
   name: 'AddressId',
   data() {
     return {
-      address: this.$route.params.id,
       search: '',
       page: 1,
       limit: 10,
@@ -70,6 +69,7 @@ export default {
       isLoading: 'main/getIsLoading',
       txs: 'tx/getTxsByAccount',
       txsCount: 'tx/getTxsByAccountCount',
+      accountInfo: 'account/getAccountInfo',
     }),
     payload() {
       return {
@@ -77,6 +77,9 @@ export default {
         limit: this.limit,
         offset: this.offset,
       };
+    },
+    address() {
+      return Object.keys(this.accountInfo).length > 0 && this.accountInfo.hash?.hex ? this.accountInfo.hash.hex : this.$route.params.id;
     },
     totalPages() {
       return Math.ceil(this.txsCount / this.limit);
@@ -107,6 +110,10 @@ export default {
     await this.$store.dispatch('account/getAccountByAddress', this.address.toLowerCase());
     await this.SetLoader(false);
   },
+  beforeDestroy() {
+    this.$store.commit('account/resetAccountInfo');
+    this.$store.commit('tx/resetTxsByAccount');
+  },
 };
 </script>
 
@@ -117,7 +124,6 @@ export default {
     width: 35px;
     align-items: center;
     justify-items: center;
-    background: $white;
     border: 1px solid $black0;
     padding: 5px;
     border-radius: 6px;
@@ -149,6 +155,7 @@ export default {
     grid-gap: 25px;
     margin-bottom: 25px;
     background: $white;
+    border-radius: 6px;
   }
 
   &__table {

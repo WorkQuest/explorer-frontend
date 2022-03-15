@@ -134,8 +134,8 @@ export default {
     ...mapGetters({
       currentBlock: 'blocks/getCurrentBlock',
       isLoading: 'main/getIsLoading',
-      symbol: 'main/getWUSDTokenSymbol',
-      decimals: 'main/getWUSDTokenDecimals',
+      symbol: 'tokens/getWUSDTokenSymbol',
+      decimals: 'tokens/getWUSDTokenDecimals',
     }),
     blockColumns() {
       if (Object.keys(this.currentBlock).length > 0) {
