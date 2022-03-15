@@ -75,6 +75,10 @@
           {{ el.item.address_hash.hex }}
         </nuxt-link>
       </template>
+
+      <template #cell(percentage)="el">
+        {{ el.value }} %
+      </template>
     </b-table>
   </div>
 </template>
@@ -109,6 +113,7 @@ export default {
     @include text-simple;
     @include normal-font-size;
     margin-left: 5px;
+    flex-basis: 100%;
   }
 
   &__description {
@@ -125,6 +130,7 @@ export default {
     width: 15px;
     height: 15px;
     overflow: hidden;
+    object-fit: cover;
   }
 }
 </style>

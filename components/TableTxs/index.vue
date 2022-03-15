@@ -41,8 +41,8 @@
         <span> {{ $t('ui.token.transfer') }} </span>
       </template>
 
-      <template #cell(timestamp)="el">
-        <span>{{ formatDataFromNow(el.item.timestamp) }}</span>
+      <template #cell(block.timestamp)="el">
+        <span>{{ formatDataFromNow(el.item.block.timestamp) }}</span>
       </template>
 
       <template #cell(age)="el">

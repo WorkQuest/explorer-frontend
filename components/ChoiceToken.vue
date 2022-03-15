@@ -21,7 +21,7 @@
             :src="require(`~/assets/img/tokens/empty-token.svg`)"
             width="15"
             height="15"
-            alt="question"
+            :alt="token.symbol"
           >
           {{ token.name }} ({{ token.symbol }})
         </p>
@@ -106,6 +106,7 @@ export default {
     width: 15px;
     height: 15px;
     overflow: hidden;
+    object-fit: cover;
   }
 
   &__code {
