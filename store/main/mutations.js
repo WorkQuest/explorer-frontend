@@ -11,9 +11,6 @@ export default {
   setLoaderProgress(state, value) {
     state.loaderProgress = value;
   },
-  setProjects(state, value) {
-    state.projects = value;
-  },
   setIsLoaderBackgroundHider(state, value) {
     state.isLoaderBackgroundHider = value;
   },
