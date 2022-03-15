@@ -294,6 +294,7 @@ export default {
       this.closeAnother('locale');
       this.isShowLocale = !this.isShowLocale;
       this.$i18n.setLocale(this.currentLocale);
+      this.$moment.locale(this.currentLocale);
     },
     closeAnother(value) {
       switch (value) {
