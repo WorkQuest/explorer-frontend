@@ -113,6 +113,7 @@ export default {
     @include text-simple;
     @include normal-font-size;
     margin-left: 5px;
+    flex-basis: 100%;
   }
 
   &__description {

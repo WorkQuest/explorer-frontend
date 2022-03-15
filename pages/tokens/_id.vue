@@ -279,7 +279,6 @@ export default {
   },
   watch: {
     async page() {
-      await this.SetLoader(true);
       this.offset = (this.page - 1) * this.limit;
 
       if (this.activeTab === 'transfers') {
@@ -289,8 +288,6 @@ export default {
       if (this.activeTab === 'holders') {
         await this.$store.dispatch('tokens/getTokenHolders', this.payload);
       }
-
-      await this.SetLoader(false);
     },
   },
   async mounted() {
