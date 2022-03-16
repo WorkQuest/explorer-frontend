@@ -10,6 +10,7 @@
       :responsive="true"
       tbody-tr-class="table__row"
       :busy="isLoading"
+      show-empty
     >
       <template #table-busy>
         <div class="text-center">
@@ -108,6 +109,9 @@
           v-else
           class="table__failed"
         >{{ el.item.status }}</span>
+      </template>
+      <template #empty>
+        <empty-data />
       </template>
     </b-table>
   </div>
