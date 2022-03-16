@@ -47,8 +47,8 @@
     </p>
     <p
       v-else-if="item === 'status'"
-      class="item__info"
-      :class="{'item__info_green': info === 1, 'item__info_red': info === 2}"
+      class="item__info status"
+      :class="{'status_green': info === 1, 'status_red': info === 0}"
     >
       {{ info === 1 ? this.$t('ui.tx.transactionSuccess') : this.$t('ui.tx.transactionFail') }}
     </p>
@@ -130,23 +130,6 @@ export default {
       font-size: 12px;
     }
 
-    &_green {
-      background: rgba(34, 204, 20, 0.1);
-      border-radius: 3px;
-      color: $default-green;
-      width: 58px;
-      font-size: 12px;
-      text-align: center;
-    }
-
-    &_red {
-      background: rgba(223, 51, 51, 0.1);
-      border-radius: 3px;
-      color: $red;
-      width: 58px;
-      font-size: 12px;
-      text-align: center;
-    }
   }
 
   &__note {
@@ -160,6 +143,22 @@ export default {
     @include link;
     font-size: 16px;
     color: $blue;
+  }
+}
+
+.status {
+  border-radius: 3px;
+  width: 58px;
+  font-size: 12px;
+  text-align: center;
+  padding: 4px;
+  &_green {
+    background: rgba(34, 204, 20, 0.1);
+    color: $default-green;
+  }
+  &_red {
+    background: rgba(223, 51, 51, 0.1);
+    color: $red;
   }
 }
 

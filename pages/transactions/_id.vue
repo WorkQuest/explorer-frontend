@@ -435,6 +435,8 @@ export default {
     font-size: 18px;
     color: $black600;
     cursor: pointer;
+    display: flex;
+    align-items: center;
 
     &:hover {
       text-decoration: none;
@@ -473,8 +475,8 @@ export default {
   &__columns {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-gap: 23px;
-    margin-top: 25px;
+    grid-gap: 20px;
+    margin-top: 28px;
   }
 
   &__logs {
@@ -659,6 +661,11 @@ export default {
       display: none;
     }
   }
+}
+
+.icon-short_left {
+  font-size: 22px;
+  margin-right: 12px;
 }
 
 .overview {
