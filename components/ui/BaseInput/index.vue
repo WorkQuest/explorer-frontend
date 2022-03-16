@@ -32,6 +32,7 @@
       </div>
       <input
         class="ctm-field__input"
+        :class="isSearch && !value ? 'ctm-field__input_padding' : ''"
         :placeholder="placeholder"
         :value="value"
         :type="type"
@@ -231,6 +232,9 @@ export default {
       }
       &:focus {
         border: 1px solid #E6EAEE !important;
+      }
+      &_padding {
+        padding: 0 0 0 50px;
       }
     }
   }
