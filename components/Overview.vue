@@ -24,7 +24,7 @@
         </template>
         <template v-else>
           <span class="overview__title">{{ symbol }} {{ $t('ui.tx.value') }}</span>
-          ${{ Floor(balance) }} (@ $1.00/{{ symbol }})
+          ${{ Floor(balance) }} ($1.00/{{ symbol }})
         </template>
       </p>
       <template v-if="!isToken">
