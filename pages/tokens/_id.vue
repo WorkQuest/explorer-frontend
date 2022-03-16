@@ -326,7 +326,7 @@ export default {
   &__header {
     display: flex;
     grid-gap: 10px;
-    align-items: center;
+    align-items: flex-end;
     margin-bottom: 25px;
   }
 
@@ -335,6 +335,8 @@ export default {
     @include normal-font-size;
     font-weight: 600;
     font-size: 28px;
+    margin-bottom: 0;
+    line-height: 100%;
   }
 
   &__info {
@@ -350,6 +352,11 @@ export default {
     border-radius: 50%;
     overflow: hidden;
     object-fit: cover;
+  }
+
+  &__token {
+    margin-bottom: 2px;
+    line-height: 100%;
   }
 }
 

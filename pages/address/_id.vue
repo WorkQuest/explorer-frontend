@@ -165,6 +165,10 @@ export default {
   &__subtitle, &__transaction {
     display: none;
   }
+
+  &__title, &__address {
+    margin-bottom: 0;
+  }
 }
 
 .icon-copy::before {

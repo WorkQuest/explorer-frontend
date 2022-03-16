@@ -58,6 +58,9 @@ export default {
     babel: {
       compact: false,
     },
+    loaders: {
+      scss: { sourceMap: false },
+    },
   },
   axios: {
     baseURL: process.env.BASE_URL,
