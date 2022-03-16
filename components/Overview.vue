@@ -28,12 +28,15 @@
         </template>
       </p>
       <template v-if="!isToken">
-        <div class="overview__token">
+        <div
+          class="overview__token"
+        >
           {{ $t('ui.token.token') }}
         </div>
         <div
           v-click-outside="hideChoice"
           class="overview__select-field"
+          @click="toggleChoice"
         >
           <div
             class="overview__input"
@@ -42,7 +45,6 @@
             {{ $t('ui.token.selectToken') }}
             <span
               class="icon-caret_down"
-              @click="toggleChoice"
             />
           </div>
           <ChoiceToken
