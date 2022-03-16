@@ -84,9 +84,12 @@ Vue.mixin({
     formatDataFromNow(data) {
       return moment(data).startOf('hour').fromNow();
     },
-    ConvertFromDecimals(value, decimals) {
+    ConvertFromDecimals(value, decimals, decimalPlaces = null) {
       if (!value || !decimals) {
         return 0;
+      }
+      if (decimalPlaces) {
+        return new BigNumber(value).shiftedBy(-decimals).decimalPlaces(decimalPlaces);
       }
       return new BigNumber(value).shiftedBy(-decimals).toString();
     },

@@ -89,16 +89,21 @@
         <span>{{ Floor(cutValueData(el.item.amount)) }} {{ symbol }}</span>
       </template>
 
+      <template #cell(transfer_amount)="el">
+        <span> {{ el.value }} </span>
+      </template>
+
       <template #cell(gas_used)="el">
         <span class="table__grey">{{ el.item.gas_used }}</span>
       </template>
 
-      <template #cell(token)="el">
+      <template #cell(tokenContractAddress)="el">
         <nuxt-link
           class="table__link"
-          :to="{ path: `tokens/`+el.item.token, params: { token: el.item.token }}"
+          :to="{ path: `tokens/`+el.item.tokenContractAddress.hash.hex, params: { token: el.item.tokenContractAddress.hash.hex }}"
         >
-          {{ formatItem(tokens[`${el.item.token}`].name, 10, 0) }} ({{ el.item.token }})
+          <span class="table__token token token__name"> {{ el.item.tokenContractAddress.token.name }}</span>
+          <span class="table__token token token__symbol"> ({{ el.item.tokenContractAddress.token.symbol }}) </span>
         </nuxt-link>
       </template>
     </b-table>
@@ -164,3 +169,13 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.token {
+  &__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+</style>

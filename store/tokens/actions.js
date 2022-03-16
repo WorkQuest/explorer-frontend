@@ -32,6 +32,15 @@ export default {
       return error(e.code || 500, 'getTokenTransfers', e);
     }
   },
+  async getAllTokensTransfers({ commit }, queries) {
+    try {
+      const response = await this.$axios.$get('/token/transfers', { params: { ...queries } });
+      commit('setAllTokenTransfers', response.result);
+      return response;
+    } catch (e) {
+      return error(e.code || 500, 'getAllTokensTransfers', e);
+    }
+  },
   async getTokenHolders({ commit }, { address, limit, offset }) {
     try {
       const response = await this.$axios.$get(`/token/${address}/holders`, { params: { limit, offset } });
