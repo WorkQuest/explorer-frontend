@@ -87,11 +87,14 @@ export default {
   }
 
   &-wrapper {
-    height: auto;
     max-height: 200px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    overscroll-behavior: contain;
+    height: 100%;
+    min-width: 100%;
+    overflow: hidden;
+    &:hover {
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+    }
   }
 
   &__item {
