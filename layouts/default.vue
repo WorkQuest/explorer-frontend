@@ -21,7 +21,7 @@
               <div class="header__links">
                 <nuxt-link
                   v-for="(item, i) in menuLinks"
-                  :key="i"
+                  :key="`${i}-desktop`"
                   :to="item.path"
                   class="header__link"
                   :active-class="'header__link_active'"
@@ -53,7 +53,7 @@
                   >
                     <div
                       v-for="(item, i) in locales"
-                      :key="i"
+                      :key="`${i}-locale`"
                       class="locale__container"
                     >
                       <div
@@ -93,7 +93,7 @@
             <div class="header__links">
               <span
                 v-for="(item, i) in mobileMenuLinks1"
-                :key="i"
+                :key="`${i}-mobileMenuLinks1`"
                 @click="toggleMobileMenu()"
               >
                 <nuxt-link
@@ -107,7 +107,7 @@
               <p class="header__separator" />
               <span
                 v-for="(item, i) in mobileMenuLinks2"
-                :key="i"
+                :key="`${i}-mobileMenuLinks2`"
                 @click="toggleMobileMenu()"
               >
                 <nuxt-link
@@ -136,7 +136,7 @@
           <div class="footer__right">
             <nuxt-link
               v-for="(item, i) in footerLinks"
-              :key="i"
+              :key="`${i}-footerLink`"
               :to="item.path"
               class="footer__link"
             >
