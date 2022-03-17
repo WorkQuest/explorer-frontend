@@ -34,16 +34,14 @@
         <div
           v-click-outside="hideChoice"
           class="overview__select-field"
+          @click="toggleChoice"
         >
           <div
             class="overview__input"
             :class="accountTokens.length === 0 ? 'overview__input_disabled' :''"
           >
             {{ $t('ui.token.selectToken') }}
-            <span
-              class="icon-caret_down"
-              @click="toggleChoice"
-            />
+            <span class="icon-caret_down" />
           </div>
           <ChoiceToken
             v-if="isChoosing"
