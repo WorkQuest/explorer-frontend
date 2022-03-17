@@ -11,7 +11,7 @@
         <span class="info__title">{{ $t('ui.token.contract') }}</span>
         <nuxt-link
           class="info__link"
-          :to="'/contract'"
+          :to="{ path: '/contract/' + token.contract_address_hash.hex}"
         >
           {{ token.contract_address_hash.hex }}
         </nuxt-link>
