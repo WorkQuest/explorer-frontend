@@ -81,7 +81,7 @@
       </template>
 
       <template #empty>
-        <empty-data />
+        <empty-data :description="emptyDescription" />
       </template>
     </b-table>
   </div>
@@ -102,6 +102,21 @@ export default {
     fields: {
       type: Array,
       default: () => [],
+    },
+    type: {
+      type: String,
+      default: '',
+    },
+  },
+  computed: {
+    emptyDescription() {
+      if (this.type === 'transfers') {
+        return this.$t('ui.token.noTransfers');
+      }
+      if (this.type === 'holders') {
+        return this.$t('ui.token.noHolders');
+      }
+      return this.$t('ui.noData');
     },
   },
 };

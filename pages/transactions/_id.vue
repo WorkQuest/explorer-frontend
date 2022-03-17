@@ -46,9 +46,9 @@
             v-if="tx && activeElement === 'logs'"
             class="txs__logs logs"
           >
-            <div v-if="Array.isArray(tx.logs) && tx.logs.length === 0">
-              {{ $t('ui.tx.noLogs') }}
-            </div>
+            <template v-if="Array.isArray(tx.logs) && tx.logs.length === 0">
+              <empty-data :description="$tc('ui.tx.noLogs')" />
+            </template>
             <div
               v-else
               class="logs__content content"
@@ -455,6 +455,7 @@ export default {
     padding: 20px;
     background: $white;
     border-radius: 6px;
+    min-height: 600px;
   }
 
   &__tab {
