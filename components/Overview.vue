@@ -28,9 +28,7 @@
         </template>
       </p>
       <template v-if="!isToken">
-        <div
-          class="overview__token"
-        >
+        <div class="overview__token">
           {{ $t('ui.token.token') }}
         </div>
         <div
@@ -43,9 +41,7 @@
             :class="accountTokens.length === 0 ? 'overview__input_disabled' :''"
           >
             {{ $t('ui.token.selectToken') }}
-            <span
-              class="icon-caret_down"
-            />
+            <span class="icon-caret_down" />
           </div>
           <ChoiceToken
             v-if="isChoosing"
