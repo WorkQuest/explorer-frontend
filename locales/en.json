@@ -15,6 +15,7 @@
     "terms": "Terms and conditions",
     "privacy": "Privacy policy",
     "loading": "Loading...",
+    "noData": "No data",
     "locals": {
       "en": "EN",
       "ru": "RU"
@@ -72,6 +73,8 @@
     },
     "token": {
       "noTokens": "There is no tokens...",
+      "noTransfers": "There is no transfers...",
+      "noHolders": "There is no holders...",
       "txs": "Transactions",
       "tracker": "Token Tracker",
       "token": "Token",

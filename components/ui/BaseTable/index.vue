@@ -111,7 +111,7 @@
         >{{ el.item.status }}</span>
       </template>
       <template #empty>
-        <empty-data />
+        <empty-data :description="emptyDescription" />
       </template>
     </b-table>
   </div>
@@ -158,6 +158,15 @@ export default {
       symbol: 'tokens/getWUSDTokenSymbol',
       decimals: 'tokens/getWUSDTokenDecimals',
     }),
+    emptyDescription() {
+      if (this.type === 'transactions') {
+        return this.$t('ui.tx.noTxs');
+      }
+      if (this.type === 'blocks') {
+        return this.$t('ui.block.noBlocks');
+      }
+      return this.$t('ui.noData');
+    },
   },
   methods: {
     async toPage() {

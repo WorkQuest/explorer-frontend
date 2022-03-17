@@ -108,7 +108,7 @@
       </template>
 
       <template #empty>
-        <empty-data />
+        <empty-data :description="$tc('ui.tx.noTxs')" />
       </template>
     </b-table>
   </div>

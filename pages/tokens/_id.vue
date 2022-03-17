@@ -70,6 +70,7 @@
           :is-only="false"
           :items="tokenHolders"
           :fields="tableHeadersHolders"
+          :type="'holders'"
         />
         <holder
           v-for="(item, i) in tokenHolders"

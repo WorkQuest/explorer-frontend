@@ -55,7 +55,7 @@
         <span>{{ +el.item.base_fee_per_gas * +el.item.gas_used }} {{ symbol }}</span>
       </template>
       <template #empty>
-        <empty-data />
+        <empty-data :description="$tc('ui.block.noBlocks')" />
       </template>
     </b-table>
   </div>
