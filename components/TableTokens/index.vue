@@ -79,6 +79,10 @@
       <template #cell(percentage)="el">
         {{ el.value }} %
       </template>
+
+      <template #empty>
+        <empty-data />
+      </template>
     </b-table>
   </div>
 </template>

@@ -106,6 +106,10 @@
           <span class="table__token token token__symbol"> ({{ el.item.tokenContractAddress.token.symbol }}) </span>
         </nuxt-link>
       </template>
+
+      <template #empty>
+        <empty-data />
+      </template>
     </b-table>
   </div>
 </template>
