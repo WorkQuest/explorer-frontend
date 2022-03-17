@@ -9,7 +9,7 @@
       :title="$tc('ui.token.tracker')"
       :items="tokens"
       :fields="tableHeaders"
-      :type="'transfers'"
+      type="transfers"
     />
 
     <!--        mobile-->

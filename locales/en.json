@@ -21,7 +21,7 @@
       "ru": "RU"
     },
     "block": {
-      "noBlocks": "There is no blocks...",
+      "noBlocks": "There are no blocks...",
       "block": "Block",
       "blockNumber": "Block Number",
       "txsCount": "Transactions in the block",
@@ -43,7 +43,7 @@
       "transactionFail": "Fail",
       "from": "From",
       "to": "To",
-      "noLogs": "There is no logs...",
+      "noLogs": "There are no logs...",
       "amount": "Amount",
       "value": "Value",
       "fee": "Txn Fee",
@@ -56,7 +56,7 @@
       "forBlock": "For Block",
       "total": "A total of",
       "found": "transactions found",
-      "noTxs": "There is no transactions...",
+      "noTxs": "There are no transactions...",
       "gasUsed": "Gas Used by Transaction"
     },
     "forms": {
@@ -72,9 +72,9 @@
       "filters": "All filters"
     },
     "token": {
-      "noTokens": "There is no tokens...",
-      "noTransfers": "There is no transfers...",
-      "noHolders": "There is no holders...",
+      "noTokens": "There are no tokens...",
+      "noTransfers": "There are no transfers...",
+      "noHolders": "There are no holders...",
       "txs": "Transactions",
       "tracker": "Token Tracker",
       "token": "Token",
