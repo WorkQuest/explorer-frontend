@@ -179,8 +179,11 @@ body {
 .custom-toast-width {
   flex-basis: fit-content;
   width: fit-content;
-  max-width: none;
+  max-width: 500px;
   min-width: 350px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: normal
 }
 
 .b-toast{
