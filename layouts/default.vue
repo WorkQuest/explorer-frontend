@@ -421,6 +421,10 @@ export default {
     color: $black400;
     text-decoration: none;
 
+    &:hover {
+      text-decoration: none;
+    }
+
     &_active {
       color: $black800;
     }
