@@ -104,7 +104,6 @@
           :transaction="item"
           :is-last="tokenTransfers[i] === tokenTransfers[tokenTransfers.length - 1]"
           :is-home="true"
-          :tokens="tokens"
           :is-token="true"
         />
         <base-pager
@@ -113,6 +112,12 @@
           class="contract__pager"
           :total-pages="totalPages"
         />
+      </div>
+      <div
+        v-if="activeTab === 'contract'"
+        class="table__contract"
+      >
+        <contract-info type="contract" />
       </div>
     </div>
   </div>
@@ -129,287 +134,8 @@ export default {
       page: 1,
       limit: 10,
       offset: 0,
-      tokens: {
-        USDT: {
-          name: 'Tether USD',
-          description: 'Tether gives you the joint benefits of open blockchain technology and traditional currency by converting your cash into a stable digital currency equivalent.',
-        },
-        BUSD: {
-          name: 'Binance USD',
-          description: 'Binance USD (BUSD) is a dollar-backed stablecoin issued and custodied by Paxos Trust Company, and regulated by the New York State Department of Financial Services. BUSD is available directly for sale 1:1 with USD on Paxos.com and will be listed for trading on Binance.',
-        },
-        GHST: {
-          name: 'Aavegotchi Ghost Token',
-          description: 'Aavegotchis are crypto-collectibles living on the Ethereum blockchain, backed by the ERC721 standard used in popular blockchain games. $GHST is the official utility token of the Aavegotchi ecosystem and can be used to purchase portals, wearables, and consumables.',
-        },
-      },
-      tabs: ['txs', 'internal', 'tokensTxns'],
+      tabs: ['txs', 'internal', 'tokensTxns', 'contract'],
       txs: [],
-      internal: [
-        {
-          blockNumber: 17102304,
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-        },
-        {
-          blockNumber: 17102305,
-          timestamp: '35 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664700000000000000,
-        },
-        {
-          blockNumber: 17102306,
-          timestamp: '45 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664800000000000000,
-        },
-      ],
-      erc: [
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-        {
-          id: '0x9ef45a5f717b9315917105c3ea920c593a591ea3',
-          timestamp: '25 secs ago',
-          fromAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          toAddress: '0xebb2e87085808be55824edb0085c5a5dc7888147',
-          value: 664600000000000000,
-          token: 'GHST',
-        },
-      ],
     };
   },
   computed: {
@@ -455,34 +181,45 @@ export default {
         { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
         { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
         { key: 'amount', label: this.$t('ui.tx.value'), sortable: true },
-        { key: 'token', label: this.$t('ui.token.token'), sortable: true },
+        // { key: 'token', label: this.$t('ui.token.token'), sortable: true },
       ];
     },
     address() {
       return this.$route.params.id;
     },
   },
+  watch: {
+    async page() {
+      this.offset = (this.page - 1) * this.limit;
+      await this.getPage();
+    },
+  },
   async mounted() {
-    // await this.SetLoader(true);
-    // TODO: Переписать
-    console.log('mounted');
-    // const txsRes = await this.$axios.get('txs');
-    // this.txs = txsRes.data.result.txs;
-    // await this.SetLoader(false);
-    await this.getContractData();
+    if (isAddress(this.address)) {
+      await this.getContractData();
+    } else {
+      await this.$router.push('/');
+    }
   },
   methods: {
     onClick(tab) {
       this.activeTab = tab;
     },
     async getContractData() {
-      if (isAddress(this.address)) {
-        await this.SetLoader(true);
-        await this.$store.dispatch('account/getAccountByAddress', this.address);
-        await this.SetLoader(false);
-      } else {
-        console.log('no address');
-        await this.$router.push('/');
+      await this.SetLoader(true);
+      await this.$store.dispatch('account/getAccountByAddress', this.address);
+      await this.SetLoader(false);
+    },
+    async getPage() {
+      const { address, limit, offset } = this;
+      if (this.activeTab === 'txs') {
+        await this.$store.dispatch('account/getAccountTransactions', { address, limit, offset });
+      }
+      if (this.activeTab === 'internal') {
+        await this.$store.dispatch('account/getAccountInternalTransactions', { address, limit, offset });
+      }
+      if (this.activeTab === 'tokensTxns') {
+        await this.$store.dispatch('account/getAccountTokenTransfers', { address, limit, offset });
       }
     },
   },
@@ -556,6 +293,11 @@ export default {
 
   &__transaction {
     display: none;
+  }
+
+  &__table {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
   }
 }
 

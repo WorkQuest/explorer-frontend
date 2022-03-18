@@ -18,6 +18,7 @@ import Holder from '~/components/mobile/holder';
 import InfoItem from '~/components/InfoItem';
 import Block from '~/components/mobile/block';
 import EmptyData from '~/components/ui/EmptyData';
+import ContractInfo from '~/components/ContractInfo';
 
 Vue.component('ctm-modal', CtmModal);
 Vue.component('base-btn', BaseButton);
@@ -37,3 +38,4 @@ Vue.component('holder', Holder);
 Vue.component('info-item', InfoItem);
 Vue.component('block', Block);
 Vue.component('empty-data', EmptyData);
+Vue.component('contract-info', ContractInfo);

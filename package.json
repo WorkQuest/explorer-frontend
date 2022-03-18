@@ -27,6 +27,7 @@
     "vue-click-outside": "^1.1.0",
     "vue-clipboard2": "^0.3.1",
     "vue-tippy": "4.4.0",
+    "vue2-ace-editor": "^0.0.15",
     "web3": "^1.7.0"
   },
   "resolutions": {

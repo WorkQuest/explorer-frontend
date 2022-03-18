@@ -111,6 +111,11 @@
       "tokensTxns": "ERC-20 Token Txns",
       "transfer": "Transfer",
       "selectToken": "Select token"
+    },
+    "contract": {
+      "contract": "Contract",
+      "read": "Read contract",
+      "write": "Write contract"
     }
   },
   "home": {

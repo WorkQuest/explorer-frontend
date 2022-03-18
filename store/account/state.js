@@ -3,6 +3,36 @@ export const account = {
   addressTokensBalances: [],
   addressCoinBalance: {},
   hash: {},
+  smartContract: {
+    address_hash: {
+      hex: '',
+      bech32: '',
+    },
+    id: '',
+    name: '',
+    compiler_version: '',
+    optimization: null,
+    contract_source_code: '',
+    abi: {
+      abi: [],
+      _format: '',
+      bytecode: '',
+      sourceName: '',
+      contractName: '',
+      linkReferences: {},
+      deployedBytecode: '',
+      deployedLinkReferences: {},
+    },
+    inserted_at: '',
+    updated_at: '',
+    constructor_arguments: null,
+    optimization_runs: null,
+    evm_version: null,
+    external_libraries: [],
+    verified_via_sourcify: null,
+    partially_verified: null,
+    file_path: null,
+  },
 };
 
 export const addressLogsList = {
