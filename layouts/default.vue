@@ -387,7 +387,7 @@ export default {
 .header {
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 100;
   min-height: 72px;
   background: $white;
   box-shadow: 0 1px 0 #E6E9EC;

@@ -115,7 +115,20 @@
     "contract": {
       "contract": "Contract",
       "read": "Read contract",
-      "write": "Write contract"
+      "write": "Write contract",
+      "contractSourceCode": "Contract Source Code",
+      "name": "Contract Name",
+      "compiler": "Compiler Version",
+      "optimization": "Optimization Enabled",
+      "other": "Other Settings",
+      "yes": "Yes",
+      "no": "Yo",
+      "with": "with",
+      "runs": "runs",
+      "default": "default",
+      "abi": "Contract ABI",
+      "bytecode": "Contract Bytecode",
+      "deployedBytecode": "Deployed Bytecode"
     }
   },
   "home": {

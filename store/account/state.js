@@ -55,10 +55,16 @@ export const transactionsList = {
   rows: [],
 };
 
+export const transactionWithTokensList = {
+  count: 0,
+  rows: [],
+};
+
 export default () => ({
   account,
   addressLogsList,
   internalTransactionsList,
   tokenTransfersList,
   transactionsList,
+  transactionWithTokensList,
 });
