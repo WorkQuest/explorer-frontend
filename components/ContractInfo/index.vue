@@ -91,6 +91,8 @@
           :type="activeTab"
           :abi-item="item"
           :number="i + 1"
+          :address="address"
+          :abi="JSON.parse(JSON.stringify(contractAbi))"
         />
       </div>
       <div
@@ -103,6 +105,8 @@
           :type="activeTab"
           :abi-item="item"
           :number="i + 1"
+          :address="address"
+          :abi="JSON.parse(JSON.stringify(contractAbi))"
         />
       </div>
     </div>
@@ -128,6 +132,10 @@ export default {
       type: String,
       default: 'token',
       validator: (value) => Object.keys(contractProps).indexOf(value) !== -1,
+    },
+    address: {
+      type: String,
+      default: '',
     },
   },
   data() {
@@ -174,10 +182,10 @@ export default {
     },
     filteredAbi() {
       if (this.activeTab === 'read') {
-        return this.contractAbi.filter((item) => item.type === 'function' && item.stateMutability === 'view');
+        return JSON.parse(JSON.stringify(this.contractAbi.filter((item) => item.type === 'function' && item.stateMutability === 'view')));
       }
       if (this.activeTab === 'write') {
-        return this.contractAbi.filter((item) => item.type === 'function' && item.stateMutability === 'nonpayable');
+        return JSON.parse(JSON.stringify(this.contractAbi.filter((item) => item.type === 'function' && item.stateMutability === 'nonpayable')));
       }
       return [];
     },

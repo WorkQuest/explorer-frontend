@@ -128,7 +128,13 @@
       "default": "default",
       "abi": "Contract ABI",
       "bytecode": "Contract Bytecode",
-      "deployedBytecode": "Deployed Bytecode"
+      "deployedBytecode": "Deployed Bytecode",
+      "buttons": {
+        "read": "Query",
+        "write": "Write"
+      },
+      "method": "method",
+      "response": "response"
     }
   },
   "home": {

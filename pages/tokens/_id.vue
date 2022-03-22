@@ -118,7 +118,10 @@
         v-if="activeTab === 'contract'"
         class="tables__contract contract"
       >
-        <contract-info type="token" />
+        <contract-info
+          type="token"
+          :address="address"
+        />
         <!--        <div class="contract__wrap">-->
         <!--          <p-->
         <!--            class="name"-->

@@ -117,7 +117,10 @@
         v-if="activeTab === 'contract'"
         class="table__contract"
       >
-        <contract-info type="contract" />
+        <contract-info
+          type="contract"
+          :address="address"
+        />
       </div>
     </div>
   </div>
