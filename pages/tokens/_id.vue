@@ -192,12 +192,12 @@
         <!--              mode="white"-->
         <!--              labelcolor="black"-->
         <!--            />-->
-        <!--            <base-btn-->
-        <!--              class="contract__submit"-->
-        <!--              mode="borderless-left"-->
-        <!--              :text="$tc('ui.token.query')"-->
-        <!--            />-->
-        <!--            &lt;!&ndash; /validation observer &ndash;&gt;-->
+        <!--                    <base-btn-->
+        <!--                      class="contract__submit"-->
+        <!--                      mode="borderless-left"-->
+        <!--                      :text="$tc('ui.token.query')"-->
+        <!--                    />-->
+        <!--                    &lt;!&ndash; /validation observer &ndash;&gt;-->
         <!--            <span class="contract__note">uint256</span>-->
         <!--          </div>-->
         <!--        </div>-->
