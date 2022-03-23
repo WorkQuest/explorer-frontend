@@ -37,31 +37,33 @@
       <p class="info__header">
         {{ $t('ui.token.more') }}
       </p>
-      <p class="info__info">
-        <span class="info__title">{{ $t('ui.token.creator') }}</span>
-        <nuxt-link
-          class="info__link"
-          :to="'/address/0xe24f99419d788003c0d5212f05f47b1572cdc38a'"
-        >
-          {{ formatItem('0xe24f99419d788003c0d5212f05f47b1572cdc38a', 9, 6) }}
-        </nuxt-link>
-        {{ $t('ui.token.atTxn') }}
-        <nuxt-link
-          class="info__link"
-          :to="'/address/0xe24f99419d788003c0d5212f05f47b1572cdc38a'"
-        >
-          {{ formatItem('0xe24f99419d788003c0d5212f05f47b1572cdc38a', 9, 6) }}
-        </nuxt-link>
-      </p>
-      <p class="info__info">
-        <span class="info__title">{{ $t('ui.token.tracker') }}</span>
-        <nuxt-link
-          class="info__link"
-          :to="'/tokens'"
-        >
-          {{ formatItem('Vault:JetSwappWINGS(vault) 16,032.204453', 26, 0) }}
-        </nuxt-link>
-      </p>
+      <template v-if="createdContract">
+        <p class="info__info">
+          <span class="info__title">{{ $t('ui.token.creator') }}</span>
+          <nuxt-link
+            class="info__link"
+            :to="'/address/0xe24f99419d788003c0d5212f05f47b1572cdc38a'"
+          >
+            {{ createdContract ? formatItem('0xe24f99419d788003c0d5212f05f47b1572cdc38a', 9, 6) : '' }}
+          </nuxt-link>
+          {{ $t('ui.token.atTxn') }}
+          <nuxt-link
+            class="info__link"
+            :to="'/address/0xe24f99419d788003c0d5212f05f47b1572cdc38a'"
+          >
+            {{ createdContract ? formatItem('0xe24f99419d788003c0d5212f05f47b1572cdc38a', 9, 6) : '' }}
+          </nuxt-link>
+        </p>
+        <p class="info__info">
+          <span class="info__title">{{ $t('ui.token.tracker') }}</span>
+          <nuxt-link
+            class="info__link"
+            :to="'/tokens'"
+          >
+            {{ createdContract ? formatItem('Vault:JetSwappWINGS(vault) 16,032.204453', 26, 0) : '' }}
+          </nuxt-link>
+        </p>
+      </template>
     </div>
   </div>
 </template>
@@ -81,9 +83,16 @@ export default {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
       token: 'tokens/getCurrentToken',
+      accountInfo: 'account/getAccountInfo',
     }),
     isToken() {
       return Object.keys(this.token).length > 0;
+    },
+    createdContract() {
+      if (!this.isToken) {
+        return this.accountInfo.createdContract;
+      }
+      return null;
     },
   },
 };

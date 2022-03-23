@@ -87,7 +87,7 @@
       >
         <contract-input
           v-for="(item, i) in filteredAbi"
-          :key="`${i}__item`"
+          :key="`${i}__read`"
           :type="activeTab"
           :abi-item="item"
           :number="i + 1"
@@ -101,7 +101,7 @@
       >
         <contract-input
           v-for="(item, i) in filteredAbi"
-          :key="`${i}__item`"
+          :key="`${i}__write`"
           :type="activeTab"
           :abi-item="item"
           :number="i + 1"

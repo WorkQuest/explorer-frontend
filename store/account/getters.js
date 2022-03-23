@@ -8,4 +8,6 @@ export default {
   getInternalTransactionsCount: (state) => state.internalTransactionsList.count,
   getTokenTransfers: (state) => state.tokenTransfersList.rows,
   getTokenTransfersCount: (state) => state.tokenTransfersList.count,
+  getTransactionWithTokensList: (state) => state.transactionWithTokensList.rows,
+  getTransactionWithTokensListCount: (state) => state.transactionWithTokensList.count,
 };

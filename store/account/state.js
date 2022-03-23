@@ -3,6 +3,7 @@ export const account = {
   addressTokensBalances: [],
   addressCoinBalance: {},
   hash: {},
+  createdContract: null,
   smartContract: {
     address_hash: {
       hex: '',

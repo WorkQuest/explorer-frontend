@@ -37,13 +37,16 @@
             :key="`${i}_abiInput`"
             v-model="value[i]"
             type="text"
-            :label="input.name ? input.name : abiItem.name"
-            :name="input.name ? input.name : abiItem.name"
+            :label="input.name ? input.name : `${abiItem.name}`"
+            :name="input.name ? input.name : `${abiItem.name}`"
             autocomplete="off"
             labelcolor="black"
             spellcheck="false"
-            :placeholder="`${input.name} (${input.type})`"
-            :rules="'required'"
+            :placeholder="`${input.name ? input.name : abiItem.name} (${input.type})`"
+            :rules="{
+              required: true,
+              isArray: checkType(input.type) ? value : false
+            }"
           />
         </template>
         <div class="inputs__footer">
@@ -69,10 +72,7 @@
             v-if="abiItem.inputs.length > 0"
             class="outputs__types types"
           >
-            <span
-
-              class="types__icon"
-            >
+            <span class="types__icon">
               &boxur;
             </span>
             <span
@@ -93,19 +93,20 @@
             v-if="response.length > 0"
             class="outputs__response response"
           >
+            <template v-if="abiItem.inputs.length > 0">
+              [ <strong> {{ abiItem.name }} </strong> {{ $t('ui.contract.method') }} {{ $t('ui.contract.response') }} ]
+            </template>
             <template v-for="(item, i) in abiItem.outputs">
               <div
                 v-if="abiItem.inputs.length > 0"
                 :key="`${i}__type`"
                 class="response__type"
-              >
-                [ <strong> {{ abiItem.name }} </strong> {{ $t('ui.contract.method') }} {{ $t('ui.contract.response') }} ]
-              </div>
+              />
               <div
                 :key="`${i}__value`"
                 class="response__value"
               >
-                <span class="icon-caret_right" /> <em> {{ item.type }}:</em>  {{ response[i] }}
+                <span class="icon-dot_03_m" /> <strong> {{ item.name }}  </strong> <em> {{ item.type }}:</em>  {{ response[i] }}
               </div>
             </template>
           </div>
@@ -116,6 +117,8 @@
 </template>
 
 <script>
+
+import { isArrayType, splitString } from '~/utils';
 
 const type = ['read', 'write'];
 const abiType = ['function', 'constructor', 'event', 'fallback'];
@@ -166,17 +169,10 @@ export default {
       this.isVisible = !this.isVisible;
     },
     async contractHandler() {
-      const regex = /\[]/;
-      let params = [];
-      const valueExist = this.value.length > 0;
-      if (valueExist) {
-        params = this.value.map((item, index) => {
-          const isArray = (this.abiItem.inputs[index].type.search(regex)) >= 0;
-          console.log('isArray: ', isArray);
-          return isArray ? item.split(',').map((i) => i.trim()) : item;
-        });
-      }
-      console.log('params: ', params);
+      const params = this.value.map((item, index) => {
+        const isArray = isArrayType(this.abiItem.inputs[index].type);
+        return isArray ? splitString(item) : item;
+      });
       const payload = {
         type: this.type,
         abi: this.abi,
@@ -186,13 +182,12 @@ export default {
       };
       this.showLoader(true);
       const request = await this.$store.dispatch('main/requestFromBlockchain', payload);
-      console.log('request.result: ', request.result);
       if (request.ok) {
         const { result } = request;
         if (this.abiItem.outputs.length > 1) {
-          this.response.push(result.map((item) => item.join(', ')));
+          this.response = [...result];
         } else {
-          this.response.push(result.join(', '));
+          this.response.push(result);
         }
       } else {
         this.error = request.data;
@@ -205,6 +200,9 @@ export default {
         this.error = null;
       }
       this.isLoading = loading;
+    },
+    checkType(stringType) {
+      return isArrayType(stringType);
     },
   },
 };
@@ -261,12 +259,15 @@ export default {
   &__value {
     display: flex;
     align-items: center;
-    &>em {
+    &>strong, em {
       margin-right: 10px;
     }
   }
 }
 .types {
+  &__name {
+    margin-right: 10px;
+  }
   &__error {
     font-size: 12px;
     color: #dc3545;

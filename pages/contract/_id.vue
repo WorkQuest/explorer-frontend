@@ -10,10 +10,9 @@
         {{ $t('ui.token.contract') }}
       </h4>
       <p class="contract__contract">
-        <!--        TODO: Вывести адрес контракта-->
-        0x7811B8604c64D62D02dc7e5a8c47185B1b59E0b3
+        {{ address }}
         <button
-          v-clipboard:copy="0x7811B8604c64D62D02dc7e5a8c47185B1b59E0b3"
+          v-clipboard:copy="address"
           v-clipboard:success="ClipboardSuccessHandler"
           v-clipboard:error="ClipboardErrorHandler"
           class="btn__copy"
@@ -148,8 +147,8 @@ export default {
       transactionsCount: 'account/getTransactionsCount',
       internalTransactions: 'account/getInternalTransactions',
       internalTransactionsCount: 'account/getInternalTransactionsCount',
-      tokenTransfers: 'account/getTokenTransfers',
-      tokenTransfersCount: 'account/getTokenTransfersCount',
+      tokenTransfers: 'account/getTransactionWithTokensList',
+      tokenTransfersCount: 'account/getTransactionWithTokensListCount',
     }),
     totalPages() {
       if (this.activeTab === 'txs') return this.setTotalPages(this.transactionsCount, this.limit);
@@ -222,7 +221,7 @@ export default {
         await this.$store.dispatch('account/getAccountInternalTransactions', { address, limit, offset });
       }
       if (this.activeTab === 'tokensTxns') {
-        await this.$store.dispatch('account/getAccountTokenTransfers', { address, limit, offset });
+        await this.$store.dispatch('account/getTransactionWithTokensList', { address, limit, offset });
       }
     },
   },
@@ -236,7 +235,6 @@ export default {
     width: 35px;
     align-items: center;
     justify-items: center;
-    background: $white;
     border: 1px solid $black0;
     padding: 5px;
     border-radius: 6px;
@@ -268,6 +266,10 @@ export default {
     grid-template-columns: 1fr 1fr;
     grid-gap: 25px;
     margin-bottom: 25px;
+    border-radius: 6px;
+  }
+  &__title, &__contract {
+    margin-bottom: 0;
   }
 }
 

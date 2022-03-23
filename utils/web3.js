@@ -1,5 +1,7 @@
 import Web3 from 'web3';
-import { error, output } from '~/utils/index';
+import {
+  convertFromTupleToString, error, isTuple, output, isMap, convertFromMapToArray,
+} from '~/utils/index';
 
 const { WQ_PROVIDER } = process.env;
 
@@ -19,10 +21,6 @@ const connectProvider = async () => {
 };
 
 export const fetchContractData = async (type = 'read', abi, address, method, params = null) => {
-  console.log('abi: ', abi);
-  console.log('address: ', address);
-  console.log('method: ', method);
-  console.log('params: ', params);
   try {
     let response = null;
     const instance = await connectProvider();
@@ -33,10 +31,18 @@ export const fetchContractData = async (type = 'read', abi, address, method, par
     if (type === 'write') {
       return error(500, 'write', '');
     }
-    console.log('response:', response);
-    return output(Array.isArray(response) ? response : [response]);
+    if (response && isTuple(response)) {
+      return output(convertFromTupleToString(response));
+    }
+    if (response && isMap(response)) {
+      return output(convertFromMapToArray(response));
+    }
+    if (response && Array.isArray(response)) {
+      return output(response.join(', '));
+    }
+    return output(response);
   } catch (e) {
-    console.log('error: ', e);
+    console.dir('fetchContractData: ', e);
     return error(500, 'readContractData', e);
   }
 };
