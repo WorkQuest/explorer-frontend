@@ -90,7 +90,7 @@
             </span>
           </div>
           <div
-            v-if="response"
+            v-if="response.length > 0"
             class="outputs__response response"
           >
             <template v-for="(item, i) in abiItem.outputs">
@@ -150,7 +150,7 @@ export default {
     return {
       isVisible: true,
       value: [],
-      response: null,
+      response: [],
       error: null,
       buttonDisabled: false,
       isLoading: false,
@@ -166,25 +166,34 @@ export default {
       this.isVisible = !this.isVisible;
     },
     async contractHandler() {
-      // const regex = /\[]/
-      // let params
-      // const valueExist = this.value.length > 0
-      // if (valueExist) {
-      //   params = this.value.map((item, index) => {
-      //     const isArray = item.search(regex)
-      //   })
-      // }
+      const regex = /\[]/;
+      let params = [];
+      const valueExist = this.value.length > 0;
+      if (valueExist) {
+        params = this.value.map((item, index) => {
+          const isArray = (this.abiItem.inputs[index].type.search(regex)) >= 0;
+          console.log('isArray: ', isArray);
+          return isArray ? item.split(',').map((i) => i.trim()) : item;
+        });
+      }
+      console.log('params: ', params);
       const payload = {
         type: this.type,
         abi: this.abi,
         address: this.address,
         method: this.abiItem.name,
-        params: this.value.length > 0 ? this.value : null,
+        params: this.value.length > 0 ? params : null,
       };
       this.showLoader(true);
       const request = await this.$store.dispatch('main/requestFromBlockchain', payload);
+      console.log('request.result: ', request.result);
       if (request.ok) {
-        this.response = request.result;
+        const { result } = request;
+        if (this.abiItem.outputs.length > 1) {
+          this.response.push(result.map((item) => item.join(', ')));
+        } else {
+          this.response.push(result.join(', '));
+        }
       } else {
         this.error = request.data;
       }
@@ -192,7 +201,7 @@ export default {
     },
     showLoader(loading) {
       if (loading) {
-        this.response = null;
+        this.response = [];
         this.error = null;
       }
       this.isLoading = loading;
