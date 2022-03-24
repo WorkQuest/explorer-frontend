@@ -6,7 +6,7 @@ export const searchResponseTypes = (type, value) => {
     0: `/blocks/${value || ''}`,
     1: `/transactions/${value || ''}`,
     2: `/blocks/${value || ''}`,
-    3: `/contracts/${value || ''}`,
+    3: `/contract/${value || ''}`,
     4: `/address/${value || ''}`,
     5: `/tokens/?search=${value || ''}`,
     6: `/tokens/${value || ''}`,
@@ -91,10 +91,10 @@ export const convertFromTupleToString = (tuple) => {
     // eslint-disable-next-line no-restricted-syntax
     for (const key in tuple) {
       if (isNaN(parseInt(key, 10))) {
-        result += ` ${key}: ${tuple[key]} `;
+        result += ` ${key}: ${tuple[key]}, `;
       }
     }
-    return result.trim();
+    return result.trim().slice(0, -1);
   }
   return '';
 };
