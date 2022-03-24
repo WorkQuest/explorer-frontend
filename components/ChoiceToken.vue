@@ -1,5 +1,8 @@
 <template>
-  <div class="tokens">
+  <div
+    class="tokens"
+    @click.stop.prevent
+  >
     <base-field
       v-model="search"
       :is-search="true"
@@ -34,6 +37,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'ChoiceToken',
   props: {
@@ -56,7 +60,7 @@ export default {
   },
   methods: {
     async onClick(token) {
-      await this.$router.push(`/tokens/${token.token_contract_address_hash.hex}`);
+      await this.$router.push(`/tokens/${token.token_contract_address_hash?.hex || ''}`);
     },
   },
 };
