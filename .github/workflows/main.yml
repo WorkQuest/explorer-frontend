@@ -23,7 +23,12 @@ jobs:
         run: npm install
 
       - name: Run generate static task
-        run: BASE_URL=${{ secrets.BASE_URL }} npm run generate
+        run: npm run generate
+
+      - name: Create .env file
+        run: |
+          echo BASE_URL=${{ secrets.BASE_URL }} >> .env
+          echo WQ_EXPLORER=${{ secrets.WQ_EXPLORER }} >> .env
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.2.11
@@ -53,7 +58,12 @@ jobs:
         run: npm install
 
       - name: Run generate static task
-        run: GMAPKEY=${{ secrets.GMAPKEY }} BASE_URL=${{ secrets.BASE_URL }} npm run generate
+        run: npm run generate
+
+      - name: Create .env file
+        run: |
+          echo BASE_URL=${{ secrets.BASE_URL }} >> .env
+          echo WQ_EXPLORER=${{ secrets.WQ_EXPLORER }} >> .env
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.2.11
@@ -84,9 +94,11 @@ jobs:
 
       - name: Run generate static task
         run: npm run generate
-        env:
-             GMAPKEY=${{ secrets.GMAPKEY }}
-             BASE_URL=${{ secrets.BASE_URL }}
+
+      - name: Create .env file
+        run: |
+          echo BASE_URL=${{ secrets.BASE_URL }} >> .env
+          echo WQ_EXPLORER=${{ secrets.WQ_EXPLORER }} >> .env
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.2.11
