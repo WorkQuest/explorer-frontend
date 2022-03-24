@@ -28,7 +28,7 @@ jobs:
       - name: Create .env file
         run: |
           echo BASE_URL=${{ secrets.BASE_URL }} >> .env
-          echo WQ_EXPLORER=${{ secrets.WQ_EXPLORER }} >> .env
+          echo WQ_PROVIDER=${{ secrets.WQ_PROVIDER }} >> .env
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.2.11
@@ -63,7 +63,7 @@ jobs:
       - name: Create .env file
         run: |
           echo BASE_URL=${{ secrets.BASE_URL }} >> .env
-          echo WQ_EXPLORER=${{ secrets.WQ_EXPLORER }} >> .env
+          echo WQ_PROVIDER=${{ secrets.WQ_PROVIDER }} >> .env
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.2.11
@@ -98,7 +98,7 @@ jobs:
       - name: Create .env file
         run: |
           echo BASE_URL=${{ secrets.BASE_URL }} >> .env
-          echo WQ_EXPLORER=${{ secrets.WQ_EXPLORER }} >> .env
+          echo WQ_PROVIDER=${{ secrets.WQ_PROVIDER }} >> .env
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.2.11
