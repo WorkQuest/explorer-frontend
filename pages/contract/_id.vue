@@ -209,7 +209,7 @@ export default {
     },
     async getContractData() {
       await this.SetLoader(true);
-      await this.$store.dispatch('account/getAccountByAddress', this.address);
+      await this.$store.dispatch('account/getAccountByAddress', { address: this.address, commonLimit: this.limit });
       await this.SetLoader(false);
     },
     async getPage() {

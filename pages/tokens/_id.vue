@@ -232,7 +232,7 @@ export default {
     async getTokenData() {
       await this.SetLoader(true);
       await this.$store.dispatch('tokens/getToken', { address: this.address, commonLimit: this.limit });
-      await this.$store.dispatch('account/getAccountByAddress', this.address);
+      await this.$store.dispatch('account/getAccountByAddress', { address: this.address, commonLimit: this.limit });
       await this.SetLoader(false);
     },
     onClickContract(elem) {
