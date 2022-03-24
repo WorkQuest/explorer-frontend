@@ -23,7 +23,7 @@
               v-for="(tab, i) in tabs"
               :key="i"
               class="txs__tab_overview"
-              :class="{txs__tab_active: activeElement === tab}"
+              :class="{ 'txs__tab_active': activeElement === tab}"
               @click="onClick(tab)"
             >{{ $t(`ui.token.${tab}`) }}</span>
           </div>
@@ -319,9 +319,9 @@ export default {
           {
             class: 'columns__item_two-one',
             title: this.$t('ui.timestamp'),
-            info: this.formatDataFromNow(this.tx.timestamp),
-            note: this.$moment(this.tx.timestamp)
-              .format('MMM-DD-YYYY HH:MM:SS A +UTC'),
+            info: this.formatDataFromNow(this.tx.block.timestamp),
+            note: this.$moment(this.tx.block.timestamp)
+              .format('MMM-DD-YYYY HH:mm:ss A +UTC'),
           },
           {
             class: 'columns__item_two-two',

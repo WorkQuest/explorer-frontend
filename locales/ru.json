@@ -113,28 +113,28 @@
       "selectToken": "Select token"
     },
     "contract": {
-      "contract": "Contract",
-      "read": "Read contract",
-      "write": "Write contract",
-      "contractSourceCode": "Contract Source Code",
-      "name": "Contract Name",
-      "compiler": "Compiler Version",
-      "optimization": "Optimization Enabled",
-      "other": "Other Settings",
-      "yes": "Yes",
-      "no": "Yo",
-      "with": "with",
-      "runs": "runs",
-      "default": "default",
-      "abi": "Contract ABI",
-      "bytecode": "Contract Bytecode",
-      "deployedBytecode": "Deployed Bytecode",
+      "contract": "Контракт",
+      "read": "Прочитать контракт",
+      "write": "Записать на контракт",
+      "contractSourceCode": "Исходный код контракта",
+      "name": "Название контракта",
+      "compiler": "Версия компилятора",
+      "optimization": "Оптимизация включена",
+      "other": "Другие настройки",
+      "yes": "Да",
+      "no": "Нет",
+      "with": "с",
+      "runs": "проходами",
+      "default": "по умолчанию",
+      "abi": "ABI контракта",
+      "bytecode": "Байткод контракта",
+      "deployedBytecode": "Задеплоенный байткод",
       "buttons": {
-        "read": "Query",
-        "write": "Write"
+        "read": "Прочитать",
+        "write": "Запись"
       },
-      "method": "method",
-      "response": "response"
+      "method": "метод",
+      "response": "ответ"
     }
   },
   "home": {

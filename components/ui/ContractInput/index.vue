@@ -258,8 +258,11 @@ export default {
   }
   &__value {
     display: flex;
-    align-items: center;
-    &>strong, em {
+    align-items: flex-start;
+    & > span {
+      margin-top: 5px;
+  }
+    & > strong, em {
       margin-right: 10px;
     }
   }

@@ -34,6 +34,7 @@ export const account = {
     partially_verified: null,
     file_path: null,
   },
+  token: null,
 };
 
 export const addressLogsList = {

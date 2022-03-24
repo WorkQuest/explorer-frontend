@@ -1,9 +1,9 @@
 import { error } from '~/utils';
 
 export default {
-  async getAccountByAddress({ commit }, address) {
+  async getAccountByAddress({ commit }, { address, commonLimit }) {
     try {
-      const response = await this.$axios.$get(`/account/${address}`);
+      const response = await this.$axios.$get(`/account/${address}`, { params: { commonLimit } });
       commit('setAccountInfo', response.result);
       return response;
     } catch (e) {

@@ -42,27 +42,30 @@
           <span class="info__title">{{ $t('ui.token.creator') }}</span>
           <nuxt-link
             class="info__link"
-            :to="'/address/0xe24f99419d788003c0d5212f05f47b1572cdc38a'"
+            :to="`/address/${creator}`"
           >
-            {{ createdContract ? formatItem('0xe24f99419d788003c0d5212f05f47b1572cdc38a', 9, 6) : '' }}
+            {{ formatItem(creator, 9, 6) }}
           </nuxt-link>
           {{ $t('ui.token.atTxn') }}
           <nuxt-link
             class="info__link"
-            :to="'/address/0xe24f99419d788003c0d5212f05f47b1572cdc38a'"
+            :to="`/transactions/${txHash}`"
           >
-            {{ createdContract ? formatItem('0xe24f99419d788003c0d5212f05f47b1572cdc38a', 9, 6) : '' }}
+            {{ formatItem(txHash, 9, 6) }}
           </nuxt-link>
         </p>
-        <p class="info__info">
-          <span class="info__title">{{ $t('ui.token.tracker') }}</span>
-          <nuxt-link
-            class="info__link"
-            :to="'/tokens'"
-          >
-            {{ createdContract ? formatItem('Vault:JetSwappWINGS(vault) 16,032.204453', 26, 0) : '' }}
-          </nuxt-link>
-        </p>
+        <template v-if="isTokenTracker">
+          <p class="info__info">
+            <span class="info__title">{{ $t('ui.token.tracker') }}</span>
+            <nuxt-link
+              class="info__link"
+              :to="`/tokens/${tokenTrackerAddress}`"
+              :title="`${tokenTrackerName} (${tokenTrackerSymbol}) (${tokenTrackerSupply})`"
+            >
+              {{ formatItem(`${tokenTrackerName} (${tokenTrackerSymbol}) (${tokenTrackerSupply})`, 26, 0) }}
+            </nuxt-link>
+          </p>
+        </template>
       </template>
     </div>
   </div>
@@ -89,10 +92,33 @@ export default {
       return Object.keys(this.token).length > 0;
     },
     createdContract() {
-      if (!this.isToken) {
-        return this.accountInfo.createdContract;
+      return !this.isToken ? this.accountInfo.createdContract : null;
+    },
+    creator() {
+      return this.createdContract ? this.accountInfo.createdContract?.from_address_hash?.hex : '';
+    },
+    txHash() {
+      return this.createdContract ? this.accountInfo.createdContract?.hash : '';
+    },
+    isTokenTracker() {
+      return this.createdContract && this.accountInfo.token;
+    },
+    tokenTrackerAddress() {
+      return this.isTokenTracker ? this.accountInfo.token.contract_address_hash.hex : '';
+    },
+    tokenTrackerName() {
+      return this.isTokenTracker ? this.accountInfo.token.name : '';
+    },
+    tokenTrackerSymbol() {
+      return this.isTokenTracker ? this.accountInfo.token.symbol : '';
+    },
+    tokenTrackerSupply() {
+      const totalSupply = this.createdContract && this.accountInfo.token ? this.accountInfo.token.total_supply : 0;
+      const decimals = this.createdContract && this.accountInfo.token ? this.accountInfo.token.decimals : 0;
+      if (totalSupply && decimals) {
+        return this.ConvertFromDecimals(totalSupply, decimals());
       }
-      return null;
+      return '';
     },
   },
 };

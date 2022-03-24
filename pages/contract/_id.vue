@@ -178,12 +178,21 @@ export default {
     },
     tableHeadersERC() {
       return [
-        { key: 'transaction_hash', label: this.$t('ui.tx.transaction'), sortable: true },
+        { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
         { key: 'age', label: this.$t('ui.block.age'), sortable: true },
         { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
         { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
-        { key: 'amount', label: this.$t('ui.tx.value'), sortable: true },
-        // { key: 'token', label: this.$t('ui.token.token'), sortable: true },
+        {
+          key: 'transfer_amount',
+          label: this.$t('ui.tx.value'),
+          sortable: true,
+          formatter: (value, key, item) => {
+            const { decimals } = item.tokenContractAddress?.token || '';
+            const rawValue = item.value || '';
+            return this.ConvertFromDecimals(rawValue, decimals);
+          },
+        },
+        { key: 'tokenTransfers', label: this.$t('ui.token.token'), sortable: true },
       ];
     },
     address() {
@@ -209,7 +218,7 @@ export default {
     },
     async getContractData() {
       await this.SetLoader(true);
-      await this.$store.dispatch('account/getAccountByAddress', this.address);
+      await this.$store.dispatch('account/getAccountByAddress', { address: this.address, commonLimit: this.limit });
       await this.SetLoader(false);
     },
     async getPage() {
