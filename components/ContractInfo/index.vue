@@ -25,9 +25,7 @@
           </div>
           <div class="details__info">
             {{ $t('ui.contract.optimization') }}:
-            <b> {{ optimization ? $t('ui.contract.yes') : $t('ui.contract.no') }}
-              {{ optimization && optimizationRuns
-                ? $t('ui.contract.with') + ' ' + optimizationRuns + ' ' + $t('ui.contract.runs') : '' }} </b>
+            <b> {{ optimizationEnabled }} {{ optimizationStatus }} </b>
           </div>
           <div class="details__info">
             {{ $t('ui.contract.other') }}:  <b> {{ evmVersion || $t('ui.contract.default') }} </b>
@@ -188,6 +186,13 @@ export default {
         return JSON.parse(JSON.stringify(this.contractAbi.filter((item) => item.type === 'function' && item.stateMutability === 'nonpayable')));
       }
       return [];
+    },
+    optimizationStatus() {
+      return this.optimization && this.optimizationRuns
+        ? `${this.$t('ui.contract.with')} ${this.optimizationRuns} ${this.$t('ui.contract.runs')}` : '';
+    },
+    optimizationEnabled() {
+      return this.optimization ? this.$t('ui.contract.yes') : this.$t('ui.contract.no');
     },
   },
   methods: {

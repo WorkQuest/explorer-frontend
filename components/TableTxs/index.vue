@@ -107,6 +107,16 @@
         </nuxt-link>
       </template>
 
+      <template #cell(tokenTransfers)="el">
+        <nuxt-link
+          class="table__link"
+          :to="{ path: `tokens/`+el.item.tokenContractAddress.hash.hex, params: { token: el.item.tokenContractAddress.hash.hex }}"
+        >
+          <span class="table__token token token__name"> {{ el.item.tokenContractAddress.token.name }}</span>
+          <span class="table__token token token__symbol"> ({{ el.item.tokenContractAddress.token.symbol }}) </span>
+        </nuxt-link>
+      </template>
+
       <template #empty>
         <empty-data :description="$tc('ui.tx.noTxs')" />
       </template>
