@@ -1,5 +1,6 @@
 import loaderModes from '~/store/main/loaderModes';
 import { error, output, searchResponseTypes } from '~/utils';
+import { fetchContractData } from '~/utils/web3';
 
 export default {
   setLoading({ commit }, value) {
@@ -64,5 +65,10 @@ export default {
     } catch (e) {
       return error(e.code || 500, 'searchHandler', e);
     }
+  },
+  async requestFromBlockchain({ _ }, {
+    type, abi, address, method, params,
+  }) {
+    return await fetchContractData(type, abi, address, method, params);
   },
 };

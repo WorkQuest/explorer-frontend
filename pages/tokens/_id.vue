@@ -118,94 +118,17 @@
         v-if="activeTab === 'contract'"
         class="tables__contract contract"
       >
-        <div class="contract__wrap">
-          <p
-            class="name"
-            @click="onClickContract('name')"
-          >
-            1. {{ $t('ui.token.name') }}
-            <span
-              v-if="activePoint.includes('name')"
-              class="icon-chevron_up"
-            />
-            <span
-              v-else
-              class="icon-chevron_down"
-            />
-          </p>
-          <p
-            v-if="activePoint.includes('name')"
-            class="contract__description"
-          >
-            some description
-          </p>
-        </div>
-        <div class="contract__wrap">
-          <p
-            class="deprecated"
-            @click="onClickContract('deprecated')"
-          >
-            2. {{ $t('ui.token.deprecated') }}
-            <span
-              v-if="activePoint.includes('deprecated')"
-              class="icon-chevron_up"
-            />
-            <span
-              v-else
-              class="icon-chevron_down"
-            />
-          </p>
-          <p
-            v-if="activePoint.includes('deprecated')"
-            class="contract__description"
-          >
-            False
-            <span class="contract__note">bool</span>
-          </p>
-        </div>
-        <div class="contract__wrap">
-          <p
-            class="balances"
-            @click="onClickContract('balances')"
-          >
-            3. {{ $t('ui.token.balances') }}
-            <span
-              v-if="activePoint.includes('balances')"
-              class="icon-chevron_up"
-            />
-            <span
-              v-else
-              class="icon-chevron_down"
-            />
-          </p>
-          <div
-            v-if="activePoint.includes('balances')"
-            class="contract__description"
-          >
-            <!-- validation observer -->
-            <base-field
-              v-model="address"
-              :placeholder="$tc('ui.token.input')"
-              :label="$tc('ui.token.input')"
-              :is-hide-error="true"
-              mode="white"
-              labelcolor="black"
-            />
-            <base-btn
-              class="contract__submit"
-              mode="borderless-left"
-              :text="$tc('ui.token.query')"
-            />
-            <!-- /validation observer -->
-            <span class="contract__note">uint256</span>
-          </div>
-        </div>
+        <contract-info
+          type="token"
+          :address="address"
+        />
       </div>
     </div>
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import { isAddress } from 'web3-utils';
 import BigNumber from 'bignumber.js';
 
 export default {
@@ -292,9 +215,11 @@ export default {
     },
   },
   async mounted() {
-    await this.SetLoader(true);
-    await this.$store.dispatch('tokens/getToken', { address: this.address, commonLimit: this.limit });
-    await this.SetLoader(false);
+    if (isAddress(this.address)) {
+      await this.getTokenData();
+    } else {
+      await this.$router.push('/');
+    }
   },
   beforeDestroy() {
     this.$store.commit('tokens/resetCurrentToken');
@@ -303,6 +228,12 @@ export default {
     onClick(tab) {
       this.activeTab = tab;
       this.page = 1;
+    },
+    async getTokenData() {
+      await this.SetLoader(true);
+      await this.$store.dispatch('tokens/getToken', { address: this.address, commonLimit: this.limit });
+      await this.$store.dispatch('account/getAccountByAddress', { address: this.address, commonLimit: this.limit });
+      await this.SetLoader(false);
     },
     onClickContract(elem) {
       if (this.activePoint.includes(elem)) {
@@ -416,42 +347,6 @@ export default {
     gap: 10px;
     margin-bottom: 10px;
   }
-}
-
-.contract {
-  padding: 0 20px 20px 20px;
-  display: grid;
-  grid-gap: 15px;
-
-  &__wrap {
-    background: $black0;
-    border-radius: 5px;
-    padding: 20px;
-  }
-
-  &__description {
-    margin-top: 20px;
-  }
-
-  &__note {
-    color: $black500;
-  }
-
-  &__submit {
-    width: 120px;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-}
-
-.name, .deprecated, .balances {
-  cursor: pointer;
-}
-
-.icon-chevron_up::before, .icon-chevron_down::before {
-  color: $blue;
-  float: right;
 }
 
 @include _767 {

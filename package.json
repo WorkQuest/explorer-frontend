@@ -13,8 +13,10 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/moment": "^1.6.1",
+    "ace-mode-solidity": "^0.1.1",
     "bignumber.js": "^9.0.1",
     "bootstrap-vue": "^2.21.2",
+    "brace": "^0.11.1",
     "cookie-universal-nuxt": "^2.1.4",
     "cross-env": "^7.0.3",
     "nuxt": "^2.15.8",
@@ -27,6 +29,7 @@
     "vue-click-outside": "^1.1.0",
     "vue-clipboard2": "^0.3.1",
     "vue-tippy": "4.4.0",
+    "vue2-ace-editor": "^0.0.15",
     "web3": "^1.7.0"
   },
   "resolutions": {

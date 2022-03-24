@@ -34,12 +34,10 @@
         <div
           v-click-outside="hideChoice"
           class="overview__select-field"
+          :class="accountTokens.length === 0 ? 'overview__select-field_disabled' :''"
           @click="toggleChoice"
         >
-          <div
-            class="overview__input"
-            :class="accountTokens.length === 0 ? 'overview__input_disabled' :''"
-          >
+          <div class="overview__input">
             {{ $t('ui.token.selectToken') }}
             <span class="icon-caret_down" />
           </div>
@@ -161,17 +159,19 @@ export default {
     background: $black0;
     border-radius: 6px;
     color: $black200;
-    &_disabled {
-      pointer-events: none;
-      color: $black100;
-    }
   }
-
   &__select {
     position: absolute;
     z-index: 1;
     width: 100%;
     left: 0;
+    &-field {
+      cursor: pointer;
+      &_disabled {
+        pointer-events: none;
+        color: $black100;
+      }
+    }
   }
 }
 
@@ -179,7 +179,6 @@ export default {
   color: $blue;
   font-size: 20px;
   float: right;
-  cursor: pointer;
 }
 
 @include _767 {

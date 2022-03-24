@@ -111,6 +111,30 @@
       "tokensTxns": "ERC-20 Token Txns",
       "transfer": "Transfer",
       "selectToken": "Select token"
+    },
+    "contract": {
+      "contract": "Contract",
+      "read": "Read contract",
+      "write": "Write contract",
+      "contractSourceCode": "Contract Source Code",
+      "name": "Contract Name",
+      "compiler": "Compiler Version",
+      "optimization": "Optimization Enabled",
+      "other": "Other Settings",
+      "yes": "Yes",
+      "no": "Yo",
+      "with": "with",
+      "runs": "runs",
+      "default": "default",
+      "abi": "Contract ABI",
+      "bytecode": "Contract Bytecode",
+      "deployedBytecode": "Deployed Bytecode",
+      "buttons": {
+        "read": "Query",
+        "write": "Write"
+      },
+      "method": "method",
+      "response": "response"
     }
   },
   "home": {
@@ -126,6 +150,7 @@
     "other": "An error occurred"
   },
   "messages": {
-    "required": "The {_field_} field is required"
+    "required": "The {_field_} field is required",
+    "isArray": "The {_field_} must be one value or multiple values separated"
   }
 }

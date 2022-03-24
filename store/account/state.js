@@ -3,6 +3,38 @@ export const account = {
   addressTokensBalances: [],
   addressCoinBalance: {},
   hash: {},
+  createdContract: null,
+  smartContract: {
+    address_hash: {
+      hex: '',
+      bech32: '',
+    },
+    id: '',
+    name: '',
+    compiler_version: '',
+    optimization: null,
+    contract_source_code: '',
+    abi: {
+      abi: [],
+      _format: '',
+      bytecode: '',
+      sourceName: '',
+      contractName: '',
+      linkReferences: {},
+      deployedBytecode: '',
+      deployedLinkReferences: {},
+    },
+    inserted_at: '',
+    updated_at: '',
+    constructor_arguments: null,
+    optimization_runs: null,
+    evm_version: null,
+    external_libraries: [],
+    verified_via_sourcify: null,
+    partially_verified: null,
+    file_path: null,
+  },
+  token: null,
 };
 
 export const addressLogsList = {
@@ -25,10 +57,16 @@ export const transactionsList = {
   rows: [],
 };
 
+export const transactionWithTokensList = {
+  count: 0,
+  rows: [],
+};
+
 export default () => ({
   account,
   addressLogsList,
   internalTransactionsList,
   tokenTransfersList,
   transactionsList,
+  transactionWithTokensList,
 });

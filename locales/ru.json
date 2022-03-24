@@ -111,6 +111,30 @@
       "tokensTxns": "ERC-20 Token Txns",
       "transfer": "Transfer",
       "selectToken": "Select token"
+    },
+    "contract": {
+      "contract": "Контракт",
+      "read": "Прочитать контракт",
+      "write": "Записать на контракт",
+      "contractSourceCode": "Исходный код контракта",
+      "name": "Название контракта",
+      "compiler": "Версия компилятора",
+      "optimization": "Оптимизация включена",
+      "other": "Другие настройки",
+      "yes": "Да",
+      "no": "Нет",
+      "with": "с",
+      "runs": "проходами",
+      "default": "по умолчанию",
+      "abi": "ABI контракта",
+      "bytecode": "Байткод контракта",
+      "deployedBytecode": "Задеплоенный байткод",
+      "buttons": {
+        "read": "Прочитать",
+        "write": "Запись"
+      },
+      "method": "метод",
+      "response": "ответ"
     }
   },
   "home": {
@@ -126,7 +150,8 @@
     "other": "Произошла ошибка"
   },
   "messages": {
-    "required": "The {_field_} field is required"
+    "required": "The {_field_} field is required",
+    "isArray": "The {_field_} must be one value or multiple values separated"
   }
 }
 
