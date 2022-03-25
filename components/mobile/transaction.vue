@@ -4,7 +4,7 @@
     :class="{transaction__separator: isLast}"
   >
     <div
-      v-if="(transaction.hash || transaction.id)"
+      v-if="(transaction.hash || isToken || transaction.transaction_hash)"
       class="transaction__hash"
     >
       <p class="transaction__title">
@@ -13,13 +13,16 @@
 
       <nuxt-link
         class="transaction__link"
-        :to="`/transactions/${(transaction.hash || transaction.id)}`"
+        :to="`/transactions/${(transaction.hash || transaction.transaction_hash)}`"
       >
-        {{ formatItem((transaction.hash || transaction.id), 9, 6) }}
+        {{ formatItem((transaction.hash || transaction.transaction_hash), 9, 6) }}
       </nuxt-link>
+      <p class="transaction__timestamp">
+        {{ transaction.block && transaction.block.timestamp ? formatDataFromNow(transaction.block.timestamp) : '' }}
+      </p>
     </div>
     <div
-      v-if="transaction.block_number && internal"
+      v-if="(transaction.block_number && internal)"
       class="transaction__hash"
     >
       {{ $t('ui.block.blockNumber') }}
@@ -30,9 +33,7 @@
         {{ transaction.block_number }}
       </nuxt-link>
     </div>
-    <p class="transaction__timestamp">
-      {{ transaction.block && transaction.block.timestamp ? formatDataFromNow(transaction.block.timestamp) : '' }}
-    </p>
+
     <div
       v-if="transaction.method"
       class="transaction__subtitle"
@@ -95,11 +96,11 @@
       </span>
     </div>
     <div
-      v-else-if="transaction.value"
+      v-else-if="transaction.value || transaction.amount"
       class="transaction__subtitle"
     >
       {{ $t('ui.tx.value') }}
-      <span class="transaction__info">{{ ConvertFromDecimals(transaction.value, decimals) }} {{ symbol }}</span>
+      <span class="transaction__info">{{ ConvertFromDecimals(transaction.value || transaction.amount, decimals) }} {{ symbol }}</span>
     </div>
     <div
       v-if="transaction.gas_used"
@@ -192,7 +193,7 @@ export default {
 .transaction {
   padding: 20px 0;
   border-bottom: 1px solid $black100;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   display: grid;
 
   &__separator {
@@ -234,6 +235,24 @@ export default {
   &__info {
     font-weight: normal;
     margin-left: 10px;
+  }
+}
+
+@include _767 {
+  .transaction {
+    &__hash {
+      display: grid;
+      grid-template: 'title timestamp' 'link link';
+    }
+    &__link {
+      grid-area: link;
+    }
+    &__title {
+      grid-area: title;
+    }
+    &__timestamp {
+      grid-area: timestamp;
+    }
   }
 }
 </style>

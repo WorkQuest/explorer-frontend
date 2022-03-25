@@ -455,7 +455,6 @@ export default {
     padding: 20px;
     background: $white;
     border-radius: 6px;
-    min-height: 600px;
   }
 
   &__tab {
@@ -665,6 +664,7 @@ export default {
 }
 
 .icon-short_left {
+  color: $black600;
   font-size: 22px;
   margin-right: 12px;
 }
@@ -699,6 +699,7 @@ export default {
     padding: 20px;
     grid-template-columns: 1fr 1fr;
     display: grid;
+    background: $white;
 
     &__hash {
       font-weight: 600;
