@@ -175,7 +175,7 @@ export default {
   }
 }
 
-.icon-caret_down::before {
+.icon-caret_down {
   color: $blue;
   font-size: 20px;
   float: right;

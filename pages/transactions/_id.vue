@@ -839,7 +839,7 @@ export default {
       }
     }
   }
-  .icon-copy::before {
+  .icon-copy {
     color: $blue;
     font-size: 20px;
     cursor: pointer;

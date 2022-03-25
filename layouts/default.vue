@@ -343,21 +343,11 @@ export default {
 .icon {
   font-size: 20px;
 
-  &-caret_down:before {
-    @extend .icon;
-    content: "\ea48";
+  &-caret_down {
     color: #2e3a59;
   }
 
-  &-caret_up:before {
-    @extend .icon;
-    content: "\ea4b";
-    color: #2e3a59;
-  }
-
-  &-close_big:before {
-    @extend .icon;
-    content: "\e948";
+  &-close_big {
     color: #2e3a59;
   }
 }
@@ -434,7 +424,7 @@ export default {
       align-items: center;
       position: relative;
 
-      span::before {
+      span {
         color: $black400;
         font-size: 24px;
         padding-left: 5px;
@@ -459,7 +449,7 @@ export default {
       border: 1px solid $black100;
     }
 
-    span:before {
+    span {
       color: $black400;
       font-size: 24px;
     }
