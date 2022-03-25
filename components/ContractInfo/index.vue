@@ -97,6 +97,12 @@
         v-if="activeTab==='write'"
         class="content__write"
       >
+        <base-btn
+          :mode="'light'"
+          @click="connectWallet()"
+        >
+          connect wallet
+        </base-btn>
         <contract-input
           v-for="(item, i) in filteredAbi"
           :key="`${i}__write`"
@@ -206,6 +212,9 @@ export default {
       const { editor } = this.$refs.editor;
       editor.textInput.setReadOnly(true);
       editor.setShowPrintMargin(false);
+    },
+    async connectWallet() {
+      await this.$store.dispatch('main/isWalletConnected');
     },
   },
 };

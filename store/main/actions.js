@@ -1,6 +1,6 @@
 import loaderModes from '~/store/main/loaderModes';
 import { error, output, searchResponseTypes } from '~/utils';
-import { fetchContractData } from '~/utils/web3';
+import { connectWallet, fetchContractData, isWalletConnected } from '~/utils/web3';
 
 export default {
   setLoading({ commit }, value) {
@@ -70,5 +70,11 @@ export default {
     type, abi, address, method, params,
   }) {
     return await fetchContractData(type, abi, address, method, params);
+  },
+  async isWalletConnected({ _ }) {
+    const connected = await isWalletConnected();
+    console.log('connected: ', connected);
+    const connect = await connectWallet();
+    console.log('connect: ', connect);
   },
 };
