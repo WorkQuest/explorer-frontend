@@ -150,11 +150,6 @@ export default {
     margin-left: 20px;
   }
 }
-.icon-caret_down:before {
-  color: $black400;
-  font-size: 20px;
-  margin-left: 17px;
-}
 .filter {
   position: absolute;
   top: 50px;
