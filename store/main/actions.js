@@ -71,10 +71,21 @@ export default {
   }) {
     return await fetchContractData(type, abi, address, method, params);
   },
-  async isWalletConnected({ _ }) {
-    const connected = await isWalletConnected();
-    console.log('connected: ', connected);
+  async connectWallet({ dispatch }) {
     const connect = await connectWallet();
     console.log('connect: ', connect);
+    if (connect.ok) {
+      console.log('connect.ok: ', connect);
+    }
+    switch (connect.code) {
+      case (449): {
+        console.log('error i18n: ', this.$i18n.messages);
+        await dispatch('showToast');
+        break;
+      }
+      default: {
+        break;
+      }
+    }
   },
 };

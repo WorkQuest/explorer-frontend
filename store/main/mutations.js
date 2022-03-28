@@ -14,4 +14,7 @@ export default {
   setIsLoaderBackgroundHider(state, value) {
     state.isLoaderBackgroundHider = value;
   },
+  setIsWalletConnected(state, value) {
+    state.isWalletConnected = value;
+  },
 };

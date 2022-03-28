@@ -2,26 +2,24 @@ import Web3 from 'web3';
 import {
   convertFromTupleToString, error, isTuple, output, isMap, convertFromMapToArray,
 } from '~/utils/index';
-import { NetworkData } from '~/utils/config';
+import { MainNetNetworkData, TestNetNetworkData } from '~/utils/config';
+import { ERROR, METHOD } from '~/utils/RPCTypes';
 
-const { WQ_PROVIDER } = process.env;
+const { WQ_PROVIDER, IS_MAINNET } = process.env;
 
 let web3Anonymous = null;
-let web3Wallet = null;
-let currentNetwork = null;
-
-let store;
-
-if (process.browser) {
-  window.onNuxtReady(({ $store }) => {
-    store = $store;
-  });
-}
+const web3Wallet = null;
+const currentNetwork = null;
 
 const _ethereumRequest = async (ethereum, method, params = null) => {
   console.log('__ethereumRequest: ', ethereum, method, params);
   await ethereum.request({ method, params: [params] });
 };
+
+const getChainId = async (ethereum) => await _ethereumRequest(ethereum, METHOD.GET_CHAIN_ID);
+const getAccount = async (ethereum) => await _ethereumRequest(ethereum, METHOD.REQUEST_ACCOUNT);
+const switchToChain = async (ethereum, toChainId) => await _ethereumRequest(ethereum, METHOD.SWITCH_CHAIN, { chainId: toChainId });
+const addChain = async (ethereum, network) => await _ethereumRequest(ethereum, METHOD.ADD_CHAIN, network);
 
 const connectProvider = async () => {
   const isListening = await web3Anonymous?.eth?.net?.isListening() || false;
@@ -63,24 +61,30 @@ export const fetchContractData = async (type = 'read', abi, address, method, par
   }
 };
 
-export const isWalletConnected = () => web3Wallet;
-
 export const connectWallet = async () => {
   const { ethereum } = window || null;
   if (!ethereum) {
     return error(449, 'metamask is not installed');
   }
-  web3Wallet = web3Wallet || new Web3(ethereum);
-  currentNetwork = await web3Wallet.eth.net.getNetworkType();
-  const eth_requestAccounts = await _ethereumRequest(ethereum, 'eth_requestAccounts');
-  const networkData = NetworkData();
+  const networkData = IS_MAINNET ? MainNetNetworkData : TestNetNetworkData;
+  console.log('networkData: ', networkData);
+  // web3Wallet = web3Wallet || new Web3(ethereum);
+  // currentNetwork = await web3Wallet.eth.net.getNetworkType();
+  const account = await getAccount(ethereum);
+  console.log('account: ', account);
+  const chainId = await getChainId(ethereum);
+  console.log('chainId: ', chainId);
+
   try {
-    await _ethereumRequest(ethereum, 'wallet_switchEthereumChain', { chainId: networkData.chainId });
+    const switchTo = await switchToChain(ethereum, networkData.chainId);
+    console.log('switchTo: ', switchTo);
   } catch (switchError) {
-    if (switchError.code === 4902) {
+    if (switchError.code === ERROR.NETWORK_MISSING) {
       try {
-        await _ethereumRequest(ethereum, 'wallet_addEthereumChain', networkData);
+        const add = await addChain(ethereum, networkData);
+        console.log('add chain: ', add);
       } catch (addError) {
+        console.log('addError: ', addError);
         return error(450, 'switch error');
       }
     }

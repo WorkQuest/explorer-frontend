@@ -98,11 +98,12 @@
         class="content__write"
       >
         <base-btn
-          :mode="'light'"
+          :mode="'approve'"
+          class="button button__wallet"
+          :class="{'button__wallet_connected': isConnected}"
+          :text="$tc('ui.contract.buttons.connectWallet')"
           @click="connectWallet()"
-        >
-          connect wallet
-        </base-btn>
+        />
         <contract-input
           v-for="(item, i) in filteredAbi"
           :key="`${i}__write`"
@@ -214,7 +215,7 @@ export default {
       editor.setShowPrintMargin(false);
     },
     async connectWallet() {
-      await this.$store.dispatch('main/isWalletConnected');
+      await this.$store.dispatch('main/connectWallet');
     },
   },
 };
@@ -269,6 +270,15 @@ export default {
   &__abi, &__bytecode, &__deployedBytecode {
     & > textarea {
       height: 200px;
+    }
+  }
+}
+
+.button {
+  &__wallet {
+    max-width: 200px;
+    &_connected {
+      background: green;
     }
   }
 }

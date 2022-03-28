@@ -131,7 +131,8 @@
       "deployedBytecode": "Deployed Bytecode",
       "buttons": {
         "read": "Query",
-        "write": "Write"
+        "write": "Write",
+        "connectWallet": "Connect wallet"
       },
       "method": "method",
       "response": "response"
@@ -152,5 +153,8 @@
   "messages": {
     "required": "The {_field_} field is required",
     "isArray": "The {_field_} must be one value or multiple values separated"
+  },
+  "web3": {
+    "installMetamask": "Please install Metamask"
   }
 }

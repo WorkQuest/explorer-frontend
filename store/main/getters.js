@@ -4,4 +4,5 @@ export default {
   getLoaderMode: (state) => state.loaderMode,
   getLoaderProgress: (state) => state.loaderProgress,
   getIsLoaderBackgroundHider: (state) => state.isLoaderBackgroundHider,
+  getIsWalletConnected: (state) => state.isWalletConnected,
 };
