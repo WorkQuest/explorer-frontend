@@ -7,4 +7,6 @@ export default () => ({
   isLoaderBackgroundHider: true,
   loaderProgress: 0,
   isWalletConnected: false,
+  walletAddress: '',
+  isDefaultChainId: false,
 });

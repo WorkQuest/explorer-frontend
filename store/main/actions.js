@@ -1,6 +1,7 @@
 import loaderModes from '~/store/main/loaderModes';
 import { error, output, searchResponseTypes } from '~/utils';
-import { connectWallet, fetchContractData, isWalletConnected } from '~/utils/web3';
+import { connectWallet, fetchContractData } from '~/utils/web3';
+import { ERROR } from '~/utils/RPCTypes';
 
 export default {
   setLoading({ commit }, value) {
@@ -27,6 +28,7 @@ export default {
       title: value.title || 'Error',
       variant: 'warning',
       solid: true,
+      href: value.href || '',
       toaster: 'b-toaster-bottom-right',
       appendToast: true,
       toastClass: 'custom-toast-width',
@@ -74,17 +76,31 @@ export default {
   async connectWallet({ dispatch }) {
     const connect = await connectWallet();
     console.log('connect: ', connect);
-    if (connect.ok) {
-      console.log('connect.ok: ', connect);
-    }
-    switch (connect.code) {
-      case (449): {
-        console.log('error i18n: ', this.$i18n.messages);
-        await dispatch('showToast');
-        break;
-      }
-      default: {
-        break;
+    if (!connect.ok) {
+      const { locale } = this.$i18n;
+      const { web3 } = this.$i18n.messages[locale];
+      switch (connect.code) {
+        case (ERROR.METAMASK_IS_NOT_INSTALLED): {
+          const text = web3.errors.installMetamask;
+          await dispatch('showToast', {
+            text,
+            href: 'https://metamask.io/',
+          });
+          break;
+        }
+        case (ERROR.NETWORK_MISSING): {
+          const text = web3.errors.networkMissing;
+          await dispatch('showToast', { text });
+          break;
+        }
+        case (ERROR.USER_REJECT): {
+          const text = web3.errors.connectAccount;
+          await dispatch('showToast', { text });
+          break;
+        }
+        default: {
+          break;
+        }
       }
     }
   },

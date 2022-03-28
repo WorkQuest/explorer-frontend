@@ -90,6 +90,6 @@ export default {
   env: {
     BASE_URL: process.env.BASE_URL,
     WQ_PROVIDER: process.env.WQ_PROVIDER,
-    IS_MAINNET: process.env.IS_MAINNET === 'true',
+    IS_MAINNET: process.env.IS_MAINNET,
   },
 };

@@ -97,13 +97,19 @@
         v-if="activeTab==='write'"
         class="content__write"
       >
-        <base-btn
-          :mode="'approve'"
-          class="button button__wallet"
-          :class="{'button__wallet_connected': isConnected}"
-          :text="$tc('ui.contract.buttons.connectWallet')"
-          @click="connectWallet()"
-        />
+        <div class="connection">
+          <span
+            class="icon-dot_03_m connection__icon"
+            :class="{'connection__icon_connected': web3connected}"
+          />
+          <base-btn
+            :mode="'outline'"
+            class="connection__button"
+            :text="$tc('ui.contract.buttons.connectWallet')"
+            :disabled="web3connected"
+            @click="connectWallet()"
+          />
+        </div>
         <contract-input
           v-for="(item, i) in filteredAbi"
           :key="`${i}__write`"
@@ -157,6 +163,8 @@ export default {
   computed: {
     ...mapGetters({
       accountInfo: 'account/getAccountInfo',
+      isWalletConnected: 'main/getIsWalletConnected',
+      isDefaultChainId: 'main/getIsDefaultChainId',
     }),
     contractCode() {
       return this.accountInfo.smartContract?.contract_source_code || '';
@@ -200,6 +208,9 @@ export default {
     },
     optimizationEnabled() {
       return this.optimization ? this.$t('ui.contract.yes') : this.$t('ui.contract.no');
+    },
+    web3connected() {
+      return (this.isWalletConnected && this.isDefaultChainId);
     },
   },
   methods: {
@@ -274,11 +285,19 @@ export default {
   }
 }
 
-.button {
-  &__wallet {
+.connection {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  &__button {
     max-width: 200px;
+  }
+  &__icon {
+    font-size: 30px;
+    color: red;
+    margin-right: 10px;
     &_connected {
-      background: green;
+      color: green;
     }
   }
 }

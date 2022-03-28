@@ -1,25 +1,73 @@
 import Web3 from 'web3';
 import {
-  convertFromTupleToString, error, isTuple, output, isMap, convertFromMapToArray,
+  convertFromMapToArray, convertFromTupleToString, error, isMap, isTuple, output,
 } from '~/utils/index';
 import { MainNetNetworkData, TestNetNetworkData } from '~/utils/config';
-import { ERROR, METHOD } from '~/utils/RPCTypes';
+import { ERROR, EVENT, METHOD } from '~/utils/RPCTypes';
 
-const { WQ_PROVIDER, IS_MAINNET } = process.env;
+const { WQ_PROVIDER } = process.env;
+const { IS_MAINNET } = process.env;
 
 let web3Anonymous = null;
-const web3Wallet = null;
-const currentNetwork = null;
+let store;
+const networkData = IS_MAINNET === 'true' ? MainNetNetworkData : TestNetNetworkData;
 
-const _ethereumRequest = async (ethereum, method, params = null) => {
-  console.log('__ethereumRequest: ', ethereum, method, params);
-  await ethereum.request({ method, params: [params] });
+if (process.browser) {
+  window.onNuxtReady(({ $store }) => {
+    store = $store;
+  });
+}
+
+const _ethereumRequest = async (method, params = null) => {
+  const { ethereum } = window || null;
+  if (ethereum) {
+    return await ethereum.request({ method, params: [params] });
+  }
+  return null;
 };
 
-const getChainId = async (ethereum) => await _ethereumRequest(ethereum, METHOD.GET_CHAIN_ID);
-const getAccount = async (ethereum) => await _ethereumRequest(ethereum, METHOD.REQUEST_ACCOUNT);
-const switchToChain = async (ethereum, toChainId) => await _ethereumRequest(ethereum, METHOD.SWITCH_CHAIN, { chainId: toChainId });
-const addChain = async (ethereum, network) => await _ethereumRequest(ethereum, METHOD.ADD_CHAIN, network);
+const ethGetChainId = async () => await _ethereumRequest(METHOD.GET_CHAIN_ID);
+const ethGetAccount = async () => await _ethereumRequest(METHOD.REQUEST_ACCOUNT);
+const ethSwitchToChain = async (toChainId) => await _ethereumRequest(METHOD.SWITCH_CHAIN, { chainId: toChainId });
+const ethAddChain = async (network) => await _ethereumRequest(METHOD.ADD_CHAIN, network);
+const ethOnConnectHandler = async ({ chainId }) => {
+  const account = await ethGetAccount();
+  if (store) {
+    if (account && Array.isArray(account) && account.length > 0 && chainId.toUpperCase() === networkData.chainId.toUpperCase()) {
+      store.commit('main/setWalletAddress', account[0]);
+      store.commit('main/setIsWalletConnected', true);
+      store.commit('main/setIsDefaultChainId', chainId.toUpperCase() === networkData.chainId.toUpperCase());
+    } else {
+      store.commit('main/resetConnection');
+    }
+  }
+};
+const ethOnChainChangesHandler = async (chainId) => {
+  if (store) {
+    if (chainId.toUpperCase() === networkData.chainId.toUpperCase()) {
+      store.commit('main/setIsDefaultChainId', chainId.toUpperCase() === networkData.chainId.toUpperCase());
+    } else {
+      store.commit('main/resetConnection');
+    }
+  }
+};
+const ethOnDisconnectHandler = async () => {
+  if (store) {
+    store.commit('main/resetConnection');
+  }
+};
+
+const removeEthereumListeners = (ethereum) => {
+  ethereum.removeListener(EVENT.CONNECT, ethOnConnectHandler);
+  ethereum.removeListener(EVENT.CHAIN_CHANGED, ethOnChainChangesHandler);
+  ethereum.removeListener(EVENT.DISCONNECT, ethOnDisconnectHandler);
+};
+
+const addEthereumListeners = (ethereum) => {
+  ethereum.on(EVENT.CONNECT, ethOnConnectHandler);
+  ethereum.on(EVENT.CHAIN_CHANGED, ethOnChainChangesHandler);
+  ethereum.on(EVENT.DISCONNECT, ethOnDisconnectHandler);
+};
 
 const connectProvider = async () => {
   const isListening = await web3Anonymous?.eth?.net?.isListening() || false;
@@ -43,6 +91,10 @@ export const fetchContractData = async (type = 'read', abi, address, method, par
       response = await contract.methods[method].apply(this, params).call();
     }
     if (type === 'write') {
+      console.log('abi: ', abi);
+      console.log('address: ', address);
+      console.log('method: ', method);
+      console.log('params: ', params);
       return error(500, 'write', '');
     }
     if (response && isTuple(response)) {
@@ -61,34 +113,66 @@ export const fetchContractData = async (type = 'read', abi, address, method, par
   }
 };
 
+export const addChain = async () => {
+  try {
+    return output(await ethAddChain(networkData));
+  } catch (addChainError) {
+    return error(addChainError.code, addChainError.message, addChainError.data);
+  }
+};
+
+export const switchChain = async () => {
+  try {
+    return output(await ethSwitchToChain(networkData.chainId));
+  } catch (switchError) {
+    return error(switchError.code, switchError.message, switchError.data);
+  }
+};
+
 export const connectWallet = async () => {
   const { ethereum } = window || null;
   if (!ethereum) {
-    return error(449, 'metamask is not installed');
+    return error(ERROR.METAMASK_IS_NOT_INSTALLED);
   }
-  const networkData = IS_MAINNET ? MainNetNetworkData : TestNetNetworkData;
-  console.log('networkData: ', networkData);
-  // web3Wallet = web3Wallet || new Web3(ethereum);
-  // currentNetwork = await web3Wallet.eth.net.getNetworkType();
-  const account = await getAccount(ethereum);
-  console.log('account: ', account);
-  const chainId = await getChainId(ethereum);
-  console.log('chainId: ', chainId);
+  removeEthereumListeners(ethereum);
+  addEthereumListeners(ethereum);
 
   try {
-    const switchTo = await switchToChain(ethereum, networkData.chainId);
-    console.log('switchTo: ', switchTo);
-  } catch (switchError) {
-    if (switchError.code === ERROR.NETWORK_MISSING) {
-      try {
-        const add = await addChain(ethereum, networkData);
-        console.log('add chain: ', add);
-      } catch (addError) {
-        console.log('addError: ', addError);
-        return error(450, 'switch error');
-      }
+    const account = await ethGetAccount();
+    if (account && Array.isArray(account) && account.length > 0 && store) {
+      store.commit('main/setWalletAddress', account[0]);
+      store.commit('main/setIsWalletConnected', true);
     }
-    return error(451, 'switch error');
+  } catch (e) {
+    return error(ERROR.USER_REJECT);
   }
-  return null;
+  let chainId = await ethGetChainId();
+
+  if (chainId.toUpperCase() !== networkData.chainId.toUpperCase()) {
+    const requestSwitch = await switchChain(networkData);
+    if (requestSwitch.ok) {
+      chainId = await ethGetChainId();
+      store.commit('main/setIsDefaultChainId', chainId.toUpperCase() === networkData.chainId.toUpperCase());
+      return output();
+    }
+    if (requestSwitch.code === ERROR.NETWORK_MISSING) {
+      const requestAddChain = await addChain();
+      if (requestAddChain.ok) {
+        chainId = await ethGetChainId();
+        if (chainId.toUpperCase() === networkData.chainId.toUpperCase()) {
+          store.commit('main/setIsDefaultChainId', chainId.toUpperCase() === networkData.chainId.toUpperCase());
+          return output();
+        }
+        return error(ERROR.USER_REJECT);
+      }
+      store.commit('main/resetConnection');
+      return error(ERROR.USER_REJECT);
+    }
+    if (requestSwitch.code === ERROR.USER_REJECT) {
+      return error(ERROR.USER_REJECT);
+    }
+  }
+
+  store.commit('main/setIsDefaultChainId', chainId.toUpperCase() === networkData.chainId.toUpperCase());
+  return output();
 };

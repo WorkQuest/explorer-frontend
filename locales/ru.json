@@ -155,7 +155,12 @@
     "isArray": "The {_field_} must be one value or multiple values separated"
   },
   "web3": {
-    "installMetamask": "Please install Metamask"
+    "errors": {
+      "installMetamask": "Пожалуйста установите Metamask",
+      "networkMissing": "Не удается переключиться на подходящую сеть",
+      "connectAccount": "Не удается подключить Metamask",
+      "addNetwork": "Не удается добавить подходящую сеть"
+    }
   }
 }
 
