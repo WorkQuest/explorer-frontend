@@ -51,7 +51,7 @@
         >
           {{ $t('ui.token.volume') }}
           <span class="token__info">
-            $ {{ token.total_supply }}
+            {{ NumberFormat(ConvertFromDecimals(token.total_supply, token.decimals)) }}
           </span>
         </div>
         <div
@@ -96,7 +96,7 @@ export default {
       isLoading: 'main/getIsLoading',
     }),
     totalPages() {
-      return this.setTotalPages(this.allTokensCount, 20);
+      return this.setTotalPages(this.allTokensCount, this.limit);
     },
     payload() {
       return {

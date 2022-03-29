@@ -4,16 +4,16 @@
     :class="{holder__separator: isLast}"
   >
     <div
-      v-if="holder.address"
+      v-if="holder.address_hash.hex"
       class="holder__hash"
     >
       <p>{{ $t('ui.token.address') }}</p>
       <p>
         <nuxt-link
           class="holder__link"
-          :to="`/address/${(holder.address)}`"
+          :to="`/address/${(holder.address_hash.hex)}`"
         >
-          {{ formatItem(holder.address, 9, 6) }}
+          {{ formatItem(holder.address_hash.hex, 9, 6) }}
         </nuxt-link>
       </p>
     </div>
@@ -21,26 +21,28 @@
       v-if="holder.quantity"
       class="holder__subtitle"
     >
-      {{ $t('ui.token.quantity') }}
+      {{ $t('ui.token.quantity') }}:
       <span class="holder__info">{{ holder.quantity }}</span>
     </div>
     <div
-      v-if="holder.percentage"
+      v-if="holder.value && token.total_supply"
       class="holder__subtitle"
     >
-      {{ $t('ui.token.percentage') }}
-      <span class="holder__info">{{ holder.percentage }}</span>
+      {{ $t('ui.token.percentage') }}:
+      <span class="holder__info">{{ percentage }}</span>
     </div>
     <div
       v-if="holder.value"
       class="holder__subtitle"
     >
-      {{ $t('ui.tx.value') }}
-      <span class="holder__info">{{ holder.value }}</span>
+      {{ $t('ui.token.quantity') }}:
+      <span class="holder__info">{{ NumberFormat(ConvertFromDecimals(holder.value, token.decimals)) }}</span>
     </div>
   </div>
 </template>
 <script>
+
+import BigNumber from 'bignumber.js';
 
 export default {
   name: 'Holder',
@@ -50,7 +52,7 @@ export default {
       default: () => {
       },
     },
-    tokens: {
+    token: {
       type: Object,
       default: () => {
       },
@@ -70,6 +72,13 @@ export default {
     internal: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    percentage() {
+      return this.holder.value && this.token.total_supply
+        ? `${new BigNumber(this.holder.value).dividedBy(this.token.total_supply).multipliedBy(100).decimalPlaces(4)}%`
+        : '';
     },
   },
 };

@@ -259,10 +259,12 @@ export default {
   &__value {
     display: flex;
     align-items: flex-start;
+    word-break: break-all;
     & > span {
       margin-top: 5px;
   }
     & > strong, em {
+      word-break: initial;
       margin-right: 10px;
     }
   }

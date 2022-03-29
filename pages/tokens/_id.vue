@@ -77,6 +77,7 @@
           :key="i"
           class="tables__item"
           :holder="item"
+          :token="token"
           :is-last="tokenHolders[i] === tokenHolders[tokenHolders.length - 1]"
         />
         <base-pager
