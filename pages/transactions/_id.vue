@@ -264,6 +264,14 @@
         {{ $t('ui.block.gasLimit') }}
         <span class="overview__info">{{ gasLimit }}</span>
       </div>
+      <div class="overview__subtitle">
+        {{ $t('ui.tx.gasPrice') }}
+        <span class="overview__info">{{ gasPrice }}</span>
+      </div>
+      <div class="overview__subtitle">
+        {{ $t('ui.tx.value') }}
+        <span class="overview__info">{{ value }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -301,12 +309,18 @@ export default {
       return +this.tx?.block?.gas_limit || 0;
     },
     gasUsed() {
-      return +this.tx?.gas_used || 0;
+      return this.tx?.gas_used || 0;
+    },
+    gasPrice() {
+      return this.NumberFormat(this.tx?.gas_price || 0);
     },
     fee() {
       return new BigNumber(this.tx.gas_price * this.gasUsed)
         .shiftedBy(-this.decimals)
         .toString();
+    },
+    value() {
+      return this.ConvertFromDecimals(this.tx?.value, this.decimals);
     },
     txsColumns() {
       if (Object.keys(this.tx).length > 0) {
@@ -354,7 +368,7 @@ export default {
           },
           {
             class: 'columns__item_three-two',
-            title: this.$t('ui.tx.feeFull'),
+            title: this.$t('ui.tx.gasPrice'),
             info: this.NumberFormat(this.tx.gas_price),
           },
           {
