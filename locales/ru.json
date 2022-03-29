@@ -58,7 +58,7 @@
       "found": "transactions found",
       "noTxs": "There are no transactions...",
       "gasUsed": "Gas Used by Transaction",
-      "gasPrice": "Gas Price"
+      "gasPrice": "Цена газа"
     },
     "forms": {
       "searchPlaceholder": "Search by Address / Txn Hash / Block / Token",
