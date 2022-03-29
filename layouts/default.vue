@@ -620,6 +620,9 @@ export default {
 
 @include _991 {
   .header {
+    &__text {
+      display: none;
+    }
     &__btn {
       display: none !important;
     }
