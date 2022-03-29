@@ -65,10 +65,6 @@
           <p class="columns__subtitle">
             {{ $t('ui.block.reward') }}
           </p>
-          <p class="columns__info">
-            <!--        TODO: Вывести награду -->
-            0.316538333801617818 MATIC
-          </p>
           <p class="columns__subtitle">
             {{ $t('ui.txs') }}
           </p>
@@ -143,7 +139,6 @@ export default {
           .shiftedBy(-this.decimals)
           .toString();
         const gasUsed = `${this.currentBlock.gas_used} (${(this.currentBlock.gas_used / this.currentBlock.gas_limit) * 100}%)`;
-        const rewards = '...';
         return [
           {
             title: this.$t('ui.timestamp'),
@@ -156,11 +151,6 @@ export default {
             info: this.currentBlock.transactionsCount,
             note: this.$t('ui.block.inThisBlock'),
             item: 'transactionsCount',
-          },
-          // TODO Rewards
-          {
-            title: this.$t('ui.block.reward'),
-            info: `${rewards} ${this.symbol}`,
           },
           {
             title: this.$t('ui.block.gasUsed'),
