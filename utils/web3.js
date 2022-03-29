@@ -132,7 +132,7 @@ export const switchChain = async () => {
 export const connectWallet = async () => {
   const { ethereum } = window || null;
   if (!ethereum) {
-    return error(ERROR.METAMASK_IS_NOT_INSTALLED);
+    return error(ERROR.METAMASK_IS_NOT_INSTALLED, 'Please install Metamask');
   }
   removeEthereumListeners(ethereum);
   addEthereumListeners(ethereum);
@@ -144,7 +144,7 @@ export const connectWallet = async () => {
       store.commit('main/setIsWalletConnected', true);
     }
   } catch (e) {
-    return error(ERROR.USER_REJECT);
+    return error(ERROR.USER_REJECT, e.msg);
   }
   let chainId = await ethGetChainId();
 
@@ -163,13 +163,13 @@ export const connectWallet = async () => {
           store.commit('main/setIsDefaultChainId', chainId.toUpperCase() === networkData.chainId.toUpperCase());
           return output();
         }
-        return error(ERROR.USER_REJECT);
+        return error(ERROR.USER_REJECT, requestAddChain.msg);
       }
       store.commit('main/resetConnection');
-      return error(ERROR.USER_REJECT);
+      return error(ERROR.USER_REJECT, requestSwitch.msg);
     }
     if (requestSwitch.code === ERROR.USER_REJECT) {
-      return error(ERROR.USER_REJECT);
+      return error(ERROR.USER_REJECT, requestSwitch.msg);
     }
   }
 

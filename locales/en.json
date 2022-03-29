@@ -159,7 +159,8 @@
       "installMetamask": "Please install Metamask",
       "networkMissing": "Unable switch to appropriate network",
       "connectAccount": "Metamask is not connected",
-      "addNetwork": "Unable to add appropriate network"
+      "addNetwork": "Unable to add appropriate network",
+      "default": "Unknown error"
     }
   }
 }

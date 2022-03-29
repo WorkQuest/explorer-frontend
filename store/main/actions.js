@@ -24,9 +24,10 @@ export default {
     commit('setLoaderProgress', value);
   },
   showToast(app, value) {
+    console.log('toast: ', value);
     this._vm.$bvToast.toast(value.text, {
       title: value.title || 'Error',
-      variant: 'warning',
+      variant: value.variant || 'warning',
       solid: true,
       href: value.href || '',
       toaster: 'b-toaster-bottom-right',
@@ -79,26 +80,38 @@ export default {
     if (!connect.ok) {
       const { locale } = this.$i18n;
       const { web3 } = this.$i18n.messages[locale];
+      /** @namespace web3 */
+      /** @property  { object } web3  */
+      /** @typedef  { Object } [web3.errors]  */
+      /** @property  { string } web3.errors.other  */
+      /** @property  { string } [web3.errors.installMetamask]  */
+      /** @property  { string } [web3.errors.networkMissing]  */
+      /** @property  { string } [web3.errors.connectAccount]  */
+      const metamaskMessage = connect.msg || web3?.errors?.other;
       switch (connect.code) {
         case (ERROR.METAMASK_IS_NOT_INSTALLED): {
-          const text = web3.errors.installMetamask;
+          const text = web3?.errors?.installMetamask || metamaskMessage;
           await dispatch('showToast', {
+            title: text,
             text,
             href: 'https://metamask.io/',
+            variant: 'info',
           });
           break;
         }
         case (ERROR.NETWORK_MISSING): {
-          const text = web3.errors.networkMissing;
-          await dispatch('showToast', { text });
+          const text = web3?.errors?.networkMissing || metamaskMessage;
+          await dispatch('showToast', { text, variant: 'warning' });
           break;
         }
         case (ERROR.USER_REJECT): {
-          const text = web3.errors.connectAccount;
-          await dispatch('showToast', { text });
+          const text = web3?.errors?.connectAccount || metamaskMessage;
+          await dispatch('showToast', { text, variant: 'warning' });
           break;
         }
         default: {
+          const text = web3?.errors?.other || metamaskMessage;
+          await dispatch('showToast', { text, variant: 'danger' });
           break;
         }
       }
