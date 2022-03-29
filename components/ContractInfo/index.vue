@@ -109,6 +109,7 @@
             :disabled="web3connected"
             @click="connectWallet()"
           />
+          <span class="connection__address">{{ walletAddress }}</span>
         </div>
         <contract-input
           v-for="(item, i) in filteredAbi"
@@ -165,6 +166,7 @@ export default {
       accountInfo: 'account/getAccountInfo',
       isWalletConnected: 'main/getIsWalletConnected',
       isDefaultChainId: 'main/getIsDefaultChainId',
+      walletAddress: 'main/getWalletAddress',
     }),
     contractCode() {
       return this.accountInfo.smartContract?.contract_source_code || '';
@@ -198,7 +200,7 @@ export default {
         return JSON.parse(JSON.stringify(this.contractAbi.filter((item) => item.type === 'function' && item.stateMutability === 'view')));
       }
       if (this.activeTab === 'write') {
-        return JSON.parse(JSON.stringify(this.contractAbi.filter((item) => item.type === 'function' && item.stateMutability === 'nonpayable')));
+        return JSON.parse(JSON.stringify(this.contractAbi.filter((item) => item.type === 'function' && item.stateMutability !== 'view')));
       }
       return [];
     },
@@ -212,6 +214,9 @@ export default {
     web3connected() {
       return (this.isWalletConnected && this.isDefaultChainId);
     },
+  },
+  beforeDestroy() {
+    this.$store.commit('main/resetConnection');
   },
   methods: {
     tabHandler(tab) {
@@ -291,6 +296,7 @@ export default {
   margin-bottom: 10px;
   &__button {
     max-width: 200px;
+    margin-right: 10px;
   }
   &__icon {
     font-size: 30px;

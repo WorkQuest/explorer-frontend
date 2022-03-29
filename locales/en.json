@@ -135,7 +135,8 @@
         "connectWallet": "Connect wallet"
       },
       "method": "method",
-      "response": "response"
+      "response": "response",
+      "viewTransactions": "View"
     }
   },
   "home": {

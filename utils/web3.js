@@ -9,6 +9,7 @@ const { WQ_PROVIDER } = process.env;
 const { IS_MAINNET } = process.env;
 
 let web3Anonymous = null;
+const web3Wallet = null;
 let store;
 const networkData = IS_MAINNET === 'true' ? MainNetNetworkData : TestNetNetworkData;
 
@@ -69,48 +70,80 @@ const addEthereumListeners = (ethereum) => {
   ethereum.on(EVENT.DISCONNECT, ethOnDisconnectHandler);
 };
 
-const connectProvider = async () => {
-  const isListening = await web3Anonymous?.eth?.net?.isListening() || false;
-  if (isListening) return web3Anonymous;
-  web3Anonymous = new Web3();
-  try {
-    const provider = new Web3.providers.HttpProvider(WQ_PROVIDER);
-    web3Anonymous.setProvider(provider);
-    return web3Anonymous;
-  } catch (e) {
-    throw error(501, 'connectProvider', e);
+const connectProvider = async (type = 'read') => {
+  const { ethereum } = window || null;
+  let isListening = false;
+
+  if (type === 'read') {
+    isListening = await web3Anonymous?.eth?.net?.isListening() || false;
+    if (isListening) return web3Anonymous;
+    web3Anonymous = new Web3();
+    try {
+      const provider = new Web3.providers.HttpProvider(WQ_PROVIDER);
+      web3Anonymous.setProvider(provider);
+      return web3Anonymous;
+    } catch (e) {
+      throw error(501, 'connectProvider', e);
+    }
   }
+
+  if (type === 'write') {
+    isListening = web3Wallet && ethereum && ethereum.isConnected();
+    if (isListening) return web3Wallet;
+    return new Web3(ethereum);
+  }
+
+  return null;
 };
 
 export const fetchContractData = async (type = 'read', abi, address, method, params = null) => {
-  try {
+  const instance = await connectProvider(type);
+  const contract = new instance.eth.Contract(abi, address);
+
+  if (type === 'read') {
     let response = null;
-    const instance = await connectProvider();
-    const contract = new instance.eth.Contract(abi, address);
-    if (type === 'read') {
+    try {
       response = await contract.methods[method].apply(this, params).call();
+      if (response && isTuple(response)) {
+        return output(convertFromTupleToString(response));
+      }
+      if (response && isMap(response)) {
+        return output(convertFromMapToArray(response));
+      }
+      if (response && Array.isArray(response)) {
+        return output(response.join(', '));
+      }
+      return output(response);
+    } catch (e) {
+      console.dir('fetchContractData: ', e);
+      return error(500 || e.code, e.message, e);
     }
-    if (type === 'write') {
-      console.log('abi: ', abi);
-      console.log('address: ', address);
-      console.log('method: ', method);
-      console.log('params: ', params);
-      return error(500, 'write', '');
-    }
-    if (response && isTuple(response)) {
-      return output(convertFromTupleToString(response));
-    }
-    if (response && isMap(response)) {
-      return output(convertFromMapToArray(response));
-    }
-    if (response && Array.isArray(response)) {
-      return output(response.join(', '));
-    }
-    return output(response);
-  } catch (e) {
-    console.dir('fetchContractData: ', e);
-    return error(500, 'readContractData', e);
   }
+  if (type === 'write' && store) {
+    let transactionHash = null;
+    let transactionReceipt = null;
+    let transactionError = null;
+
+    const walletAddress = store.getters['main/getWalletAddress'];
+    try {
+      const request = await contract.methods[method].apply(this, params).send({ from: walletAddress })
+        .on('error', (err, receipt) => {
+          transactionError = err;
+          transactionReceipt = receipt;
+          return transactionError;
+        });
+      transactionHash = request.transactionHash;
+      if (!transactionError) {
+        return output({ transactionHash });
+      }
+      return error(ERROR.INVALID_PARAMS, transactionError, transactionError);
+    } catch (writeError) {
+      console.dir('fetchContractDat err: ', writeError);
+      return error(ERROR.INVALID_PARAMS || writeError.code, writeError.message, writeError);
+    }
+  }
+
+  return error(500, 'fetchContractData');
 };
 
 export const addChain = async () => {

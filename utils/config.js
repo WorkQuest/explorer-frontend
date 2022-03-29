@@ -7,6 +7,7 @@ export const MainNetNetworkData = {
     symbol: 'WUSD',
     decimals: 18,
   },
+  blockExplorerUrls: ['https://dev-explorer.workquest.co'],
 };
 export const TestNetNetworkData = {
   chainId: '0x13488D0',
@@ -17,4 +18,5 @@ export const TestNetNetworkData = {
     symbol: 'WUSD',
     decimals: 18,
   },
+  blockExplorerUrls: ['https://dev-explorer.workquest.co'],
 };

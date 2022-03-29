@@ -135,7 +135,8 @@
         "connectWallet": "Подключить кошелек"
       },
       "method": "метод",
-      "response": "ответ"
+      "response": "ответ",
+      "viewTransactions": "Перейти"
     }
   },
   "home": {

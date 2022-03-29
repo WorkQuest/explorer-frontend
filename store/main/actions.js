@@ -24,7 +24,6 @@ export default {
     commit('setLoaderProgress', value);
   },
   showToast(app, value) {
-    console.log('toast: ', value);
     this._vm.$bvToast.toast(value.text, {
       title: value.title || 'Error',
       variant: value.variant || 'warning',
@@ -76,7 +75,6 @@ export default {
   },
   async connectWallet({ dispatch }) {
     const connect = await connectWallet();
-    console.log('connect: ', connect);
     if (!connect.ok) {
       const { locale } = this.$i18n;
       const { web3 } = this.$i18n.messages[locale];
