@@ -103,7 +103,7 @@
             :class="{'connection__icon_connected': web3connected}"
           />
           <base-btn
-            :mode="'outline'"
+            mode="outline"
             class="connection__button"
             :text="$tc('ui.contract.buttons.connectWallet')"
             :disabled="web3connected"

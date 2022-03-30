@@ -47,7 +47,7 @@
         :title="$tc('ui.latestTxs')"
         :items="txs"
         :headerlink="$tc('ui.allTxs')"
-        type="transactions"
+        type="tx"
         class="home__table"
         :fields="tableHeadersTxs"
       />
@@ -57,7 +57,7 @@
         </p>
         <nuxt-link
           class="blocks__link"
-          :to="'transactions'"
+          :to="'tx'"
         >
           {{ $t('ui.allTxs') }}
         </nuxt-link>

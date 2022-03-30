@@ -31,7 +31,7 @@
       <template #cell(hash)="el">
         <nuxt-link
           class="table__link"
-          :to="`/transactions/${el.item.hash || el.item.transaction_hash}`"
+          :to="`/tx/${el.item.hash || el.item.transaction_hash}`"
         >
           {{ formatItem(el.item.hash || el.item.transaction_hash, 9, 6) }}
         </nuxt-link>

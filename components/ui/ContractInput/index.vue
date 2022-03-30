@@ -52,7 +52,7 @@
         <div class="inputs__footer">
           <base-btn
             :text="$tc(`ui.contract.buttons.${type}`)"
-            :mode="'outline'"
+            mode="outline"
             :disabled="isLoading"
             class="button"
             @click="handleSubmit(contractHandler)"
@@ -68,7 +68,7 @@
             v-if="hash"
             :disabled="isLoading"
             class="button"
-            :link="`/transactions/${hash}`"
+            :link="`/tx/${hash}`"
           >
             {{ $t('ui.contract.viewTransactions') }}
           </base-btn>

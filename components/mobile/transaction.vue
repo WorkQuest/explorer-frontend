@@ -13,7 +13,7 @@
 
       <nuxt-link
         class="transaction__link"
-        :to="`/transactions/${(transaction.hash || transaction.transaction_hash)}`"
+        :to="`/tx/${(transaction.hash || transaction.transaction_hash)}`"
       >
         {{ formatItem((transaction.hash || transaction.transaction_hash), 9, 6) }}
       </nuxt-link>

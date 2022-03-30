@@ -1,17 +1,24 @@
 import Web3 from 'web3';
 import {
-  convertFromMapToArray, convertFromTupleToString, error, isMap, isTuple, output,
+  chainIdsIsEqual,
+  convertFromMapToArray,
+  convertFromTupleToString,
+  error,
+  isMap,
+  isTuple,
+  output,
 } from '~/utils/index';
-import { MainNetNetworkData, TestNetNetworkData } from '~/utils/config';
+import { NetworkData } from '~/utils/config';
 import { ERROR, EVENT, METHOD } from '~/utils/RPCTypes';
 
+const prodTypes = ['MAIN', 'TEST', 'DEV'];
 const { WQ_PROVIDER } = process.env;
-const { IS_MAINNET } = process.env;
+const { PRODUCTION } = process.env;
 
 let web3Anonymous = null;
-const web3Wallet = null;
+let web3Wallet = null;
 let store;
-const networkData = IS_MAINNET === 'true' ? MainNetNetworkData : TestNetNetworkData;
+const networkData = prodTypes.includes(PRODUCTION) ? NetworkData[PRODUCTION] : NetworkData.DEV;
 
 if (process.browser) {
   window.onNuxtReady(({ $store }) => {
@@ -34,10 +41,10 @@ const ethAddChain = async (network) => await _ethereumRequest(METHOD.ADD_CHAIN, 
 const ethOnConnectHandler = async ({ chainId }) => {
   const account = await ethGetAccount();
   if (store) {
-    if (account && Array.isArray(account) && account.length > 0 && chainId.toUpperCase() === networkData.chainId.toUpperCase()) {
+    if (account && Array.isArray(account) && account.length > 0 && chainIdsIsEqual(chainId, networkData.chainId)) {
       store.commit('main/setWalletAddress', account[0]);
       store.commit('main/setIsWalletConnected', true);
-      store.commit('main/setIsDefaultChainId', chainId.toUpperCase() === networkData.chainId.toUpperCase());
+      store.commit('main/setIsDefaultChainId', chainIdsIsEqual(chainId, networkData.chainId));
     } else {
       store.commit('main/resetConnection');
     }
@@ -46,7 +53,7 @@ const ethOnConnectHandler = async ({ chainId }) => {
 const ethOnChainChangesHandler = async (chainId) => {
   if (store) {
     if (chainId.toUpperCase() === networkData.chainId.toUpperCase()) {
-      store.commit('main/setIsDefaultChainId', chainId.toUpperCase() === networkData.chainId.toUpperCase());
+      store.commit('main/setIsDefaultChainId', chainIdsIsEqual(chainId, networkData.chainId));
     } else {
       store.commit('main/resetConnection');
     }
@@ -90,7 +97,8 @@ const connectProvider = async (type = 'read') => {
   if (type === 'write') {
     isListening = web3Wallet && ethereum && ethereum.isConnected();
     if (isListening) return web3Wallet;
-    return new Web3(ethereum);
+    web3Wallet = new Web3(ethereum);
+    return web3Wallet;
   }
 
   return null;
@@ -185,7 +193,7 @@ export const connectWallet = async () => {
     const requestSwitch = await switchChain(networkData);
     if (requestSwitch.ok) {
       chainId = await ethGetChainId();
-      store.commit('main/setIsDefaultChainId', chainId.toUpperCase() === networkData.chainId.toUpperCase());
+      store.commit('main/setIsDefaultChainId', chainIdsIsEqual(chainId, networkData.chainId));
       return output();
     }
     if (requestSwitch.code === ERROR.NETWORK_MISSING) {
@@ -193,7 +201,7 @@ export const connectWallet = async () => {
       if (requestAddChain.ok) {
         chainId = await ethGetChainId();
         if (chainId.toUpperCase() === networkData.chainId.toUpperCase()) {
-          store.commit('main/setIsDefaultChainId', chainId.toUpperCase() === networkData.chainId.toUpperCase());
+          store.commit('main/setIsDefaultChainId', chainIdsIsEqual(chainId, networkData.chainId));
           return output();
         }
         return error(ERROR.USER_REJECT, requestAddChain.msg);
@@ -206,6 +214,6 @@ export const connectWallet = async () => {
     }
   }
 
-  store.commit('main/setIsDefaultChainId', chainId.toUpperCase() === networkData.chainId.toUpperCase());
+  store.commit('main/setIsDefaultChainId', chainIdsIsEqual(chainId, networkData.chainId));
   return output();
 };

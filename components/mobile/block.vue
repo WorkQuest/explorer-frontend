@@ -31,7 +31,7 @@
       <nuxt-link
         class="block__link_small"
         :class="block.transactions.length === 0 ? 'block__link_disabled' : ''"
-        :to="{ path: '/transactions', query: { block: block.number }}"
+        :to="{ path: '/tx', query: { block: block.number }}"
       >
         {{ block.transactions.length }} txns
       </nuxt-link>
