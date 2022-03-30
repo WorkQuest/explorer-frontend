@@ -38,6 +38,7 @@
 
       <div
         v-if="activeTab === 'transfers'"
+        id="transfers"
         class="tables__tf"
       >
         <table-txs
@@ -63,6 +64,7 @@
 
       <div
         v-if="activeTab === 'holders'"
+        id="holders"
         class="tables__holders"
       >
         <table-tokens
@@ -90,6 +92,7 @@
       <!--      TODO update when server response changes    -->
       <div
         v-if="activeTab === 'info'"
+        id="info"
         class="tables__info token-info"
       >
         <p class="token-info__title">
@@ -117,6 +120,7 @@
 
       <div
         v-if="activeTab === 'contract'"
+        id="contract"
         class="tables__contract contract"
       >
         <contract-info
@@ -218,6 +222,7 @@ export default {
   async mounted() {
     if (isAddress(this.address)) {
       await this.getTokenData();
+      await this.hashNavigation();
     } else {
       await this.$router.push('/');
     }
@@ -229,6 +234,7 @@ export default {
     onClick(tab) {
       this.activeTab = tab;
       this.page = 1;
+      this.$router.push({ hash: `#${tab}` });
     },
     async getTokenData() {
       await this.SetLoader(true);
@@ -236,12 +242,12 @@ export default {
       await this.$store.dispatch('account/getAccountByAddress', { address: this.address, commonLimit: this.limit });
       await this.SetLoader(false);
     },
-    onClickContract(elem) {
-      if (this.activePoint.includes(elem)) {
-        const index = this.activePoint.indexOf(elem);
-        this.activePoint.splice(index, 1);
-      } else {
-        this.activePoint.push(elem);
+    async hashNavigation() {
+      const { hash } = this.$route;
+      if (hash) {
+        await this.$router.push({ hash });
+        const replacedHash = hash ? hash.replace('#', '') : '';
+        this.activeTab = this.tabs.includes(replacedHash) ? replacedHash : 'overview';
       }
     },
   },

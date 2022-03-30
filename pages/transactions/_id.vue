@@ -23,12 +23,13 @@
               v-for="(tab, i) in tabs"
               :key="i"
               class="txs__tab_overview"
-              :class="{ 'txs__tab_active': activeElement === tab}"
+              :class="{ 'txs__tab_active': activeTab === tab}"
               @click="onClick(tab)"
             >{{ $t(`ui.token.${tab}`) }}</span>
           </div>
           <div
-            v-if="txsColumns.length > 0 && activeElement === 'overview'"
+            v-if="txsColumns.length > 0 && activeTab === 'overview'"
+            id="overview"
             class="txs__columns columns"
           >
             <info-item
@@ -43,7 +44,8 @@
           </div>
           <!-- logs -->
           <div
-            v-if="tx && activeElement === 'logs'"
+            v-if="tx && activeTab === 'logs'"
+            id="logs"
             class="txs__logs logs"
           >
             <template v-if="Array.isArray(tx.logs) && tx.logs.length === 0">
@@ -62,7 +64,7 @@
 
               <div class="content__table table">
                 <p
-                  v-if="tx.logs.length > 0"
+                  v-if="Array.isArray(tx.logs) && tx.logs.length > 0"
                   class="table__title"
                 >
                   {{ $t('ui.tx.transactionFull') }}
@@ -172,7 +174,7 @@
 
     <!-- mobile -->
     <div
-      v-if="tx && activeElement === 'overview'"
+      v-if="tx && activeTab === 'overview'"
       class="overview"
     >
       <div class="overview__hash">
@@ -294,7 +296,7 @@ export default {
   data() {
     return {
       tabs: ['overview', 'logs'],
-      activeElement: 'overview',
+      activeTab: 'overview',
       search: '',
     };
   },
@@ -323,7 +325,7 @@ export default {
       return this.ConvertFromDecimals(this.tx?.value, this.decimals);
     },
     txsColumns() {
-      if (Object.keys(this.tx).length > 0) {
+      if (typeof this.tx === 'object' && Object.keys(this.tx).length > 0) {
         return [
           {
             class: 'columns__item_six',
@@ -402,6 +404,7 @@ export default {
   },
   async mounted() {
     await this.SetLoader(true);
+    await this.hashNavigation();
     await this.SetLoader(false);
   },
   beforeDestroy() {
@@ -409,7 +412,16 @@ export default {
   },
   methods: {
     onClick(tab) {
-      this.activeElement = tab;
+      this.activeTab = tab;
+      this.$router.push({ hash: `#${tab}` });
+    },
+    async hashNavigation() {
+      const { hash } = this.$route;
+      if (hash) {
+        await this.$router.push({ hash });
+        const replacedHash = hash ? hash.replace('#', '') : '';
+        this.activeTab = this.tabs.includes(replacedHash) ? replacedHash : 'overview';
+      }
     },
   },
 };

@@ -38,6 +38,7 @@
       </div>
       <div
         v-if="activeTab === 'txs'"
+        id="txs"
         class="tables__txs"
       >
         <table-txs
@@ -63,6 +64,7 @@
       </div>
       <div
         v-if="activeTab === 'internal'"
+        id="internal"
         class="tables__internal"
       >
         <table-txs
@@ -88,6 +90,7 @@
       </div>
       <div
         v-if="activeTab === 'tokensTxns'"
+        id="tokensTxns"
         class="tables__erc"
       >
         <table-txs
@@ -114,6 +117,7 @@
       </div>
       <div
         v-if="activeTab === 'contract'"
+        id="contract"
         class="table__contract"
       >
         <contract-info
@@ -215,6 +219,8 @@ export default {
   methods: {
     onClick(tab) {
       this.activeTab = tab;
+      this.page = 1;
+      this.$router.push({ hash: `#${tab}` });
     },
     async getContractData() {
       await this.SetLoader(true);
@@ -231,6 +237,14 @@ export default {
       }
       if (this.activeTab === 'tokensTxns') {
         await this.$store.dispatch('account/getTransactionWithTokensList', { address, limit, offset });
+      }
+    },
+    async hashNavigation() {
+      const { hash } = this.$route;
+      if (hash) {
+        await this.$router.push({ hash });
+        const replacedHash = hash ? hash.replace('#', '') : '';
+        this.activeTab = this.tabs.includes(replacedHash) ? replacedHash : 'overview';
       }
     },
   },
