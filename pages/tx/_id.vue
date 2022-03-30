@@ -182,7 +182,7 @@
 
         <nuxt-link
           class="overview__link"
-          :to="`/transactions/${(tx.hash)}`"
+          :to="`/tx/${(tx.hash)}`"
         >
           {{ formatItem(tx.hash, 9, 6) }}
         </nuxt-link>

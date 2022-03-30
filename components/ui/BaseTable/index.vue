@@ -58,7 +58,7 @@
         <nuxt-link
           class="table__link"
           :class="el.item.transactions.length === 0 ? 'table__link_disabled' : ''"
-          :to="{ path: '/transactions', query: { block: el.item.number }}"
+          :to="{ path: '/tx', query: { block: el.item.number }}"
         >
           {{ Array.isArray(el.item.transactions) ? el.item.transactions.length : '' }} txns
         </nuxt-link>
@@ -71,7 +71,7 @@
       <template #cell(hash)="el">
         <nuxt-link
           class="table__link"
-          :to="`/transactions/${el.item.hash}`"
+          :to="`/tx/${el.item.hash}`"
         >
           {{ formatItem(el.item.hash, 9, 6) }}
         </nuxt-link>
@@ -159,7 +159,7 @@ export default {
       decimals: 'tokens/getWUSDTokenDecimals',
     }),
     emptyDescription() {
-      if (this.type === 'transactions') {
+      if (this.type === 'tx') {
         return this.$t('ui.tx.noTxs');
       }
       if (this.type === 'blocks') {

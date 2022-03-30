@@ -20,7 +20,7 @@
     >
       <nuxt-link
         class="item__link"
-        :to="{ path: '/transactions', query: { block: currentBlock.number }}"
+        :to="{ path: '/tx', query: { block: currentBlock.number }}"
       >
         {{ info }} {{ $t('ui.txs') }}
       </nuxt-link>

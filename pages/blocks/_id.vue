@@ -70,7 +70,7 @@
           </p>
           <nuxt-link
             class="columns__link_small"
-            :to="{ path: '/transactions', query: { block: currentBlock.number }}"
+            :to="{ path: '/tx', query: { block: currentBlock.number }}"
           >
             {{ currentBlock.transactionsCount }} txns
           </nuxt-link>

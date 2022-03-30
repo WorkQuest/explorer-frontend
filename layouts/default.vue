@@ -190,7 +190,7 @@ export default {
         },
         {
           title: this.$t('ui.txs'),
-          path: '/transactions',
+          path: '/tx',
         },
         {
           title: this.$t('ui.blocks'),
@@ -218,7 +218,7 @@ export default {
         },
         {
           title: this.$t('ui.txs'),
-          path: '/transactions',
+          path: '/tx',
         },
       ];
     },

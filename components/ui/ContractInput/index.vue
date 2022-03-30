@@ -52,7 +52,7 @@
         <div class="inputs__footer">
           <base-btn
             :text="$tc(`ui.contract.buttons.${type}`)"
-            :mode="'outline'"
+            mode="outline"
             :disabled="isLoading"
             class="button"
             @click="handleSubmit(contractHandler)"
@@ -64,10 +64,18 @@
               class="spinner"
             />
           </base-btn>
+          <base-btn
+            v-if="hash"
+            :disabled="isLoading"
+            class="button"
+            :link="`/tx/${hash}`"
+          >
+            {{ $t('ui.contract.viewTransactions') }}
+          </base-btn>
         </div>
       </validation-observer>
       <div class="outputs">
-        <template v-if="abiItem.outputs.length > 0">
+        <template v-if="abiItem.outputs.length > 0 && type === 'read'">
           <div
             v-if="abiItem.inputs.length > 0"
             class="outputs__types types"
@@ -111,6 +119,26 @@
             </template>
           </div>
         </template>
+        <template v-if="abiItem.outputs.length > 0 && type !== 'read'">
+          <div class="outputs__write">
+            <span
+              v-if="error"
+              class="types__error"
+            >
+              {{ error }}
+            </span>
+          </div>
+        </template>
+        <template v-else>
+          <div class="outputs__write">
+            <span
+              v-if="error"
+              class="types__error"
+            >
+              {{ error }}
+            </span>
+          </div>
+        </template>
       </div>
     </b-collapse>
   </div>
@@ -120,7 +148,7 @@
 
 import { isArrayType, splitString } from '~/utils';
 
-const type = ['read', 'write'];
+const type = ['read', 'write', 'nonpayable'];
 const abiType = ['function', 'constructor', 'event', 'fallback'];
 
 export default {
@@ -157,6 +185,7 @@ export default {
       error: null,
       buttonDisabled: false,
       isLoading: false,
+      hash: '',
     };
   },
   async mounted() {
@@ -184,19 +213,26 @@ export default {
       const request = await this.$store.dispatch('main/requestFromBlockchain', payload);
       if (request.ok) {
         const { result } = request;
-        if (this.abiItem.outputs.length > 1) {
+        if (this.type === 'read' && this.abiItem.outputs.length > 1) {
           this.response = [...result];
         } else {
           this.response.push(result);
         }
-      } else {
+        if (this.type !== 'read') {
+          this.hash = result.transactionHash;
+        }
+      } else if (this.type === 'read') {
         this.error = request.data;
+      } else {
+        this.error = request.msg;
+        this.hash = request.data?.receipt?.transactionHash || '';
       }
       this.showLoader(false);
     },
     showLoader(loading) {
       if (loading) {
         this.response = [];
+        this.hash = '';
         this.error = null;
       }
       this.isLoading = loading;
@@ -251,6 +287,12 @@ export default {
     align-items: flex-start;
     margin-bottom: 10px;
   }
+  &__write {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
 }
 .response {
   &__type {
@@ -277,11 +319,18 @@ export default {
     font-size: 12px;
     color: #dc3545;
     padding: 4px;
+    overflow-wrap: anywhere;
   }
 }
 .button {
   width: 150px;
   position: relative;
+  margin-right: 10px;
+  text-decoration: none;
+}
+.view {
+  width: 150px;
+  color: $black600;
 }
 .spinner {
   position: absolute;

@@ -4,7 +4,7 @@ import { SERVER_MESSAGES } from '~/utils/serverMessages';
 export const searchResponseTypes = (type, value) => {
   const types = {
     0: `/blocks/${value || ''}`,
-    1: `/transactions/${value || ''}`,
+    1: `/tx/${value || ''}`,
     2: `/blocks/${value || ''}`,
     3: `/contract/${value || ''}`,
     4: `/address/${value || ''}`,
