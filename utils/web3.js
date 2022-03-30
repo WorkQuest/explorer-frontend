@@ -1,21 +1,27 @@
 import Web3 from 'web3';
 import {
-  convertFromMapToArray, convertFromTupleToString, error, isMap, isTuple, output,
+  isMap,
+  error,
+  output,
+  isTuple,
+  convertFromMapToArray,
+  convertFromTupleToString,
 } from '~/utils/index';
+
 import { NetworkData } from '~/utils/config';
 import { ERROR, EVENT, METHOD } from '~/utils/RPCTypes';
 
 const { WQ_PROVIDER } = process.env;
 const { PRODUCTION } = process.env;
 
-let web3Anonymous = null;
-let web3Wallet = null;
 let store;
 let _chainId = null;
-const networkData = NetworkData.get(PRODUCTION);
+let web3Wallet = null;
+let web3Anonymous = null;
 
+const networkData = NetworkData.get(PRODUCTION);
 if (!networkData) {
-  console.error('Error getting network data');
+  console.error('Error getting network data, need to fix secret PRODUCTION=', PRODUCTION);
 }
 
 const isCorrectNetwork = () => +_chainId === +networkData.chainId;
