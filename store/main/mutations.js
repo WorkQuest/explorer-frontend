@@ -14,4 +14,18 @@ export default {
   setIsLoaderBackgroundHider(state, value) {
     state.isLoaderBackgroundHider = value;
   },
+  setIsWalletConnected(state, value) {
+    state.isWalletConnected = value;
+  },
+  setWalletAddress(state, value) {
+    state.walletAddress = value;
+  },
+  setIsDefaultChainId(state, value) {
+    state.isDefaultChainId = value;
+  },
+  resetConnection(state) {
+    state.isWalletConnected = false;
+    state.walletAddress = '';
+    state.isDefaultChainId = false;
+  },
 };

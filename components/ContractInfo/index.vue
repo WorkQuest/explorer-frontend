@@ -97,6 +97,20 @@
         v-if="activeTab==='write'"
         class="content__write"
       >
+        <div class="connection">
+          <span
+            class="icon-dot_03_m connection__icon"
+            :class="{'connection__icon_connected': web3connected}"
+          />
+          <base-btn
+            mode="outline"
+            class="connection__button"
+            :text="$tc('ui.contract.buttons.connectWallet')"
+            :disabled="web3connected"
+            @click="connectWallet()"
+          />
+          <span class="connection__address">{{ walletAddress }}</span>
+        </div>
         <contract-input
           v-for="(item, i) in filteredAbi"
           :key="`${i}__write`"
@@ -150,6 +164,9 @@ export default {
   computed: {
     ...mapGetters({
       accountInfo: 'account/getAccountInfo',
+      isWalletConnected: 'main/getIsWalletConnected',
+      isDefaultChainId: 'main/getIsDefaultChainId',
+      walletAddress: 'main/getWalletAddress',
     }),
     contractCode() {
       return this.accountInfo.smartContract?.contract_source_code || '';
@@ -183,7 +200,7 @@ export default {
         return JSON.parse(JSON.stringify(this.contractAbi.filter((item) => item.type === 'function' && item.stateMutability === 'view')));
       }
       if (this.activeTab === 'write') {
-        return JSON.parse(JSON.stringify(this.contractAbi.filter((item) => item.type === 'function' && item.stateMutability === 'nonpayable')));
+        return JSON.parse(JSON.stringify(this.contractAbi.filter((item) => item.type === 'function' && item.stateMutability !== 'view')));
       }
       return [];
     },
@@ -194,6 +211,12 @@ export default {
     optimizationEnabled() {
       return this.optimization ? this.$t('ui.contract.yes') : this.$t('ui.contract.no');
     },
+    web3connected() {
+      return (this.isWalletConnected && this.isDefaultChainId);
+    },
+  },
+  beforeDestroy() {
+    this.$store.commit('main/resetConnection');
   },
   methods: {
     tabHandler(tab) {
@@ -206,6 +229,9 @@ export default {
       const { editor } = this.$refs.editor;
       editor.textInput.setReadOnly(true);
       editor.setShowPrintMargin(false);
+    },
+    async connectWallet() {
+      await this.$store.dispatch('main/connectWallet');
     },
   },
 };
@@ -260,6 +286,24 @@ export default {
   &__abi, &__bytecode, &__deployedBytecode {
     & > textarea {
       height: 200px;
+    }
+  }
+}
+
+.connection {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  &__button {
+    max-width: 200px;
+    margin-right: 10px;
+  }
+  &__icon {
+    font-size: 30px;
+    color: red;
+    margin-right: 10px;
+    &_connected {
+      color: green;
     }
   }
 }

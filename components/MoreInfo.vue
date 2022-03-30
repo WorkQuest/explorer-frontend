@@ -49,7 +49,7 @@
           {{ $t('ui.token.atTxn') }}
           <nuxt-link
             class="info__link"
-            :to="`/transactions/${txHash}`"
+            :to="`/tx/${txHash}`"
           >
             {{ formatItem(txHash, 9, 6) }}
           </nuxt-link>

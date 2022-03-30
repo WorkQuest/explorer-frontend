@@ -43,7 +43,7 @@
         <nuxt-link
           class="table__link"
           :class="el.item.transactionsCount === 0 ? 'table__link_disabled' : ''"
-          :to="{ path: '/transactions', query: { block: el.item.number }}"
+          :to="{ path: '/tx', query: { block: el.item.number }}"
         >
           {{ el.item.transactionsCount }}
         </nuxt-link>

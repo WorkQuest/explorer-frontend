@@ -90,5 +90,6 @@ export default {
   env: {
     BASE_URL: process.env.BASE_URL,
     WQ_PROVIDER: process.env.WQ_PROVIDER,
+    PRODUCTION: process.env.PRODUCTION,
   },
 };

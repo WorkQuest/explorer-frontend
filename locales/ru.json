@@ -132,10 +132,12 @@
       "deployedBytecode": "Задеплоенный байткод",
       "buttons": {
         "read": "Прочитать",
-        "write": "Запись"
+        "write": "Запись",
+        "connectWallet": "Подключить кошелек"
       },
       "method": "метод",
-      "response": "ответ"
+      "response": "ответ",
+      "viewTransactions": "Перейти"
     }
   },
   "home": {
@@ -153,6 +155,15 @@
   "messages": {
     "required": "The {_field_} field is required",
     "isArray": "The {_field_} must be one value or multiple values separated"
+  },
+  "web3": {
+    "errors": {
+      "installMetamask": "Пожалуйста установите Metamask",
+      "networkMissing": "Не удается переключиться на подходящую сеть",
+      "connectAccount": "Не удается подключить Metamask",
+      "addNetwork": "Не удается добавить подходящую сеть",
+      "default": "Неизвестная ошибка"
+    }
   }
 }
 

@@ -132,10 +132,12 @@
       "deployedBytecode": "Deployed Bytecode",
       "buttons": {
         "read": "Query",
-        "write": "Write"
+        "write": "Write",
+        "connectWallet": "Connect wallet"
       },
       "method": "method",
-      "response": "response"
+      "response": "response",
+      "viewTransactions": "View"
     }
   },
   "home": {
@@ -153,5 +155,14 @@
   "messages": {
     "required": "The {_field_} field is required",
     "isArray": "The {_field_} must be one value or multiple values separated"
+  },
+  "web3": {
+    "errors": {
+      "installMetamask": "Please install Metamask",
+      "networkMissing": "Unable switch to appropriate network",
+      "connectAccount": "Metamask is not connected",
+      "addNetwork": "Unable to add appropriate network",
+      "default": "Unknown error"
+    }
   }
 }
