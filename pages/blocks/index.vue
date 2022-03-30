@@ -73,16 +73,23 @@ export default {
   },
   watch: {
     async page() {
-      await this.SetLoader(true);
       this.offset = (this.page - 1) * this.limit;
-      await this.$store.dispatch('blocks/getBlocks', this.payload);
-      await this.SetLoader(false);
+      await this.getBlocks();
     },
   },
   async mounted() {
     await this.SetLoader(true);
-    await this.$store.dispatch('blocks/getBlocks', this.payload);
-    await this.SetLoader(false);
+    const { page } = this.$route.query;
+    this.page = page ? +page : 1;
+    await this.getBlocks();
+  },
+  methods: {
+    async getBlocks() {
+      await this.SetLoader(true);
+      await this.$store.dispatch('blocks/getBlocks', this.payload);
+      await this.$router.push({ query: { ...this.$route.query, page: this.page.toString() } });
+      await this.SetLoader(false);
+    },
   },
 };
 </script>

@@ -122,7 +122,7 @@
           </div>
         </div>
         <div class="template__content">
-          <nuxt />
+          <nuxt :key="$route.fullPath" />
         </div>
         <div class="template__footer footer">
           <div class="footer__left">

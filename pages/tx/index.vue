@@ -58,8 +58,8 @@ export default {
   data() {
     return {
       limit: 20,
-      offset: 0,
-      page: 1,
+      offset: (+this.$route.query.page - 1) * 20,
+      page: +this.$route.query.page,
       search: '',
     };
   },
@@ -103,38 +103,49 @@ export default {
       ];
     },
   },
+  watchQuery(newQuery, oldQuery) {
+    // Only execute component methods if the old query string contained `bar`
+    // and the new query string contains `foo`
+    console.log('watch query: ', newQuery, oldQuery);
+    return newQuery.page !== oldQuery.page;
+  },
   watch: {
-    async page() {
-      this.offset = (this.page - 1) * this.limit;
-      await this.getTransactions();
+    async page(current, previous) {
+      console.log('page: ', current, previous);
+      if (current !== previous) {
+        this.page = current;
+        this.offset = (this.page - 1) * this.limit;
+        // await this.getTransactions();
+        await this.$router.push({ query: { ...this.$route.query, page: this.page.toString() } });
+      }
     },
     async query(current, previous) {
-      if (!current && current !== previous) {
+      console.log('query: ', current, previous);
+      if (current && current !== previous) {
         await this.getTransactions();
       }
     },
   },
   async mounted() {
-    await this.SetLoader(true);
-    if (this.query) {
-      await this.$store.dispatch('blocks/getBlockById', this.query);
-    }
-    await this.getTransactions();
+    console.log('mounted');
     await this.SetLoader(false);
+    await this.getTransactions();
   },
   beforeDestroy() {
+    console.log('beforeDestroy');
     this.$store.commit('blocks/resetBlockTransactions');
     this.$store.commit('tx/resetTxs');
   },
   methods: {
     async getTransactions() {
-      await this.SetLoader(true);
+      console.log('getTransactions: ');
+      // await this.SetLoader(true);
       if (this.query) {
         await this.$store.dispatch('blocks/getBlockTransactions', { blockId: this.query, ...this.payload });
       } else {
         await this.$store.dispatch('tx/getTxs', this.payload);
       }
-      await this.SetLoader(false);
+      // await this.SetLoader(false);
     },
   },
 };
