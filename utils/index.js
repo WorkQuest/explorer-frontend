@@ -118,5 +118,3 @@ export const convertFromMapToArray = (map) => {
   }
   return [];
 };
-
-export const chainIdsIsEqual = (chainId1, chainId2) => parseInt(chainId1, 10) === parseInt(chainId2, 10);

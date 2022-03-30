@@ -1,24 +1,24 @@
 import Web3 from 'web3';
 import {
-  chainIdsIsEqual,
-  convertFromMapToArray,
-  convertFromTupleToString,
-  error,
-  isMap,
-  isTuple,
-  output,
+  convertFromMapToArray, convertFromTupleToString, error, isMap, isTuple, output,
 } from '~/utils/index';
 import { NetworkData } from '~/utils/config';
 import { ERROR, EVENT, METHOD } from '~/utils/RPCTypes';
 
-const prodTypes = ['MAIN', 'TEST', 'DEV'];
 const { WQ_PROVIDER } = process.env;
 const { PRODUCTION } = process.env;
 
 let web3Anonymous = null;
 let web3Wallet = null;
 let store;
-const networkData = prodTypes.includes(PRODUCTION) ? NetworkData[PRODUCTION] : NetworkData.DEV;
+let _chainId = null;
+const networkData = NetworkData.get(PRODUCTION);
+
+if (!networkData) {
+  console.error('Error getting network data');
+}
+
+const isCorrectNetwork = () => +_chainId === +networkData.chainId;
 
 if (process.browser) {
   window.onNuxtReady(({ $store }) => {
@@ -38,27 +38,32 @@ const ethGetChainId = async () => await _ethereumRequest(METHOD.GET_CHAIN_ID);
 const ethGetAccount = async () => await _ethereumRequest(METHOD.REQUEST_ACCOUNT);
 const ethSwitchToChain = async (toChainId) => await _ethereumRequest(METHOD.SWITCH_CHAIN, { chainId: toChainId });
 const ethAddChain = async (network) => await _ethereumRequest(METHOD.ADD_CHAIN, network);
+
 const ethOnConnectHandler = async ({ chainId }) => {
   const account = await ethGetAccount();
+  _chainId = chainId;
   if (store) {
-    if (account && Array.isArray(account) && account.length > 0 && chainIdsIsEqual(chainId, networkData.chainId)) {
+    if (account && Array.isArray(account) && account.length > 0 && isCorrectNetwork()) {
       store.commit('main/setWalletAddress', account[0]);
       store.commit('main/setIsWalletConnected', true);
-      store.commit('main/setIsDefaultChainId', chainIdsIsEqual(chainId, networkData.chainId));
+      store.commit('main/setIsDefaultChainId', true);
     } else {
       store.commit('main/resetConnection');
     }
   }
 };
+
 const ethOnChainChangesHandler = async (chainId) => {
+  _chainId = chainId;
   if (store) {
-    if (chainId.toUpperCase() === networkData.chainId.toUpperCase()) {
-      store.commit('main/setIsDefaultChainId', chainIdsIsEqual(chainId, networkData.chainId));
+    if (isCorrectNetwork()) {
+      store.commit('main/setIsDefaultChainId', true);
     } else {
       store.commit('main/resetConnection');
     }
   }
 };
+
 const ethOnDisconnectHandler = async () => {
   if (store) {
     store.commit('main/resetConnection');
@@ -187,21 +192,22 @@ export const connectWallet = async () => {
   } catch (e) {
     return error(ERROR.USER_REJECT, e.msg);
   }
-  let chainId = await ethGetChainId();
 
-  if (chainId.toUpperCase() !== networkData.chainId.toUpperCase()) {
+  _chainId = await ethGetChainId();
+
+  if (!isCorrectNetwork()) {
     const requestSwitch = await switchChain(networkData);
     if (requestSwitch.ok) {
-      chainId = await ethGetChainId();
-      store.commit('main/setIsDefaultChainId', chainIdsIsEqual(chainId, networkData.chainId));
+      _chainId = await ethGetChainId();
+      store.commit('main/setIsDefaultChainId', isCorrectNetwork());
       return output();
     }
     if (requestSwitch.code === ERROR.NETWORK_MISSING) {
       const requestAddChain = await addChain();
       if (requestAddChain.ok) {
-        chainId = await ethGetChainId();
-        if (chainId.toUpperCase() === networkData.chainId.toUpperCase()) {
-          store.commit('main/setIsDefaultChainId', chainIdsIsEqual(chainId, networkData.chainId));
+        _chainId = await ethGetChainId();
+        if (isCorrectNetwork()) {
+          store.commit('main/setIsDefaultChainId', true);
           return output();
         }
         return error(ERROR.USER_REJECT, requestAddChain.msg);
@@ -214,6 +220,6 @@ export const connectWallet = async () => {
     }
   }
 
-  store.commit('main/setIsDefaultChainId', chainIdsIsEqual(chainId, networkData.chainId));
+  store.commit('main/setIsDefaultChainId', isCorrectNetwork());
   return output();
 };
