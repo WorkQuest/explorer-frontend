@@ -7,7 +7,7 @@ on:
 jobs:
   build-prod:
     if: github.ref == 'refs/heads/master'
-    environment: master
+    environment: production
     runs-on: ubuntu-latest
 
     steps:
@@ -24,6 +24,7 @@ jobs:
 
       - name: Create .env file
         run: |
+          echo PRODUCTION=${{ secrets.PRODUCTION }} >> .env
           echo BASE_URL=${{ secrets.BASE_URL }} >> .env
           echo WQ_PROVIDER=${{ secrets.WQ_PROVIDER }} >> .env
 
@@ -59,6 +60,7 @@ jobs:
 
       - name: Create .env file
         run: |
+          echo PRODUCTION=${{ secrets.PRODUCTION }} >> .env
           echo BASE_URL=${{ secrets.BASE_URL }} >> .env
           echo WQ_PROVIDER=${{ secrets.WQ_PROVIDER }} >> .env
 
@@ -94,6 +96,7 @@ jobs:
 
       - name: Create .env file
         run: |
+          echo PRODUCTION=${{ secrets.PRODUCTION }} >> .env
           echo BASE_URL=${{ secrets.BASE_URL }} >> .env
           echo WQ_PROVIDER=${{ secrets.WQ_PROVIDER }} >> .env
 
