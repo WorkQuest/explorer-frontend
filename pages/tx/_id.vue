@@ -420,6 +420,7 @@ export default {
       if (hash) {
         await this.$router.push({ hash });
         const replacedHash = hash ? hash.replace('#', '') : '';
+        console.log('replacedHash: ', replacedHash);
         this.activeTab = this.tabs.includes(replacedHash) ? replacedHash : 'overview';
       }
     },

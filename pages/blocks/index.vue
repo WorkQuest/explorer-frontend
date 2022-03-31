@@ -40,9 +40,8 @@ export default {
   data() {
     return {
       limit: 20,
-      offset: 0,
-      page: 1,
-      search: '',
+      offset: ((+this.$route.query?.page || 1) - 1) * 20,
+      page: +this.$route.query?.page || 1,
     };
   },
   computed: {
@@ -52,7 +51,7 @@ export default {
       isLoading: 'main/getIsLoading',
     }),
     totalPages() {
-      return Math.ceil(this.blocksCount / this.limit);
+      return this.setTotalPages(this.blocksCount, this.limit);
     },
     tableHeaders() {
       return [
@@ -72,22 +71,20 @@ export default {
     },
   },
   watch: {
-    async page() {
-      this.offset = (this.page - 1) * this.limit;
-      await this.getBlocks();
+    async page(current, previous) {
+      if (current !== previous) {
+        this.offset = (this.page - 1) * this.limit;
+        await this.$router.push({ query: { ...this.$route.query, page: this.page.toString() } });
+      }
     },
   },
   async mounted() {
-    await this.SetLoader(true);
-    const { page } = this.$route.query;
-    this.page = page ? +page : 1;
     await this.getBlocks();
   },
   methods: {
     async getBlocks() {
       await this.SetLoader(true);
       await this.$store.dispatch('blocks/getBlocks', this.payload);
-      await this.$router.push({ query: { ...this.$route.query, page: this.page.toString() } });
       await this.SetLoader(false);
     },
   },

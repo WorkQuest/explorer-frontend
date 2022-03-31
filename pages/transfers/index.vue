@@ -22,10 +22,10 @@
       />
     </div>
     <base-pager
-      v-if="totalPagesValue > 1"
+      v-if="totalPages > 1"
       v-model="page"
       class="transfer__pager"
-      :total-pages="totalPagesValue"
+      :total-pages="totalPages"
     />
   </div>
 </template>
@@ -36,9 +36,9 @@ export default {
   name: 'Transfer',
   data() {
     return {
-      page: 1,
       limit: 20,
-      offset: 0,
+      offset: ((+this.$route.query?.page || 1) - 1) * 20,
+      page: +this.$route.query?.page || 1,
     };
   },
   computed: {
@@ -53,7 +53,7 @@ export default {
         offset: this.offset,
       };
     },
-    totalPagesValue() {
+    totalPages() {
       return this.setTotalPages(this.allTokenTransfersCount, this.limit);
     },
     tableHeaders() {
@@ -77,9 +77,11 @@ export default {
     },
   },
   watch: {
-    async page() {
-      this.offset = (this.page - 1) * this.limit;
-      await this.getTokenTransfers();
+    async page(current, previous) {
+      if (current !== previous) {
+        this.offset = (this.page - 1) * this.limit;
+        await this.$router.push({ query: { ...this.$route.query, page: this.page.toString() } });
+      }
     },
   },
   async mounted() {
