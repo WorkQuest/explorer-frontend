@@ -107,10 +107,6 @@ export default {
     margin: 25px 0;
   }
 
-  &__table {
-    margin: 25px 0;
-  }
-
   &__grey {
     color: $black500;
   }
@@ -136,10 +132,6 @@ export default {
   .transfer {
     &__table {
       display: none;
-    }
-
-    &__pager {
-      margin: 16px;
     }
   }
   .tables {

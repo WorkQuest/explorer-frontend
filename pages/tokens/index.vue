@@ -178,9 +178,6 @@ export default {
       @include normal-font-size;
     }
 
-    &__pager {
-      margin: 16px;
-    }
   }
   .token {
     padding: 20px 0;

@@ -41,13 +41,13 @@
         :transaction="item"
         :is-last="txsTable[i] === txsTable[txsTable.length - 1]"
       />
-      <base-pager
-        v-if="totalPages > 1"
-        v-model="page"
-        class="transactions__pager"
-        :total-pages="totalPages"
-      />
     </div>
+    <base-pager
+      v-if="totalPages > 1"
+      v-model="page"
+      class="transactions__pager"
+      :total-pages="totalPages"
+    />
   </div>
 </template>
 <script>
@@ -150,7 +150,7 @@ export default {
   }
 
   &__header {
-    padding: 20px 0 0 20px;
+    padding: 20px;
   }
 
   &__title {
@@ -166,12 +166,13 @@ export default {
   }
 
   &__wrap {
-    background: $white;
     border-radius: 6px;
+    background-color: $white;
   }
 
   &__table {
-    margin: 25px 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
   }
 
   &__transaction {
@@ -213,10 +214,6 @@ export default {
 
     &__transaction {
       display: block;
-    }
-
-    &__pager {
-      margin: 16px;
     }
   }
 }

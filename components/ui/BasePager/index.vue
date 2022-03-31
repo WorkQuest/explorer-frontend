@@ -1,66 +1,68 @@
 <template>
-  <div class="pager">
-    <button
-      class="pager__icon"
-      :class="{'pager__icon_disabled': value === 1}"
-      :disabled="value === 1"
-      @click="prevPage"
-    >
-      <img
-        v-if="value === 1"
-        src="~/assets/img/ui/pagerNext_disabled.svg"
-        class="pager__img"
-        alt="<"
+  <div class="pager-wrapper">
+    <div class="pager">
+      <button
+        class="pager__icon"
+        :class="{'pager__icon_disabled': value === 1}"
+        :disabled="value === 1"
+        @click="prevPage"
       >
-      <img
-        v-else
-        src="~/assets/img/ui/pagerNext.svg"
-        class="pager__img pager__img_prev"
-        alt="<"
-      >
-    </button>
-    <div class="pager__items">
-      <div
-        v-for="(item, i) in formedPages"
-        :key="`page-${i}`"
-        class="pager__item"
-        :class="{'pager__item_active': value === item}"
-      >
-        <div
-          v-if="item === -1"
-          class="pager__dots"
+        <img
+          v-if="value === 1"
+          src="~/assets/img/ui/pagerNext_disabled.svg"
+          class="pager__img"
+          alt="<"
         >
-          ...
-        </div>
-        <button
+        <img
           v-else
-          class="pager__cloud"
-          :class="{'pager__cloud_active': value === item}"
-          @click="setPage(item)"
+          src="~/assets/img/ui/pagerNext.svg"
+          class="pager__img pager__img_prev"
+          alt="<"
         >
-          {{ item }}
-        </button>
+      </button>
+      <div class="pager__items">
+        <div
+          v-for="(item, i) in formedPages"
+          :key="`page-${i}`"
+          class="pager__item"
+          :class="{'pager__item_active': value === item}"
+        >
+          <div
+            v-if="item === -1"
+            class="pager__dots"
+          >
+            ...
+          </div>
+          <button
+            v-else
+            class="pager__cloud"
+            :class="{'pager__cloud_active': value === item}"
+            @click="setPage(item)"
+          >
+            {{ item }}
+          </button>
+        </div>
       </div>
+      <button
+        class="pager__icon"
+        :class="{'pager__icon_disabled': value === totalPages}"
+        :disabled="value === totalPages"
+        @click="nextPage"
+      >
+        <img
+          v-if="value === totalPages"
+          src="~/assets/img/ui/pagerNext_disabled.svg"
+          class="pager__img pager__img_prev"
+          alt=">"
+        >
+        <img
+          v-else
+          src="~/assets/img/ui/pagerNext.svg"
+          class="pager__img"
+          alt=">"
+        >
+      </button>
     </div>
-    <button
-      class="pager__icon"
-      :class="{'pager__icon_disabled': value === totalPages}"
-      :disabled="value === totalPages"
-      @click="nextPage"
-    >
-      <img
-        v-if="value === totalPages"
-        src="~/assets/img/ui/pagerNext_disabled.svg"
-        class="pager__img pager__img_prev"
-        alt=">"
-      >
-      <img
-        v-else
-        src="~/assets/img/ui/pagerNext.svg"
-        class="pager__img"
-        alt=">"
-      >
-    </button>
   </div>
 </template>
 
@@ -131,14 +133,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.pager {
-  max-width: 450px;
-  float: right;
-  background-color: #FFFFFF;
-  border-radius: 6px;
+.pager-wrapper {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+}
+
+.pager {
+  border-radius: 6px;
+  margin-left: auto;
+  display: flex;
+  background-color: #FFFFFF;
 
   &__dots {
     @include text-simple;
@@ -152,13 +157,13 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-left: 1px solid #F7F8FA;
   }
 
   &__item {
     display: flex;
     align-items: center;
     justify-content: center;
+    border-left: 1px solid $black0;
 
     &_active {
       background-color: #e6f3fa;
@@ -168,7 +173,7 @@ export default {
   &__cloud {
     @include btn-filter;
     @include text-simple;
-    padding: 0px 4px;
+    padding: 0 4px;
     min-width: 43px;
     height: 40px;
     display: flex;
@@ -189,6 +194,9 @@ export default {
 
   &__items {
     display: flex;
+    border-top: 1px solid $black0;
+    border-bottom: 1px solid $black0;
+    max-height: 40px;
   }
 
   &__icon {
@@ -197,7 +205,19 @@ export default {
     align-items: center;
     width: 40px;
     height: 40px;
-    border-left: 1px solid #F7F8FA;
+    border-top: 1px solid $black0;
+    border-bottom: 1px solid $black0;
+    &:first-child {
+      border-left: 1px solid $black0;
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
+    }
+    &:last-child {
+      border-left: 1px solid $black0;
+      border-right: 1px solid $black0;
+      border-top-right-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
 
     &_disabled {
       cursor: default;
@@ -210,6 +230,16 @@ export default {
     &_prev {
       transform: rotate(180deg);
     }
+  }
+}
+@include _767 {
+  .pager-wrapper {
+    padding: 20px 0;
+    justify-content: center;
+    background-color: $white;
+  }
+  .pager {
+    margin: auto;
   }
 }
 </style>

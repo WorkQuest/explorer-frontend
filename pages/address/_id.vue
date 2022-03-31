@@ -204,10 +204,6 @@ export default {
     &__subtitle, &__transaction {
       display: block;
     }
-
-    &__pager {
-      margin: 16px;
-    }
   }
 }
 
