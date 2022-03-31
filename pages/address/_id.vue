@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!isLoading"
+    v-if="!isLoading && Object.keys(txs).length > 0"
     class="address"
   >
     <search-filter class="address__search" />
@@ -75,20 +75,20 @@ export default {
       return {
         address: this.address,
         limit: this.limit,
-        offset: this.offset,
+        offset: (this.page - 1) * this.limit,
       };
     },
     address() {
       return Object.keys(this.accountInfo).length > 0 && this.accountInfo.hash?.hex ? this.accountInfo.hash.hex : this.$route.params.id;
     },
     totalPages() {
-      return Math.ceil(this.txsCount / this.limit);
+      return this.setTotalPages(this.txsCount, this.limit);
     },
     tableFields() {
       return [
         { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
         { key: 'block_number', label: this.$t('ui.block.blockNumber'), sortable: true },
-        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'age', label: this.$t('ui.block.age'), sortable: true },
         { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
         { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
         { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
@@ -97,25 +97,28 @@ export default {
     },
   },
   watch: {
-    async page() {
-      await this.SetLoader(true);
-      this.offset = (this.page - 1) * this.limit;
-      await this.$store.dispatch('tx/getTxsByAccount', this.payload);
-      await this.SetLoader(false);
+    async page(current, previous) {
+      if (current !== previous) {
+        await this.getAccountData();
+      }
     },
   },
   async mounted() {
-    await this.SetLoader(true);
-    await this.$store.dispatch('tx/getTxsByAccount', this.payload);
-    await this.$store.dispatch('account/getAccountByAddress', {
-      address: this.address.toLowerCase(),
-      commonLimit: this.limit,
-    });
-    await this.SetLoader(false);
+    await this.getAccountData();
   },
   beforeDestroy() {
     this.$store.commit('account/resetAccountInfo');
     this.$store.commit('tx/resetTxsByAccount');
+  },
+  methods: {
+    async getAccountData() {
+      if (!this.accountInfo.hash?.hex) {
+        await this.SetLoader(true);
+        await this.$store.dispatch('account/getAccountByAddress', { address: this.address, commonLimit: this.limit });
+        await this.SetLoader(false);
+      }
+      await this.$store.dispatch('tx/getTxsByAccount', this.payload);
+    },
   },
 };
 </script>

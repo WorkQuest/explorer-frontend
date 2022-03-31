@@ -38,6 +38,7 @@
       </div>
       <div
         v-if="activeTab === 'txs'"
+        id="txs"
         class="tables__txs"
       >
         <table-txs
@@ -63,6 +64,7 @@
       </div>
       <div
         v-if="activeTab === 'internal'"
+        id="internal"
         class="tables__internal"
       >
         <table-txs
@@ -88,6 +90,7 @@
       </div>
       <div
         v-if="activeTab === 'tokensTxns'"
+        id="tokensTxns"
         class="tables__erc"
       >
         <table-txs
@@ -114,6 +117,7 @@
       </div>
       <div
         v-if="activeTab === 'contract'"
+        id="contract"
         class="table__contract"
       >
         <contract-info
@@ -198,16 +202,25 @@ export default {
     address() {
       return this.$route.params.id;
     },
+    hash() {
+      return this.$route.hash;
+    },
   },
   watch: {
     async page() {
       this.offset = (this.page - 1) * this.limit;
       await this.getPage();
     },
+    async hash(current, previous) {
+      if (current !== previous) {
+        await this.hashNavigation();
+      }
+    },
   },
   async mounted() {
     if (isAddress(this.address)) {
       await this.getContractData();
+      await this.hashNavigation();
     } else {
       await this.$router.push('/');
     }
@@ -215,6 +228,8 @@ export default {
   methods: {
     onClick(tab) {
       this.activeTab = tab;
+      this.page = 1;
+      this.$router.push({ hash: `#${tab}` });
     },
     async getContractData() {
       await this.SetLoader(true);
@@ -231,6 +246,13 @@ export default {
       }
       if (this.activeTab === 'tokensTxns') {
         await this.$store.dispatch('account/getTransactionWithTokensList', { address, limit, offset });
+      }
+    },
+    async hashNavigation() {
+      if (this.hash) {
+        await this.$router.push({ hash: this.hash });
+        const replacedHash = this.hash ? this.hash.replace('#', '') : '';
+        this.activeTab = this.tabs.includes(replacedHash) ? replacedHash : this.tabs[0];
       }
     },
   },

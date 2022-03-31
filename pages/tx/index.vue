@@ -59,8 +59,7 @@ export default {
     return {
       limit: 20,
       offset: 0,
-      page: 1,
-      search: '',
+      page: +this.$route.query?.page || 1,
     };
   },
   computed: {
@@ -83,13 +82,13 @@ export default {
     payload() {
       return {
         limit: this.limit,
-        offset: this.offset,
+        offset: (this.page - 1) * this.limit,
       };
     },
     totalPages() {
       return this.query && this.currentBlockTransactionsCount > 0
-        ? Math.ceil(this.currentBlockTransactionsCount / this.limit)
-        : Math.ceil(this.txsCount / this.limit);
+        ? this.setTotalPages(this.currentBlockTransactionsCount, this.limit)
+        : this.setTotalPages(this.txsCount, this.limit);
     },
     tableHeaders() {
       return [
@@ -104,23 +103,20 @@ export default {
     },
   },
   watch: {
-    async page() {
-      this.offset = (this.page - 1) * this.limit;
-      await this.getTransactions();
+    async page(current, previous) {
+      if (current !== previous) {
+        await this.$router.push({ query: { ...this.$route.query, page: this.page.toString() } });
+      }
     },
     async query(current, previous) {
-      if (!current && current !== previous) {
+      if (current && current !== previous) {
         await this.getTransactions();
       }
     },
   },
   async mounted() {
-    await this.SetLoader(true);
-    if (this.query) {
-      await this.$store.dispatch('blocks/getBlockById', this.query);
-    }
     await this.getTransactions();
-    await this.SetLoader(false);
+    sessionStorage.setItem('backRoute', this.$route.fullPath);
   },
   beforeDestroy() {
     this.$store.commit('blocks/resetBlockTransactions');
