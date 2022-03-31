@@ -38,6 +38,7 @@
 
       <div
         v-if="activeTab === 'transfers'"
+        id="transfers"
         class="tables__tf"
       >
         <table-txs
@@ -63,6 +64,7 @@
 
       <div
         v-if="activeTab === 'holders'"
+        id="holders"
         class="tables__holders"
       >
         <table-tokens
@@ -90,6 +92,7 @@
       <!--      TODO update when server response changes    -->
       <div
         v-if="activeTab === 'info'"
+        id="info"
         class="tables__info token-info"
       >
         <p class="token-info__title">
@@ -117,6 +120,7 @@
 
       <div
         v-if="activeTab === 'contract'"
+        id="contract"
         class="tables__contract contract"
       >
         <contract-info
@@ -159,8 +163,8 @@ export default {
       return this.$route.params.id;
     },
     totalPagesValue() {
-      if (this.activeTab === 'transfers') return this.setTotalPages(this.tokenTransfersCount, 20);
-      if (this.activeTab === 'holders') return this.setTotalPages(this.tokenHoldersCount, 20);
+      if (this.activeTab === 'transfers') return this.setTotalPages(this.tokenTransfersCount, this.limit);
+      if (this.activeTab === 'holders') return this.setTotalPages(this.tokenHoldersCount, this.limit);
       return 1;
     },
     payload() {
@@ -201,6 +205,9 @@ export default {
         { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
       ];
     },
+    hash() {
+      return this.$route.hash;
+    },
   },
   watch: {
     async page() {
@@ -214,10 +221,16 @@ export default {
         await this.$store.dispatch('tokens/getTokenHolders', this.payload);
       }
     },
+    async hash(current, previous) {
+      if (current !== previous) {
+        await this.hashNavigation();
+      }
+    },
   },
   async mounted() {
     if (isAddress(this.address)) {
       await this.getTokenData();
+      await this.hashNavigation();
     } else {
       await this.$router.push('/');
     }
@@ -229,6 +242,7 @@ export default {
     onClick(tab) {
       this.activeTab = tab;
       this.page = 1;
+      this.$router.push({ hash: `#${tab}` });
     },
     async getTokenData() {
       await this.SetLoader(true);
@@ -236,12 +250,11 @@ export default {
       await this.$store.dispatch('account/getAccountByAddress', { address: this.address, commonLimit: this.limit });
       await this.SetLoader(false);
     },
-    onClickContract(elem) {
-      if (this.activePoint.includes(elem)) {
-        const index = this.activePoint.indexOf(elem);
-        this.activePoint.splice(index, 1);
-      } else {
-        this.activePoint.push(elem);
+    async hashNavigation() {
+      if (this.hash) {
+        await this.$router.push({ hash: this.hash });
+        const replacedHash = this.hash ? this.hash.replace('#', '') : '';
+        this.activeTab = this.tabs.includes(replacedHash) ? replacedHash : this.tabs[0];
       }
     },
   },

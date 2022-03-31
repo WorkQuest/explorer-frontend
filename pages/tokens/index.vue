@@ -84,9 +84,9 @@ export default {
   components: { TableTokens },
   data() {
     return {
-      page: 1,
-      limit: 10,
+      limit: 20,
       offset: 0,
+      page: +this.$route.query?.page || 1,
     };
   },
   computed: {
@@ -101,7 +101,7 @@ export default {
     payload() {
       return {
         limit: this.limit,
-        offset: this.offset,
+        offset: (this.page - 1) * this.limit,
       };
     },
     tokens() {
@@ -127,6 +127,13 @@ export default {
           formatter: (value) => this.NumberFormat(value),
         },
       ];
+    },
+  },
+  watch: {
+    async page(current, previous) {
+      if (current !== previous) {
+        await this.$router.push({ query: { ...this.$route.query, page: this.page.toString() } });
+      }
     },
   },
   async mounted() {

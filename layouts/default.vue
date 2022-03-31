@@ -122,7 +122,7 @@
           </div>
         </div>
         <div class="template__content">
-          <nuxt />
+          <nuxt :key="$route.query.page || $route.path" />
         </div>
         <div class="template__footer footer">
           <div class="footer__left">
@@ -353,8 +353,7 @@ export default {
 }
 
 .primary {
-  height: 100vh;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .template {

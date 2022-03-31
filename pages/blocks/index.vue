@@ -41,8 +41,7 @@ export default {
     return {
       limit: 20,
       offset: 0,
-      page: 1,
-      search: '',
+      page: +this.$route.query?.page || 1,
     };
   },
   computed: {
@@ -52,7 +51,7 @@ export default {
       isLoading: 'main/getIsLoading',
     }),
     totalPages() {
-      return Math.ceil(this.blocksCount / this.limit);
+      return this.setTotalPages(this.blocksCount, this.limit);
     },
     tableHeaders() {
       return [
@@ -67,22 +66,27 @@ export default {
     payload() {
       return {
         limit: this.limit,
-        offset: this.offset,
+        offset: (this.page - 1) * this.limit,
       };
     },
   },
   watch: {
-    async page() {
-      await this.SetLoader(true);
-      this.offset = (this.page - 1) * this.limit;
-      await this.$store.dispatch('blocks/getBlocks', this.payload);
-      await this.SetLoader(false);
+    async page(current, previous) {
+      if (current !== previous) {
+        await this.$router.push({ query: { ...this.$route.query, page: this.page.toString() } });
+      }
     },
   },
   async mounted() {
-    await this.SetLoader(true);
-    await this.$store.dispatch('blocks/getBlocks', this.payload);
-    await this.SetLoader(false);
+    await this.getBlocks();
+    sessionStorage.setItem('backRoute', this.$route.fullPath);
+  },
+  methods: {
+    async getBlocks() {
+      await this.SetLoader(true);
+      await this.$store.dispatch('blocks/getBlocks', this.payload);
+      await this.SetLoader(false);
+    },
   },
 };
 </script>

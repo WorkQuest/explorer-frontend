@@ -9,7 +9,7 @@
         <button
           class="txs__back"
           type="button"
-          @click="$router.go(-1)"
+          @click="back()"
         >
           <span class="icon-short_left" />
           {{ $t('ui.back') }}
@@ -23,12 +23,13 @@
               v-for="(tab, i) in tabs"
               :key="i"
               class="txs__tab_overview"
-              :class="{ 'txs__tab_active': activeElement === tab}"
+              :class="{ 'txs__tab_active': activeTab === tab}"
               @click="onClick(tab)"
             >{{ $t(`ui.token.${tab}`) }}</span>
           </div>
           <div
-            v-if="txsColumns.length > 0 && activeElement === 'overview'"
+            v-if="txsColumns.length > 0 && activeTab === 'overview'"
+            id="overview"
             class="txs__columns columns"
           >
             <info-item
@@ -43,7 +44,8 @@
           </div>
           <!-- logs -->
           <div
-            v-if="tx && activeElement === 'logs'"
+            v-if="tx && activeTab === 'logs'"
+            id="logs"
             class="txs__logs logs"
           >
             <template v-if="Array.isArray(tx.logs) && tx.logs.length === 0">
@@ -62,7 +64,7 @@
 
               <div class="content__table table">
                 <p
-                  v-if="tx.logs.length > 0"
+                  v-if="Array.isArray(tx.logs) && tx.logs.length > 0"
                   class="table__title"
                 >
                   {{ $t('ui.tx.transactionFull') }}
@@ -172,7 +174,7 @@
 
     <!-- mobile -->
     <div
-      v-if="tx && activeElement === 'overview'"
+      v-if="tx && activeTab === 'overview'"
       class="overview"
     >
       <div class="overview__hash">
@@ -294,8 +296,7 @@ export default {
   data() {
     return {
       tabs: ['overview', 'logs'],
-      activeElement: 'overview',
-      search: '',
+      activeTab: 'overview',
     };
   },
   computed: {
@@ -323,7 +324,7 @@ export default {
       return this.ConvertFromDecimals(this.tx?.value, this.decimals);
     },
     txsColumns() {
-      if (Object.keys(this.tx).length > 0) {
+      if (typeof this.tx === 'object' && Object.keys(this.tx).length > 0) {
         return [
           {
             class: 'columns__item_six',
@@ -396,12 +397,26 @@ export default {
         { class: 'table__number_mobile', text: this.formatItem(this.tx.hash, 9, 6) },
       ];
     },
+    hash() {
+      return this.$route.hash;
+    },
+    historyPath() {
+      return sessionStorage.getItem('backRoute');
+    },
+  },
+  watch: {
+    async hash(current, previous) {
+      if (current !== previous) {
+        await this.hashNavigation();
+      }
+    },
   },
   async beforeCreate() {
     await this.$store.dispatch('tx/getTxsByHash', this.$route.params.id);
   },
   async mounted() {
     await this.SetLoader(true);
+    await this.hashNavigation();
     await this.SetLoader(false);
   },
   beforeDestroy() {
@@ -409,7 +424,22 @@ export default {
   },
   methods: {
     onClick(tab) {
-      this.activeElement = tab;
+      this.activeTab = tab;
+      this.$router.push({ hash: `#${tab}` });
+    },
+    async hashNavigation() {
+      if (this.hash) {
+        await this.$router.push({ hash: this.hash });
+        const replacedHash = this.hash ? this.hash.replace('#', '') : '';
+        this.activeTab = this.tabs.includes(replacedHash) ? replacedHash : this.tabs[0];
+      }
+    },
+    back() {
+      if (this.historyPath) {
+        this.$router.push(this.historyPath);
+      } else {
+        this.$router.push('/tx');
+      }
     },
   },
 };
