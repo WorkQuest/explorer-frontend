@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       limit: 20,
-      offset: ((+this.$route.query?.page || 1) - 1) * 20,
+      offset: 0,
       page: +this.$route.query?.page || 1,
     };
   },
@@ -50,7 +50,7 @@ export default {
     payload() {
       return {
         limit: this.limit,
-        offset: this.offset,
+        offset: (this.page - 1) * this.limit,
       };
     },
     totalPages() {
@@ -79,7 +79,6 @@ export default {
   watch: {
     async page(current, previous) {
       if (current !== previous) {
-        this.offset = (this.page - 1) * this.limit;
         await this.$router.push({ query: { ...this.$route.query, page: this.page.toString() } });
       }
     },

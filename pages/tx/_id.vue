@@ -9,7 +9,7 @@
         <button
           class="txs__back"
           type="button"
-          @click="$router.go(-1)"
+          @click="back()"
         >
           <span class="icon-short_left" />
           {{ $t('ui.back') }}
@@ -297,7 +297,6 @@ export default {
     return {
       tabs: ['overview', 'logs'],
       activeTab: 'overview',
-      search: '',
     };
   },
   computed: {
@@ -398,6 +397,19 @@ export default {
         { class: 'table__number_mobile', text: this.formatItem(this.tx.hash, 9, 6) },
       ];
     },
+    hash() {
+      return this.$route.hash;
+    },
+    historyPath() {
+      return sessionStorage.getItem('backRoute');
+    },
+  },
+  watch: {
+    async hash(current, previous) {
+      if (current !== previous) {
+        await this.hashNavigation();
+      }
+    },
   },
   async beforeCreate() {
     await this.$store.dispatch('tx/getTxsByHash', this.$route.params.id);
@@ -416,12 +428,17 @@ export default {
       this.$router.push({ hash: `#${tab}` });
     },
     async hashNavigation() {
-      const { hash } = this.$route;
-      if (hash) {
-        await this.$router.push({ hash });
-        const replacedHash = hash ? hash.replace('#', '') : '';
-        console.log('replacedHash: ', replacedHash);
-        this.activeTab = this.tabs.includes(replacedHash) ? replacedHash : 'overview';
+      if (this.hash) {
+        await this.$router.push({ hash: this.hash });
+        const replacedHash = this.hash ? this.hash.replace('#', '') : '';
+        this.activeTab = this.tabs.includes(replacedHash) ? replacedHash : this.tabs[0];
+      }
+    },
+    back() {
+      if (this.historyPath) {
+        this.$router.push(this.historyPath);
+      } else {
+        this.$router.push('/tx');
       }
     },
   },

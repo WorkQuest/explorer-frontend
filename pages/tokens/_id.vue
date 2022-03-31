@@ -205,6 +205,9 @@ export default {
         { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
       ];
     },
+    hash() {
+      return this.$route.hash;
+    },
   },
   watch: {
     async page() {
@@ -216,6 +219,11 @@ export default {
 
       if (this.activeTab === 'holders') {
         await this.$store.dispatch('tokens/getTokenHolders', this.payload);
+      }
+    },
+    async hash(current, previous) {
+      if (current !== previous) {
+        await this.hashNavigation();
       }
     },
   },
@@ -243,11 +251,10 @@ export default {
       await this.SetLoader(false);
     },
     async hashNavigation() {
-      const { hash } = this.$route;
-      if (hash) {
-        await this.$router.push({ hash });
-        const replacedHash = hash ? hash.replace('#', '') : '';
-        this.activeTab = this.tabs.includes(replacedHash) ? replacedHash : 'overview';
+      if (this.hash) {
+        await this.$router.push({ hash: this.hash });
+        const replacedHash = this.hash ? this.hash.replace('#', '') : '';
+        this.activeTab = this.tabs.includes(replacedHash) ? replacedHash : this.tabs[0];
       }
     },
   },

@@ -10,7 +10,7 @@
     >
       <button
         class="block__back"
-        @click="$router.go(-1)"
+        @click="back()"
       >
         <span class="icon-short_left" />
         {{ $t('ui.back') }}
@@ -178,6 +178,9 @@ export default {
         offset: this.offset,
       };
     },
+    historyPath() {
+      return sessionStorage.getItem('backRoute');
+    },
   },
   async mounted() {
     await this.SetLoader(true);
@@ -192,6 +195,13 @@ export default {
       await this.SetLoader(true);
       await this.$router.push(`${blockId}`);
       await this.SetLoader(false);
+    },
+    back() {
+      if (this.historyPath) {
+        this.$router.push(this.historyPath);
+      } else {
+        this.$router.push('/blocks');
+      }
     },
   },
 };

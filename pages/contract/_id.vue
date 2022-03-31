@@ -202,16 +202,25 @@ export default {
     address() {
       return this.$route.params.id;
     },
+    hash() {
+      return this.$route.hash;
+    },
   },
   watch: {
     async page() {
       this.offset = (this.page - 1) * this.limit;
       await this.getPage();
     },
+    async hash(current, previous) {
+      if (current !== previous) {
+        await this.hashNavigation();
+      }
+    },
   },
   async mounted() {
     if (isAddress(this.address)) {
       await this.getContractData();
+      await this.hashNavigation();
     } else {
       await this.$router.push('/');
     }
@@ -240,11 +249,10 @@ export default {
       }
     },
     async hashNavigation() {
-      const { hash } = this.$route;
-      if (hash) {
-        await this.$router.push({ hash });
-        const replacedHash = hash ? hash.replace('#', '') : '';
-        this.activeTab = this.tabs.includes(replacedHash) ? replacedHash : 'overview';
+      if (this.hash) {
+        await this.$router.push({ hash: this.hash });
+        const replacedHash = this.hash ? this.hash.replace('#', '') : '';
+        this.activeTab = this.tabs.includes(replacedHash) ? replacedHash : this.tabs[0];
       }
     },
   },
