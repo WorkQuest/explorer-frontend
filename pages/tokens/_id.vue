@@ -163,8 +163,8 @@ export default {
       return this.$route.params.id;
     },
     totalPagesValue() {
-      if (this.activeTab === 'transfers') return this.setTotalPages(this.tokenTransfersCount, 20);
-      if (this.activeTab === 'holders') return this.setTotalPages(this.tokenHoldersCount, 20);
+      if (this.activeTab === 'transfers') return this.setTotalPages(this.tokenTransfersCount, this.limit);
+      if (this.activeTab === 'holders') return this.setTotalPages(this.tokenHoldersCount, this.limit);
       return 1;
     },
     payload() {
