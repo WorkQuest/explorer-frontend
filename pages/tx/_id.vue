@@ -343,6 +343,7 @@ export default {
             title: this.$t('ui.tx.status'),
             info: this.tx.status,
             item: 'status',
+            note: this.tx.error,
           },
           {
             class: 'columns__item_two-three',
