@@ -12,6 +12,7 @@
       :busy="isLoading"
       :empty-text="$t('ui.tx.noTxs')"
       show-empty
+      stacked="md"
     >
       <template #table-busy>
         <div class="text-center">
@@ -19,11 +20,12 @@
         </div>
       </template>
 
-      <template
-        v-if="isOnly"
-        #table-caption
-      >
-        <div class="table__titles">
+      <template #table-caption>
+        <slot name="table-caption" />
+        <div
+          v-if="title"
+          class="table__titles"
+        >
           <span class="table__title">{{ $props.title }}</span>
         </div>
       </template>
@@ -192,4 +194,10 @@ export default {
     white-space: nowrap;
   }
 }
+.table {
+  &__link, &__grey {
+    font-size: 16px;
+  }
+}
+
 </style>

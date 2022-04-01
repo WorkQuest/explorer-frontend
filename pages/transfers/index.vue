@@ -1,5 +1,8 @@
 <template>
-  <div class="transfer transfer__container">
+  <div
+    v-if="!isLoading"
+    class="transfer transfer__container"
+  >
     <search-filter class="transfer__search" />
     <table-txs
       class="transfer__table"
@@ -7,20 +10,20 @@
       :items="allTokenTransfers"
       :fields="tableHeaders"
     />
-    <div class="tables__transactions">
-      <p class="tables__title">
-        {{ $t('ui.token.token') + ' ' + $t('ui.token.transfers') }}
-      </p>
-      <transaction
-        v-for="(item, i) in allTokenTransfers"
-        :key="i"
-        class="tables__transaction"
-        :transaction="item"
-        :is-last="allTokenTransfers[i] === allTokenTransfers[allTokenTransfers.length - 1]"
-        :is-token="true"
-        :is-transfer="true"
-      />
-    </div>
+    <!--    <div class="tables__transactions">-->
+    <!--      <p class="tables__title">-->
+    <!--        {{ $t('ui.token.token') + ' ' + $t('ui.token.transfers') }}-->
+    <!--      </p>-->
+    <!--      <transaction-->
+    <!--        v-for="(item, i) in allTokenTransfers"-->
+    <!--        :key="i"-->
+    <!--        class="tables__transaction"-->
+    <!--        :transaction="item"-->
+    <!--        :is-last="allTokenTransfers[i] === allTokenTransfers[allTokenTransfers.length - 1]"-->
+    <!--        :is-token="true"-->
+    <!--        :is-transfer="true"-->
+    <!--      />-->
+    <!--    </div>-->
     <base-pager
       v-if="totalPages > 1"
       v-model="page"
@@ -131,9 +134,9 @@ export default {
 
 @include _767 {
   .transfer {
-    &__table {
-      display: none;
-    }
+    //&__table {
+    //  display: none;
+    //}
   }
   .tables {
     &__transactions {

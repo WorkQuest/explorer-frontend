@@ -1,0 +1,71 @@
+@import "typography";
+@import "../vars";
+
+.table {
+  overflow-x: hidden;
+  font-size: 16px;
+  line-height: 130%;
+  background: #FFFFFF;
+  border-radius: 6px;
+  &__titles {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0 30px 0 20px;
+  }
+  &__title {
+    margin: 10px;
+    color: $black800;
+  }
+  &__link {
+    color: $blue !important;
+    border: none !important;
+    background: $white !important;
+    width: 200px !important;
+    overflow-wrap: anywhere;
+
+    &:hover {
+      color: $blue;
+    }
+
+    &_disabled {
+      pointer-events: none;
+    }
+  }
+  &__header {
+    @include text-simple;
+    @include normal-font-size;
+    background: rgba(0, 131, 199, 0.1);
+    font-weight: 500;
+    height: 27px;
+    color: $blue;
+    word-break: break-word;
+    & > tr > th {
+      font-weight: 500;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .table.b-table.b-table-stacked-md {
+    font-family: 'Inter', sans-serif;
+  }
+  .table.b-table.b-table-stacked-md > tbody > tr > [data-label]::before {
+    text-align: left !important;
+    font-size: 16px;
+  }
+  .table.b-table.b-table-stacked-md > tbody > tr > [data-label] > div {
+    font-size: 16px;
+  }
+  .table.b-table.b-table-stacked-md > caption, .table.b-table.b-table-stacked-md > tbody, .table.b-table.b-table-stacked-md > tbody > tr, .table.b-table.b-table-stacked-md > tbody > tr > td, .table.b-table.b-table-stacked-md > tbody > tr > th {
+    margin-bottom: 10px;
+  }
+  .table__row {
+    &:not(:last-child) {
+      border-bottom: 1px solid $black100;
+    }
+  }
+  .table th, .table td {
+    padding: 0.75rem 0.75rem 0.75rem 1.75rem;
+  }
+}

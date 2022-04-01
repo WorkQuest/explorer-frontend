@@ -4,44 +4,37 @@
     class="transactions"
   >
     <search-filter class="transactions__search" />
-    <div class="transactions__wrap">
-      <div
+
+    <!--    <div class="transactions__wrap">-->
+    <table-txs
+      class="transactions__table"
+      :is-only="false"
+      :items="txsTable"
+      :fields="tableHeaders"
+      :title="query ? '' : $tc('ui.txs')"
+    >
+      <template
         v-if="query"
-        class="transactions__header"
+        v-slot:table-caption
       >
-        <h5 class="transactions__title">
-          {{ $t('ui.tx.total') }} {{ currentBlockTransactionsCount }} {{ $t('ui.tx.found') }}
-        </h5>
-        <p class="transactions__block">
-          {{ $t('ui.tx.forBlock') }}
-          <nuxt-link
-            class="transactions__link"
-            :to="`/blocks/`+query"
-          >
-            {{ query }}
-          </nuxt-link>
-        </p>
-      </div>
-      <p
-        v-else
-        class="transactions__header"
-      >
-        {{ $t('ui.txs') }}
-      </p>
-      <table-txs
-        class="transactions__table"
-        :is-only="false"
-        :items="txsTable"
-        :fields="tableHeaders"
-      />
-      <transaction
-        v-for="(item, i) in txsTable"
-        :key="i"
-        class="transactions__transaction"
-        :transaction="item"
-        :is-last="txsTable[i] === txsTable[txsTable.length - 1]"
-      />
-    </div>
+        <div class="transactions__header">
+          <h5 class="transactions__title">
+            {{ $t('ui.tx.total') }} {{ currentBlockTransactionsCount }} {{ $t('ui.tx.found') }}
+          </h5>
+          <p class="transactions__block">
+            {{ $t('ui.tx.forBlock') }}
+            <nuxt-link
+              class="transactions__link"
+              :to="`/blocks/`+query"
+            >
+              {{ query }}
+            </nuxt-link>
+          </p>
+        </div>
+      </template>
+    </table-txs>
+
+    <!--    </div>-->
     <base-pager
       v-if="totalPages > 1"
       v-model="page"
@@ -109,7 +102,7 @@ export default {
       }
     },
     async query(current, previous) {
-      if (current && current !== previous) {
+      if (!current && current !== previous) {
         await this.getTransactions();
       }
     },
@@ -196,9 +189,6 @@ export default {
 
 @include _767 {
   .transactions {
-    &__table {
-      display: none;
-    }
 
     &__wrap {
       padding: 20px 16px 0 16px;

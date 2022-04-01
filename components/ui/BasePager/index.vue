@@ -236,7 +236,7 @@ export default {
   .pager-wrapper {
     padding: 20px 0;
     justify-content: center;
-    background-color: $white;
+    //background-color: $white;
   }
   .pager {
     margin: auto;

@@ -12,6 +12,7 @@
       tbody-tr-class="table__row"
       :empty-text="$t('ui.token.noTokens')"
       show-empty
+      stacked="md"
     >
       <template
         v-if="$props.title"

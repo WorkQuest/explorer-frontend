@@ -12,16 +12,19 @@
       :busy="isLoading"
       :empty-text="$t('ui.block.noBlocks')"
       show-empty
+      stacked="md"
     >
       <template #table-busy>
         <div class="text-center">
           <strong>{{ $t('ui.loading') }}</strong>
         </div>
       </template>
-      <template
-        #table-caption
-      >
-        <div class="table__titles">
+      <template #table-caption>
+        <slot name="table-caption" />
+        <div
+          v-if="title"
+          class="table__titles"
+        >
           <span class="table__title">{{ $props.title }}</span>
         </div>
       </template>
@@ -64,7 +67,6 @@
 <script>
 import { mapGetters } from 'vuex';
 
-// TODO reward
 /** @param {array} items[] */
 /** @param {Object} item */
 /** @param {string} item.gas_used  */

@@ -47,13 +47,13 @@
           :items="tokenTransfers"
           :fields="tableHeadersTransfers"
         />
-        <transaction
-          v-for="(item, i) in tokenTransfers"
-          :key="i"
-          class="tables__item"
-          :transaction="item"
-          :is-last="tokenTransfers[i] === tokenTransfers[tokenTransfers.length - 1]"
-        />
+        <!--        <transaction-->
+        <!--          v-for="(item, i) in tokenTransfers"-->
+        <!--          :key="i"-->
+        <!--          class="tables__item"-->
+        <!--          :transaction="item"-->
+        <!--          :is-last="tokenTransfers[i] === tokenTransfers[tokenTransfers.length - 1]"-->
+        <!--        />-->
         <base-pager
           v-if="totalPagesValue > 1"
           v-model="page"
@@ -74,14 +74,14 @@
           :fields="tableHeadersHolders"
           type="holders"
         />
-        <holder
-          v-for="(item, i) in tokenHolders"
-          :key="i"
-          class="tables__item"
-          :holder="item"
-          :token="token"
-          :is-last="tokenHolders[i] === tokenHolders[tokenHolders.length - 1]"
-        />
+        <!--        <holder-->
+        <!--          v-for="(item, i) in tokenHolders"-->
+        <!--          :key="i"-->
+        <!--          class="tables__item"-->
+        <!--          :holder="item"-->
+        <!--          :token="token"-->
+        <!--          :is-last="tokenHolders[i] === tokenHolders[tokenHolders.length - 1]"-->
+        <!--        />-->
         <base-pager
           v-if="totalPagesValue > 1"
           v-model="page"
@@ -384,21 +384,16 @@ export default {
       margin: 0 0 25px 16px;
     }
   }
-  .table {
-    display: none;
-  }
+
   .tables {
-    padding: 16px 16px 0 16px;
     background-color: $white;
 
     &__menu {
-      margin: 0 0 15px 0;
-      padding: 0;
+      padding: 20px;
     }
 
     &__info, &__contract {
-      padding: 0;
-      margin-top: 30px;
+      padding: 20px;
     }
 
     &__item {

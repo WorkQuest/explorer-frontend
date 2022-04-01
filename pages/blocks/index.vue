@@ -10,18 +10,19 @@
       :items="blocks"
       :fields="tableHeaders"
     />
-    <div class="blocks__items items">
-      <p class="items__title">
-        {{ $t('ui.blocks') }}
-      </p>
-      <block
-        v-for="(item, i) in blocks"
-        :key="i"
-        class="items__block"
-        :block="item"
-        :is-last="blocks[i] === blocks[blocks.length - 1]"
-      />
-    </div>
+    <!--    <div class="blocks__items items">-->
+    <!--      <p class="items__title">-->
+    <!--        {{ $t('ui.blocks') }}-->
+    <!--      </p>-->
+    <!--      <block-->
+    <!--        v-for="(item, i) in blocks"-->
+    <!--        :key="i"-->
+    <!--        class="items__block"-->
+    <!--        :block="item"-->
+    <!--        :is-last="blocks[i] === blocks[blocks.length - 1]"-->
+    <!--      />-->
+    <!--    </div>-->
+
     <base-pager
       v-if="totalPages > 1"
       v-model="page"
@@ -99,6 +100,10 @@ export default {
     @include container;
   }
 
+  &__wrap {
+    background-color: $white;
+  }
+
   &__search {
     margin: 25px 0;
   }
@@ -114,8 +119,11 @@ export default {
 
 @include _767 {
   .blocks {
-    &__table {
-      display: none;
+    //&__table {
+    //  display: none;
+    //}
+    &__wrap {
+      padding: 20px 16px 0 16px;
     }
 
   }
