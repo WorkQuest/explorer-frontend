@@ -242,4 +242,13 @@ export default {
     margin: auto;
   }
 }
+
+@include _380 {
+  .pager {
+    max-width: 375px;
+    &__cloud {
+      min-width: 37px;
+    }
+  }
+}
 </style>

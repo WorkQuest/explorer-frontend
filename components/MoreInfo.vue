@@ -217,7 +217,6 @@ export default {
   .info {
     &__info {
       max-width: 300px;
-      white-space: nowrap;
     }
   }
 }
