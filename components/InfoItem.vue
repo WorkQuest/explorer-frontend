@@ -62,7 +62,7 @@
       class="item__note"
       :class="{'item__note_red': info === 0}"
     >
-      <span v-if="info === 0">&boxur;</span> {{ note }}
+      <span v-if="info === 0 && note">&boxur;</span> {{ note }}
     </p>
   </div>
 </template>
