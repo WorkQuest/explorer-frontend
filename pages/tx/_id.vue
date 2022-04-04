@@ -775,8 +775,8 @@ export default {
       border-radius: 6px;
       width: 61px;
       &_green {
-        background: rgba(34, 204, 20, 0.1);
-        color: $default-green;
+        background: $green100;
+        color: $green;
         text-align: center;
         display: inline-block;
       }

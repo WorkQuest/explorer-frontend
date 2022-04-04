@@ -151,7 +151,7 @@ export default {
     font-size: 13px;
     line-height: 18px;
     letter-spacing: 0.04em;
-    color: $pager-dots;
+    color: $black600;
     width: 40px;
     height: 40px;
     display: flex;
@@ -166,7 +166,7 @@ export default {
     border-left: 1px solid $black0;
 
     &_active {
-      background-color: $pager-item-active-bg;
+      background-color: $blue100;
     }
   }
 
@@ -184,10 +184,10 @@ export default {
     font-size: 16px;
     line-height: 130%;
     letter-spacing: 0.04em;
-    color: $pager-item-inactive-bg;
+    color: $black600;
 
     &_active {
-      color: $pager-item-active-text;
+      color: $blue;
       cursor: default;
     }
   }
