@@ -175,13 +175,17 @@
       </p>
       <div class="overview__subtitle">
         {{ $t('ui.tx.status') }}
-        <p
-          v-if="tx.status"
+        <span
+          v-if="tx.status === 0 || tx.status === 1"
           class="overview__status"
-          :class="{'overview__status_green': tx.status === 1, 'overview__status_red': tx.status === 2}"
+          :class="{'overview__status_green': tx.status === 1, 'overview__status_red': tx.status === 0}"
         >
           {{ tx.status === 1 ? this.$t('ui.tx.transactionSuccess') : this.$t('ui.tx.transactionFail') }}
-        </p>
+        </span>
+        <span
+          v-if="tx.error"
+          class="overview__status overview__status_error-text"
+        > {{ tx.error }} </span>
       </div>
       <div class="overview__subtitle">
         {{ $t('ui.block.blockNumber') }}
@@ -326,6 +330,7 @@ export default {
             title: this.$t('ui.tx.status'),
             info: this.tx.status,
             item: 'status',
+            note: this.tx.error,
           },
           {
             class: 'columns__item_two-three',
@@ -781,6 +786,11 @@ export default {
         color: $red;
         text-align: center;
         display: inline-block;
+      }
+
+      &_error-text {
+        width: auto;
+        color: $red;
       }
     }
   }
