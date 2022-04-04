@@ -29,6 +29,10 @@
       </template>
 
       <template #cell(hash)="el">
+        <span
+          v-if="el.item.status === 0"
+          class="icon-error icon-error_outline"
+        />
         <nuxt-link
           class="table__link"
           :to="`/tx/${el.item.hash || el.item.transaction_hash}`"
@@ -191,5 +195,8 @@ export default {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+}
+.icon-error {
+  color: $red;
 }
 </style>
