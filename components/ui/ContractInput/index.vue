@@ -27,7 +27,7 @@
       class="contract-input__body body"
     >
       <validation-observer
-        v-if="abiItem.inputs.length > 0"
+        v-if="abiItem.inputs"
         v-slot="{ handleSubmit }"
         tag="div"
         class="inputs"
@@ -53,7 +53,7 @@
           <base-btn
             :text="$tc(`ui.contract.buttons.${type}`)"
             mode="outline"
-            :disabled="isLoading"
+            :disabled="isLoading || !web3connected"
             class="button"
             @click="handleSubmit(contractHandler)"
           >
@@ -119,7 +119,7 @@
             </template>
           </div>
         </template>
-        <template v-if="abiItem.outputs.length > 0 && type !== 'read'">
+        <template v-if="type !== 'read'">
           <div class="outputs__write">
             <span
               v-if="error"
@@ -175,6 +175,10 @@ export default {
     abi: {
       type: Array,
       default: () => [],
+    },
+    web3connected: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

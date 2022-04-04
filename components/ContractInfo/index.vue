@@ -91,6 +91,7 @@
           :number="i + 1"
           :address="address"
           :abi="JSON.parse(JSON.stringify(contractAbi))"
+          :web3connected="web3connected"
         />
       </div>
       <div
@@ -119,6 +120,7 @@
           :number="i + 1"
           :address="address"
           :abi="JSON.parse(JSON.stringify(contractAbi))"
+          :web3connected="web3connected"
         />
       </div>
     </div>
