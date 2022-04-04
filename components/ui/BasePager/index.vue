@@ -143,7 +143,7 @@ export default {
   border-radius: 6px;
   margin-left: auto;
   display: flex;
-  background-color: #FFFFFF;
+  background-color: $white;
 
   &__dots {
     @include text-simple;
@@ -151,7 +151,7 @@ export default {
     font-size: 13px;
     line-height: 18px;
     letter-spacing: 0.04em;
-    color: #C6CBD9;
+    color: $pager-dots;
     width: 40px;
     height: 40px;
     display: flex;
@@ -166,7 +166,7 @@ export default {
     border-left: 1px solid $black0;
 
     &_active {
-      background-color: #e6f3fa;
+      background-color: $pager-item-active-bg;
     }
   }
 
@@ -184,10 +184,10 @@ export default {
     font-size: 16px;
     line-height: 130%;
     letter-spacing: 0.04em;
-    color: #4C5767;
+    color: $pager-item-inactive-bg;
 
     &_active {
-      color: #3A56FF;
+      color: $pager-item-active-text;
       cursor: default;
     }
   }
@@ -235,11 +235,8 @@ export default {
 @include _767 {
   .pager-wrapper {
     padding: 20px 0;
-    justify-content: center;
+    justify-content: flex-end;
     background-color: $white;
-  }
-  .pager {
-    margin: auto;
   }
 }
 
