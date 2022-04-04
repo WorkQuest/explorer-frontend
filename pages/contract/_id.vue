@@ -11,15 +11,10 @@
       </h4>
       <p class="contract__contract">
         {{ address }}
-        <button
-          v-clipboard:copy="address"
-          v-clipboard:success="ClipboardSuccessHandler"
-          v-clipboard:error="ClipboardErrorHandler"
-          class="btn__copy"
-          type="button"
-        >
-          <span class="icon-copy" />
-        </button>
+        <button-copy
+          :value="address"
+          icon-color="primary"
+        />
       </p>
     </div>
     <div class="contract__info">
@@ -33,6 +28,7 @@
           :key="i"
           class="tables__tab"
           :class="{tables__tab_active: activeTab === tab}"
+          :title="$t(`ui.token.${tab}`)"
           @click="onClick(tab)"
         >{{ $t(`ui.token.${tab}`) }}</span>
       </div>
@@ -42,18 +38,11 @@
         class="tables__txs"
       >
         <table-txs
+          id="contract-transactions-table"
           class="tables__table"
-          :title="$tc('ui.txs')"
           :is-only="false"
           :items="transactions"
           :fields="tableHeadersTxs"
-        />
-        <transaction
-          v-for="(item, i) in transactions"
-          :key="i"
-          class="tables__transaction"
-          :transaction="item"
-          :is-last="transactions[i] === transactions[transactions.length - 1]"
         />
         <base-pager
           v-if="totalPages > 1"
@@ -68,18 +57,11 @@
         class="tables__internal"
       >
         <table-txs
+          id="contract-internal-transactions-table"
           class="tables__table"
           :is-only="false"
           :items="internalTransactions"
           :fields="tableHeadersInternal"
-        />
-        <transaction
-          v-for="(item, i) in internalTransactions"
-          :key="i"
-          class="tables__transaction"
-          :transaction="item"
-          :is-last="internalTransactions[i] === internalTransactions[internalTransactions.length - 1]"
-          :internal="true"
         />
         <base-pager
           v-if="totalPages > 1"
@@ -98,15 +80,6 @@
           :is-only="false"
           :items="tokenTransfers"
           :fields="tableHeadersERC"
-        />
-        <transaction
-          v-for="(item, i) in tokenTransfers"
-          :key="i"
-          class="tables__transaction"
-          :transaction="item"
-          :is-last="tokenTransfers[i] === tokenTransfers[tokenTransfers.length - 1]"
-          :is-home="true"
-          :is-token="true"
         />
         <base-pager
           v-if="totalPages > 1"
@@ -163,8 +136,8 @@ export default {
     tableHeadersTxs() {
       return [
         { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'block_number', label: this.$t('ui.block.blockNumber'), sortable: true },
         { key: 'age', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'block_number', label: this.$t('ui.block.blockNumber'), sortable: true },
         { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
         { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
         { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
@@ -278,7 +251,7 @@ export default {
 }
 
 .contract {
-  animation: show 1s 1;
+  //animation: show 1s 1;
   @include container;
 
   &__search {
@@ -373,8 +346,6 @@ export default {
     }
   }
   .tables {
-    padding: 20px 15px 15px 15px;
-
     &__menu {
       margin: 0;
       display: flex;
@@ -383,14 +354,13 @@ export default {
 
     &__tab {
       margin-right: 3px;
-    }
-
-    &__table {
-      display: none;
-    }
-
-    &__transaction {
-      display: block;
+      word-spacing: unset;
+      max-width: 25%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 16px;
+      word-break: unset;
+      white-space: nowrap;
     }
   }
 }

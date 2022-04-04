@@ -42,18 +42,12 @@
         class="tables__tf"
       >
         <table-txs
+          id="tokens-transfers-table"
           class="tables__table"
           :is-only="false"
           :items="tokenTransfers"
           :fields="tableHeadersTransfers"
         />
-        <!--        <transaction-->
-        <!--          v-for="(item, i) in tokenTransfers"-->
-        <!--          :key="i"-->
-        <!--          class="tables__item"-->
-        <!--          :transaction="item"-->
-        <!--          :is-last="tokenTransfers[i] === tokenTransfers[tokenTransfers.length - 1]"-->
-        <!--        />-->
         <base-pager
           v-if="totalPagesValue > 1"
           v-model="page"
@@ -74,14 +68,6 @@
           :fields="tableHeadersHolders"
           type="holders"
         />
-        <!--        <holder-->
-        <!--          v-for="(item, i) in tokenHolders"-->
-        <!--          :key="i"-->
-        <!--          class="tables__item"-->
-        <!--          :holder="item"-->
-        <!--          :token="token"-->
-        <!--          :is-last="tokenHolders[i] === tokenHolders[tokenHolders.length - 1]"-->
-        <!--        />-->
         <base-pager
           v-if="totalPagesValue > 1"
           v-model="page"
@@ -177,8 +163,8 @@ export default {
     tableHeadersTransfers() {
       return [
         { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'method', label: this.$t('ui.token.method'), sortable: true },
         { key: 'age', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'method', label: this.$t('ui.token.method'), sortable: true },
         { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
         { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
         { key: 'amount', label: this.$t('ui.token.quantity'), sortable: true },
@@ -262,7 +248,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .token {
-  animation: show 1s 1;
+  //animation: show 1s 1;
   @include container;
 
   &__search {
@@ -389,10 +375,6 @@ export default {
     background-color: $white;
 
     &__menu {
-      padding: 20px;
-    }
-
-    &__info, &__contract {
       padding: 20px;
     }
 

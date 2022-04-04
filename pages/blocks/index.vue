@@ -1,27 +1,17 @@
 <template>
   <div
     v-if="!isLoading"
-    class="blocks blocks__container"
+    class="blocks"
   >
     <search-filter class="blocks__search" />
+
     <table-blocks
+      id="blocks-table"
       class="blocks__table"
       :title="$tc('ui.blocks')"
       :items="blocks"
       :fields="tableHeaders"
     />
-    <!--    <div class="blocks__items items">-->
-    <!--      <p class="items__title">-->
-    <!--        {{ $t('ui.blocks') }}-->
-    <!--      </p>-->
-    <!--      <block-->
-    <!--        v-for="(item, i) in blocks"-->
-    <!--        :key="i"-->
-    <!--        class="items__block"-->
-    <!--        :block="item"-->
-    <!--        :is-last="blocks[i] === blocks[blocks.length - 1]"-->
-    <!--      />-->
-    <!--    </div>-->
 
     <base-pager
       v-if="totalPages > 1"
@@ -94,43 +84,10 @@ export default {
 
 <style lang="scss" scoped>
 .blocks {
-  animation: show 1s 1;
-
-  &__container {
-    @include container;
-  }
-
-  &__wrap {
-    background-color: $white;
-  }
+  @include container;
 
   &__search {
     margin: 25px 0;
-  }
-
-  &__grey {
-    color: $black500;
-  }
-}
-
-.items {
-  display: none;
-}
-
-@include _767 {
-  .blocks {
-    //&__table {
-    //  display: none;
-    //}
-    &__wrap {
-      padding: 20px 16px 0 16px;
-    }
-
-  }
-  .items {
-    display: block;
-    background: $white;
-    padding: 16px;
   }
 }
 

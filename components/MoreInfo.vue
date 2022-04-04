@@ -15,15 +15,10 @@
         >
           {{ token.contract_address_hash.hex }}
         </nuxt-link>
-        <button
-          v-clipboard:copy="token.contract_address_hash.hex"
-          v-clipboard:success="ClipboardSuccessHandler"
-          v-clipboard:error="ClipboardErrorHandler"
-          class="btn__copy"
-          type="button"
-        >
-          <span class="icon-copy" />
-        </button>
+        <button-copy
+          :value="token.contract_address_hash.hex"
+          icon-color="primary"
+        />
       </p>
       <p class="info__info">
         <span class="info__title">{{ $t('ui.token.decimals') }}</span>

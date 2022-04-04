@@ -35,15 +35,10 @@
       >
         {{ info }}
       </nuxt-link>
-      <button
-        v-clipboard:copy="info"
-        v-clipboard:success="ClipboardSuccessHandler"
-        v-clipboard:error="ClipboardErrorHandler"
-        class="btn__copy"
-        type="button"
-      >
-        <span class="icon-copy" />
-      </button>
+      <button-copy
+        :value="info"
+        icon-color="primary"
+      />
     </p>
     <p
       v-else-if="item === 'status'"

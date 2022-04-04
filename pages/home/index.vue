@@ -17,6 +17,7 @@
     <div class="home__tables">
       <div class="home__content">
         <table-blocks
+          id="home-transactions"
           class="home__table"
           :items="blocks"
           :fields="tableHeadersBlocks"
@@ -114,7 +115,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .home {
-  animation: show 1s 1;
+  //animation: show 1s 1;
 
   &__header {
     background: $darkblue;
@@ -142,13 +143,6 @@ export default {
     color: $white;
     font-family: 'Inter', sans-serif;
   }
-
-  &__header-button {
-    width: 46px;
-    height: 63px;
-    margin-left: 10px;
-    display: none;
-  }
 }
 
 .table__link {
@@ -165,10 +159,6 @@ export default {
       font-size: 28px;
       max-width: 200px;
       margin-left: 16px;
-    }
-
-    &__block {
-      display: grid;
     }
   }
 }

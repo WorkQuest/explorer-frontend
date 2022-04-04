@@ -20,7 +20,10 @@
         </div>
       </template>
 
-      <template #table-caption>
+      <template
+        v-if="$props.title || $slots['table-caption']"
+        #table-caption
+      >
         <slot name="table-caption" />
         <div
           v-if="title"

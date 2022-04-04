@@ -4,30 +4,18 @@
     class="transfer transfer__container"
   >
     <search-filter class="transfer__search" />
+
     <table-txs
+      id="transfers-table"
       class="transfer__table"
       :title="$t('ui.token.token')+' '+$t('ui.token.transfers')"
       :items="allTokenTransfers"
       :fields="tableHeaders"
     />
-    <!--    <div class="tables__transactions">-->
-    <!--      <p class="tables__title">-->
-    <!--        {{ $t('ui.token.token') + ' ' + $t('ui.token.transfers') }}-->
-    <!--      </p>-->
-    <!--      <transaction-->
-    <!--        v-for="(item, i) in allTokenTransfers"-->
-    <!--        :key="i"-->
-    <!--        class="tables__transaction"-->
-    <!--        :transaction="item"-->
-    <!--        :is-last="allTokenTransfers[i] === allTokenTransfers[allTokenTransfers.length - 1]"-->
-    <!--        :is-token="true"-->
-    <!--        :is-transfer="true"-->
-    <!--      />-->
-    <!--    </div>-->
+
     <base-pager
       v-if="totalPages > 1"
       v-model="page"
-      class="transfer__pager"
       :total-pages="totalPages"
     />
   </div>
@@ -101,49 +89,12 @@ export default {
 
 <style lang="scss" scoped>
 .transfer {
-  animation: show 1s 1;
-
-  &__container {
-    @include container;
-  }
+  //animation: show 1s 1;
+  @include container;
 
   &__search {
     margin: 25px 0;
   }
-
-  &__grey {
-    color: $black500;
-  }
 }
 
-.page {
-  &__active {
-    color: $blue;
-  }
-
-  &__common {
-    color: $black600;
-  }
-}
-
-.tables {
-  &__transactions {
-    display: none;
-  }
-}
-
-@include _767 {
-  .transfer {
-    //&__table {
-    //  display: none;
-    //}
-  }
-  .tables {
-    &__transactions {
-      display: block;
-      background: $white;
-      padding: 16px;
-    }
-  }
-}
 </style>

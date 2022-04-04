@@ -10,15 +10,10 @@
       </h4>
       <p class="address__address">
         {{ address }}
-        <button
-          v-clipboard:copy="address"
-          v-clipboard:success="ClipboardSuccessHandler"
-          v-clipboard:error="ClipboardErrorHandler"
-          class="btn__copy"
-          type="button"
-        >
-          <span class="icon-copy" />
-        </button>
+        <button-copy
+          :value="address"
+          icon-color="primary"
+        />
       </p>
     </div>
     <div class="address__info">
@@ -26,20 +21,11 @@
     </div>
     <div class="address__txs">
       <table-txs
+        id="address-transfers-table"
         class="address__table"
         :title="$tc('ui.txs')"
         :items="txs"
         :fields="tableFields"
-      />
-      <p class="address__subtitle">
-        {{ $t('ui.txs') }}
-      </p>
-      <transaction
-        v-for="(item, i) in txs"
-        :key="i"
-        class="address__transaction"
-        :transaction="item"
-        :is-last="txs[i] === txs[txs.length - 1]"
       />
     </div>
     <base-pager
@@ -87,8 +73,8 @@ export default {
     tableFields() {
       return [
         { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'block_number', label: this.$t('ui.block.blockNumber'), sortable: true },
         { key: 'age', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'block_number', label: this.$t('ui.block.blockNumber'), sortable: true },
         { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
         { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
         { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
@@ -185,10 +171,6 @@ export default {
 
 @include _767 {
   .address {
-    &__table {
-      display: none;
-    }
-
     &__header {
       display: block;
       word-wrap: break-word;
@@ -197,11 +179,6 @@ export default {
 
     &__address, &__title {
       margin-left: 16px;
-    }
-
-    &__txs {
-      background: $white;
-      padding: 16px;
     }
 
     &__subtitle, &__transaction {

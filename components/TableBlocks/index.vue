@@ -19,7 +19,10 @@
           <strong>{{ $t('ui.loading') }}</strong>
         </div>
       </template>
-      <template #table-caption>
+      <template
+        v-if="$props.title || $scopedSlots['table-caption']"
+        #table-caption
+      >
         <slot name="table-caption" />
         <div
           v-if="title"
