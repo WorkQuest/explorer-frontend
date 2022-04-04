@@ -59,11 +59,9 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import TableBlocks from '~/components/TableBlocks';
 
 export default {
   name: 'Home',
-  components: { TableBlocks },
   layout: 'default',
   data() {
     return {

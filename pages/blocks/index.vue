@@ -23,11 +23,9 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import TableBlocks from '~/components/TableBlocks';
 
 export default {
   name: 'Blocks',
-  components: { TableBlocks },
   data() {
     return {
       limit: 20,
