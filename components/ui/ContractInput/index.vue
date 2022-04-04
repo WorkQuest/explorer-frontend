@@ -54,7 +54,7 @@
             v-if="(type === 'read' && abiItem.inputs.length !== 0) || type !== 'read'"
             :text="$tc(`ui.contract.buttons.${type}`)"
             mode="outline"
-            :disabled="isLoading || !web3connected"
+            :disabled="isLoading || !isConnectedWeb3"
             class="button"
             @click="handleSubmit(contractHandler)"
           >
@@ -177,7 +177,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    web3connected: {
+    isConnectedWeb3: {
       type: Boolean,
       default: false,
     },
