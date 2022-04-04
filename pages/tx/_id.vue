@@ -318,6 +318,7 @@ export default {
             title: this.$t('ui.tx.status'),
             info: this.tx.status,
             item: 'status',
+            note: this.tx.error,
           },
           {
             class: 'columns__item_two-three',
@@ -780,6 +781,11 @@ export default {
         color: $red;
         text-align: center;
         display: inline-block;
+      }
+
+      &_error-text {
+        width: auto;
+        color: $red;
       }
     }
   }

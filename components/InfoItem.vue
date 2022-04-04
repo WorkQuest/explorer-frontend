@@ -53,8 +53,11 @@
     >
       {{ info }}
     </p>
-    <p class="item__note">
-      {{ note }}
+    <p
+      class="item__note"
+      :class="{'item__note_red': info === 0}"
+    >
+      <span v-if="info === 0 && note">&boxur;</span> {{ note }}
     </p>
   </div>
 </template>
@@ -131,6 +134,9 @@ export default {
     @include text-simple;
     font-size: 14px;
     color: $black300;
+    &_red {
+      color: $red;
+    }
   }
 
   &__link {
