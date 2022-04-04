@@ -236,7 +236,6 @@ export default {
   .pager-wrapper {
     padding: 20px 0;
     justify-content: flex-end;
-    background-color: $white;
   }
 }
 
