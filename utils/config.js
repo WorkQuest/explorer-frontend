@@ -35,3 +35,8 @@ export const NetworkData = new Map([
     blockExplorerUrls: ['https://dev-explorer.workquest.co'],
   }],
 ]);
+
+export const links = {
+  terms: 'https://workquest.co/terms_conditions',
+  privacy: '/',
+};
