@@ -134,14 +134,16 @@
             </p>
           </div>
           <div class="footer__right">
-            <nuxt-link
+            <a
               v-for="(item, i) in footerLinks"
               :key="`${i}-footerLink`"
-              :to="item.path"
+              target="_blank"
+              rel="noopener"
+              :href="item.path"
               class="footer__link"
             >
               · {{ item.title }}
-            </nuxt-link>
+            </a>
           </div>
         </div>
       </div>
@@ -157,6 +159,7 @@
 import { mapGetters } from 'vuex';
 import moment from 'moment';
 import ClickOutside from 'vue-click-outside';
+import { links } from '~/utils/config';
 
 export default {
   name: 'DefaultLayout',
@@ -238,11 +241,11 @@ export default {
       return [
         {
           title: this.$t('ui.terms'),
-          path: '/',
+          path: links.terms,
         },
         {
           title: this.$t('ui.privacy'),
-          path: '/',
+          path: links.privacy,
         },
       ];
     },
