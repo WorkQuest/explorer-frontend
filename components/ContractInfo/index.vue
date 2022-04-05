@@ -91,6 +91,7 @@
           :number="i + 1"
           :address="address"
           :abi="JSON.parse(JSON.stringify(contractAbi))"
+          :is-connected-web3="isConnectedWeb3"
         />
       </div>
       <div
@@ -100,13 +101,13 @@
         <div class="connection">
           <span
             class="icon-dot_03_m connection__icon"
-            :class="{'connection__icon_connected': web3connected}"
+            :class="{'connection__icon_connected': isConnectedWeb3}"
           />
           <base-btn
             mode="outline"
             class="connection__button"
             :text="$tc('ui.contract.buttons.connectWallet')"
-            :disabled="web3connected"
+            :disabled="isConnectedWeb3"
             @click="connectWallet()"
           />
           <span class="connection__address">{{ walletAddress }}</span>
@@ -119,6 +120,7 @@
           :number="i + 1"
           :address="address"
           :abi="JSON.parse(JSON.stringify(contractAbi))"
+          :is-connected-web3="isConnectedWeb3"
         />
       </div>
     </div>
@@ -211,7 +213,7 @@ export default {
     optimizationEnabled() {
       return this.optimization ? this.$t('ui.contract.yes') : this.$t('ui.contract.no');
     },
-    web3connected() {
+    isConnectedWeb3() {
       return (this.isWalletConnected && this.isDefaultChainId);
     },
   },
