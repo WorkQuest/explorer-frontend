@@ -99,8 +99,9 @@ export default {
 .fields {
   display: flex;
   align-items: center;
+  @include container;
   &__search-field {
-    @include container;
+    //@include container;
     background: $white;
     height: 83px;
     display: flex;

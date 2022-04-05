@@ -17,7 +17,7 @@
     <div class="home__tables">
       <div class="home__content">
         <table-blocks
-          id="home-transactions"
+          id="home-blocks"
           class="home__table"
           :items="blocks"
           :fields="tableHeadersBlocks"
@@ -37,6 +37,7 @@
       </div>
       <div class="home__content">
         <table-txs
+          id="home-transactions"
           class="home__table"
           :items="txs"
           :fields="tableHeadersTxs"
@@ -84,18 +85,34 @@ export default {
     },
     tableHeadersBlocks() {
       return [
-        { key: 'number', label: this.$t('ui.block.blockNumber'), sortable: true },
-        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'transactionsCount', label: this.$t('ui.block.txsCount'), sortable: true },
-        { key: 'reward', label: this.$t('ui.block.reward'), sortable: true },
+        {
+          key: 'number', label: this.$t('ui.block.blockNumber'), sortable: true,
+        },
+        {
+          key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
+        },
+        {
+          key: 'transactionsCount', label: this.$t('ui.block.txsCount'), sortable: true,
+        },
+        {
+          key: 'reward', label: this.$t('ui.block.reward'), sortable: true,
+        },
       ];
     },
     tableHeadersTxs() {
       return [
-        { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
-        { key: 'value', label: this.$t('ui.tx.amount'), sortable: true },
+        {
+          key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true,
+        },
+        {
+          key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true,
+        },
+        {
+          key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true,
+        },
+        {
+          key: 'value', label: this.$t('ui.tx.amount'), sortable: true,
+        },
       ];
     },
   },

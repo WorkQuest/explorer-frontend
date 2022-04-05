@@ -47,8 +47,12 @@
   }
 }
 
+.column-style {
+  max-width: 200px !important;
+}
+
 @media (max-width: 1199px) {
-  #transfers, #home-transactions,
+  #transfers,
   #blocks-table, #transactions-table,
   #transfers-table, #address-transfers-table,
   #contract-transactions-table,
@@ -91,7 +95,8 @@
   }
 
   // stacked table first two columns as rows
-  #transfers, #home-transactions,
+  #transfers,
+  #home-blocks,
   #blocks-table, #transactions-table,
   #transfers-table, #address-transfers-table,
   #contract-transactions-table,

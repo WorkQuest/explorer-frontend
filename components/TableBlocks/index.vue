@@ -5,10 +5,10 @@
       :fields="fields"
       borderless
       thead-class="table__header"
+      tbody-tr-class="table__row"
       caption-top
       sort-icon-right
-      :responsive="true"
-      tbody-tr-class="table__row"
+      responsive="xl"
       :busy="isLoading"
       :empty-text="$t('ui.block.noBlocks')"
       show-empty

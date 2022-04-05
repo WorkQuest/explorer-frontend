@@ -5,10 +5,10 @@
       :fields="fields"
       borderless
       thead-class="table__header"
+      tbody-tr-class="table__row"
       caption-top
       sort-icon-right
       responsive="xl"
-      tbody-tr-class="table__row"
       :busy="isLoading"
       :empty-text="$t('ui.tx.noTxs')"
       show-empty
@@ -210,4 +210,5 @@ export default {
 .icon-error {
   color: $red;
 }
+
 </style>
