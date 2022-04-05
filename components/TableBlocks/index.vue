@@ -20,7 +20,7 @@
         </div>
       </template>
       <template
-        v-if="$props.title || $scopedSlots['table-caption']"
+        v-if="$props.title || $slots['table-caption']"
         #table-caption
       >
         <slot name="table-caption" />
@@ -108,6 +108,9 @@ export default {
       isLoading: 'main/getIsLoading',
       symbol: 'tokens/getWUSDTokenSymbol',
     }),
+  },
+  mounted() {
+    console.log('this: ', this);
   },
 };
 </script>
