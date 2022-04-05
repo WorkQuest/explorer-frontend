@@ -154,8 +154,8 @@ export default {
   text-align: center;
   padding: 4px;
   &_green {
-    background: rgba(34, 204, 20, 0.1);
-    color: $default-green;
+    background: $green100;
+    color: $green;
   }
   &_red {
     background: rgba(223, 51, 51, 0.1);

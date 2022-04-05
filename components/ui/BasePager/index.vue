@@ -1,68 +1,66 @@
 <template>
-  <div class="pager-wrapper">
-    <div class="pager">
-      <button
-        class="pager__icon"
-        :class="{'pager__icon_disabled': value === 1}"
-        :disabled="value === 1"
-        @click="prevPage"
+  <div class="pager">
+    <button
+      class="pager__icon"
+      :class="{'pager__icon_disabled': value === 1}"
+      :disabled="value === 1"
+      @click="prevPage"
+    >
+      <img
+        v-if="value === 1"
+        src="~/assets/img/ui/pagerNext_disabled.svg"
+        class="pager__img"
+        alt="<"
       >
-        <img
-          v-if="value === 1"
-          src="~/assets/img/ui/pagerNext_disabled.svg"
-          class="pager__img"
-          alt="<"
-        >
-        <img
-          v-else
-          src="~/assets/img/ui/pagerNext.svg"
-          class="pager__img pager__img_prev"
-          alt="<"
-        >
-      </button>
-      <div class="pager__items">
+      <img
+        v-else
+        src="~/assets/img/ui/pagerNext.svg"
+        class="pager__img pager__img_prev"
+        alt="<"
+      >
+    </button>
+    <div class="pager__items">
+      <div
+        v-for="(item, i) in formedPages"
+        :key="`page-${i}`"
+        class="pager__item"
+        :class="{'pager__item_active': value === item}"
+      >
         <div
-          v-for="(item, i) in formedPages"
-          :key="`page-${i}`"
-          class="pager__item"
-          :class="{'pager__item_active': value === item}"
+          v-if="item === -1"
+          class="pager__dots"
         >
-          <div
-            v-if="item === -1"
-            class="pager__dots"
-          >
-            ...
-          </div>
-          <button
-            v-else
-            class="pager__cloud"
-            :class="{'pager__cloud_active': value === item}"
-            @click="setPage(item)"
-          >
-            {{ item }}
-          </button>
+          ...
         </div>
-      </div>
-      <button
-        class="pager__icon"
-        :class="{'pager__icon_disabled': value === totalPages}"
-        :disabled="value === totalPages"
-        @click="nextPage"
-      >
-        <img
-          v-if="value === totalPages"
-          src="~/assets/img/ui/pagerNext_disabled.svg"
-          class="pager__img pager__img_prev"
-          alt=">"
-        >
-        <img
+        <button
           v-else
-          src="~/assets/img/ui/pagerNext.svg"
-          class="pager__img"
-          alt=">"
+          class="pager__cloud"
+          :class="{'pager__cloud_active': value === item}"
+          @click="setPage(item)"
         >
-      </button>
+          {{ item }}
+        </button>
+      </div>
     </div>
+    <button
+      class="pager__icon"
+      :class="{'pager__icon_disabled': value === totalPages}"
+      :disabled="value === totalPages"
+      @click="nextPage"
+    >
+      <img
+        v-if="value === totalPages"
+        src="~/assets/img/ui/pagerNext_disabled.svg"
+        class="pager__img pager__img_prev"
+        alt=">"
+      >
+      <img
+        v-else
+        src="~/assets/img/ui/pagerNext.svg"
+        class="pager__img"
+        alt=">"
+      >
+    </button>
   </div>
 </template>
 
@@ -143,7 +141,10 @@ export default {
   border-radius: 6px;
   margin-left: auto;
   display: flex;
-  background-color: #FFFFFF;
+  background-color: $white;
+  align-items: center;
+  justify-content: flex-end;
+  max-width: max-content;
 
   &__dots {
     @include text-simple;
@@ -151,7 +152,7 @@ export default {
     font-size: 13px;
     line-height: 18px;
     letter-spacing: 0.04em;
-    color: #C6CBD9;
+    color: $black600;
     width: 40px;
     height: 40px;
     display: flex;
@@ -166,7 +167,7 @@ export default {
     border-left: 1px solid $black0;
 
     &_active {
-      background-color: #e6f3fa;
+      background-color: $blue100;
     }
   }
 
@@ -184,10 +185,10 @@ export default {
     font-size: 16px;
     line-height: 130%;
     letter-spacing: 0.04em;
-    color: #4C5767;
+    color: $black600;
 
     &_active {
-      color: #3A56FF;
+      color: $blue;
       cursor: default;
     }
   }
@@ -235,17 +236,12 @@ export default {
 @include _767 {
   .pager-wrapper {
     padding: 20px 0;
-    justify-content: center;
-    //background-color: $white;
-  }
-  .pager {
-    margin: auto;
+    justify-content: flex-end;
   }
 }
 
 @include _380 {
   .pager {
-    max-width: 375px;
     &__cloud {
       min-width: 37px;
     }
