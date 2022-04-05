@@ -1,68 +1,66 @@
 <template>
-  <div class="pager-wrapper">
-    <div class="pager">
-      <button
-        class="pager__icon"
-        :class="{'pager__icon_disabled': value === 1}"
-        :disabled="value === 1"
-        @click="prevPage"
+  <div class="pager">
+    <button
+      class="pager__icon"
+      :class="{'pager__icon_disabled': value === 1}"
+      :disabled="value === 1"
+      @click="prevPage"
+    >
+      <img
+        v-if="value === 1"
+        src="~/assets/img/ui/pagerNext_disabled.svg"
+        class="pager__img"
+        alt="<"
       >
-        <img
-          v-if="value === 1"
-          src="~/assets/img/ui/pagerNext_disabled.svg"
-          class="pager__img"
-          alt="<"
-        >
-        <img
-          v-else
-          src="~/assets/img/ui/pagerNext.svg"
-          class="pager__img pager__img_prev"
-          alt="<"
-        >
-      </button>
-      <div class="pager__items">
+      <img
+        v-else
+        src="~/assets/img/ui/pagerNext.svg"
+        class="pager__img pager__img_prev"
+        alt="<"
+      >
+    </button>
+    <div class="pager__items">
+      <div
+        v-for="(item, i) in formedPages"
+        :key="`page-${i}`"
+        class="pager__item"
+        :class="{'pager__item_active': value === item}"
+      >
         <div
-          v-for="(item, i) in formedPages"
-          :key="`page-${i}`"
-          class="pager__item"
-          :class="{'pager__item_active': value === item}"
+          v-if="item === -1"
+          class="pager__dots"
         >
-          <div
-            v-if="item === -1"
-            class="pager__dots"
-          >
-            ...
-          </div>
-          <button
-            v-else
-            class="pager__cloud"
-            :class="{'pager__cloud_active': value === item}"
-            @click="setPage(item)"
-          >
-            {{ item }}
-          </button>
+          ...
         </div>
-      </div>
-      <button
-        class="pager__icon"
-        :class="{'pager__icon_disabled': value === totalPages}"
-        :disabled="value === totalPages"
-        @click="nextPage"
-      >
-        <img
-          v-if="value === totalPages"
-          src="~/assets/img/ui/pagerNext_disabled.svg"
-          class="pager__img pager__img_prev"
-          alt=">"
-        >
-        <img
+        <button
           v-else
-          src="~/assets/img/ui/pagerNext.svg"
-          class="pager__img"
-          alt=">"
+          class="pager__cloud"
+          :class="{'pager__cloud_active': value === item}"
+          @click="setPage(item)"
         >
-      </button>
+          {{ item }}
+        </button>
+      </div>
     </div>
+    <button
+      class="pager__icon"
+      :class="{'pager__icon_disabled': value === totalPages}"
+      :disabled="value === totalPages"
+      @click="nextPage"
+    >
+      <img
+        v-if="value === totalPages"
+        src="~/assets/img/ui/pagerNext_disabled.svg"
+        class="pager__img pager__img_prev"
+        alt=">"
+      >
+      <img
+        v-else
+        src="~/assets/img/ui/pagerNext.svg"
+        class="pager__img"
+        alt=">"
+      >
+    </button>
   </div>
 </template>
 
@@ -144,6 +142,9 @@ export default {
   margin-left: auto;
   display: flex;
   background-color: $white;
+  align-items: center;
+  justify-content: flex-end;
+  max-width: max-content;
 
   &__dots {
     @include text-simple;
@@ -241,7 +242,6 @@ export default {
 
 @include _380 {
   .pager {
-    max-width: 375px;
     &__cloud {
       min-width: 37px;
     }
