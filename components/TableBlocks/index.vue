@@ -109,8 +109,5 @@ export default {
       symbol: 'tokens/getWUSDTokenSymbol',
     }),
   },
-  mounted() {
-    console.log('this: ', this);
-  },
 };
 </script>
