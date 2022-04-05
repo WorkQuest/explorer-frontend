@@ -251,7 +251,7 @@ export default {
 }
 
 .contract {
-  //animation: show 1s 1;
+  animation: show 1s 1;
   @include container;
 
   &__search {

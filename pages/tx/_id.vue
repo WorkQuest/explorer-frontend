@@ -441,7 +441,7 @@ export default {
 }
 
 .txs {
-  //animation: show 1s 1;
+  animation: show 1s 1;
   @include container;
 
   &__search {
@@ -801,10 +801,6 @@ export default {
 
     &__info {
       margin: 15px 0 0 0;
-
-      &_desktop {
-        //display: none;
-      }
 
       &_mobile {
         display: block;

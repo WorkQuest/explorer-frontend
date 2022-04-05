@@ -113,7 +113,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .home {
-  //animation: show 1s 1;
+  animation: show 1s 1;
 
   &__header {
     background: $darkblue;

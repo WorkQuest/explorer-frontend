@@ -130,7 +130,7 @@ export default {
 
 <style lang="scss" scoped>
 .transactions {
-  //animation: show 1s 1;
+  animation: show 1s 1;
   @include container;
 
   &__search {

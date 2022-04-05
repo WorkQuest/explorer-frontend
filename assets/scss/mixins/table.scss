@@ -47,7 +47,25 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1199px) {
+  #transfers, #home-transactions,
+  #blocks-table, #transactions-table,
+  #transfers-table, #address-transfers-table,
+  #contract-transactions-table,
+  #contract-internal-transactions-table,
+  #tokens-transfers-table {
+    & > div {
+      overflow-x: scroll;
+      position: relative;
+    }
+    & > div > table {
+      width: 1100px;
+    }
+  }
+}
+
+
+@media (max-width: 767px) {
   .table.b-table.b-table-stacked-md {
     font-family: 'Inter', sans-serif;
   }
@@ -79,6 +97,15 @@
   #contract-transactions-table,
   #contract-internal-transactions-table,
   #tokens-transfers-table {
+
+    & > div {
+      overflow: auto;
+      position: static;
+    }
+    & > div > table {
+      width: 100%;
+    }
+
     .table.b-table.b-table-stacked-md > tbody > tr {
       display: flex;
       flex-direction: column;

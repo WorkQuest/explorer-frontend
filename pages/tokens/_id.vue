@@ -248,7 +248,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .token {
-  //animation: show 1s 1;
+  animation: show 1s 1;
   @include container;
 
   &__search {

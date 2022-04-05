@@ -7,7 +7,7 @@
       thead-class="table__header"
       caption-top
       sort-icon-right
-      :responsive="true"
+      responsive="xl"
       tbody-tr-class="table__row"
       :busy="isLoading"
       :empty-text="$t('ui.tx.noTxs')"
