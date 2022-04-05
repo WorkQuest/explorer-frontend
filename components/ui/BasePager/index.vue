@@ -131,11 +131,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.pager-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
 
 .pager {
   border-radius: 6px;
@@ -231,12 +226,6 @@ export default {
     &_prev {
       transform: rotate(180deg);
     }
-  }
-}
-@include _767 {
-  .pager-wrapper {
-    padding: 20px 0;
-    justify-content: flex-end;
   }
 }
 
