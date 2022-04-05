@@ -118,7 +118,7 @@
       <div
         v-if="activeTab === 'contract'"
         id="contract"
-        class="table__contract"
+        class="tables__contract"
       >
         <contract-info
           type="contract"
@@ -305,13 +305,14 @@ export default {
 }
 
 .tables {
-  background: $white;
   border-radius: 6px;
-  padding-top: 20px;
   min-height: 450px;
 
   &__menu {
-    margin: 0 0 27px 20px
+    padding: 20px;
+    background: $white;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
   }
 
   &__tab {
@@ -332,8 +333,15 @@ export default {
   }
 
   &__table {
+    background: $white;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+  }
+
+  &__contract {
+    background-color: $white;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
   }
 }
 

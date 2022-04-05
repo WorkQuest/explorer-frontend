@@ -118,9 +118,6 @@ export default {
       display: none;
     }
 
-    &__pager {
-      margin: 16px;
-    }
   }
   .items {
     display: block;

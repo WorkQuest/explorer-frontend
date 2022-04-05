@@ -70,12 +70,10 @@
                   {{ $t('ui.tx.transactionFull') }}
                 </p>
                 <span
-                  v-for="(item, i) in txsLogs"
-                  :key="i"
+                  v-if="tx.hash"
                   class="table__number"
-                  :class="item.class"
                 >
-                  {{ item.text }}
+                  {{ tx.hash }}
                 </span>
                 <template v-for="(item, index) in tx.logs">
                   <template v-if="item.first_topic">
@@ -93,11 +91,8 @@
                         <p class="topic__index">
                           0
                         </p>
-                        <p class="topic__item topic__item_desktop">
+                        <p class="topic__item">
                           {{ item.first_topic }}
-                        </p>
-                        <p class="topic__item topic__item_mobile">
-                          {{ formatItem(item.first_topic, 9, 6) }}
                         </p>
                       </div>
                       <div
@@ -108,11 +103,8 @@
                         <p class="topic__index">
                           1
                         </p>
-                        <p class="topic__item topic__item_desktop">
+                        <p class="topic__item">
                           {{ item.second_topic }}
-                        </p>
-                        <p class="topic__item topic__item_mobile">
-                          {{ formatItem(item.second_topic, 9, 6) }}
                         </p>
                       </div>
                       <div
@@ -123,11 +115,8 @@
                         <p class="topic__index">
                           2
                         </p>
-                        <p class="topic__item topic__item_desktop">
+                        <p class="topic__item">
                           {{ item.third_topic }}
-                        </p>
-                        <p class="topic__item topic__item_mobile">
-                          {{ formatItem(item.third_topic, 9, 6) }}
                         </p>
                       </div>
                       <div
@@ -138,11 +127,8 @@
                         <p class="topic__index">
                           3
                         </p>
-                        <p class="topic__item topic__item_desktop">
+                        <p class="topic__item">
                           {{ item.fourth_topic }}
-                        </p>
-                        <p class="topic__item topic__item_mobile">
-                          {{ formatItem(item.fourth_topic, 9, 6) }}
                         </p>
                       </div>
                     </div>
@@ -156,11 +142,8 @@
                       :key="`${index}_dataContent`"
                       class="table__data"
                     >
-                      <div class="table__data_desktop">
+                      <div class="table__data">
                         {{ item.data }}
-                      </div>
-                      <div class="table__data_mobile">
-                        {{ formatItem(item.data, 9, 6) }}
                       </div>
                     </div>
                   </template>
@@ -595,6 +578,7 @@ export default {
 
     &_desktop {
       display: block;
+      overflow-wrap: anywhere;
     }
 
     &_mobile {
@@ -610,6 +594,7 @@ export default {
   &__item {
     &_desktop {
       display: block;
+      overflow-wrap: anywhere;
     }
 
     &_mobile {
@@ -661,26 +646,15 @@ export default {
   &__data {
     @include text-simple;
     margin-bottom: 20px;
-    &_desktop {
-      overflow-wrap: anywhere;
-      width: 600px;
-      text-align: justify;
-    }
-    &_mobile {
-     display: none;
-    }
+    overflow-wrap: anywhere;
+    max-width: 600px;
+    text-align: justify;
   }
   &__number {
     @include text-simple;
     color: $blue;
-    font-weight: 600;
     margin-bottom: 5px;
-    &_desktop {
-      display: block;
-    }
-    &_mobile {
-      display: none;
-    }
+    overflow-wrap: anywhere;
   }
 }
 
@@ -700,15 +674,12 @@ export default {
     height: 21px;
     margin-right: 10px;
     font-size: 12px;
+    padding-right: 5px;
+    padding-left: 5px;
   }
   &__item {
     @include text-simple;
-    &_desktop {
-      display: block;
-    }
-    &_mobile {
-      display: none;
-    }
+    overflow-wrap: anywhere;
   }
 }
 
@@ -804,8 +775,8 @@ export default {
       border-radius: 6px;
       width: 61px;
       &_green {
-        background: rgba(34, 204, 20, 0.1);
-        color: $default-green;
+        background: $green100;
+        color: $green;
         text-align: center;
         display: inline-block;
       }
@@ -833,81 +804,30 @@ export default {
       display: grid;
     }
 
-    &__number {
-      display: none;
-
-      &_mobile {
-        display: block;
-        @include text-simple;
-        color: $blue;
-        margin: 15px 0;
-        font-size: 20px;
-      }
-    }
-
-    &__item {
-      display: none;
-
-      &_mobile {
-        display: inline-block;
-      }
-    }
-
     &__info {
       margin: 15px 0 0 0;
 
       &_desktop {
-        display: none;
+        //display: none;
       }
 
       &_mobile {
         display: block;
       }
     }
-  }
-  .columns {
-    display: none;
   }
   .content {
     &__table {
       grid-template-columns: 1fr
     }
   }
-  .table {
-    &__title {
-      text-align: left;
-    }
-    &__data {
-      &_desktop {
-        display: none;
-      }
-      &_mobile {
-        display: block;
-      }
-    }
-    &__number {
-      &_desktop {
-        display: none;
-      }
-      &_mobile {
-        display: block;
-      }
-    }
+  .table__title {
+    text-align: left;
   }
   .icon-copy {
     color: $blue;
     font-size: 20px;
     cursor: pointer;
-  }
-  .topic {
-    &__item {
-      &_desktop {
-        display: none;
-      }
-      &_mobile {
-        display: block;
-      }
-    }
   }
 }
 </style>

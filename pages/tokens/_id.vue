@@ -307,12 +307,15 @@ export default {
 }
 
 .tables {
-  background: $white;
   border-radius: 6px;
-  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
 
   &__menu {
-    margin: 0 0 27px 20px
+    padding: 20px;
+    background: $white;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
   }
 
   &__tab {
@@ -338,7 +341,8 @@ export default {
 }
 
 .token-info {
-  padding: 0 0 10px 20px;
+  padding: 0 20px 20px 20px;
+  background-color: $white;
 
   &__title {
     @include text-simple;
@@ -363,15 +367,17 @@ export default {
   }
 }
 
+.tables__contract {
+  background-color: $white;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
 @include _767 {
   .token {
     &__info {
       grid-template-columns: 1fr;
       grid-gap: 0;
-    }
-
-    &__pager {
-      margin: 16px;
     }
 
     &__header {
@@ -382,10 +388,12 @@ export default {
     display: none;
   }
   .tables {
-    padding: 16px;
+    padding: 16px 16px 0 16px;
+    background-color: $white;
 
     &__menu {
       margin: 0 0 15px 0;
+      padding: 0;
     }
 
     &__info, &__contract {
