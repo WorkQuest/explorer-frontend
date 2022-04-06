@@ -47,7 +47,12 @@ export default {
         { key: 'number', label: this.$t('ui.block.blockNumber'), sortable: true },
         { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
         { key: 'transactionsCount', label: this.$t('ui.block.txn'), sortable: true },
-        { key: 'gas_used', label: this.$t('ui.block.gasUsed'), sortable: true },
+        {
+          key: 'gas_used',
+          label: this.$t('ui.block.gasUsed'),
+          sortable: true,
+          formatter: (value, key, item) => `${this.NumberFormat((+value / +item.gas_limit) * 100, 4)}%`,
+        },
         { key: 'gas_limit', label: this.$t('ui.block.gasLimit'), sortable: true },
       ];
     },

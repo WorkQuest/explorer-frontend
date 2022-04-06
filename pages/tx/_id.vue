@@ -122,7 +122,7 @@
               </div>
               <div class="overview__subtitle">
                 {{ $t('ui.block.gasUsed') }}
-                <span class="overview__info">{{ gasUsed }}</span>
+                <span class="overview__info">{{ gasUsed }} ({{ NumberFormat((gasUsed / gasLimit) * 100, 4) }}%) </span>
               </div>
               <div class="overview__subtitle">
                 {{ $t('ui.block.gasLimit') }}
@@ -285,7 +285,7 @@ export default {
       return +this.tx?.block?.gas_limit || 0;
     },
     gasUsed() {
-      return this.tx?.gas_used || 0;
+      return +this.tx?.gas_used || 0;
     },
     gasPrice() {
       return this.NumberFormat(this.tx?.gas_price || 0);
@@ -356,7 +356,7 @@ export default {
           {
             class: 'columns__item_four-two',
             title: this.$t('ui.tx.gasUsed'),
-            info: `${this.gasUsed} (${(this.gasUsed / this.gasLimit) * 100}%)`,
+            info: `${this.gasUsed} (${this.NumberFormat((this.gasUsed / this.gasLimit) * 100, 4)}%)`,
           },
           {
             class: 'columns__item_four-three',
