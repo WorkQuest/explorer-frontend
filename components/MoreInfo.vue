@@ -167,6 +167,7 @@ export default {
 
   &__link {
     @include link;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -178,40 +179,13 @@ export default {
 
 @include _767 {
   .info {
-    @include container;
-    max-width: 100vw;
-
+    max-width: 100%;
     &__title {
       display: block;
     }
 
     &__info {
-      max-width: 700px;
       word-wrap: break-word;
-    }
-  }
-}
-
-@include _575 {
-  .info {
-    &__info {
-      max-width: 500px;
-    }
-  }
-}
-
-@include _480 {
-  .info {
-    &__info {
-      max-width: 400px;
-    }
-  }
-}
-
-@include _380 {
-  .info {
-    &__info {
-      max-width: 300px;
     }
   }
 }

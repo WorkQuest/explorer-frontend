@@ -1,25 +1,13 @@
 
 @mixin container {
-  max-width: 1180px;
-  margin: 0 auto;
-  width: 98%;
-  padding-left: 10px;
-  padding-right: 10px;
-  @include _1199 {
-    max-width: 1070px;
-    width: 98%;
-    //padding-left: 10px;
-    //padding-right: 10px;
-  }
-  @include _1024 {
-    max-width: 1000px;
-
-  }
-  @include _991 {
-    max-width: 970px;
-  }
+  max-width: 1200px;
+  margin-right: auto;
+  margin-left: auto;
+  width: 100%;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
   @include _767 {
-    max-width: 100%;
-    width: 100vw;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
   }
 }

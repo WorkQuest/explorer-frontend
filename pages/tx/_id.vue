@@ -158,16 +158,16 @@
                 {{ $t('ui.tx.logs') }}
               </p>
 
-              <div class="content__table table">
+              <div class="content__table log">
                 <p
                   v-if="Array.isArray(tx.logs) && tx.logs.length > 0"
-                  class="table__title"
+                  class="log__title"
                 >
                   {{ $t('ui.tx.transactionFull') }}
                 </p>
                 <span
                   v-if="tx.hash"
-                  class="table__number"
+                  class="log__number"
                 >
                   {{ tx.hash }}
                 </span>
@@ -175,13 +175,13 @@
                   <template v-if="item.first_topic">
                     <p
                       :key="`${index}_title`"
-                      class="table__title"
+                      class="log__title"
                     >
                       {{ $t('ui.tx.topics') }}
                     </p>
                     <div
                       :key="`${index}_firstTopic`"
-                      class="table__topic"
+                      class="log__topic"
                     >
                       <div class="topic">
                         <p class="topic__index">
@@ -230,15 +230,15 @@
                     </div>
                     <p
                       :key="`${index}_dataTitle`"
-                      class="table__title"
+                      class="log__title"
                     >
                       {{ $t('ui.tx.data') }}
                     </p>
                     <div
                       :key="`${index}_dataContent`"
-                      class="table__data"
+                      class="log__data"
                     >
-                      <div class="table__data">
+                      <div class="log__data">
                         {{ item.data }}
                       </div>
                     </div>
@@ -623,7 +623,7 @@ export default {
   }
 }
 
-.table {
+.log {
   &__title {
     @include text-simple;
     font-weight: 600;
@@ -688,22 +688,8 @@ export default {
 
 @include _991 {
   .txs {
-    &__columns {
-      grid-gap: 5px;
-    }
-  }
-}
-
-@include _767 {
-  .txs {
     &__info {
       padding: 16px;
-    }
-    &__title {
-      margin-left: 16px;
-    }
-    &__back {
-      margin-left: 16px;
     }
   }
   .overview {
@@ -787,6 +773,11 @@ export default {
         width: auto;
         color: $red;
       }
+    }
+  }
+  .log {
+    &__title {
+      text-align: left;
     }
   }
   .logs {

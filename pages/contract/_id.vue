@@ -305,12 +305,6 @@ export default {
     display: none;
   }
 
-  &__table {
-    background: $white;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
-
   &__contract {
     background-color: $white;
     border-bottom-left-radius: 6px;
@@ -340,16 +334,13 @@ export default {
       grid-template-columns: 1fr;
       grid-gap: 0;
     }
-
-    &__pager {
-      margin: 16px;
-    }
   }
   .tables {
     &__menu {
       margin: 0;
       display: flex;
       gap: 5px;
+      flex-wrap: wrap;
     }
 
     &__tab {

@@ -350,7 +350,7 @@ export default {
   justify-content: center;
 
   &__body {
-    max-width: 1180px;
+    @include container;
     width: 100%;
     display: flex;
     align-items: center;
@@ -562,13 +562,6 @@ export default {
     }
   }
   .header {
-    &__body {
-      margin: 0 20px 0 20px;
-    }
-
-    &__links {
-    }
-
     &__right {
       grid-gap: 0;
     }
@@ -607,11 +600,12 @@ export default {
     }
 
     &__links {
-      grid-gap: 15px;
+      grid-gap: 10px;
     }
 
     &__link {
       font-size: 17px;
+      white-space: nowrap;
     }
   }
 }

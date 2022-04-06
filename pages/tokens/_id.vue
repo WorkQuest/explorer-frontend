@@ -62,6 +62,7 @@
         class="tables__holders"
       >
         <table-tokens
+          id="tokens-holders-table"
           class="tables__table"
           :is-only="false"
           :items="tokenHolders"

@@ -1,5 +1,5 @@
 <template>
-  <div class="table">
+  <div class="table-wrapper">
     <b-table
       :items="items"
       :fields="fields"

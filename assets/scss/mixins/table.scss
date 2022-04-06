@@ -2,11 +2,8 @@
 @import "../vars";
 
 .table {
-  overflow-x: hidden;
   font-size: 16px;
   line-height: 130%;
-  background: #FFFFFF;
-  border-radius: 6px;
   &__titles {
     display: flex;
     justify-content: space-between;
@@ -47,27 +44,41 @@
   }
 }
 
-.column-style {
-  max-width: 200px !important;
+.table td {
+  white-space: nowrap;
+}
+
+.table-responsive-xl {
+  border-radius: 6px;
+}
+
+table {
+  background: $white;
+  & > caption {
+    background: $white;
+  }
 }
 
 @media (max-width: 1199px) {
   #transfers,
-  #blocks-table, #transactions-table,
-  #transfers-table, #address-transfers-table,
+  #blocks-table,
+  #transactions-table,
+  #transfers-table,
+  #address-transfers-table,
   #contract-transactions-table,
   #contract-internal-transactions-table,
-  #tokens-transfers-table {
-    & > div {
-      overflow-x: scroll;
+  #tokens-transfers-table,
+  #tokens-holders-table {
+    display: grid;
+    width: 100%;
+    max-width: 100%;
+    & > .table-responsive-xl > table {
       position: relative;
-    }
-    & > div > table {
-      width: 1100px;
+      overflow: auto;
+      width: 1160px;
     }
   }
 }
-
 
 @media (max-width: 767px) {
   .table.b-table.b-table-stacked-md {
@@ -93,6 +104,15 @@
   .table th, .table td {
     padding: 0.75rem 0.75rem 0.75rem 20px;
   }
+  .b-table-empty-row {
+    justify-content: center;
+  }
+
+  #tokens-holders-table {
+    & > .table-responsive-xl > table {
+      width: 100%;
+    }
+  }
 
   // stacked table first two columns as rows
   #transfers,
@@ -103,11 +123,11 @@
   #contract-internal-transactions-table,
   #tokens-transfers-table {
 
-    & > div {
+    & > .table-responsive-xl {
       overflow: auto;
       position: static;
     }
-    & > div > table {
+    & > .table-responsive-xl > table {
       width: 100%;
     }
 
