@@ -47,6 +47,13 @@
     >
       {{ info === 1 ? this.$t('ui.tx.transactionSuccess') : this.$t('ui.tx.transactionFail') }}
     </p>
+
+    <p
+      v-else-if="item === 'timestamp'"
+      class="item__info"
+    >
+      <slot name="timestamp" />
+    </p>
     <p
       v-else
       class="item__info"
