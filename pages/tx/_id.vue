@@ -112,10 +112,6 @@
                   icon-color="primary"
                 />
               </div>
-              <div class="overview__subtitle">
-                {{ $t('ui.tx.amount') }}
-                <span class="overview__info">{{ ConvertFromDecimals(tx.value, decimals) }} {{ symbol }}</span>
-              </div>
               <div class="overview__subtitle  overview__subtitle_underlined">
                 {{ $t('ui.tx.fee') }}
                 <span class="overview__info">{{ fee }}</span>
@@ -134,7 +130,7 @@
               </div>
               <div class="overview__subtitle">
                 {{ $t('ui.tx.value') }}
-                <span class="overview__info">{{ value }}</span>
+                <span class="overview__info">{{ value }} {{ symbol }}</span>
               </div>
             </div>
           </div>
@@ -291,9 +287,7 @@ export default {
       return this.NumberFormat(this.tx?.gas_price || 0);
     },
     fee() {
-      return new BigNumber(this.tx.gas_price * this.gasUsed)
-        .shiftedBy(-this.decimals)
-        .toString();
+      return new BigNumber(this.tx.gas_price * this.gasUsed).toString();
     },
     value() {
       return this.ConvertFromDecimals(this.tx?.value, this.decimals);
@@ -504,6 +498,17 @@ export default {
       @include text-simple;
       border-bottom: 2px solid $blue;
     }
+  }
+
+  &__columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 20px;
+    margin-top: 28px;
+  }
+
+  &__logs {
+    margin-top: 25px;
   }
 }
 
