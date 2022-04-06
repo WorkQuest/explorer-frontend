@@ -82,7 +82,7 @@ Vue.mixin({
       return moment(data).format('dd mm yy');
     },
     formatDataFromNow(data) {
-      return moment(data).startOf('hour').fromNow();
+      return moment(data).fromNow();
     },
     ConvertFromDecimals(value, decimals, decimalPlaces = null) {
       if (!value || !decimals) {
