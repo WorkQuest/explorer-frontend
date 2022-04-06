@@ -48,12 +48,19 @@
             :info="item.info"
             :note="item.note"
             :item="item.item"
-          />
+          >
+            <template
+              v-if="item.item === 'timestamp'"
+              #timestamp
+            >
+              {{ dateFromNow }}
+            </template>
+          </info-item>
         </div>
         <div class="block__columns_mobile columns">
           <div class="columns__time">
             <span class="columns__timestamp">
-              {{ formatDataFromNow(currentBlock.timestamp) }}
+              {{ dateFromNow }}
             </span>
             <div class="columns__subtitle">
               {{ $t('ui.timestamp') }}
@@ -107,7 +114,6 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import BigNumber from 'bignumber.js';
 
 /** @param  { Object } currentBlock  */
 /** @param  {{ string }} currentBlock.size  */
@@ -124,6 +130,9 @@ export default {
       limit: 10,
       offset: 0,
       index: 0,
+      timer: null,
+      time: Date.now(),
+      minute: 60000,
     };
   },
   computed: {
@@ -135,16 +144,14 @@ export default {
     }),
     blockColumns() {
       if (Object.keys(this.currentBlock).length > 0) {
-        const fee = new BigNumber(this.currentBlock.base_fee_per_gas).multipliedBy(this.currentBlock.gas_used)
-          .shiftedBy(-this.decimals)
-          .toString();
         const gasUsed = `${this.currentBlock.gas_used} (${(this.currentBlock.gas_used / this.currentBlock.gas_limit) * 100}%)`;
         return [
           {
             title: this.$t('ui.timestamp'),
-            info: this.formatDataFromNow(this.currentBlock.timestamp),
+            info: this.currentBlock.timestamp,
             note: `(${this.$moment(this.currentBlock.timestamp)
               .format('MMM-DD-YYYY HH:mm:ss A +UTC')})`,
+            item: 'timestamp',
           },
           {
             title: this.$t('ui.txs'),
@@ -181,13 +188,21 @@ export default {
     historyPath() {
       return sessionStorage.getItem('backRoute');
     },
+    dateFromNow() {
+      return this.time && this.formatDataFromNow(this.currentBlock.timestamp);
+    },
   },
   async mounted() {
     await this.SetLoader(true);
     await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
     await this.SetLoader(false);
+    clearInterval(Number(this.timer));
+    this.timer = setInterval(() => {
+      this.time = Date.now();
+    }, this.minute);
   },
   beforeDestroy() {
+    clearInterval(Number(this.timer));
     this.$store.commit('blocks/resetBlock');
   },
   methods: {
