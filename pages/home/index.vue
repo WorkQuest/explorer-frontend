@@ -15,10 +15,9 @@
       </div>
     </div>
     <div class="home__tables">
-      <div class="home__content">
+      <div class="home__table">
         <table-blocks
           id="home-blocks"
-          class="home__table"
           :items="blocks"
           :fields="tableHeadersBlocks"
         >
@@ -35,10 +34,9 @@
           </template>
         </table-blocks>
       </div>
-      <div class="home__content">
+      <div class="home__table">
         <table-txs
           id="home-transactions"
-          class="home__table"
           :items="txs"
           :fields="tableHeadersTxs"
         >

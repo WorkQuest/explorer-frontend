@@ -229,6 +229,13 @@ export default {
   }
 }
 
+@include _480 {
+  .pager {
+    margin: 0 auto;
+    width: auto;
+  }
+}
+
 @include _380 {
   .pager {
     &__cloud {
