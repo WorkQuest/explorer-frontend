@@ -17,4 +17,10 @@ export default {
   resetBlock(state) {
     state.block = {};
   },
+  resetBlocksInfo(state) {
+    state.blocksInfo = {
+      count: 0,
+      blocks: [],
+    };
+  },
 };

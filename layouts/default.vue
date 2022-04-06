@@ -92,22 +92,8 @@
           >
             <div class="header__links">
               <span
-                v-for="(item, i) in mobileMenuLinks1"
-                :key="`${i}-mobileMenuLinks1`"
-                @click="toggleMobileMenu()"
-              >
-                <nuxt-link
-                  :to="item.path"
-                  class="header__link"
-                  :active-class="'header__link_active'"
-                >
-                  {{ item.title }}
-                </nuxt-link>
-              </span>
-              <p class="header__separator" />
-              <span
-                v-for="(item, i) in mobileMenuLinks2"
-                :key="`${i}-mobileMenuLinks2`"
+                v-for="(item, i) in menuLinks"
+                :key="`${i}-mobileMenuLinks`"
                 @click="toggleMobileMenu()"
               >
                 <nuxt-link
@@ -121,7 +107,10 @@
             </div>
           </div>
         </div>
-        <div class="template__content">
+        <div
+          class="template__content"
+          :class="{'hidden': isMobileMenu}"
+        >
           <nuxt :key="$route.query.page || $route.path" />
         </div>
         <div class="template__footer footer">
@@ -199,34 +188,6 @@ export default {
           title: this.$t('ui.blocks'),
           path: '/blocks',
         },
-        {
-          title: this.$t('ui.transfers'),
-          path: '/transfers',
-        },
-        {
-          title: this.$t('ui.tokens'),
-          path: '/tokens',
-        },
-      ];
-    },
-    mobileMenuLinks1() {
-      return [
-        {
-          title: this.$t('ui.home'),
-          path: '/home',
-        },
-        {
-          title: this.$t('ui.blocks'),
-          path: '/blocks',
-        },
-        {
-          title: this.$t('ui.txs'),
-          path: '/tx',
-        },
-      ];
-    },
-    mobileMenuLinks2() {
-      return [
         {
           title: this.$t('ui.transfers'),
           path: '/transfers',
@@ -389,7 +350,7 @@ export default {
   justify-content: center;
 
   &__body {
-    max-width: 1180px;
+    @include container;
     width: 100%;
     display: flex;
     align-items: center;
@@ -601,13 +562,6 @@ export default {
     }
   }
   .header {
-    &__body {
-      margin: 0 20px 0 20px;
-    }
-
-    &__links {
-    }
-
     &__right {
       grid-gap: 0;
     }
@@ -646,11 +600,12 @@ export default {
     }
 
     &__links {
-      grid-gap: 15px;
+      grid-gap: 10px;
     }
 
     &__link {
       font-size: 17px;
+      white-space: nowrap;
     }
   }
 }
@@ -688,14 +643,11 @@ export default {
 
       &_mobile {
         display: inline-block;
-        grid-template-columns: 1fr;
-        grid-gap: 0;
-        grid-template-rows: auto 1fr;
-        align-items: flex-start;
         background: $white;
-        padding: 23px 16px;
+        padding: 20px;
         height: 100vh;
-        position: fixed;
+        width: 100vw;
+        position: absolute;
         left: 0;
         top: 72px;
       }
@@ -704,7 +656,13 @@ export default {
     &__links {
       flex-direction: column;
       align-items: flex-start;
-      width: 100vw;
+      &>span {
+        width: 100%;
+        &:nth-child(3){
+          border-bottom: 1px solid $black100;
+          padding-bottom: 10px;
+        }
+      }
     }
 
     &__separator {
@@ -718,6 +676,10 @@ export default {
     display: flex;
     justify-content: space-between;
     padding: 25px 15px;
+  }
+  .hidden {
+    overflow: hidden;
+    visibility: hidden;
   }
 }
 

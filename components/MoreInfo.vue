@@ -15,15 +15,10 @@
         >
           {{ token.contract_address_hash.hex }}
         </nuxt-link>
-        <button
-          v-clipboard:copy="token.contract_address_hash.hex"
-          v-clipboard:success="ClipboardSuccessHandler"
-          v-clipboard:error="ClipboardErrorHandler"
-          class="btn__copy"
-          type="button"
-        >
-          <span class="icon-copy" />
-        </button>
+        <button-copy
+          :value="token.contract_address_hash.hex"
+          icon-color="primary"
+        />
       </p>
       <p class="info__info">
         <span class="info__title">{{ $t('ui.token.decimals') }}</span>
@@ -172,6 +167,7 @@ export default {
 
   &__link {
     @include link;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -183,40 +179,13 @@ export default {
 
 @include _767 {
   .info {
-    @include container;
-    max-width: 100vw;
-
+    max-width: 100%;
     &__title {
       display: block;
     }
 
     &__info {
-      max-width: 700px;
       word-wrap: break-word;
-    }
-  }
-}
-
-@include _575 {
-  .info {
-    &__info {
-      max-width: 500px;
-    }
-  }
-}
-
-@include _480 {
-  .info {
-    &__info {
-      max-width: 400px;
-    }
-  }
-}
-
-@include _380 {
-  .info {
-    &__info {
-      max-width: 300px;
     }
   }
 }

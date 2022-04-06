@@ -1,17 +1,18 @@
 <template>
-  <div class="table">
+  <div class="table-wrapper">
     <b-table
       :items="items"
       :fields="fields"
       borderless
       thead-class="table__header"
+      tbody-tr-class="table__row"
       caption-top
       sort-icon-right
-      :responsive="true"
-      tbody-tr-class="table__row"
+      responsive="xl"
       :busy="isLoading"
       :empty-text="$t('ui.tx.noTxs')"
       show-empty
+      stacked="md"
     >
       <template #table-busy>
         <div class="text-center">
@@ -20,10 +21,14 @@
       </template>
 
       <template
-        v-if="isOnly"
+        v-if="$props.title || $slots['table-caption']"
         #table-caption
       >
-        <div class="table__titles">
+        <slot name="table-caption" />
+        <div
+          v-if="title"
+          class="table__titles"
+        >
           <span class="table__title">{{ $props.title }}</span>
         </div>
       </template>
@@ -196,7 +201,14 @@ export default {
     white-space: nowrap;
   }
 }
+.table {
+  &__link, &__grey {
+    font-size: 16px;
+  }
+}
+
 .icon-error {
   color: $red;
 }
+
 </style>

@@ -18,29 +18,125 @@
           {{ $t('ui.tx.txDetails') }}
         </h3>
         <div class="txs__info">
-          <div class="txs__number-field">
+          <div class="tab">
             <span
               v-for="(tab, i) in tabs"
               :key="i"
-              class="txs__tab_overview"
-              :class="{ 'txs__tab_active': activeTab === tab}"
+              class="tab__item"
+              :class="{ 'tab__item_active': activeTab === tab} "
               @click="onClick(tab)"
             >{{ $t(`ui.token.${tab}`) }}</span>
           </div>
           <div
             v-if="txsColumns.length > 0 && activeTab === 'overview'"
             id="overview"
-            class="txs__columns columns"
+            class="overview"
           >
-            <info-item
-              v-for="(item, i) in txsColumns"
-              :key="i"
-              :class="item.class"
-              :title="item.title"
-              :info="item.info"
-              :note="item.note"
-              :item="item.item"
-            />
+            <div class="overview__desktop txs__columns columns">
+              <info-item
+                v-for="(item, i) in txsColumns"
+                :key="i"
+                :class="item.class"
+                :title="item.title"
+                :info="item.info"
+                :note="item.note"
+                :item="item.item"
+              />
+            </div>
+            <div class="overview__mobile">
+              <div class="overview__hash">
+                <p>{{ $t('ui.tx.transaction') }}</p>
+
+                <nuxt-link
+                  class="overview__link"
+                  :to="`/tx/${(tx.hash)}`"
+                >
+                  {{ formatItem(tx.hash, 9, 6) }}
+                </nuxt-link>
+                <button-copy
+                  v-if="tx.hash"
+                  :value="tx.hash"
+                  icon-color="primary"
+                />
+              </div>
+              <p class="overview__timestamp">
+                {{ formatDataFromNow(tx.block.timestamp) }}
+              </p>
+              <div class="overview__subtitle">
+                {{ $t('ui.tx.status') }}
+                <p
+                  v-if="tx.status"
+                  class="overview__status"
+                  :class="{'overview__status_green': tx.status === 1, 'overview__status_red': tx.status === 2}"
+                >
+                  {{ tx.status === 1 ? this.$t('ui.tx.transactionSuccess') : this.$t('ui.tx.transactionFail') }}
+                </p>
+              </div>
+              <div class="overview__subtitle">
+                {{ $t('ui.block.blockNumber') }}
+                <nuxt-link
+                  v-if="tx.block_number"
+                  class="overview__link_small"
+                  :to="`/blocks/${tx.block_number}`"
+                >
+                  {{ tx.block_number }}
+                </nuxt-link>
+              </div>
+              <div class="overview__subtitle">
+                {{ $t('ui.tx.from') }}
+                <nuxt-link
+                  v-if="tx.from_address_hash"
+                  class="overview__link_small"
+                  :to="`/address/${tx.from_address_hash.hex}`"
+                >
+                  {{ formatItem(tx.from_address_hash.hex, 7, 6) }}
+                </nuxt-link>
+                <button-copy
+                  v-if="tx.from_address_hash"
+                  :value="tx.from_address_hash.hex"
+                  icon-color="primary"
+                />
+              </div>
+              <div class="overview__subtitle">
+                {{ $t('ui.tx.to') }}
+                <nuxt-link
+                  v-if="tx.to_address_hash"
+                  class="overview__link_small"
+                  :to="`/address/${tx.to_address_hash.hex}`"
+                >
+                  {{ formatItem(tx.to_address_hash.hex, 7, 6) }}
+                </nuxt-link>
+                <button-copy
+                  v-if="tx.to_address_hash"
+                  :value="tx.to_address_hash.hex"
+                  icon-color="primary"
+                />
+              </div>
+              <div class="overview__subtitle">
+                {{ $t('ui.tx.amount') }}
+                <span class="overview__info">{{ ConvertFromDecimals(tx.value, decimals) }} {{ symbol }}</span>
+              </div>
+              <div class="overview__subtitle  overview__subtitle_underlined">
+                {{ $t('ui.tx.fee') }}
+                <span class="overview__info">{{ fee }}</span>
+              </div>
+              <div class="overview__subtitle">
+                {{ $t('ui.block.gasUsed') }}
+                <span class="overview__info">{{ gasUsed }}</span>
+              </div>
+              <div class="overview__subtitle">
+                {{ $t('ui.block.gasLimit') }}
+                <span class="overview__info">{{ gasLimit }}</span>
+              </div>
+              <div class="overview__subtitle">
+                {{ $t('ui.tx.gasPrice') }}
+                <span class="overview__info">{{ gasPrice }}</span>
+              </div>
+              <div class="overview__subtitle">
+                {{ $t('ui.tx.value') }}
+                <span class="overview__info">{{ value }}</span>
+              </div>
+            </div>
           </div>
           <!-- logs -->
           <div
@@ -62,16 +158,16 @@
                 {{ $t('ui.tx.logs') }}
               </p>
 
-              <div class="content__table table">
+              <div class="content__table log">
                 <p
                   v-if="Array.isArray(tx.logs) && tx.logs.length > 0"
-                  class="table__title"
+                  class="log__title"
                 >
                   {{ $t('ui.tx.transactionFull') }}
                 </p>
                 <span
                   v-if="tx.hash"
-                  class="table__number"
+                  class="log__number"
                 >
                   {{ tx.hash }}
                 </span>
@@ -79,13 +175,13 @@
                   <template v-if="item.first_topic">
                     <p
                       :key="`${index}_title`"
-                      class="table__title"
+                      class="log__title"
                     >
                       {{ $t('ui.tx.topics') }}
                     </p>
                     <div
                       :key="`${index}_firstTopic`"
-                      class="table__topic"
+                      class="log__topic"
                     >
                       <div class="topic">
                         <p class="topic__index">
@@ -134,15 +230,15 @@
                     </div>
                     <p
                       :key="`${index}_dataTitle`"
-                      class="table__title"
+                      class="log__title"
                     >
                       {{ $t('ui.tx.data') }}
                     </p>
                     <div
                       :key="`${index}_dataContent`"
-                      class="table__data"
+                      class="log__data"
                     >
-                      <div class="table__data">
+                      <div class="log__data">
                         {{ item.data }}
                       </div>
                     </div>
@@ -152,114 +248,6 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- mobile -->
-    <div
-      v-if="tx && activeTab === 'overview'"
-      class="overview"
-    >
-      <div class="overview__hash">
-        <p>{{ $t('ui.tx.transaction') }}</p>
-
-        <nuxt-link
-          class="overview__link"
-          :to="`/tx/${(tx.hash)}`"
-        >
-          {{ formatItem(tx.hash, 9, 6) }}
-        </nuxt-link>
-      </div>
-      <p class="overview__timestamp">
-        {{ formatDataFromNow(tx.timestamp) }}
-      </p>
-      <div class="overview__subtitle">
-        {{ $t('ui.tx.status') }}
-        <span
-          v-if="tx.status === 0 || tx.status === 1"
-          class="overview__status"
-          :class="{'overview__status_green': tx.status === 1, 'overview__status_red': tx.status === 0}"
-        >
-          {{ tx.status === 1 ? this.$t('ui.tx.transactionSuccess') : this.$t('ui.tx.transactionFail') }}
-        </span>
-        <span
-          v-if="tx.error"
-          class="overview__status overview__status_error-text"
-        > {{ tx.error }} </span>
-      </div>
-      <div class="overview__subtitle">
-        {{ $t('ui.block.blockNumber') }}
-        <nuxt-link
-          v-if="tx.block_number"
-          class="overview__link_small"
-          :to="`/blocks/${tx.block_number}`"
-        >
-          {{ tx.block_number }}
-        </nuxt-link>
-      </div>
-      <div class="overview__subtitle">
-        {{ $t('ui.tx.from') }}
-        <nuxt-link
-          v-if="tx.from_address_hash"
-          class="overview__link_small"
-          :to="`/address/${tx.from_address_hash.hex}`"
-        >
-          {{ formatItem(tx.from_address_hash.hex, 7, 6) }}
-        </nuxt-link>
-        <button
-          v-if="tx.from_address_hash"
-          v-clipboard:copy="tx.from_address_hash.hex"
-          v-clipboard:success="ClipboardSuccessHandler"
-          v-clipboard:error="ClipboardErrorHandler"
-          class="btn__copy"
-          type="button"
-        >
-          <span class="icon-copy" />
-        </button>
-      </div>
-      <div class="overview__subtitle">
-        {{ $t('ui.tx.to') }}
-        <nuxt-link
-          v-if="tx.to_address_hash"
-          class="overview__link_small"
-          :to="`/address/${tx.to_address_hash.hex}`"
-        >
-          {{ formatItem(tx.to_address_hash.hex, 7, 6) }}
-        </nuxt-link>
-        <button
-          v-if="tx.to_address_hash"
-          v-clipboard:copy="tx.to_address_hash.hex"
-          v-clipboard:success="ClipboardSuccessHandler"
-          v-clipboard:error="ClipboardErrorHandler"
-          class="btn__copy"
-          type="button"
-        >
-          <span class="icon-copy" />
-        </button>
-      </div>
-      <div class="overview__subtitle">
-        {{ $t('ui.tx.amount') }}
-        <span class="overview__info">{{ ConvertFromDecimals(tx.value, decimals) }} {{ symbol }}</span>
-      </div>
-      <div class="overview__subtitle  overview__subtitle_underlined">
-        {{ $t('ui.tx.fee') }}
-        <span class="overview__info">{{ fee }}</span>
-      </div>
-      <div class="overview__subtitle">
-        {{ $t('ui.block.gasUsed') }}
-        <span class="overview__info">{{ gasUsed }}</span>
-      </div>
-      <div class="overview__subtitle">
-        {{ $t('ui.block.gasLimit') }}
-        <span class="overview__info">{{ gasLimit }}</span>
-      </div>
-      <div class="overview__subtitle">
-        {{ $t('ui.tx.gasPrice') }}
-        <span class="overview__info">{{ gasPrice }}</span>
-      </div>
-      <div class="overview__subtitle">
-        {{ $t('ui.tx.value') }}
-        <span class="overview__info">{{ value }}</span>
       </div>
     </div>
   </div>
@@ -489,30 +477,33 @@ export default {
     border-radius: 6px;
   }
 
-  &__tab {
-    &_overview, &_logs {
-      @include text-simple;
-      margin-right: 20px;
-      padding-bottom: 12px;
-      color: $black500;
-      cursor: pointer;
-    }
-
-    &_active {
-      @include text-simple;
-      border-bottom: 2px solid $blue;
-    }
-  }
-
   &__columns {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 20px;
     margin-top: 28px;
   }
+  &__mobile {
+    display: none;
+  }
 
   &__logs {
     margin-top: 25px;
+  }
+}
+
+.tab {
+  margin-bottom: 30px;
+  &__item {
+    @include text-simple;
+    margin-right: 20px;
+    padding-bottom: 12px;
+    color: $black500;
+    cursor: pointer;
+    &_active {
+      @include text-simple;
+      border-bottom: 2px solid $blue;
+    }
   }
 }
 
@@ -632,7 +623,7 @@ export default {
   }
 }
 
-.table {
+.log {
   &__title {
     @include text-simple;
     font-weight: 600;
@@ -690,36 +681,26 @@ export default {
 }
 
 .overview {
-  display: none;
+  &__mobile {
+    display: none;
+  }
 }
 
 @include _991 {
   .txs {
-    &__columns {
-      grid-gap: 5px;
-    }
-  }
-}
-
-@include _767 {
-  .txs {
     &__info {
       padding: 16px;
     }
-
-    &__title {
-      margin-left: 16px;
-    }
-
-    &__back {
-      margin-left: 16px;
-    }
   }
   .overview {
-    padding: 20px;
-    grid-template-columns: 1fr 1fr;
-    display: grid;
-    background: $white;
+    &__mobile {
+      display: grid;
+      background: $white;
+    }
+
+    &__desktop {
+      display: none;
+    }
 
     &__hash {
       font-weight: 600;
@@ -794,6 +775,11 @@ export default {
       }
     }
   }
+  .log {
+    &__title {
+      text-align: left;
+    }
+  }
   .logs {
     &__header {
       font-size: 16px;
@@ -806,10 +792,6 @@ export default {
 
     &__info {
       margin: 15px 0 0 0;
-
-      &_desktop {
-        //display: none;
-      }
 
       &_mobile {
         display: block;
@@ -828,6 +810,14 @@ export default {
     color: $blue;
     font-size: 20px;
     cursor: pointer;
+  }
+  .tx {
+    &__column {
+      display: none;
+    }
+    &__mobile {
+      display: block;
+    }
   }
 }
 </style>

@@ -42,17 +42,11 @@
         class="tables__tf"
       >
         <table-txs
+          id="tokens-transfers-table"
           class="tables__table"
           :is-only="false"
           :items="tokenTransfers"
           :fields="tableHeadersTransfers"
-        />
-        <transaction
-          v-for="(item, i) in tokenTransfers"
-          :key="i"
-          class="tables__item"
-          :transaction="item"
-          :is-last="tokenTransfers[i] === tokenTransfers[tokenTransfers.length - 1]"
         />
         <base-pager
           v-if="totalPagesValue > 1"
@@ -68,19 +62,12 @@
         class="tables__holders"
       >
         <table-tokens
+          id="tokens-holders-table"
           class="tables__table"
           :is-only="false"
           :items="tokenHolders"
           :fields="tableHeadersHolders"
           type="holders"
-        />
-        <holder
-          v-for="(item, i) in tokenHolders"
-          :key="i"
-          class="tables__item"
-          :holder="item"
-          :token="token"
-          :is-last="tokenHolders[i] === tokenHolders[tokenHolders.length - 1]"
         />
         <base-pager
           v-if="totalPagesValue > 1"
@@ -177,8 +164,8 @@ export default {
     tableHeadersTransfers() {
       return [
         { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'method', label: this.$t('ui.token.method'), sortable: true },
         { key: 'age', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'method', label: this.$t('ui.token.method'), sortable: true },
         { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
         { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
         { key: 'amount', label: this.$t('ui.token.quantity'), sortable: true },
@@ -312,6 +299,8 @@ export default {
   flex-direction: column;
 
   &__menu {
+    display: flex;
+    flex-wrap: wrap;
     padding: 20px;
     background: $white;
     border-top-left-radius: 6px;
@@ -384,21 +373,16 @@ export default {
       margin: 0 0 25px 16px;
     }
   }
-  .table {
-    display: none;
-  }
+
   .tables {
-    padding: 16px 16px 0 16px;
     background-color: $white;
 
-    &__menu {
-      margin: 0 0 15px 0;
-      padding: 0;
+    &__tab {
+      margin-right: 10px;
     }
 
-    &__info, &__contract {
-      padding: 0;
-      margin-top: 30px;
+    &__menu {
+      padding: 20px;
     }
 
     &__item {

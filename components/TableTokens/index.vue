@@ -1,17 +1,18 @@
 <template>
-  <div class="table">
+  <div class="table-wrapper">
     <b-table
       class="token"
       :items="items"
       :fields="fields"
       borderless
       thead-class="table__header"
+      tbody-tr-class="table__row"
       caption-top
       sort-icon-right
-      :responsive="true"
-      tbody-tr-class="table__row"
+      responsive="xl"
       :empty-text="$t('ui.token.noTokens')"
       show-empty
+      stacked="md"
     >
       <template
         v-if="$props.title"

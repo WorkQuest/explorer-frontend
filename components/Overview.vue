@@ -122,7 +122,7 @@ export default {
   max-width: 578px;
 
   &-wrap {
-    margin: 20px;
+    padding: 20px;
     position: relative;
   }
 
@@ -130,7 +130,6 @@ export default {
     @include text-simple;
     @include normal-font-size;
     font-size: 18px;
-    margin-bottom: 20px;
   }
 
   &__info {
@@ -183,9 +182,8 @@ export default {
 
 @include _767 {
   .overview {
-    @include container;
-    max-width: 100vw;
-
+    width: 100%;
+    max-width: 100%;
     &__title {
       display: block;
     }

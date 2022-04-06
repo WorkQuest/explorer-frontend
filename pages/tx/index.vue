@@ -4,44 +4,36 @@
     class="transactions"
   >
     <search-filter class="transactions__search" />
-    <div class="transactions__wrap">
-      <div
+
+    <table-txs
+      id="transactions-table"
+      class="transactions__table"
+      :is-only="false"
+      :items="txsTable"
+      :fields="tableHeaders"
+      :title="query ? '' : $tc('ui.txs')"
+    >
+      <template
         v-if="query"
-        class="transactions__header"
+        v-slot:table-caption
       >
-        <h5 class="transactions__title">
-          {{ $t('ui.tx.total') }} {{ currentBlockTransactionsCount }} {{ $t('ui.tx.found') }}
-        </h5>
-        <p class="transactions__block">
-          {{ $t('ui.tx.forBlock') }}
-          <nuxt-link
-            class="transactions__link"
-            :to="`/blocks/`+query"
-          >
-            {{ query }}
-          </nuxt-link>
-        </p>
-      </div>
-      <p
-        v-else
-        class="transactions__header"
-      >
-        {{ $t('ui.txs') }}
-      </p>
-      <table-txs
-        class="transactions__table"
-        :is-only="false"
-        :items="txsTable"
-        :fields="tableHeaders"
-      />
-      <transaction
-        v-for="(item, i) in txsTable"
-        :key="i"
-        class="transactions__transaction"
-        :transaction="item"
-        :is-last="txsTable[i] === txsTable[txsTable.length - 1]"
-      />
-    </div>
+        <div class="transactions__header">
+          <h5 class="transactions__title">
+            {{ $t('ui.tx.total') }} {{ currentBlockTransactionsCount }} {{ $t('ui.tx.found') }}
+          </h5>
+          <p class="transactions__block">
+            {{ $t('ui.tx.forBlock') }}
+            <nuxt-link
+              class="transactions__link"
+              :to="`/blocks/`+query"
+            >
+              {{ query }}
+            </nuxt-link>
+          </p>
+        </div>
+      </template>
+    </table-txs>
+
     <base-pager
       v-if="totalPages > 1"
       v-model="page"
@@ -93,8 +85,8 @@ export default {
     tableHeaders() {
       return [
         { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'block_number', label: this.$t('ui.block.blockNumber'), sortable: true },
         { key: 'block.timestamp', label: this.$t('ui.block.age'), sortable: true },
+        { key: 'block_number', label: this.$t('ui.block.blockNumber'), sortable: true },
         { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
         { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
         { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
@@ -109,7 +101,7 @@ export default {
       }
     },
     async query(current, previous) {
-      if (current && current !== previous) {
+      if (!current && current !== previous) {
         await this.getTransactions();
       }
     },
@@ -161,55 +153,15 @@ export default {
     font-size: 14px;
   }
 
-  &__wrap {
-    border-radius: 6px;
-    background-color: $white;
-  }
-
-  &__table {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
-
-  &__transaction {
-    display: none;
-  }
-
-  &__grey {
-    color: $black500;
-  }
-
   &__link {
     @include link;
   }
 }
 
-.page {
-  &__active {
-    color: $blue;
-  }
-
-  &__common {
-    color: $black600;
-  }
-}
-
 @include _767 {
   .transactions {
-    &__table {
-      display: none;
-    }
-
-    &__wrap {
-      padding: 20px 16px 0 16px;
-    }
-
     &__header {
-      padding: 0;
-    }
-
-    &__transaction {
-      display: block;
+      padding: 0 20px;
     }
   }
 }

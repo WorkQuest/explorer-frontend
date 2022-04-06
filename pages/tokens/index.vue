@@ -4,68 +4,15 @@
     class="tokens"
   >
     <search-filter class="tokens__search" />
+
     <table-tokens
+      id="tokens-table"
       class="tokens__table"
       :title="$tc('ui.token.tracker')"
       :items="tokens"
       :fields="tableHeaders"
       type="transfers"
     />
-
-    <!--        mobile-->
-    <div class="tokens__content">
-      <p class="tokens__title">
-        {{ $t('ui.token.tracker') }}
-      </p>
-      <div
-        v-for="(token, index) in tokens"
-        :key="index"
-        class="token"
-        :class="{token__separator: (index === tokens.length - 1)}"
-      >
-        <p class="token__token">
-          {{ $t('ui.token.token') }}
-        </p>
-        <div class="token__header">
-          <!--              TODO base64-->
-          <img
-            :src="require(`~/assets/img/tokens/empty-token.svg`)"
-            width="15"
-            height="15"
-            class="token__image"
-            :alt="token.symbol"
-          >
-          <nuxt-link
-            :to="{ path: `/tokens/`+token.contract_address_hash.hex, params: { token: token.contract_address_hash.hex }}"
-            class="token__title table__link"
-          >
-            {{ token.name }} ({{ token.symbol }})
-          </nuxt-link>
-        </div>
-        <p class="token__description">
-          {{ token.description ? token.description : '' }}
-        </p>
-        <div
-          v-if="token.total_supply"
-          class="token__subtitle"
-        >
-          {{ $t('ui.token.volume') }}
-          <span class="token__info">
-            {{ NumberFormat(ConvertFromDecimals(token.total_supply, token.decimals)) }}
-          </span>
-        </div>
-        <div
-          v-if="token.holder_count"
-          class="token__subtitle"
-        >
-          {{ $t('ui.token.holders') }}
-          <span class="token__info">
-            {{ token.holder_count }}
-          </span>
-        </div>
-      </div>
-    </div>
-
     <base-pager
       v-if="totalPages > 1"
       v-model="page"
@@ -153,26 +100,11 @@ export default {
 <style lang="scss" scoped>
 .tokens {
   animation: show 1s 1;
-  margin: 0 auto;
-
-  &__search {
-    margin: 25px 0;
-  }
-
-  &__table {
-    @include container;
-  }
-
-  &__content {
-    display: none;
-  }
+  @include container;
 }
 
 @include _767 {
   .tokens {
-    &__table {
-      display: none;
-    }
 
     &__content {
       display: block;

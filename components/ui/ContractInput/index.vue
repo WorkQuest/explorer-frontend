@@ -328,7 +328,7 @@ export default {
   }
 }
 .button {
-  width: 150px;
+  width: 150px !important;
   position: relative;
   margin-right: 10px;
   text-decoration: none;

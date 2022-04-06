@@ -1,27 +1,18 @@
 <template>
   <div
     v-if="!isLoading"
-    class="blocks blocks__container"
+    class="blocks"
   >
     <search-filter class="blocks__search" />
+
     <table-blocks
+      id="blocks-table"
       class="blocks__table"
       :title="$tc('ui.blocks')"
       :items="blocks"
       :fields="tableHeaders"
     />
-    <div class="blocks__items items">
-      <p class="items__title">
-        {{ $t('ui.blocks') }}
-      </p>
-      <block
-        v-for="(item, i) in blocks"
-        :key="i"
-        class="items__block"
-        :block="item"
-        :is-last="blocks[i] === blocks[blocks.length - 1]"
-      />
-    </div>
+
     <base-pager
       v-if="totalPages > 1"
       v-model="page"
@@ -32,11 +23,9 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import TableBlocks from '~/components/TableBlocks';
 
 export default {
   name: 'Blocks',
-  components: { TableBlocks },
   data() {
     return {
       limit: 20,
@@ -60,7 +49,6 @@ export default {
         { key: 'transactionsCount', label: this.$t('ui.block.txn'), sortable: true },
         { key: 'gas_used', label: this.$t('ui.block.gasUsed'), sortable: true },
         { key: 'gas_limit', label: this.$t('ui.block.gasLimit'), sortable: true },
-        { key: 'reward', label: this.$t('ui.block.reward'), sortable: true },
       ];
     },
     payload() {
@@ -93,36 +81,10 @@ export default {
 
 <style lang="scss" scoped>
 .blocks {
-  animation: show 1s 1;
-
-  &__container {
-    @include container;
-  }
+  @include container;
 
   &__search {
     margin: 25px 0;
-  }
-
-  &__grey {
-    color: $black500;
-  }
-}
-
-.items {
-  display: none;
-}
-
-@include _767 {
-  .blocks {
-    &__table {
-      display: none;
-    }
-
-  }
-  .items {
-    display: block;
-    background: $white;
-    padding: 16px;
   }
 }
 
