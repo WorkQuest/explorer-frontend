@@ -24,7 +24,7 @@
                   :key="`${i}-desktop`"
                   :to="item.path"
                   class="header__link"
-                  :active-class="'header__link_active'"
+                  exact
                 >
                   {{ item.title }}
                 </nuxt-link>
@@ -99,7 +99,7 @@
                 <nuxt-link
                   :to="item.path"
                   class="header__link"
-                  :active-class="'header__link_active'"
+                  exact
                 >
                   {{ item.title }}
                 </nuxt-link>
@@ -178,7 +178,7 @@ export default {
       return [
         {
           title: this.$t('ui.home'),
-          path: '/home',
+          path: '/',
         },
         {
           title: this.$t('ui.txs'),
