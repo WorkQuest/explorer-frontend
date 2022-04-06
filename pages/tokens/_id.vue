@@ -299,6 +299,8 @@ export default {
   flex-direction: column;
 
   &__menu {
+    display: flex;
+    flex-wrap: wrap;
     padding: 20px;
     background: $white;
     border-top-left-radius: 6px;
@@ -374,6 +376,10 @@ export default {
 
   .tables {
     background-color: $white;
+
+    &__tab {
+      margin-right: 10px;
+    }
 
     &__menu {
       padding: 20px;

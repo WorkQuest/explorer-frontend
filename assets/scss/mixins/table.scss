@@ -112,6 +112,10 @@ table {
     & > .table-responsive-xl > table {
       width: 100%;
     }
+    .table td {
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
   }
 
   // stacked table first two columns as rows
@@ -172,10 +176,12 @@ table {
           display: none;
         }
         & > div {
+          display: contents;
           text-align: right !important;
           color: $black300;
         }
       }
     }
+
   }
 }
