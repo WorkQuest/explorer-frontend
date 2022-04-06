@@ -49,7 +49,6 @@ export default {
         { key: 'transactionsCount', label: this.$t('ui.block.txn'), sortable: true },
         { key: 'gas_used', label: this.$t('ui.block.gasUsed'), sortable: true },
         { key: 'gas_limit', label: this.$t('ui.block.gasLimit'), sortable: true },
-        { key: 'reward', label: this.$t('ui.block.reward'), sortable: true },
       ];
     },
     payload() {
