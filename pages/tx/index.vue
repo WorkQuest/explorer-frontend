@@ -113,6 +113,9 @@ export default {
   beforeDestroy() {
     this.$store.commit('blocks/resetBlockTransactions');
     this.$store.commit('tx/resetTxs');
+    if (this.$route.name !== 'tx-id') {
+      sessionStorage.removeItem('backRoute');
+    }
   },
   methods: {
     async getTransactions() {

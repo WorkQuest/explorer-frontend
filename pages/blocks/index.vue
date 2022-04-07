@@ -74,6 +74,11 @@ export default {
     await this.getBlocks();
     sessionStorage.setItem('backRoute', this.$route.fullPath);
   },
+  beforeDestroy() {
+    if (this.$route.name !== 'blocks-id') {
+      sessionStorage.removeItem('backRoute');
+    }
+  },
   methods: {
     async getBlocks() {
       await this.SetLoader(true);
