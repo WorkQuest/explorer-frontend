@@ -120,28 +120,24 @@
                 />
               </div>
               <div class="overview__subtitle">
-                {{ $t('ui.tx.amount') }}
-                <span class="overview__info">{{ ConvertFromDecimals(tx.value, decimals) }} {{ symbol }}</span>
+                {{ $t('ui.tx.value') }}
+                <span class="overview__info">{{ value }} {{ symbol }}</span>
               </div>
               <div class="overview__subtitle  overview__subtitle_underlined">
                 {{ $t('ui.tx.fee') }}
-                <span class="overview__info">{{ fee }}</span>
-              </div>
-              <div class="overview__subtitle">
-                {{ $t('ui.block.gasUsed') }}
-                <span class="overview__info">{{ gasUsed }} ({{ NumberFormat((gasUsed / gasLimit) * 100, 4) }}%) </span>
+                <span class="overview__info">{{ NumberFormat(fee) }}</span>
               </div>
               <div class="overview__subtitle">
                 {{ $t('ui.block.gasLimit') }}
-                <span class="overview__info">{{ gasLimit }}</span>
+                <span class="overview__info">{{ NumberFormat(gasLimit) }}</span>
+              </div>
+              <div class="overview__subtitle">
+                {{ $t('ui.block.gasUsed') }}
+                <span class="overview__info">{{ NumberFormat(gasUsed) }} ({{ NumberFormat((gasUsed / gasLimit) * 100, 4) }}%) </span>
               </div>
               <div class="overview__subtitle">
                 {{ $t('ui.tx.gasPrice') }}
                 <span class="overview__info">{{ gasPrice }}</span>
-              </div>
-              <div class="overview__subtitle">
-                {{ $t('ui.tx.value') }}
-                <span class="overview__info">{{ value }}</span>
               </div>
             </div>
           </div>
@@ -156,7 +152,7 @@
             </template>
             <div
               v-else
-              class="logs__content content"
+              class="content"
             >
               <p
                 v-if="Array.isArray(tx.logs) && tx.logs.length > 0"
@@ -301,9 +297,7 @@ export default {
       return this.NumberFormat(this.tx?.gas_price || 0);
     },
     fee() {
-      return new BigNumber(this.tx.gas_price * this.gasUsed)
-        .shiftedBy(-this.decimals)
-        .toString();
+      return new BigNumber(this.tx.gas_price * this.gasUsed).toString();
     },
     value() {
       return this.ConvertFromDecimals(this.tx?.value, this.decimals);
@@ -497,7 +491,6 @@ export default {
   }
 
   &__columns {
-    display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 20px;
     margin-top: 28px;
@@ -572,64 +565,9 @@ export default {
   }
 }
 
-.logs {
-
-  &__content {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &__topic {
-    display: flex;
-  }
-
-  &__info {
-    margin-left: 10px;
-
-    &_desktop {
-      display: block;
-      overflow-wrap: anywhere;
-    }
-
-    &_mobile {
-      display: none;
-    }
-  }
-
-  &__title {
-    @include text-simple;
-    font-weight: 600;
-  }
-
-  &__item {
-    &_desktop {
-      display: block;
-      overflow-wrap: anywhere;
-    }
-
-    &_mobile {
-      display: none;
-    }
-  }
-
-  &__block {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-.block {
-  &__topic {
-    display: flex;
-    flex-direction: row;
-  }
-  &__data {
-    display: flex;
-    flex-direction: row;
-  }
-}
-
 .content {
+  display: flex;
+  flex-direction: column;
   &__header {
     @include text-simple;
     font-size: 20px;
@@ -700,6 +638,9 @@ export default {
 }
 
 .overview {
+  &__desktop {
+    display: grid;
+  }
   &__mobile {
     display: none;
   }
@@ -729,6 +670,7 @@ export default {
 
     &__link {
       @include link;
+      color: $blue !important;
       font-size: 20px;
       font-weight: normal;
     }
@@ -794,49 +736,23 @@ export default {
       }
     }
   }
-  .log {
-    &__title {
-      text-align: left;
-    }
-  }
-  .logs {
-    &__header {
-      font-size: 16px;
-    }
 
-    &__content {
-      margin: 0 0 15px 0;
-      display: grid;
-    }
-
-    &__info {
-      margin: 15px 0 0 0;
-
-      &_mobile {
-        display: block;
-      }
-    }
+  .log__title {
+    text-align: left;
   }
-  .content {
-    &__table {
-      grid-template-columns: 1fr
-    }
+
+  .content__table {
+    grid-template-columns: 1fr
   }
+
   .table__title {
     text-align: left;
   }
+
   .icon-copy {
     color: $blue;
     font-size: 20px;
     cursor: pointer;
-  }
-  .tx {
-    &__column {
-      display: none;
-    }
-    &__mobile {
-      display: block;
-    }
   }
 }
 </style>
