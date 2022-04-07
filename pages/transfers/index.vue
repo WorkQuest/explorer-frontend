@@ -76,6 +76,12 @@ export default {
   },
   async mounted() {
     await this.getTokenTransfers();
+    sessionStorage.setItem('backRoute', this.$route.fullPath);
+  },
+  beforeDestroy() {
+    if (this.$route.name !== 'tx-id') {
+      sessionStorage.removeItem('backRoute');
+    }
   },
   methods: {
     async getTokenTransfers() {

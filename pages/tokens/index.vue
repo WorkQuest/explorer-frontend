@@ -90,9 +90,11 @@ export default {
       await this.$store.dispatch('tokens/getAllTokens', this.payload);
       await this.SetLoader(false);
     }
+    sessionStorage.setItem('backRoute', this.$route.fullPath);
   },
   beforeDestroy() {
     this.$store.commit('tokens/resetTokens');
+    sessionStorage.removeItem('backRoute');
   },
 };
 </script>
