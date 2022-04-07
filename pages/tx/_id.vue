@@ -119,25 +119,25 @@
                   icon-color="primary"
                 />
               </div>
+              <div class="overview__subtitle">
+                {{ $t('ui.tx.value') }}
+                <span class="overview__info">{{ value }} {{ symbol }}</span>
+              </div>
               <div class="overview__subtitle  overview__subtitle_underlined">
                 {{ $t('ui.tx.fee') }}
-                <span class="overview__info">{{ fee }}</span>
-              </div>
-              <div class="overview__subtitle">
-                {{ $t('ui.block.gasUsed') }}
-                <span class="overview__info">{{ gasUsed }} ({{ NumberFormat((gasUsed / gasLimit) * 100, 4) }}%) </span>
+                <span class="overview__info">{{ NumberFormat(fee) }}</span>
               </div>
               <div class="overview__subtitle">
                 {{ $t('ui.block.gasLimit') }}
-                <span class="overview__info">{{ gasLimit }}</span>
+                <span class="overview__info">{{ NumberFormat(gasLimit) }}</span>
+              </div>
+              <div class="overview__subtitle">
+                {{ $t('ui.block.gasUsed') }}
+                <span class="overview__info">{{ NumberFormat(gasUsed) }} ({{ NumberFormat((gasUsed / gasLimit) * 100, 4) }}%) </span>
               </div>
               <div class="overview__subtitle">
                 {{ $t('ui.tx.gasPrice') }}
                 <span class="overview__info">{{ gasPrice }}</span>
-              </div>
-              <div class="overview__subtitle">
-                {{ $t('ui.tx.value') }}
-                <span class="overview__info">{{ value }} {{ symbol }}</span>
               </div>
             </div>
           </div>
@@ -670,6 +670,7 @@ export default {
 
     &__link {
       @include link;
+      color: $blue !important;
       font-size: 20px;
       font-weight: normal;
     }
