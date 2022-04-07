@@ -128,6 +128,7 @@ export default {
 }
 
 .address {
+  animation: show 1s 1;
   @include container;
 
   &__search {

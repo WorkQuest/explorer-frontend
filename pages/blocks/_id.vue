@@ -224,8 +224,8 @@ export default {
 <style lang="scss" scoped>
 
 .block {
+  animation: show 1s 1;
   @include container;
-  transition: .5s ease-in;
 
   &__search {
     margin: 25px 0;
