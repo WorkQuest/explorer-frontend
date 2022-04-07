@@ -148,17 +148,16 @@ body {
   margin: 0 !important;
 }
 
-.fade-enter-active, .fade-leave-active {
+.page-enter-active {
   transition: opacity .5s;
 }
-.fade-enter, .fade-leave-to {
+.page-leave-active {
   opacity: 0;
 }
-
-.fade-fast-enter-active, .fade-fast-leave-active {
-  transition: opacity .3s;
+.page-enter {
+  opacity: 0;
 }
-.fade-enter, .fade-leave-to {
+.page-leave-to {
   opacity: 0;
 }
 

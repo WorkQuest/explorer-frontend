@@ -87,6 +87,7 @@ export default {
 <style lang="scss" scoped>
 .blocks {
   @include container;
+  animation: show 1s 1;
 
   &__search {
     margin: 25px 0;
