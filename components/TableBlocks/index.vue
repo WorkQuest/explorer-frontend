@@ -55,7 +55,7 @@
         </nuxt-link>
       </template>
       <template #cell(gas_used)="el">
-        <span>{{ el.item.gas_used }} </span>
+        <span> {{ el.item.gas_used }} </span> <span class="grey">{{ el.value }} </span>
       </template>
       <template #cell(reward)="el">
         <span>{{ +el.item.base_fee_per_gas * +el.item.gas_used }} {{ symbol }}</span>
@@ -111,3 +111,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+
+.grey {
+  color: $black400;
+  font-size: 14px;
+}
+
+</style>

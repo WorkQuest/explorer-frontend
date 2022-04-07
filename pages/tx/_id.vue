@@ -41,7 +41,14 @@
                 :info="item.info"
                 :note="item.note"
                 :item="item.item"
-              />
+              >
+                <template
+                  v-if="item.item === 'timestamp'"
+                  #timestamp
+                >
+                  {{ dateFromNow }}
+                </template>
+              </info-item>
             </div>
             <div class="overview__mobile">
               <div class="overview__hash">
@@ -60,7 +67,7 @@
                 />
               </div>
               <p class="overview__timestamp">
-                {{ formatDataFromNow(tx.block.timestamp) }}
+                {{ dateFromNow }}
               </p>
               <div class="overview__subtitle">
                 {{ $t('ui.tx.status') }}
@@ -118,7 +125,7 @@
               </div>
               <div class="overview__subtitle">
                 {{ $t('ui.block.gasUsed') }}
-                <span class="overview__info">{{ gasUsed }}</span>
+                <span class="overview__info">{{ gasUsed }} ({{ NumberFormat((gasUsed / gasLimit) * 100, 4) }}%) </span>
               </div>
               <div class="overview__subtitle">
                 {{ $t('ui.block.gasLimit') }}
@@ -268,6 +275,9 @@ export default {
     return {
       tabs: ['overview', 'logs'],
       activeTab: 'overview',
+      timer: null,
+      time: Date.now(),
+      minute: 60000,
     };
   },
   computed: {
@@ -281,7 +291,7 @@ export default {
       return +this.tx?.block?.gas_limit || 0;
     },
     gasUsed() {
-      return this.tx?.gas_used || 0;
+      return +this.tx?.gas_used || 0;
     },
     gasPrice() {
       return this.NumberFormat(this.tx?.gas_price || 0);
@@ -303,9 +313,10 @@ export default {
           {
             class: 'columns__item_two-one',
             title: this.$t('ui.timestamp'),
-            info: this.formatDataFromNow(this.tx.block.timestamp),
+            info: this.tx.block.timestamp,
             note: this.$moment(this.tx.block.timestamp)
               .format('MMM-DD-YYYY HH:mm:ss A +UTC'),
+            item: 'timestamp',
           },
           {
             class: 'columns__item_two-two',
@@ -350,7 +361,7 @@ export default {
           {
             class: 'columns__item_four-two',
             title: this.$t('ui.tx.gasUsed'),
-            info: `${this.gasUsed} (${(this.gasUsed / this.gasLimit) * 100}%)`,
+            info: `${this.gasUsed} (${this.NumberFormat((this.gasUsed / this.gasLimit) * 100, 4)}%)`,
           },
           {
             class: 'columns__item_four-three',
@@ -373,6 +384,9 @@ export default {
     historyPath() {
       return sessionStorage.getItem('backRoute');
     },
+    dateFromNow() {
+      return this.time && this.formatDataFromNow(this.tx.block.timestamp);
+    },
   },
   watch: {
     async hash(current, previous) {
@@ -388,8 +402,13 @@ export default {
     await this.SetLoader(true);
     await this.hashNavigation();
     await this.SetLoader(false);
+    clearInterval(Number(this.timer));
+    this.timer = setInterval(() => {
+      this.time = Date.now();
+    }, this.minute);
   },
   beforeDestroy() {
+    clearInterval(Number(this.timer));
     this.$store.commit('tx/resetTxsByHash');
   },
   methods: {
