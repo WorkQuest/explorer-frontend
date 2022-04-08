@@ -139,7 +139,6 @@ export const isValidByte = (byte, bits, stripHexPrefix, isHexStrict) => {
 };
 
 export const isValidUint = (uint, bits) => {
-  console.log('isValidUint: ', uint, bits);
   if (!uint) return false;
   const valueToCheck = new BigNumber(uint);
   const maxValue = new BigNumber(2).pow(bits ? +bits : 1).minus(1);
