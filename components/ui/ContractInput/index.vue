@@ -45,7 +45,7 @@
             :placeholder="`${input.name ? input.name : abiItem.name} (${input.type})`"
             :rules="{
               required: true,
-              isArray: checkType(input.type) ? value : false
+              'type': input.type
             }"
           />
         </template>
@@ -54,7 +54,7 @@
             v-if="(type === 'read' && abiItem.inputs.length !== 0) || type !== 'read'"
             :text="$tc(`ui.contract.buttons.${type}`)"
             mode="outline"
-            :disabled="isLoading || !isConnectedWeb3"
+            :disabled="isLoading || type === 'write' ? !isConnectedWeb3 : false"
             class="button"
             @click="handleSubmit(contractHandler)"
           >
@@ -121,16 +121,6 @@
           </div>
         </template>
         <template v-if="type !== 'read'">
-          <div class="outputs__write">
-            <span
-              v-if="error"
-              class="types__error"
-            >
-              {{ error }}
-            </span>
-          </div>
-        </template>
-        <template v-else>
           <div class="outputs__write">
             <span
               v-if="error"
@@ -241,9 +231,6 @@ export default {
         this.error = null;
       }
       this.isLoading = loading;
-    },
-    checkType(stringType) {
-      return isArrayType(stringType);
     },
   },
 };
