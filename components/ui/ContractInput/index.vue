@@ -45,7 +45,7 @@
             :placeholder="`${input.name ? input.name : abiItem.name} (${input.type})`"
             :rules="{
               required: true,
-              isArray: checkType(input.type) ? value : false
+              'type': input.type
             }"
           />
         </template>

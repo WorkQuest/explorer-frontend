@@ -1,4 +1,7 @@
+import BigNumber from 'bignumber.js';
 import { SERVER_MESSAGES } from '~/utils/serverMessages';
+
+BigNumber.config({ EXPONENTIAL_AT: 256 });
 
 // eslint-disable-next-line import/prefer-default-export
 export const searchResponseTypes = (type, value) => {
@@ -117,4 +120,36 @@ export const convertFromMapToArray = (map) => {
     }, []);
   }
   return [];
+};
+
+export const isValidAddress = (address, toChecksumAddress, isAddress) => {
+  if (!address || !toChecksumAddress || !isAddress) return false;
+  try {
+    const checksum = toChecksumAddress(address);
+    return isAddress(checksum);
+  } catch (e) {
+    return false;
+  }
+};
+
+export const isValidByte = (byte, bits, stripHexPrefix, isHexStrict) => {
+  if (!byte || !stripHexPrefix || !isHexStrict) return false;
+  const isLengthEqual = (stripHexPrefix(byte).length / 2) === (+bits ? +bits : 1);
+  return isHexStrict(byte) && (bits ? isLengthEqual : true);
+};
+
+export const isValidUint = (uint, bits) => {
+  console.log('isValidUint: ', uint, bits);
+  if (!uint) return false;
+  const valueToCheck = new BigNumber(uint);
+  const maxValue = new BigNumber(2).pow(bits ? +bits : 1).minus(1);
+  return valueToCheck.isGreaterThanOrEqualTo(0) && valueToCheck.isLessThanOrEqualTo(maxValue);
+};
+
+export const isValidInt = (int, bits) => {
+  if (!int) return false;
+  const valueToCheck = new BigNumber(int);
+  const minValue = new BigNumber(-2).pow(bits ? 1 : +bits - 1);
+  const maxValue = new BigNumber(2).pow(bits ? 1 : +bits - 2);
+  return valueToCheck.isGreaterThanOrEqualTo(minValue) && valueToCheck.isLessThanOrEqualTo(maxValue);
 };
