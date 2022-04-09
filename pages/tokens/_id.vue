@@ -48,7 +48,7 @@
           :items="tokenTransfers"
           :fields="tableHeadersTransfers"
         />
-        <base-pager
+        <paginator
           v-if="totalPagesValue > 1"
           v-model="page"
           class="token__pager"
@@ -69,7 +69,7 @@
           :fields="tableHeadersHolders"
           type="holders"
         />
-        <base-pager
+        <paginator
           v-if="totalPagesValue > 1"
           v-model="page"
           class="token__pager"
@@ -375,8 +375,6 @@ export default {
   }
 
   .tables {
-    background-color: $white;
-
     &__tab {
       margin-right: 10px;
     }

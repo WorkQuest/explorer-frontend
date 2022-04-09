@@ -18,6 +18,7 @@ import EmptyData from '~/components/ui/EmptyData';
 import ContractInfo from '~/components/ContractInfo';
 import ContractInput from '~/components/ui/ContractInput';
 import ButtonCopy from '~/components/ui/ButtonCopy';
+import BSCPaginator from '~/components/ui/BSCPaginator';
 
 Vue.component('ctm-modal', CtmModal);
 Vue.component('base-btn', BaseButton);
@@ -37,3 +38,4 @@ Vue.component('empty-data', EmptyData);
 Vue.component('contract-info', ContractInfo);
 Vue.component('contract-input', ContractInput);
 Vue.component('button-copy', ButtonCopy);
+Vue.component('paginator', BSCPaginator);
