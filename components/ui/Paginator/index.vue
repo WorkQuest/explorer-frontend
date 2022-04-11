@@ -129,9 +129,6 @@ export default {
     &:first-child {
       margin-left: 0;
     }
-    &:nth-of-type(2){
-      padding-top: 2px;
-    }
   }
   &__icon {
     color: $blue;
@@ -143,7 +140,8 @@ export default {
         color: $black200;
       }
     }
-    &_inverted {
+    &_inverted > span:before {
+      display: inline-block;
       transform: scale(-1);
     }
   }
