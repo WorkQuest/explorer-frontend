@@ -20,7 +20,7 @@
       <overview />
     </div>
     <div class="address__txs">
-      <table-txs
+      <base-table
         id="address-transfers-table"
         class="address__table"
         :title="$tc('ui.txs')"
@@ -55,6 +55,8 @@ export default {
       isLoading: 'main/getIsLoading',
       txs: 'tx/getTxsByAccount',
       txsCount: 'tx/getTxsByAccountCount',
+      WUSDSymbol: 'tokens/getWUSDTokenSymbol',
+      WUSDDecimal: 'tokens/getWUSDTokenDecimals',
       accountInfo: 'account/getAccountInfo',
     }),
     payload() {
@@ -73,12 +75,42 @@ export default {
     tableFields() {
       return [
         { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'age', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'block_number', label: this.$t('ui.block.blockNumber'), sortable: true },
-        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
-        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
-        { key: 'gas_used', label: this.$t('ui.tx.fee'), sortable: true },
+        {
+          key: 'age',
+          label: this.$t('ui.block.age'),
+          sortable: true,
+          formatter: (value, key, item) => this.formatDataFromNow(item.block.timestamp),
+        },
+        {
+          key: 'blockNumber',
+          label: this.$t('ui.block.blockNumber'),
+          sortable: true,
+          formatter: (value, key, item) => item.block_number,
+        },
+        {
+          key: 'addressFrom',
+          label: this.$t('ui.tx.from'),
+          sortable: true,
+          formatter: (value, key, item) => item.from_address_hash?.hex || '',
+        },
+        {
+          key: 'addressTo',
+          label: this.$t('ui.tx.to'),
+          sortable: true,
+          formatter: (value, key, item) => item.to_address_hash?.hex || '',
+        },
+        {
+          key: 'value',
+          label: this.$t('ui.tx.value'),
+          sortable: true,
+          formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
+        },
+        {
+          key: 'gasUsed',
+          label: this.$t('ui.tx.fee'),
+          sortable: true,
+          formatter: (value, key, item) => `${item.gas_used}`,
+        },
       ];
     },
   },

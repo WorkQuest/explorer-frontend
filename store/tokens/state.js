@@ -36,6 +36,18 @@ export const accountTokens = {
   tokens: [],
 };
 
+/** @namespace allTokenTransfers */
+/** @property { number } count  */
+/** @property {[{
+ * amount: string,
+ * block: object,
+ * from_address_hash: object,
+ * to_address_hash: object,
+ * tokenContractAddress: object,
+ * token_contract_address_hash: object,
+ * transaction_hash: string
+ * }]} transfers
+ * */
 export const allTokenTransfers = {
   count: 0,
   transfers: [],

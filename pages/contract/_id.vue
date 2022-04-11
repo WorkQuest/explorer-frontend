@@ -37,12 +37,12 @@
         id="txs"
         class="tables__txs"
       >
-        <table-txs
+        <base-table
           id="contract-transactions-table"
           class="tables__table"
-          :is-only="false"
           :items="transactions"
           :fields="tableHeadersTxs"
+          :table-busy="tableBusy"
         />
         <base-pager
           v-if="totalPages > 1"
@@ -56,12 +56,12 @@
         id="internal"
         class="tables__internal"
       >
-        <table-txs
+        <base-table
           id="contract-internal-transactions-table"
           class="tables__table"
-          :is-only="false"
           :items="internalTransactions"
           :fields="tableHeadersInternal"
+          :table-busy="tableBusy"
         />
         <base-pager
           v-if="totalPages > 1"
@@ -75,6 +75,12 @@
         id="tokensTxns"
         class="tables__erc"
       >
+        <base-table
+          class="tables__table"
+          :items="tokenTransfers"
+          :fields="tableHeadersERC"
+          :table-busy="tableBusy"
+        />
         <table-txs
           class="tables__table"
           :is-only="false"
@@ -115,11 +121,14 @@ export default {
       offset: 0,
       tabs: ['txs', 'internal', 'tokensTxns', 'contract'],
       txs: [],
+      tableBusy: false,
     };
   },
   computed: {
     ...mapGetters({
       isLoading: 'main/getIsLoading',
+      WUSDSymbol: 'tokens/getWUSDTokenSymbol',
+      WUSDDecimal: 'tokens/getWUSDTokenDecimals',
       transactions: 'account/getTransactions',
       transactionsCount: 'account/getTransactionsCount',
       internalTransactions: 'account/getInternalTransactions',
@@ -136,21 +145,76 @@ export default {
     tableHeadersTxs() {
       return [
         { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'age', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'block_number', label: this.$t('ui.block.blockNumber'), sortable: true },
-        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
-        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
-        { key: 'gas_used', label: this.$t('ui.tx.fee'), sortable: true },
+        {
+          key: 'age',
+          label: this.$t('ui.block.age'),
+          sortable: true,
+          formatter: (value, key, item) => this.formatDataFromNow(item.block.timestamp),
+        },
+        {
+          key: 'blockNumber',
+          label: this.$t('ui.block.blockNumber'),
+          sortable: true,
+          formatter: (value, key, item) => item.block_number,
+        },
+        {
+          key: 'addressFrom',
+          label: this.$t('ui.tx.from'),
+          sortable: true,
+          formatter: (value, key, item) => item.from_address_hash?.hex || '',
+        },
+        {
+          key: 'addressTo',
+          label: this.$t('ui.tx.to'),
+          sortable: true,
+          formatter: (value, key, item) => item.to_address_hash?.hex || '',
+        },
+        {
+          key: 'value',
+          label: this.$t('ui.tx.value'),
+          sortable: true,
+          formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
+        },
+        {
+          key: 'gasUsed',
+          label: this.$t('ui.tx.fee'),
+          sortable: true,
+          formatter: (value, key, item) => `${item.gas_used}`,
+        },
       ];
     },
     tableHeadersInternal() {
       return [
-        { key: 'block_number', label: this.$t('ui.block.blockNumber'), sortable: true },
-        { key: 'age', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
-        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
+        {
+          key: 'blockNumber',
+          label: this.$t('ui.block.blockNumber'),
+          sortable: true,
+          formatter: (value, key, item) => item.block_number,
+        },
+        {
+          key: 'age',
+          label: this.$t('ui.block.age'),
+          sortable: true,
+          formatter: (value, key, item) => this.formatDataFromNow(item.block.timestamp),
+        },
+        {
+          key: 'addressFrom',
+          label: this.$t('ui.tx.from'),
+          sortable: true,
+          formatter: (value, key, item) => item.from_address_hash?.hex || '',
+        },
+        {
+          key: 'addressTo',
+          label: this.$t('ui.tx.to'),
+          sortable: true,
+          formatter: (value, key, item) => item.to_address_hash?.hex || '',
+        },
+        {
+          key: 'value',
+          label: this.$t('ui.tx.value'),
+          sortable: true,
+          formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
+        },
       ];
     },
     tableHeadersERC() {
@@ -211,6 +275,7 @@ export default {
     },
     async getPage() {
       const { address, limit, offset } = this;
+      this.tableBusy = true;
       if (this.activeTab === 'txs') {
         await this.$store.dispatch('account/getAccountTransactions', { address, limit, offset });
       }
@@ -220,6 +285,7 @@ export default {
       if (this.activeTab === 'tokensTxns') {
         await this.$store.dispatch('account/getTransactionWithTokensList', { address, limit, offset });
       }
+      this.tableBusy = false;
     },
     async hashNavigation() {
       if (this.hash) {

@@ -105,7 +105,7 @@ export default {
           key: 'addressFrom',
           label: this.$t('ui.tx.from'),
           sortable: true,
-          formatter: (value, key, item) => item.from_address_hash.hex,
+          formatter: (value, key, item) => item.from_address_hash?.hex || '',
         },
         {
           key: 'addressTo',
@@ -117,7 +117,7 @@ export default {
           key: 'value',
           label: this.$t('ui.tx.value'),
           sortable: true,
-          formatter: (value, key, item) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
+          formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
         },
         {
           key: 'gasUsed',

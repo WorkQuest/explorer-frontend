@@ -12,6 +12,7 @@
       :items="blocks"
       :fields="tableHeaders"
       type="blocks"
+      :table-busy="tableBusy"
     />
 
     <base-pager
@@ -32,6 +33,7 @@ export default {
       limit: 20,
       offset: 0,
       page: +this.$route.query?.page || 1,
+      tableBusy: false,
     };
   },
   computed: {
@@ -87,6 +89,7 @@ export default {
     },
   },
   async mounted() {
+    await this.SetLoader(false);
     await this.getBlocks();
     sessionStorage.setItem('backRoute', this.$route.fullPath);
   },
@@ -97,9 +100,9 @@ export default {
   },
   methods: {
     async getBlocks() {
-      await this.SetLoader(true);
+      this.tableBusy = true;
       await this.$store.dispatch('blocks/getBlocks', this.payload);
-      await this.SetLoader(false);
+      this.tableBusy = false;
     },
   },
 };

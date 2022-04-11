@@ -11,6 +11,7 @@
       :title="$t('ui.token.token')+' '+$t('ui.token.transfers')"
       :items="allTokenTransfers"
       :fields="tableHeaders"
+      :table-busy="tableBusy"
     />
 
     <base-pager
@@ -30,6 +31,7 @@ export default {
       limit: 20,
       offset: 0,
       page: +this.$route.query?.page || 1,
+      tableBusy: false,
     };
   },
   computed: {
@@ -86,8 +88,14 @@ export default {
           key: 'token',
           label: this.$t('ui.token.token'),
           sortable: true,
+          /**
+           * @param { string } value
+           * @param { number } key
+           * @param { tokenTransfers } item
+           * @memberOf tokenTransfers
+           */
           formatter: (value, key, item) => {
-            const { name, symbol } = item.tokenContractAddress.token;
+            const { name, symbol } = item.tokenContractAddress?.token;
             const link = item.tokenContractAddress.hash.hex;
             return {
               name,
@@ -107,6 +115,7 @@ export default {
     },
   },
   async mounted() {
+    await this.SetLoader(false);
     await this.getTokenTransfers();
     sessionStorage.setItem('backRoute', this.$route.fullPath);
   },
@@ -117,9 +126,9 @@ export default {
   },
   methods: {
     async getTokenTransfers() {
-      await this.SetLoader(true);
+      this.tableBusy = true;
       await this.$store.dispatch('tokens/getAllTokensTransfers', this.payload);
-      await this.SetLoader(false);
+      this.tableBusy = false;
     },
   },
 };

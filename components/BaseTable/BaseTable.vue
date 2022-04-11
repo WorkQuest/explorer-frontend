@@ -72,8 +72,9 @@
 
       <template #cell(addressFrom)="el">
         <nuxt-link
+          v-if="el.value"
           class="table__link"
-          :to="'/address/'+el.value"
+          :to="`/address/${el.value}`"
         >
           {{ formatItem(el.value, 9, 6) }}
         </nuxt-link>
@@ -83,7 +84,7 @@
         <nuxt-link
           v-if="el.value"
           class="table__link"
-          :to="'/address/'+el.value"
+          :to="`/address/${el.value}`"
         >
           {{ formatItem(el.value, 9, 6) }}
         </nuxt-link>
@@ -181,8 +182,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import BigNumber from 'bignumber.js';
 
 export default {
   name: 'BaseTable',
