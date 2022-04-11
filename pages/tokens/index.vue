@@ -13,7 +13,6 @@
       :fields="tableHeaders"
       type="tokens"
     />
-
     <base-pager
       v-if="totalPages > 1"
       v-model="page"

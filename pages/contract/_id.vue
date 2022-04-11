@@ -44,7 +44,7 @@
           :fields="tableHeadersTxs"
           :table-busy="tableBusy"
         />
-        <base-pager
+        <paginator
           v-if="totalPages > 1"
           v-model="page"
           class="contract__pager"
@@ -63,7 +63,7 @@
           :fields="tableHeadersInternal"
           :table-busy="tableBusy"
         />
-        <base-pager
+        <paginator
           v-if="totalPages > 1"
           v-model="page"
           class="contract__pager"
@@ -87,7 +87,7 @@
           :items="tokenTransfers"
           :fields="tableHeadersERC"
         />
-        <base-pager
+        <paginator
           v-if="totalPages > 1"
           v-model="page"
           class="contract__pager"

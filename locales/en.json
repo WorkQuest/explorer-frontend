@@ -164,5 +164,13 @@
       "addNetwork": "Unable to add appropriate network",
       "default": "Unknown error"
     }
+  },
+  "paginator": {
+    "page": "Page",
+    "of": "of",
+    "toFirstPage": "To first page",
+    "toPreviousPage": "To previous page",
+    "toLastPage": "To last page",
+    "toNextPage": "To next page"
   }
 }
