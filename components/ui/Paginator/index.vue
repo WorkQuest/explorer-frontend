@@ -81,13 +81,12 @@ export default {
   },
   methods: {
     setPage(value) {
-      if (!value) {
-        this.input = '';
-        return;
-      }
-      if (!value || (this.value !== +value && +value <= this.totalPages) || +value < 1) {
+      if (+value > 0 && this.value !== +value && +value <= this.totalPages) {
+        console.log('value and other stuff: ', value);
         this.$emit('input', Math.ceil(+value));
+        this.input = '';
       } else {
+        console.log('value');
         this.input = '';
       }
     },
@@ -129,6 +128,9 @@ export default {
     border-radius: 6px;
     &:first-child {
       margin-left: 0;
+    }
+    &:nth-of-type(2){
+      padding-top: 2px;
     }
   }
   &__icon {
