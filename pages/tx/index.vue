@@ -34,7 +34,7 @@
       </template>
     </table-txs>
 
-    <base-pager
+    <paginator
       v-if="totalPages > 1"
       v-model="page"
       class="transactions__pager"

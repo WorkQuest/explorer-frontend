@@ -13,7 +13,7 @@
       :fields="tableHeaders"
     />
 
-    <base-pager
+    <paginator
       v-if="totalPages > 1"
       v-model="page"
       :total-pages="totalPages"

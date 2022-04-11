@@ -13,7 +13,7 @@
       :fields="tableHeaders"
       type="transfers"
     />
-    <base-pager
+    <paginator
       v-if="totalPages > 1"
       v-model="page"
       class="tokens__pager"
