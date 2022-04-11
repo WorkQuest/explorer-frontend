@@ -5,14 +5,15 @@
   >
     <search-filter class="tokens__search" />
 
-    <table-tokens
+    <base-table
       id="tokens-table"
       class="tokens__table"
       :title="$tc('ui.token.tracker')"
       :items="tokens"
       :fields="tableHeaders"
-      type="transfers"
+      type="tokens"
     />
+
     <base-pager
       v-if="totalPages > 1"
       v-model="page"
@@ -24,11 +25,9 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import TableTokens from '~/components/TableTokens';
 
 export default {
   name: 'TokensTracker',
-  components: { TableTokens },
   data() {
     return {
       limit: 20,
@@ -59,19 +58,41 @@ export default {
     },
     tableHeaders() {
       return [
-        { key: 'number', label: '#', sortable: false },
-        { key: 'contract_address_hash.hex', label: this.$t('ui.token.token'), sortable: true },
         {
-          key: 'total_supply',
-          label: this.$t('ui.token.volume'),
-          sortable: true,
-          formatter: (value, key, item) => this.NumberFormat(this.ConvertFromDecimals(value, item.decimals)),
+          key: 'index',
+          label: '#',
+          sortable: false,
+          formatter: () => this.offset + 1,
         },
         {
-          key: 'holder_count',
+          key: 'token',
+          label: this.$t('ui.token.token'),
+          sortable: true,
+          formatter: (value, key, item) => {
+            const { name, symbol } = item;
+            const link = item.contract_address_hash.hex;
+            return {
+              name,
+              symbol,
+              link,
+            };
+          },
+        },
+        {
+          key: 'volume',
+          label: this.$t('ui.token.volume'),
+          sortable: true,
+          formatter: (value, key, item) => {
+            const { decimals } = item;
+            const convertedVolume = this.ConvertFromDecimals(item.total_supply, decimals);
+            return this.NumberFormat(convertedVolume);
+          },
+        },
+        {
+          key: 'holders',
           label: this.$t('ui.token.holders'),
           sortable: true,
-          formatter: (value) => this.NumberFormat(value),
+          formatter: (value, key, item) => this.NumberFormat(item.holder_count),
         },
       ];
     },

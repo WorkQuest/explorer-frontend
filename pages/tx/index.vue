@@ -5,13 +5,14 @@
   >
     <search-filter class="transactions__search" />
 
-    <table-txs
+    <base-table
       id="transactions-table"
       class="transactions__table"
       :is-only="false"
       :items="txsTable"
       :fields="tableHeaders"
       :title="query ? '' : $tc('ui.txs')"
+      :busy="tableBusy"
     >
       <template
         v-if="query"
@@ -25,14 +26,14 @@
             {{ $t('ui.tx.forBlock') }}
             <nuxt-link
               class="transactions__link"
-              :to="`/blocks/`+query"
+              :to="`/blocks/${query}`"
             >
               {{ query }}
             </nuxt-link>
           </p>
         </div>
       </template>
-    </table-txs>
+    </base-table>
 
     <base-pager
       v-if="totalPages > 1"
@@ -52,12 +53,15 @@ export default {
       limit: 20,
       offset: 0,
       page: +this.$route.query?.page || 1,
+      tableBusy: false,
     };
   },
   computed: {
     ...mapGetters({
       txs: 'tx/getTxs',
       txsCount: 'tx/getTxsCount',
+      WUSDSymbol: 'tokens/getWUSDTokenSymbol',
+      WUSDDecimal: 'tokens/getWUSDTokenDecimals',
       currentBlock: 'blocks/getCurrentBlock',
       currentBlockTransactions: 'blocks/getCurrentBlockTransactions',
       currentBlockTransactionsCount: 'blocks/getCurrentBlockTransactionsCount',
@@ -68,7 +72,7 @@ export default {
     },
     txsTable() {
       return this.query && this.currentBlockTransactionsCount > 0
-        ? this.currentBlockTransactions || []
+        ? this.currentBlockTransactions
         : this.txs;
     },
     payload() {
@@ -85,12 +89,42 @@ export default {
     tableHeaders() {
       return [
         { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'block.timestamp', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'block_number', label: this.$t('ui.block.blockNumber'), sortable: true },
-        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
-        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
-        { key: 'gas_used', label: this.$t('ui.tx.fee'), sortable: true },
+        {
+          key: 'age',
+          label: this.$t('ui.block.age'),
+          sortable: true,
+          formatter: (value, key, item) => this.formatDataFromNow(item.block.timestamp),
+        },
+        {
+          key: 'blockNumber',
+          label: this.$t('ui.block.blockNumber'),
+          sortable: true,
+          formatter: (value, key, item) => item.block_number,
+        },
+        {
+          key: 'addressFrom',
+          label: this.$t('ui.tx.from'),
+          sortable: true,
+          formatter: (value, key, item) => item.from_address_hash.hex,
+        },
+        {
+          key: 'addressTo',
+          label: this.$t('ui.tx.to'),
+          sortable: true,
+          formatter: (value, key, item) => item.to_address_hash?.hex || '',
+        },
+        {
+          key: 'value',
+          label: this.$t('ui.tx.value'),
+          sortable: true,
+          formatter: (value, key, item) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
+        },
+        {
+          key: 'gasUsed',
+          label: this.$t('ui.tx.fee'),
+          sortable: true,
+          formatter: (value, key, item) => `${item.gas_used}`,
+        },
       ];
     },
   },
@@ -107,6 +141,7 @@ export default {
     },
   },
   async mounted() {
+    await this.SetLoader(false);
     await this.getTransactions();
     sessionStorage.setItem('backRoute', this.$route.fullPath);
   },
@@ -119,13 +154,13 @@ export default {
   },
   methods: {
     async getTransactions() {
-      await this.SetLoader(true);
+      this.tableBusy = true;
       if (this.query) {
         await this.$store.dispatch('blocks/getBlockTransactions', { blockId: this.query, ...this.payload });
       } else {
         await this.$store.dispatch('tx/getTxs', this.payload);
       }
-      await this.SetLoader(false);
+      this.tableBusy = false;
     },
   },
 };

@@ -41,10 +41,9 @@
         id="transfers"
         class="tables__tf"
       >
-        <table-txs
+        <base-table
           id="tokens-transfers-table"
           class="tables__table"
-          :is-only="false"
           :items="tokenTransfers"
           :fields="tableHeadersTransfers"
         />
@@ -61,7 +60,7 @@
         id="holders"
         class="tables__holders"
       >
-        <table-tokens
+        <base-table
           id="tokens-holders-table"
           class="tables__table"
           :is-only="false"
@@ -163,30 +162,73 @@ export default {
     },
     tableHeadersTransfers() {
       return [
-        { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'age', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'method', label: this.$t('ui.token.method'), sortable: true },
-        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
-        { key: 'amount', label: this.$t('ui.token.quantity'), sortable: true },
+        {
+          key: 'hash',
+          label: this.$t('ui.tx.transaction'),
+          sortable: true,
+          formatter: (value, key, item) => item.transaction_hash,
+        },
+        {
+          key: 'age',
+          label: this.$t('ui.block.age'),
+          sortable: true,
+          formatter: (value, key, item) => this.formatDataFromNow(item.block.timestamp),
+        },
+        {
+          key: 'method',
+          label: this.$t('ui.token.method'),
+          sortable: true,
+          formatter: () => this.$t('ui.token.transfer'),
+        },
+        {
+          key: 'addressFrom',
+          label: this.$t('ui.tx.from'),
+          sortable: true,
+          formatter: (value, key, item) => item.from_address_hash.hex,
+        },
+        {
+          key: 'addressTo',
+          label: this.$t('ui.tx.to'),
+          sortable: true,
+          formatter: (value, key, item) => item.to_address_hash.hex,
+        },
+        {
+          key: 'amount',
+          label: this.$t('ui.token.quantity'),
+          sortable: true,
+          formatter: (value, key, item) => this.ConvertFromDecimals(item.amount, this.token.decimals),
+        },
       ];
     },
     tableHeadersHolders() {
       return [
-        'rank',
-        { key: 'address_hash.hex', label: this.$t('ui.token.address'), sortable: true },
+        {
+          key: 'index',
+          label: this.$t('ui.token.rank'),
+          sortable: true,
+          formatter: () => this.offset + 1,
+        },
+        {
+          key: 'address',
+          label: this.$t('ui.token.address'),
+          sortable: true,
+          formatter: (value, key, item) => item.address_hash.hex,
+        },
         {
           key: 'value',
           label: this.$t('ui.token.quantity'),
           sortable: true,
-          formatter: (value) => this.NumberFormat(this.ConvertFromDecimals(value, this.token.decimals)),
+          formatter: (value) => this.NumberFormat(this.ConvertFromDecimals(value, this.token.decimals), 4),
         },
         {
           key: 'percentage',
           label: this.$t('ui.token.percentage'),
           sortable: true,
           formatter: (
-            (value, key, item) => new BigNumber(item.value).dividedBy(this.token.total_supply).multipliedBy(100).decimalPlaces(4)
+            (value, key, item) => new BigNumber(item.value)
+              .dividedBy(this.token.total_supply)
+              .multipliedBy(100)
+              .decimalPlaces(4)
           ),
         },
         { key: 'value', label: this.$t('ui.tx.value'), sortable: true },

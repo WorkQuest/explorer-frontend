@@ -5,12 +5,13 @@
   >
     <search-filter class="blocks__search" />
 
-    <table-blocks
+    <base-table
       id="blocks-table"
       class="blocks__table"
       :title="$tc('ui.blocks')"
       :items="blocks"
       :fields="tableHeaders"
+      type="blocks"
     />
 
     <base-pager
@@ -44,16 +45,31 @@ export default {
     },
     tableHeaders() {
       return [
-        { key: 'number', label: this.$t('ui.block.blockNumber'), sortable: true },
-        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
+        {
+          key: 'blockNumber',
+          label: this.$t('ui.block.blockNumber'),
+          sortable: true,
+          formatter: (value, key, item) => item.number,
+        },
+        {
+          key: 'age',
+          label: this.$t('ui.block.age'),
+          sortable: true,
+          formatter: (value, key, item) => this.formatDataFromNow(item.timestamp),
+        },
         { key: 'transactionsCount', label: this.$t('ui.block.txn'), sortable: true },
         {
-          key: 'gas_used',
+          key: 'gasUsed',
           label: this.$t('ui.block.gasUsed'),
           sortable: true,
-          formatter: (value, key, item) => `${this.NumberFormat((+value / +item.gas_limit) * 100, 4)}%`,
+          formatter: (value, key, item) => `${this.NumberFormat((+item.gas_used / +item.gas_limit) * 100, 4)}%`,
         },
-        { key: 'gas_limit', label: this.$t('ui.block.gasLimit'), sortable: true },
+        {
+          key: 'gasLimit',
+          label: this.$t('ui.block.gasLimit'),
+          sortable: true,
+          formatter: (value, key, item) => this.NumberFormat(item.gas_limit),
+        },
       ];
     },
     payload() {

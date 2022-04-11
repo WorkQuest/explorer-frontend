@@ -9,15 +9,21 @@
       caption-top
       sort-icon-right
       responsive="xl"
-      :busy="isLoading"
+      :busy="tableBusy"
       :empty-text="$t('ui.tx.noTxs')"
       show-empty
       stacked="md"
     >
       <template #table-busy>
-        <div class="text-center">
-          <strong>{{ $t('ui.loading') }}</strong>
-        </div>
+        <b-skeleton-table
+
+          :rows="items.length"
+          :columns="fields.length"
+          :table-props="{ bordered: false, striped: true }"
+        />
+        <!--        <div class="text-center">-->
+        <!--          <strong>{{ $t('ui.loading') }}</strong>-->
+        <!--        </div>-->
       </template>
 
       <template
@@ -166,6 +172,10 @@ export default {
       type: Object,
       default: () => {
       },
+    },
+    tableBusy: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
