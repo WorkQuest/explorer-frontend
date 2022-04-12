@@ -1,3 +1,7 @@
+export const blocks = {
+
+};
+
 export default () => ({
   block: {},
   blocksInfo: {

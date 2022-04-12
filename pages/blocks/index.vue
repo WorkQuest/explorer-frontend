@@ -65,7 +65,16 @@ export default {
           key: 'gasUsed',
           label: this.$t('ui.block.gasUsed'),
           sortable: true,
-          formatter: (value, key, item) => `${this.NumberFormat((+item.gas_used / +item.gas_limit) * 100, 4)}%`,
+          formatter: (value, key, item) => [
+            {
+              value: +item.gas_used,
+              class: '',
+            },
+            {
+              value: `${this.NumberFormat((+item.gas_used / +item.gas_limit) * 100, 4)}%`,
+              class: 'grey',
+            },
+          ],
         },
         {
           key: 'gasLimit',
@@ -90,7 +99,6 @@ export default {
     },
   },
   async mounted() {
-    await this.SetLoader(false);
     await this.getBlocks();
     sessionStorage.setItem('backRoute', this.$route.fullPath);
   },

@@ -259,16 +259,6 @@
 import { mapGetters } from 'vuex';
 import BigNumber from 'bignumber.js';
 
-/** @param { array } txsColumns[] */
-/** @param {{ gas_limit: string }} tx   */
-/** @param {{ gas_price: string }} tx   */
-/** @param { array } tx.logs  */
-/** @param {{ transaction_hash: string }} tx.logs  */
-/** @param {{ first_topic: string }} tx.logs  */
-/** @param {{ second_topic: string }} tx.logs  */
-/** @param {{ third_topic: string }} tx.logs  */
-/** @param {{ fourth_topic: string }} tx.logs  */
-
 export default {
   name: 'Block',
   data() {

@@ -93,5 +93,21 @@ Vue.mixin({
       }
       return new BigNumber(value).shiftedBy(-decimals).toString();
     },
+    FormatSmallNumber(number) {
+      if (!number) {
+        return 0;
+      }
+      const num = new BigNumber(number);
+      if (num.isLessThan(0.000001)) {
+        return '> 0,000001';
+      }
+      if (num.isGreaterThan(999999999)) {
+        return `~ ${num.decimalPlaces(0)}`;
+      }
+      if (num.isGreaterThan(0.000001)) {
+        return `${num.decimalPlaces(6)}`;
+      }
+      return `${num.decimalPlaces(4)}`;
+    },
   },
 });

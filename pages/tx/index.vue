@@ -123,7 +123,12 @@ export default {
           key: 'gasUsed',
           label: this.$t('ui.tx.fee'),
           sortable: true,
-          formatter: (value, key, item) => `${item.gas_used}`,
+          formatter: (value, key, item) => [
+            {
+              value: this.FormatSmallNumber(this.ConvertFromDecimals(item.gas_used * item.gas_price, this.WUSDDecimal)),
+              class: 'grey',
+            },
+          ],
         },
       ];
     },

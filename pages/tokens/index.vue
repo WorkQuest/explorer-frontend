@@ -12,8 +12,9 @@
       :items="tokens"
       :fields="tableHeaders"
       type="tokens"
+      :table-busy="tableBusy"
     />
-    <base-pager
+    <paginator
       v-if="totalPages > 1"
       v-model="page"
       class="tokens__pager"
@@ -32,6 +33,7 @@ export default {
       limit: 20,
       offset: 0,
       page: +this.$route.query?.page || 1,
+      tableBusy: false,
     };
   },
   computed: {
@@ -105,11 +107,11 @@ export default {
   },
   async mounted() {
     const isSearch = this.$route.query?.search;
+    this.tableBusy = true;
     if (!isSearch || !this.allTokensCount) {
-      await this.SetLoader(true);
       await this.$store.dispatch('tokens/getAllTokens', this.payload);
-      await this.SetLoader(false);
     }
+    this.tableBusy = false;
     sessionStorage.setItem('backRoute', this.$route.fullPath);
   },
   beforeDestroy() {

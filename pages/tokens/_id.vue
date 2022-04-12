@@ -46,6 +46,7 @@
           class="tables__table"
           :items="tokenTransfers"
           :fields="tableHeadersTransfers"
+          :table-busy="tableBusy"
         />
         <paginator
           v-if="totalPagesValue > 1"
@@ -67,6 +68,7 @@
           :items="tokenHolders"
           :fields="tableHeadersHolders"
           type="holders"
+          :table-busy="tableBusy"
         />
         <paginator
           v-if="totalPagesValue > 1"
@@ -134,6 +136,7 @@ export default {
       limit: 10,
       offset: 0,
       tabs: ['transfers', 'holders', 'info', 'contract'],
+      tableBusy: false,
     };
   },
   computed: {
@@ -243,11 +246,15 @@ export default {
       this.offset = (this.page - 1) * this.limit;
 
       if (this.activeTab === 'transfers') {
+        this.tableBusy = true;
         await this.$store.dispatch('tokens/getTokenTransfers', this.payload);
+        this.tableBusy = false;
       }
 
       if (this.activeTab === 'holders') {
+        this.tableBusy = true;
         await this.$store.dispatch('tokens/getTokenHolders', this.payload);
+        this.tableBusy = false;
       }
     },
     async hash(current, previous) {

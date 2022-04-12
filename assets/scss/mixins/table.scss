@@ -60,7 +60,7 @@ table {
   }
 }
 
-.token {
+.token-item {
   &__header {
     display: flex;
     align-items: center;
@@ -78,7 +78,6 @@ table {
     @include normal-font-size;
     font-size: 12px;
     color: $black300;
-    //max-width: 273px;
     margin-left: 8px;
   }
 

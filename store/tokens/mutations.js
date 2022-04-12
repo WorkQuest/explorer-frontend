@@ -1,4 +1,4 @@
-import { allTokens, currentToken, allTokenTransfers } from '~/store/tokens/state';
+import { allTokens, allTokenTransfers, currentToken } from '~/store/tokens/state';
 
 export default {
   setAllTokens(state, data) {

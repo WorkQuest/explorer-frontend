@@ -115,13 +115,6 @@
 <script>
 import { mapGetters } from 'vuex';
 
-/** @param  { Object } currentBlock  */
-/** @param  {{ string }} currentBlock.size  */
-/** @param  {{ string }} currentBlock.gas_limit  */
-/** @param  {{ string }} currentBlock.gas_used  */
-/** @param  {{ array }} currentBlock.transactions  */
-/** @param  {{ string }} currentBlock.base_fee_per_gas  */
-
 export default {
   name: 'Block',
   data() {

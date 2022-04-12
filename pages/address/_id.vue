@@ -26,6 +26,7 @@
         :title="$tc('ui.txs')"
         :items="txs"
         :fields="tableFields"
+        :table-busy="tableBusy"
       />
     </div>
     <paginator
@@ -48,6 +49,7 @@ export default {
       page: 1,
       limit: 10,
       offset: 0,
+      tableBusy: false,
     };
   },
   computed: {
@@ -109,7 +111,12 @@ export default {
           key: 'gasUsed',
           label: this.$t('ui.tx.fee'),
           sortable: true,
-          formatter: (value, key, item) => `${item.gas_used}`,
+          formatter: (value, key, item) => [
+            {
+              value: this.FormatSmallNumber(this.ConvertFromDecimals(item.gas_used * item.gas_price, this.WUSDDecimal)),
+              class: 'grey',
+            },
+          ],
         },
       ];
     },
@@ -135,7 +142,9 @@ export default {
         await this.$store.dispatch('account/getAccountByAddress', { address: this.address, commonLimit: this.limit });
         await this.SetLoader(false);
       }
+      this.tableBusy = true;
       await this.$store.dispatch('tx/getTxsByAccount', this.payload);
+      this.tableBusy = false;
     },
   },
 };

@@ -88,12 +88,6 @@ export default {
           key: 'token',
           label: this.$t('ui.token.token'),
           sortable: true,
-          /**
-           * @param { string } value
-           * @param { number } key
-           * @param { tokenTransfers } item
-           * @memberOf tokenTransfers
-           */
           formatter: (value, key, item) => {
             const { name, symbol } = item.tokenContractAddress?.token;
             const link = item.tokenContractAddress.hash.hex;
@@ -115,7 +109,6 @@ export default {
     },
   },
   async mounted() {
-    await this.SetLoader(false);
     await this.getTokenTransfers();
     sessionStorage.setItem('backRoute', this.$route.fullPath);
   },

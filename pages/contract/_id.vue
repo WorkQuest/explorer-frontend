@@ -77,15 +77,9 @@
       >
         <base-table
           class="tables__table"
-          :items="tokenTransfers"
+          :items="transactionWithTokensList"
           :fields="tableHeadersERC"
           :table-busy="tableBusy"
-        />
-        <table-txs
-          class="tables__table"
-          :is-only="false"
-          :items="tokenTransfers"
-          :fields="tableHeadersERC"
         />
         <paginator
           v-if="totalPages > 1"
@@ -133,13 +127,13 @@ export default {
       transactionsCount: 'account/getTransactionsCount',
       internalTransactions: 'account/getInternalTransactions',
       internalTransactionsCount: 'account/getInternalTransactionsCount',
-      tokenTransfers: 'account/getTransactionWithTokensList',
-      tokenTransfersCount: 'account/getTransactionWithTokensListCount',
+      transactionWithTokensList: 'account/getTransactionWithTokensList',
+      transactionWithTokensListCount: 'account/getTransactionWithTokensListCount',
     }),
     totalPages() {
       if (this.activeTab === 'txs') return this.setTotalPages(this.transactionsCount, this.limit);
       if (this.activeTab === 'internal') return this.setTotalPages(this.internalTransactionsCount, this.limit);
-      if (this.activeTab === 'tokensTxns') return this.setTotalPages(this.tokenTransfersCount, this.limit);
+      if (this.activeTab === 'tokensTxns') return this.setTotalPages(this.transactionWithTokensListCount, this.limit);
       return 1;
     },
     tableHeadersTxs() {
@@ -179,7 +173,12 @@ export default {
           key: 'gasUsed',
           label: this.$t('ui.tx.fee'),
           sortable: true,
-          formatter: (value, key, item) => `${item.gas_used}`,
+          formatter: (value, key, item) => [
+            {
+              value: this.FormatSmallNumber(this.ConvertFromDecimals(item.gas_used * item.gas_price, this.WUSDDecimal)),
+              class: 'grey',
+            },
+          ],
         },
       ];
     },
@@ -220,20 +219,49 @@ export default {
     tableHeadersERC() {
       return [
         { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'age', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
+        // TODO заменить на age
         {
-          key: 'transfer_amount',
+          key: 'blockNumber',
+          label: this.$t('ui.block.blockNumber'),
+          sortable: true,
+          formatter: (value, key, item) => item.block_number,
+        },
+        {
+          key: 'addressFrom',
+          label: this.$t('ui.tx.from'),
+          sortable: true,
+          formatter: (value, key, item) => item.from_address_hash?.hex || '',
+        },
+        {
+          key: 'addressTo',
+          label: this.$t('ui.tx.to'),
+          sortable: true,
+          formatter: (value, key, item) => item.to_address_hash?.hex || '',
+        },
+        {
+          key: 'value',
           label: this.$t('ui.tx.value'),
           sortable: true,
           formatter: (value, key, item) => {
-            const { decimals } = item.tokenContractAddress?.token || '';
+            const { decimals } = item.tokenTransfers[0].tokenContractAddress.token;
             const rawValue = item.value || '';
             return this.ConvertFromDecimals(rawValue, decimals);
           },
         },
-        { key: 'tokenTransfers', label: this.$t('ui.token.token'), sortable: true },
+        {
+          key: 'token',
+          label: this.$t('ui.token.token'),
+          sortable: true,
+          formatter: (value, key, item) => {
+            const { name, symbol } = item.tokenTransfers[0]?.tokenContractAddress?.token || '';
+            const link = item.tokenTransfers[0]?.tokenContractAddress?.hash?.hex || '';
+            return {
+              name,
+              symbol,
+              link,
+            };
+          },
+        },
       ];
     },
     address() {
@@ -255,6 +283,7 @@ export default {
     },
   },
   async mounted() {
+    await this.SetLoader(false);
     if (isAddress(this.address)) {
       await this.getContractData();
       await this.hashNavigation();
@@ -269,23 +298,27 @@ export default {
       this.$router.push({ hash: `#${tab}` });
     },
     async getContractData() {
-      await this.SetLoader(true);
+      this.tableBusy = true;
       await this.$store.dispatch('account/getAccountByAddress', { address: this.address, commonLimit: this.limit });
-      await this.SetLoader(false);
+      this.tableBusy = false;
     },
     async getPage() {
       const { address, limit, offset } = this;
-      this.tableBusy = true;
       if (this.activeTab === 'txs') {
+        this.tableBusy = true;
         await this.$store.dispatch('account/getAccountTransactions', { address, limit, offset });
+        this.tableBusy = false;
       }
       if (this.activeTab === 'internal') {
+        this.tableBusy = true;
         await this.$store.dispatch('account/getAccountInternalTransactions', { address, limit, offset });
+        this.tableBusy = false;
       }
       if (this.activeTab === 'tokensTxns') {
+        this.tableBusy = true;
         await this.$store.dispatch('account/getTransactionWithTokensList', { address, limit, offset });
+        this.tableBusy = false;
       }
-      this.tableBusy = false;
     },
     async hashNavigation() {
       if (this.hash) {

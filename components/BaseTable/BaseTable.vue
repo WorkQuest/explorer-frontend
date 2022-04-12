@@ -14,16 +14,18 @@
       show-empty
       stacked="md"
     >
-      <template #empty>
-        <empty-data :description="emptyDescription" />
-      </template>
-
       <template #table-busy>
         <b-skeleton-table
           :rows="items.length"
           :columns="fields.length"
-          :table-props="{ bordered: false, striped: true }"
+          :hide-header="true"
+          :show-footer="false"
+          :table-props="{ bordered: false, striped: false, outlined: false, sortIconRight: true, small: true }"
         />
+      </template>
+
+      <template #empty>
+        <empty-data :description="emptyDescription" />
       </template>
 
       <template
@@ -40,7 +42,6 @@
       </template>
 
       <template #cell(age)="el">
-        <!--        <span v-if="el.item.block && el.item.block.timestamp">{{ formatDataFromNow(el.item.block.timestamp) }}</span>-->
         <span>{{ el.value }}</span>
       </template>
 
@@ -91,7 +92,18 @@
       </template>
 
       <template #cell(gasUsed)="el">
-        <span v-if="type === 'blocks'"> {{ el.item.gas_used }} </span> <span class="grey">{{ el.value }} </span>
+        <template v-if="Array.isArray(el.value)">
+          <span
+            v-for="(item, key) in el.value"
+            :key="`gasUsed-${key}`"
+            :class="item.class"
+          >
+            {{ item.value }}
+          </span>
+        </template>
+        <template v-else>
+          {{ el.value }}
+        </template>
       </template>
 
       <template #cell(gasLimit)="el">
@@ -128,46 +140,40 @@
       </template>
 
       <template #cell(token)="el">
-        <div class="token__header">
+        <div class="token-item__header">
           <img
             v-if="type === 'tokens'"
             :src="require(`~/assets/img/tokens/empty-token.svg`)"
             width="15"
             height="15"
-            class="token__image"
+            class="token-item__image"
             :alt="el.item.symbol"
           >
           <nuxt-link
-            class="token__title table__link"
-            :to="{ path: `tokens/${el.value.link}`}"
+            class="token-item__title table__link"
+            :to="`/tokens/${el.value.link}`"
           >
-            <span class="table__token token token__name"> {{ el.value.name }}</span>
-            <span class="table__token token token__symbol"> ({{ el.value.symbol }}) </span>
+            <span class="table__token token token-item__name"> {{ el.value.name }}</span>
+            <span class="table__token token token-item__symbol"> ({{ el.value.symbol }}) </span>
           </nuxt-link>
         </div>
-        <p class="token__description">
+        <p class="token-item__description">
           {{ el.item.description }}
         </p>
       </template>
 
-      <template #cell(tokenTransfers)="el">
-        <nuxt-link
-          class="table__link"
-          :to="{ path: `tokens/`+el.item.tokenContractAddress.hash.hex, params: { token: el.item.tokenContractAddress.hash.hex }}"
-        >
-          <span class="table__token token token__name"> {{ el.item.tokenContractAddress.token.name }}</span>
-          <span class="table__token token token__symbol"> ({{ el.item.tokenContractAddress.token.symbol }}) </span>
-        </nuxt-link>
-      </template>
-
       <template #cell(transactionsCount)="el">
-        <nuxt-link
-          class="table__link"
-          :class="el.item.transactionsCount === 0 ? 'table__link_disabled' : ''"
-          :to="{ path: '/tx', query: { block: el.item.number }}"
-        >
-          {{ el.item.transactionsCount }}
-        </nuxt-link>
+        <template v-if="el.item.number">
+          <nuxt-link
+            class="table__link"
+            :to="{ path: '/tx', query: { block: el.item.number }}"
+          >
+            {{ el.item.transactionsCount }}
+          </nuxt-link>
+        </template>
+        <template v-else>
+          {{ el.value }}
+        </template>
       </template>
 
       <template #cell(value)="el">
