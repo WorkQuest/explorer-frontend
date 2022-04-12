@@ -94,13 +94,13 @@
                 <nuxt-link
                   v-if="tx.from_address_hash"
                   class="overview__link_small"
-                  :to="`/address/${tx.from_address_hash.hex}`"
+                  :to="`/address/${tx.from_address_hash.bech32}`"
                 >
-                  {{ formatItem(tx.from_address_hash.hex, 7, 6) }}
+                  {{ formatItem(tx.from_address_hash.bech32, 7, 6) }}
                 </nuxt-link>
                 <button-copy
                   v-if="tx.from_address_hash"
-                  :value="tx.from_address_hash.hex"
+                  :value="tx.from_address_hash.bech32"
                   icon-color="primary"
                 />
               </div>
@@ -109,13 +109,13 @@
                 <nuxt-link
                   v-if="tx.to_address_hash"
                   class="overview__link_small"
-                  :to="`/address/${tx.to_address_hash.hex}`"
+                  :to="`/address/${tx.to_address_hash.bech32}`"
                 >
-                  {{ formatItem(tx.to_address_hash.hex, 7, 6) }}
+                  {{ formatItem(tx.to_address_hash.bech32, 7, 6) }}
                 </nuxt-link>
                 <button-copy
                   v-if="tx.to_address_hash"
-                  :value="tx.to_address_hash.hex"
+                  :value="tx.to_address_hash.bech32"
                   icon-color="primary"
                 />
               </div>
@@ -324,13 +324,13 @@ export default {
           {
             class: 'columns__item_three-one',
             title: this.$t('ui.tx.from'),
-            info: this.tx.from_address_hash.hex,
+            info: this.tx.from_address_hash.bech32,
             item: 'address',
           },
           {
             class: 'columns__item_three-two',
             title: this.$t('ui.tx.to'),
-            info: this.tx.to_address_hash ? this.tx.to_address_hash.hex : null,
+            info: this.tx.to_address_hash ? this.tx.to_address_hash.bech32 : null,
             item: 'address',
           },
           {

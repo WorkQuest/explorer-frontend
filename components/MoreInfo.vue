@@ -11,12 +11,12 @@
         <span class="info__title">{{ $t('ui.token.contract') }}</span>
         <nuxt-link
           class="info__link"
-          :to="{ path: '/contract/' + token.contract_address_hash.hex}"
+          :to="{ path: '/contract/' + token.contract_address_hash.bech32}"
         >
-          {{ token.contract_address_hash.hex }}
+          {{ token.contract_address_hash.bech32 }}
         </nuxt-link>
         <button-copy
-          :value="token.contract_address_hash.hex"
+          :value="token.contract_address_hash.bech32"
           icon-color="primary"
         />
       </p>
@@ -90,7 +90,7 @@ export default {
       return !this.isToken ? this.accountInfo.createdContract : null;
     },
     creator() {
-      return this.createdContract ? this.accountInfo.createdContract?.from_address_hash?.hex : '';
+      return this.createdContract ? this.accountInfo.createdContract?.from_address_hash?.bech32 : '';
     },
     txHash() {
       return this.createdContract ? this.accountInfo.createdContract?.hash : '';
@@ -99,7 +99,7 @@ export default {
       return this.createdContract && this.accountInfo.token;
     },
     tokenTrackerAddress() {
-      return this.isTokenTracker ? this.accountInfo.token.contract_address_hash.hex : '';
+      return this.isTokenTracker ? this.accountInfo.token.contract_address_hash.bech32 : '';
     },
     tokenTrackerName() {
       return this.isTokenTracker ? this.accountInfo.token.name : '';

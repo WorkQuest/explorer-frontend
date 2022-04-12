@@ -3,6 +3,7 @@ import moment from 'moment';
 import VueTippy, { TippyComponent } from 'vue-tippy';
 import BigNumber from 'bignumber.js';
 import modals from '~/store/modals/modals';
+import { isValidBech32 } from '~/utils';
 
 Vue.use(VueTippy);
 Vue.component('tippy', TippyComponent);
@@ -108,6 +109,9 @@ Vue.mixin({
         return `${num.decimalPlaces(6)}`;
       }
       return `${num.decimalPlaces(4)}`;
+    },
+    IsValidBech32Address(address) {
+      return isValidBech32(address);
     },
   },
 });

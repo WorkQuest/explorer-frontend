@@ -72,7 +72,7 @@ export default {
           sortable: true,
           formatter: (value, key, item) => {
             const { name, symbol } = item;
-            const link = item.contract_address_hash.hex;
+            const link = item.contract_address_hash.bech32;
             return {
               name,
               symbol,

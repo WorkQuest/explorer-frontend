@@ -152,3 +152,8 @@ export const isValidInt = (int, bits) => {
   const maxValue = new BigNumber(2).pow(bits ? 1 : +bits - 2);
   return valueToCheck.isGreaterThanOrEqualTo(minValue) && valueToCheck.isLessThanOrEqualTo(maxValue);
 };
+
+export const isValidBech32 = (address) => {
+  const regex = /^(wq1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$/;
+  return regex.test(address);
+};
