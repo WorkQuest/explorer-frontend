@@ -81,12 +81,9 @@ export default {
   },
   methods: {
     setPage(value) {
-      if (!value) {
-        this.input = '';
-        return;
-      }
-      if (!value || (this.value !== +value && +value <= this.totalPages) || +value < 1) {
+      if (+value > 0 && this.value !== +value && +value <= this.totalPages) {
         this.$emit('input', Math.ceil(+value));
+        this.input = '';
       } else {
         this.input = '';
       }
@@ -141,7 +138,8 @@ export default {
         color: $black200;
       }
     }
-    &_inverted {
+    &_inverted > span:before {
+      display: inline-block;
       transform: scale(-1);
     }
   }
