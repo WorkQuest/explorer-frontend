@@ -13,6 +13,7 @@
       :fields="tableHeaders"
       type="tokens"
       :table-busy="tableBusy"
+      :skeleton="{rows: limit, columns: tableHeaders.length}"
     />
     <paginator
       v-if="totalPages > 1"

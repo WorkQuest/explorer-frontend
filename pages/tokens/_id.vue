@@ -47,6 +47,8 @@
           :items="tokenTransfers"
           :fields="tableHeadersTransfers"
           :table-busy="tableBusy"
+          type="transfers"
+          :skeleton="{rows: limit, columns: tableHeadersTransfers.length}"
         />
         <paginator
           v-if="totalPagesValue > 1"
@@ -64,11 +66,11 @@
         <base-table
           id="tokens-holders-table"
           class="tables__table"
-          :is-only="false"
           :items="tokenHolders"
           :fields="tableHeadersHolders"
           type="holders"
           :table-busy="tableBusy"
+          :skeleton="{rows: limit, columns: tableHeadersHolders.length}"
         />
         <paginator
           v-if="totalPagesValue > 1"

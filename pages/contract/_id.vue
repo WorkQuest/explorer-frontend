@@ -43,6 +43,8 @@
           :items="transactions"
           :fields="tableHeadersTxs"
           :table-busy="tableBusy"
+          type="transactions"
+          :skeleton="{rows: limit, columns: tableHeadersTxs.length}"
         />
         <paginator
           v-if="totalPages > 1"
@@ -62,6 +64,8 @@
           :items="internalTransactions"
           :fields="tableHeadersInternal"
           :table-busy="tableBusy"
+          type="transactions"
+          :skeleton="{rows: limit, columns: tableHeadersInternal.length}"
         />
         <paginator
           v-if="totalPages > 1"
@@ -80,6 +84,8 @@
           :items="transactionWithTokensList"
           :fields="tableHeadersERC"
           :table-busy="tableBusy"
+          type="transactions"
+          :skeleton="{rows: limit, columns: tableHeadersERC.length}"
         />
         <paginator
           v-if="totalPages > 1"

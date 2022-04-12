@@ -16,8 +16,8 @@
     >
       <template #table-busy>
         <b-skeleton-table
-          :rows="items.length"
-          :columns="fields.length"
+          :rows="skeleton.rows"
+          :columns="skeleton.columns"
           :hide-header="true"
           :show-footer="false"
           :table-props="{ bordered: false, striped: false, outlined: false, sortIconRight: true, small: true }"
@@ -208,13 +208,13 @@ export default {
       type: Array,
       default: () => [],
     },
-    isOnly: {
-      type: Boolean,
-      default: true,
-    },
     tableBusy: {
       type: Boolean,
       default: false,
+    },
+    skeleton: {
+      type: Object,
+      default: () => ({ rows: 5, columns: 5 }),
     },
   },
   computed: {
@@ -224,6 +224,12 @@ export default {
       }
       if (this.type === 'holders') {
         return this.$t('ui.token.noHolders');
+      }
+      if (this.type === 'blocks') {
+        return this.$t('ui.block.noBlocks');
+      }
+      if (this.type === 'transactions') {
+        return this.$t('ui.tx.noTxs');
       }
       return this.$t('ui.noData');
     },

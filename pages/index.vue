@@ -22,6 +22,7 @@
           :fields="tableHeadersBlocks"
           :table-busy="tableBusy"
           type="blocks"
+          :skeleton="{rows: limit, columns: tableHeadersBlocks.length}"
         >
           <template v-slot:table-caption>
             <div class="table__titles">
@@ -42,6 +43,8 @@
           :items="txs"
           :fields="tableHeadersTxs"
           :table-busy="tableBusy"
+          type="transactions"
+          :skeleton="{rows: limit, columns: tableHeadersTxs.length}"
         >
           <template #table-caption>
             <div class="table__titles">

@@ -27,6 +27,8 @@
         :items="txs"
         :fields="tableFields"
         :table-busy="tableBusy"
+        type="transactions"
+        :skeleton="{rows: limit, columns: tableFields.length}"
       />
     </div>
     <paginator

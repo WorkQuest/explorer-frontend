@@ -12,6 +12,8 @@
       :items="allTokenTransfers"
       :fields="tableHeaders"
       :table-busy="tableBusy"
+      type="transfers"
+      :skeleton="{rows: limit, columns: tableHeaders.length}"
     />
 
     <paginator

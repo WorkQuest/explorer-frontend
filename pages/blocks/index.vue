@@ -13,6 +13,7 @@
       :fields="tableHeaders"
       type="blocks"
       :table-busy="tableBusy"
+      :skeleton="{rows: limit, columns: tableHeaders.length}"
     />
 
     <paginator

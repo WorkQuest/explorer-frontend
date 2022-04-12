@@ -8,11 +8,12 @@
     <base-table
       id="transactions-table"
       class="transactions__table"
-      :is-only="false"
       :items="txsTable"
       :fields="tableHeaders"
       :title="query ? '' : $tc('ui.txs')"
       :busy="tableBusy"
+      type="transactions"
+      :skeleton="{rows: limit, columns: tableHeaders.length}"
     >
       <template
         v-if="query"
