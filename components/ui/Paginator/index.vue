@@ -82,11 +82,9 @@ export default {
   methods: {
     setPage(value) {
       if (+value > 0 && this.value !== +value && +value <= this.totalPages) {
-        console.log('value and other stuff: ', value);
         this.$emit('input', Math.ceil(+value));
         this.input = '';
       } else {
-        console.log('value');
         this.input = '';
       }
     },
