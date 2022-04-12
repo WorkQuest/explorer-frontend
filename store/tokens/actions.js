@@ -50,4 +50,14 @@ export default {
       return error(e.code || 500, 'getTokenHolders', e);
     }
   },
+  async getTokenPrices({ commit }) {
+    try {
+      const URL = process.env.WQ_ORACLE_URL;
+      const response = await this.$axios.$get(`${URL}oracle/current-prices`);
+      commit('setTokenPrices', response.result);
+      return response.result;
+    } catch (e) {
+      return error(e.code || 500, 'getTokenPrices', e);
+    }
+  },
 };

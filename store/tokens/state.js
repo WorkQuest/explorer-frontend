@@ -41,6 +41,23 @@ export const allTokenTransfers = {
   transfers: [],
 };
 
+/** @typedef {array} tokenPrices
+ * @property {object} 0
+ * @property {object} 1
+ * @property {object} 2
+ * @property {string} 0.symbol
+ * @property {string} 0.price
+ * @property {string} 0.timestamp
+ * @property {string} 1.symbol
+ * @property {string} 1.price
+ * @property {string} 1.timestamp
+ * @property {string} 2.symbol
+ * @property {string} 2.price
+ * @property {string} 2.timestamp
+ */
+
+export const tokenPrices = [];
+
 export default () => ({
   allTokens,
   currentToken,
@@ -50,4 +67,5 @@ export default () => ({
     symbol: 'WUSD',
     decimals: 18,
   },
+  tokenPrices,
 });

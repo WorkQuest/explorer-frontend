@@ -76,7 +76,7 @@
           :total-pages="totalPagesValue"
         />
       </div>
-      <!--      TODO update when server response changes    -->
+
       <div
         v-if="activeTab === 'info'"
         id="info"
@@ -86,22 +86,23 @@
           {{ $t('ui.token.overview') }}
         </p>
         <p class="token-info__description">
-          {{ $t('ui.token.tether') }}
+          <!--      TODO update when server response changes    -->
+          <!--          {{ $t('ui.token.tether') }}-->
         </p>
         <p class="token-info__title">
           {{ $t('ui.token.market') }}
         </p>
         <p class="token-info__description">
           <span class="token-info__subtitle">{{ $t('ui.token.volume') }}</span>
-          $ 44 215 188 907,00
+          $ {{ volume }}
         </p>
         <p class="token-info__description">
           <span class="token-info__subtitle">{{ $t('ui.token.capitalization') }}</span>
-          $ 62 059 827 982,00
+          $ {{ capitalization }}
         </p>
         <p class="token-info__description">
           <span class="token-info__subtitle">{{ $t('ui.token.supply') }}</span>
-          61 992 333 258.00 USDT
+          {{ circulatingSupply }} {{ token.symbol }}
         </p>
       </div>
 
@@ -176,10 +177,10 @@ export default {
         'rank',
         { key: 'address_hash.hex', label: this.$t('ui.token.address'), sortable: true },
         {
-          key: 'value',
+          key: 'quantity',
           label: this.$t('ui.token.quantity'),
           sortable: true,
-          formatter: (value) => this.NumberFormat(this.ConvertFromDecimals(value, this.token.decimals)),
+          formatter: (value, key, item) => this.NumberFormat(new BigNumber(item.value).shiftedBy(-this.token.decimals).dp(0, 1)),
         },
         {
           key: 'percentage',
@@ -189,11 +190,37 @@ export default {
             (value, key, item) => new BigNumber(item.value).dividedBy(this.token.total_supply).multipliedBy(100).decimalPlaces(4)
           ),
         },
-        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
+        {
+          key: 'value',
+          label: this.$t('ui.tx.value'),
+          sortable: true,
+          formatter: (value, key, item) => {
+            const price = new BigNumber(this.tokenPrice).shiftedBy(-this.token.decimals);
+            const valueFromBN = new BigNumber(item.value).shiftedBy(-this.token.decimals);
+            return `$${this.NumberFormat(price.multipliedBy(valueFromBN).decimalPlaces(2))}`;
+          },
+        },
       ];
     },
     hash() {
       return this.$route.hash;
+    },
+    tokenPrice() {
+      const price = this.$store.getters['tokens/getTokenPrice'](this.token.symbol) || 0;
+      return new BigNumber(price).toString();
+    },
+    volume() {
+      const price = new BigNumber(this.tokenPrice).shiftedBy(-this.token.decimals);
+      const valueFromBN = new BigNumber(this.token.volume).shiftedBy(-this.token.decimals);
+      return this.NumberFormat(price.multipliedBy(valueFromBN).toString());
+    },
+    circulatingSupply() {
+      return this.NumberFormat(new BigNumber(this.token.circulatingSupply).shiftedBy(-this.token.decimals).toString());
+    },
+    capitalization() {
+      const price = new BigNumber(this.tokenPrice).shiftedBy(-this.token.decimals);
+      const valueFromBN = new BigNumber(this.token.circulatingSupply).shiftedBy(-this.token.decimals);
+      return this.NumberFormat(price.multipliedBy(valueFromBN).decimalPlaces(2).toString());
     },
   },
   watch: {
@@ -235,6 +262,7 @@ export default {
       await this.SetLoader(true);
       await this.$store.dispatch('tokens/getToken', { address: this.address, commonLimit: this.limit });
       await this.$store.dispatch('account/getAccountByAddress', { address: this.address, commonLimit: this.limit });
+      await this.$store.dispatch('tokens/getTokenPrices');
       await this.SetLoader(false);
     },
     async hashNavigation() {

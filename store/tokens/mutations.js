@@ -1,4 +1,4 @@
-import { allTokens, currentToken, allTokenTransfers } from '~/store/tokens/state';
+import { allTokens, allTokenTransfers, currentToken } from '~/store/tokens/state';
 
 export default {
   setAllTokens(state, data) {
@@ -25,6 +25,9 @@ export default {
   setAllTokenTransfers(state, data) {
     state.allTokenTransfers = data;
   },
+  setTokenPrices(state, data) {
+    state.tokenPrices = [...data];
+  },
   resetTokens(state) {
     Object.assign(state.allTokens, allTokens);
   },
@@ -33,5 +36,8 @@ export default {
   },
   resetAllTokenTransfers(state) {
     Object.assign(state.allTokenTransfers, allTokenTransfers);
+  },
+  resetTokenPrices(state) {
+    state.tokenPrices = [];
   },
 };

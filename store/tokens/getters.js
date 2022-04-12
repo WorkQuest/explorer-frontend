@@ -13,4 +13,5 @@ export default {
   getWUSDTokenData: (state) => state.wusd,
   getWUSDTokenSymbol: (state) => state.wusd.symbol,
   getWUSDTokenDecimals: (state) => state.wusd.decimals,
+  getTokenPrice: (state) => (tokenSymbol) => state.tokenPrices.find((token) => token.symbol === tokenSymbol)?.price,
 };
