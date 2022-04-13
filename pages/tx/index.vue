@@ -1,17 +1,13 @@
 <template>
-  <div
-    v-if="!isLoading"
-    class="transactions"
-  >
+  <div class="transactions">
     <search-filter class="transactions__search" />
-
     <base-table
       id="transactions-table"
       class="transactions__table"
+      :title="query ? '' : $tc('ui.txs')"
       :items="txsTable"
       :fields="tableHeaders"
-      :title="query ? '' : $tc('ui.txs')"
-      :busy="tableBusy"
+      :table-busy="tableBusy"
       type="transactions"
       :skeleton="{rows: limit, columns: tableHeaders.length}"
     >
@@ -147,7 +143,6 @@ export default {
     },
   },
   async mounted() {
-    await this.SetLoader(false);
     await this.getTransactions();
     sessionStorage.setItem('backRoute', this.$route.fullPath);
   },
@@ -182,7 +177,7 @@ export default {
   }
 
   &__header {
-    padding: 20px;
+    padding: 8px 20px;
   }
 
   &__title {

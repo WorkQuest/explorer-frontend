@@ -1,10 +1,25 @@
 <template>
   <div class="item">
-    <p class="item__header">
+    <p
+      v-if="isBlockLoading"
+      class="item__header"
+    >
+      <b-skeleton width="50%" />
+    </p>
+    <p
+      v-if="!isBlockLoading"
+      class="item__header"
+    >
       {{ title }}
     </p>
     <p
-      v-if="item === 'link'"
+      v-if="isBlockLoading"
+      class="item__info"
+    >
+      <b-skeleton width="30%" />
+    </p>
+    <p
+      v-else-if="!isBlockLoading && item === 'link' "
       class="item__info"
     >
       <nuxt-link
@@ -15,7 +30,7 @@
       </nuxt-link>
     </p>
     <p
-      v-else-if="item === 'transactionsCount'"
+      v-else-if="!isBlockLoading && item === 'transactionsCount'"
       class="item__link"
     >
       <nuxt-link
@@ -26,7 +41,7 @@
       </nuxt-link>
     </p>
     <p
-      v-else-if="info && item === 'address'"
+      v-else-if="!isBlockLoading && info && item === 'address'"
       class="item__info item__info_blue"
     >
       <nuxt-link
@@ -41,7 +56,7 @@
       />
     </p>
     <p
-      v-else-if="item === 'status'"
+      v-else-if="!isBlockLoading && item === 'status'"
       class="item__info status"
       :class="{'status_green': info === 1, 'status_red': info === 0}"
     >
@@ -49,7 +64,7 @@
     </p>
 
     <p
-      v-else-if="item === 'timestamp'"
+      v-else-if="!isBlockLoading && item === 'timestamp'"
       class="item__info"
     >
       <slot name="timestamp" />
@@ -60,7 +75,11 @@
     >
       {{ info }}
     </p>
+    <p v-if="isBlockLoading">
+      <b-skeleton width="60%" />
+    </p>
     <p
+      v-else-if="!isBlockLoading && note"
       class="item__note"
       :class="{'item__note_red': info === 0}"
     >
@@ -88,6 +107,10 @@ export default {
     item: {
       type: String,
       default: '',
+    },
+    isBlockLoading: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

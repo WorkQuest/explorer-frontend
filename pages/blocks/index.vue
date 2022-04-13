@@ -1,18 +1,14 @@
 <template>
-  <div
-    v-if="!isLoading"
-    class="blocks"
-  >
+  <div class="blocks">
     <search-filter class="blocks__search" />
-
     <base-table
       id="blocks-table"
       class="blocks__table"
       :title="$tc('ui.blocks')"
       :items="blocks"
       :fields="tableHeaders"
-      type="blocks"
       :table-busy="tableBusy"
+      type="blocks"
       :skeleton="{rows: limit, columns: tableHeaders.length}"
     />
 

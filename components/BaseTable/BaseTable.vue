@@ -1,6 +1,26 @@
 <template>
   <div class="table-wrapper">
+    <div
+      v-if="tableBusy"
+      class="skeleton-table"
+    >
+      <div
+        v-if="title"
+        class="table__titles"
+      >
+        <span class="table__title">{{ title }}</span>
+      </div>
+      <b-skeleton-table
+        :rows="skeleton.rows"
+        :columns="skeleton.columns"
+        :hide-header="false"
+        :show-footer="false"
+        class="skeleton-table"
+        :table-props="{ bordered: false, striped: false, outlined: false, small: false }"
+      />
+    </div>
     <b-table
+      v-else
       :items="items"
       :fields="fields"
       borderless
@@ -9,22 +29,13 @@
       caption-top
       sort-icon-right
       responsive="xl"
-      :busy="tableBusy"
-      :empty-text="emptyDescription"
       show-empty
       stacked="md"
     >
-      <template #table-busy>
-        <b-skeleton-table
-          :rows="skeleton.rows"
-          :columns="skeleton.columns"
-          :hide-header="true"
-          :show-footer="false"
-          :table-props="{ bordered: false, striped: false, outlined: false, sortIconRight: true, small: true }"
-        />
-      </template>
-
-      <template #empty>
+      <template
+        v-if="!tableBusy"
+        #empty
+      >
         <empty-data :description="emptyDescription" />
       </template>
 

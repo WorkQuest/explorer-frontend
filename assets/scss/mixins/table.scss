@@ -90,6 +90,31 @@ table {
   }
 }
 
+.skeleton-table {
+  border-radius: 6px;
+  overflow: auto;
+  & > table {
+    & > thead > tr {
+      background: rgba(0, 131, 199, 0.1);
+      & > th {
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+      }
+    }
+    & > tbody > tr {
+      & > td {
+        vertical-align: middle;
+        border-top: 1px solid transparent;
+      }
+    }
+  }
+  & .table__titles  {
+    background-color: $white;
+    padding-top: 10px;
+    padding-bottom: 11px;
+  }
+}
+
 @media (max-width: 1199px) {
   #transfers,
   #blocks-table,
@@ -166,13 +191,13 @@ table {
       width: 100%;
     }
 
-    .table.b-table.b-table-stacked-md > tbody > tr {
+    .skeleton-table > table > tbody > tr,.table.b-table.b-table-stacked-md > tbody > tr {
       display: flex;
       flex-direction: column;
       flex-flow: wrap;
     }
 
-    .table.b-table.b-table-stacked-md > tbody > tr > td {
+    .skeleton-table > table > tbody > tr > td,.table.b-table.b-table-stacked-md > tbody > tr > td {
       display: flex;
       flex-direction: row;
       flex-basis: 100%;

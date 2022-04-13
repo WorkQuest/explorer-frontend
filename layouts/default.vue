@@ -1,10 +1,10 @@
 <template>
   <div class="primary">
     <div class="primary__template template">
-      <div class="template__content">
+      <div class="template__main">
         <div
           v-click-outside="closeAll"
-          class="template__header header"
+          class="template__header header__desktop"
         >
           <div class="header__body">
             <div class="header__left">
@@ -85,7 +85,10 @@
           </div>
         </div>
         <!-- mobile header -->
-        <div class="template__header header_mobile">
+        <div
+          class="header__mobile"
+          :class="{'header__mobile_visible': isMobileMenu}"
+        >
           <div
             v-if="isMobileMenu"
             class="header__left_mobile"
@@ -306,14 +309,6 @@ export default {
 <style lang="scss" scoped>
 .icon {
   font-size: 20px;
-
-  &-caret_down {
-    color: #2e3a59;
-  }
-
-  &-close_big {
-    color: #2e3a59;
-  }
 }
 
 .primary {
@@ -321,33 +316,42 @@ export default {
 }
 
 .template {
-  min-height: 100vh;
-  background: #F7F8FA;
-
-  &__content {
-    display: grid;
-    min-height: calc(100vh - 185px);
-  }
 
   &__main {
     display: grid;
-    padding-bottom: 80px;
-    transition: 1s;
-    width: 100%;
+    min-height: 100vh;
+    background: #F7F8FA;
+    grid-template-rows: auto 1fr auto;
+    margin: 0;
+  }
+
+  &__header {
+    min-height: 72px;
+  }
+
+  &__content {
+  }
+  &__footer {
+    min-height: 75px;
   }
 }
 
 .header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  min-height: 72px;
-  background: $white;
-  box-shadow: 0 1px 0 #E6E9EC;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  &__desktop {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: $white;
+    box-shadow: 0 1px 0 #E6E9EC;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__mobile {
+    display: none;
+  }
 
   &__body {
     @include container;
@@ -614,8 +618,11 @@ export default {
   .header {
     z-index: 5;
 
-    &_mobile {
+    &__mobile {
       z-index: 2;
+      &_visible {
+        display: block;
+      }
     }
 
     &__button_menu {
@@ -663,13 +670,6 @@ export default {
           padding-bottom: 10px;
         }
       }
-    }
-
-    &__separator {
-      height: 1px;
-      background: $black100;
-      width: 100%;
-      display: block;
     }
   }
   .footer {

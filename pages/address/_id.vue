@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="!isLoading && Object.keys(txs).length > 0"
-    class="address"
-  >
+  <div class="address">
     <search-filter class="address__search" />
     <div class="address__header">
       <h4 class="address__title">
