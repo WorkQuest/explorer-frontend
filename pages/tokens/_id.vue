@@ -210,8 +210,8 @@ export default {
       return new BigNumber(price).toString();
     },
     volume() {
-      const price = new BigNumber(this.tokenPrice).shiftedBy(-this.token.decimals);
-      const valueFromBN = new BigNumber(this.token.volume).shiftedBy(-this.token.decimals);
+      const price = new BigNumber(this.tokenPrice || 0).shiftedBy(-this.token?.decimals || 0);
+      const valueFromBN = new BigNumber(this.token?.volume || 0).shiftedBy(-this.token?.decimals || 0);
       return this.NumberFormat(price.multipliedBy(valueFromBN).toString());
     },
     circulatingSupply() {
@@ -262,7 +262,6 @@ export default {
       await this.SetLoader(true);
       await this.$store.dispatch('tokens/getToken', { address: this.address, commonLimit: this.limit });
       await this.$store.dispatch('account/getAccountByAddress', { address: this.address, commonLimit: this.limit });
-      await this.$store.dispatch('tokens/getTokenPrices');
       await this.SetLoader(false);
     },
     async hashNavigation() {

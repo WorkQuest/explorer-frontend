@@ -62,7 +62,7 @@ export default {
         { key: 'number', label: '#', sortable: false },
         { key: 'contract_address_hash.hex', label: this.$t('ui.token.token'), sortable: true },
         {
-          key: 'total_supply',
+          key: 'volume',
           label: this.$t('ui.token.volume'),
           sortable: true,
           formatter: (value, key, item) => this.NumberFormat(this.ConvertFromDecimals(value, item.decimals)),
@@ -88,6 +88,7 @@ export default {
     if (!isSearch || !this.allTokensCount) {
       await this.SetLoader(true);
       await this.$store.dispatch('tokens/getAllTokens', this.payload);
+      await this.$store.dispatch('tokens/getTokenPrices');
       await this.SetLoader(false);
     }
     sessionStorage.setItem('backRoute', this.$route.fullPath);

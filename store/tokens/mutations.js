@@ -28,6 +28,14 @@ export default {
   setTokenPrices(state, data) {
     state.tokenPrices = [...data];
   },
+  setTokensVolume(state, data) {
+    state.allTokens.tokens = Array.isArray(data)
+      ? state.allTokens.tokens.map((token) => {
+        token.volume = data.find((vol) => vol.result.token.contract_address_hash.hex === token.contract_address_hash.hex).result.token.volume;
+        return token;
+      })
+      : [...state.allTokens.tokens];
+  },
   resetTokens(state) {
     Object.assign(state.allTokens, allTokens);
   },
