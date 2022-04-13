@@ -301,6 +301,7 @@ export default {
     },
     setLocale(item) {
       this.currentLocale = item;
+      this.closeAll();
       this.changeLocale();
     },
   },
@@ -327,9 +328,6 @@ export default {
 
   &__header {
     min-height: 72px;
-  }
-
-  &__content {
   }
   &__footer {
     min-height: 75px;

@@ -26,7 +26,7 @@
             v-if="isBlockLoading"
             class="block__number"
           >
-            #<b-skeleton width="30%" />
+            #<b-skeleton />
           </span>
           <span
             v-else-if="currentBlockNumber"
@@ -44,15 +44,15 @@
           <template v-if="isBlockLoading">
             <info-item
               v-for="(item, i) in blockColumns"
-              :key="`info-item-loader-${i}`"
+              :key="`block-item-loader-${i}`"
               :title="item.title"
-              :is-block-loading="true"
+              :is-info-loading="true"
             />
           </template>
           <template v-else>
             <info-item
               v-for="(item, i) in blockColumns"
-              :key="i"
+              :key="`block-item-${i}`"
               :title.sync="item.title"
               :info.sync="item.info"
               :note.sync="item.note"
@@ -98,11 +98,13 @@ export default {
       decimals: 'tokens/getWUSDTokenDecimals',
     }),
     blockColumns() {
-      const gasUsed = `${this.currentBlock.gas_used} (${(this.currentBlock.gas_used / this.currentBlock.gas_limit) * 100}%)`;
+      const gasUsedValue = this.currentBlock?.gas_used || 0;
+      const gasLimitValue = this.currentBlock?.gas_limit || 1;
+      const gasUsed = `${gasUsedValue} (${(gasUsedValue / gasLimitValue) * 100}%)`;
       return [
         {
           title: this.$t('ui.timestamp'),
-          info: this.currentBlock.timestamp,
+          info: this.dateFromNow,
           note: `(${this.$moment(this.currentBlock.timestamp)
             .format('MMM-DD-YYYY HH:mm:ss A +UTC')})`,
           item: 'timestamp',
@@ -236,9 +238,9 @@ export default {
     flex-direction: row;
     align-items: center;
     & > .b-skeleton.b-skeleton-text {
-      width: 50px;
-      height: 22px;
-      margin-bottom: 0;
+      min-width: 75px !important;
+      height: 24px !important;
+      margin-bottom: 0 !important;
     }
     &-field {
       display: flex;

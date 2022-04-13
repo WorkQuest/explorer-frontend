@@ -1,25 +1,25 @@
 <template>
   <div class="item">
     <p
-      v-if="isBlockLoading"
+      v-if="isInfoLoading"
       class="item__header"
     >
       <b-skeleton width="50%" />
     </p>
     <p
-      v-if="!isBlockLoading"
+      v-if="!isInfoLoading"
       class="item__header"
     >
       {{ title }}
     </p>
     <p
-      v-if="isBlockLoading"
+      v-if="isInfoLoading"
       class="item__info"
     >
       <b-skeleton width="30%" />
     </p>
     <p
-      v-else-if="!isBlockLoading && item === 'link' "
+      v-else-if="!isInfoLoading && item === 'link' "
       class="item__info"
     >
       <nuxt-link
@@ -30,7 +30,7 @@
       </nuxt-link>
     </p>
     <p
-      v-else-if="!isBlockLoading && item === 'transactionsCount'"
+      v-else-if="!isInfoLoading && item === 'transactionsCount'"
       class="item__link"
     >
       <nuxt-link
@@ -41,7 +41,7 @@
       </nuxt-link>
     </p>
     <p
-      v-else-if="!isBlockLoading && info && item === 'address'"
+      v-else-if="!isInfoLoading && info && item === 'address'"
       class="item__info item__info_blue"
     >
       <nuxt-link
@@ -56,7 +56,7 @@
       />
     </p>
     <p
-      v-else-if="!isBlockLoading && item === 'status'"
+      v-else-if="!isInfoLoading && item === 'status'"
       class="item__info status"
       :class="{'status_green': info === 1, 'status_red': info === 0}"
     >
@@ -64,7 +64,7 @@
     </p>
 
     <p
-      v-else-if="!isBlockLoading && item === 'timestamp'"
+      v-else-if="!isInfoLoading && item === 'timestamp'"
       class="item__info"
     >
       <slot name="timestamp" />
@@ -75,11 +75,11 @@
     >
       {{ info }}
     </p>
-    <p v-if="isBlockLoading">
+    <p v-if="isInfoLoading">
       <b-skeleton width="60%" />
     </p>
     <p
-      v-else-if="!isBlockLoading && note"
+      v-else-if="!isInfoLoading && note"
       class="item__note"
       :class="{'item__note_red': info === 0}"
     >
@@ -108,7 +108,7 @@ export default {
       type: String,
       default: '',
     },
-    isBlockLoading: {
+    isInfoLoading: {
       type: Boolean,
       default: false,
     },
@@ -151,11 +151,11 @@ export default {
   &__info {
     @include text-simple;
     word-break: break-all;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 130%;
     &_blue {
       color: $blue;
-      font-size: 12px;
+      font-size: 18px;
     }
 
   }
@@ -172,7 +172,7 @@ export default {
   &__link {
     @include text-simple;
     @include link;
-    font-size: 16px;
+    font-size: 18px;
     color: $blue;
   }
 }

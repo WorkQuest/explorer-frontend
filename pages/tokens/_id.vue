@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="!isLoading && Object.keys(token).length > 0"
-    class="token"
-  >
+  <div class="token">
     <search-filter class="token__search" />
 
     <div class="token__header">
