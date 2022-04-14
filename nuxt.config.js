@@ -64,7 +64,6 @@ export default {
   },
   axios: {
     baseURL: process.env.BASE_URL,
-    oracleUTL: process.env.WQ_ORACLE_URL,
   },
   i18n: {
     locales: ['en', 'ru'],

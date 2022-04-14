@@ -84,8 +84,7 @@
           {{ $t('ui.token.overview') }}
         </p>
         <p class="token-info__description">
-          <!--      TODO update when server response changes    -->
-          <!--          {{ $t('ui.token.tether') }}-->
+          {{ description }}
         </p>
         <p class="token-info__title">
           {{ $t('ui.token.market') }}
@@ -196,7 +195,7 @@ export default {
           key: 'amount',
           label: this.$t('ui.token.quantity'),
           sortable: true,
-          formatter: (value, key, item) => this.ConvertFromDecimals(item.amount, this.token.decimals),
+          formatter: (value, key, item) => this.ConvertFromDecimals(item.amount, this.token.decimals, 4),
         },
       ];
     },
@@ -253,7 +252,7 @@ export default {
     volume() {
       const price = new BigNumber(this.tokenPrice || 0).shiftedBy(-this.token?.decimals || 0);
       const valueFromBN = new BigNumber(this.token?.volume || 0).shiftedBy(-this.token?.decimals || 0);
-      return this.NumberFormat(price.multipliedBy(valueFromBN).toString());
+      return this.NumberFormat(price.multipliedBy(valueFromBN).dp(2, 1));
     },
     circulatingSupply() {
       return this.NumberFormat(new BigNumber(this.token.circulatingSupply).shiftedBy(-this.token.decimals).toString());
@@ -262,6 +261,9 @@ export default {
       const price = new BigNumber(this.tokenPrice).shiftedBy(-this.token.decimals);
       const valueFromBN = new BigNumber(this.token.circulatingSupply).shiftedBy(-this.token.decimals);
       return this.NumberFormat(price.multipliedBy(valueFromBN).decimalPlaces(2).toString());
+    },
+    description() {
+      return this.token.metadata?.description || '';
     },
   },
   watch: {
