@@ -195,7 +195,7 @@ export default {
           key: 'amount',
           label: this.$t('ui.token.quantity'),
           sortable: true,
-          formatter: (value, key, item) => this.ConvertFromDecimals(item.amount, this.token.decimals),
+          formatter: (value, key, item) => this.ConvertFromDecimals(item.amount, this.token.decimals, 4),
         },
       ];
     },
