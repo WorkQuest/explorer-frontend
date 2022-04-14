@@ -14,7 +14,6 @@
   * @property {string|null} tokens.bridged
   * @property {string|null} tokens.skip_metadata
   * @property {number} count
-  * @exports allTokens.token
   */
 
 export const allTokens = {
@@ -133,5 +132,3 @@ export default () => ({
   },
   tokenPrices,
 });
-
-module.exports = allTokens;

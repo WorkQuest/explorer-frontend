@@ -152,14 +152,11 @@
 
       <template #cell(token)="el">
         <div class="token-item__header">
-          <img
+          <token-image
             v-if="type === 'tokens'"
-            :src="require(`~/assets/img/tokens/empty-token.svg`)"
-            width="15"
-            height="15"
-            class="token-item__image"
-            :alt="el.value.symbol"
-          >
+            :link="el.value.iconUrl"
+            :symbol="el.value.symbol"
+          />
           <nuxt-link
             class="token-item__title table__link"
             :to="`/tokens/${el.value.link}`"
