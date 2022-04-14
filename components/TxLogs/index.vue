@@ -1,13 +1,13 @@
 <template>
-  <div
-
-    class="txs__logs logs"
-  >
+  <div class="txs__logs logs">
     <template v-if="Array.isArray(logs) && logs.length === 0">
       <empty-data :description="$tc('ui.tx.noLogs')" />
     </template>
 
-    <div class="content">
+    <div
+      v-else
+      class="content"
+    >
       <p
         v-if="Array.isArray(logs) && logs.length > 0"
         class="content__header"

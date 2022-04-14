@@ -143,7 +143,6 @@ export default {
       tokenTransfersCount: 'tokens/getCurrentTokenTransfersCount',
       tokenHolders: 'tokens/getCurrentTokenHolders',
       tokenHoldersCount: 'tokens/getCurrentTokenHoldersCount',
-      isLoading: 'main/getIsLoading',
     }),
     address() {
       return this.$route.params.id;

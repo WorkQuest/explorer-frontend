@@ -1,71 +1,66 @@
 <template>
-  <div class="transaction-wrapper">
-    <div class="txs">
-      <div class="txs__content">
-        <button
-          class="txs__back"
-          type="button"
-          @click="back()"
-        >
-          <span class="icon-short_left" />
-          {{ $t('ui.back') }}
-        </button>
-        <h3 class="txs__title">
-          {{ $t('ui.tx.txDetails') }}
-        </h3>
-        <div class="txs__info">
-          <div class="tab">
-            <span
-              v-for="(tab, i) in tabs"
-              :key="i"
-              class="tab__item"
-              :class="{ 'tab__item_active': activeTab === tab} "
-              @click="onClick(tab)"
-            >{{ $t(`ui.token.${tab}`) }}</span>
-          </div>
-          <div
-            v-if="txsColumns.length > 0 && activeTab === 'overview'"
-            id="overview"
-            class="overview"
-          >
-            <div class="columns">
-              <template v-if="isTxLoading">
-                <info-item
-                  v-for="(item, i) in txsColumns"
-                  :key="`txs-item-loader-${i}`"
-                  :class="item.class"
-                  :title="item.title"
-                  :is-info-loading="true"
-                />
+  <div class="txs">
+    <button
+      class="txs__back"
+      type="button"
+      @click="back()"
+    >
+      <span class="icon-short_left" />
+      {{ $t('ui.back') }}
+    </button>
+    <h3 class="txs__title">
+      {{ $t('ui.tx.txDetails') }}
+    </h3>
+    <div class="txs__info">
+      <div class="tab">
+        <span
+          v-for="(tab, i) in tabs"
+          :key="i"
+          class="tab__item"
+          :class="{ 'tab__item_active': activeTab === tab} "
+          @click="onClick(tab)"
+        >{{ $t(`ui.token.${tab}`) }}</span>
+      </div>
+      <div
+        v-if="txsColumns.length > 0 && activeTab === 'overview'"
+        id="overview"
+      >
+        <div class="columns">
+          <template v-if="isTxLoading">
+            <info-item
+              v-for="(item, i) in txsColumns"
+              :key="`txs-item-loader-${i}`"
+              :class="item.class"
+              :title="item.title"
+              :is-info-loading="true"
+            />
+          </template>
+          <template v-else>
+            <info-item
+              v-for="(item, i) in txsColumns"
+              :key="`txs-item-${i}`"
+              :class="item.class"
+              :title="item.title"
+              :info="item.info"
+              :note="item.note"
+              :item="item.item"
+            >
+              <template
+                v-if="item.item === 'timestamp'"
+                #timestamp
+              >
+                {{ dateFromNow }}
               </template>
-              <template v-else>
-                <info-item
-                  v-for="(item, i) in txsColumns"
-                  :key="`txs-item-${i}`"
-                  :class="item.class"
-                  :title="item.title"
-                  :info="item.info"
-                  :note="item.note"
-                  :item="item.item"
-                >
-                  <template
-                    v-if="item.item === 'timestamp'"
-                    #timestamp
-                  >
-                    {{ dateFromNow }}
-                  </template>
-                </info-item>
-              </template>
-            </div>
-          </div>
-          <tx-logs
-            v-if="tx && activeTab === 'logs'"
-            id="logs"
-            :logs="tx.logs"
-            :hash="tx.hash"
-          />
+            </info-item>
+          </template>
         </div>
       </div>
+      <tx-logs
+        v-if="tx && activeTab === 'logs'"
+        id="logs"
+        :logs="tx.logs"
+        :hash="tx.hash"
+      />
     </div>
   </div>
 </template>
@@ -90,7 +85,6 @@ export default {
       tx: 'tx/getTxsByHash',
       symbol: 'tokens/getWUSDTokenSymbol',
       decimals: 'tokens/getWUSDTokenDecimals',
-      isLoading: 'main/getIsLoading',
     }),
     gasLimit() {
       return +this.tx?.block?.gas_limit || 0;
@@ -361,19 +355,16 @@ export default {
   margin-right: 12px;
 }
 
-.overview {
-  display: grid;
-}
-
 @include _991 {
   .txs {
     &__info {
       padding: 16px;
     }
   }
-  .overview {
+  .columns {
     display: flex;
     flex-direction: column;
+    position: relative;
   }
 
   ::v-deep .item {
@@ -390,7 +381,9 @@ export default {
       }
     }
     &:nth-child(1) {
+      // hash
       flex-direction: column;
+      order: 1;
     }
     &:nth-child(1) .item__header {
       margin-bottom: 5px;
@@ -402,11 +395,17 @@ export default {
       font-weight: 400;
       align-self: flex-start;
     }
+    &:nth-child(2) {
+      // timestamp
+      order: 2;
+      margin-bottom: -25px;
+    }
     &:nth-child(2) .item__info {
       position: absolute;
-      right: 35px;
-      top: 385px;
+      right: 0;
+      top: 4px;
       color: $black300;
+      font-size: 14px;
     }
     &:nth-child(2) .item__header {
       display: none;
@@ -414,10 +413,52 @@ export default {
     &:nth-child(2) .item__note {
       display: none;
     }
+    &:nth-child(3) {
+      // status
+      order: 3;
+    }
+    &:nth-child(4) {
+      // block
+      order: 4;
+    }
+    &:nth-child(5) {
+      // from
+      order: 5;
+    }
+    &:nth-child(6) {
+      // to
+      order: 6;
+    }
+    &:nth-child(7) {
+      // value
+      order: 7;
+    }
+    &:nth-child(8) {
+      // gas price
+      order: 9;
+    }
+    &:nth-child(9) {
+      // gas limit
+      order: 10;
+    }
+    &:nth-child(10) {
+      // gas used
+      order: 11;
+    }
+    &:nth-child(11) {
+      // fee
+      order: 8;
+      padding-bottom: 10px;
+      border-bottom: 1px solid $black100;
+    }
   }
 }
 
 @include _767 {
+  .txs {
+    background: $white;
+    padding-top: 22px;
+  }
   ::v-deep .item {
     &__info_blue {
       font-size: 18px;

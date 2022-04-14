@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="!isLoading"
-    class="tokens"
-  >
+  <div class="tokens">
     <base-table
       id="tokens-table"
       class="tokens__table"
@@ -39,7 +36,6 @@ export default {
     ...mapGetters({
       allTokensCount: 'tokens/getAllTokensCount',
       allTokens: 'tokens/getAllTokens',
-      isLoading: 'main/getIsLoading',
     }),
     totalPages() {
       return this.setTotalPages(this.allTokensCount, this.limit);

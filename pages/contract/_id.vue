@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="!isLoading"
-    class="contract"
-  >
+  <div class="contract">
     <div class="contract__header">
       <h4 class="contract__title">
         {{ $t('ui.token.contract') }}
@@ -124,7 +121,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isLoading: 'main/getIsLoading',
       WUSDSymbol: 'tokens/getWUSDTokenSymbol',
       WUSDDecimal: 'tokens/getWUSDTokenDecimals',
       transactions: 'account/getTransactions',

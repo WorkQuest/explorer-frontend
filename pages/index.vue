@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="!isLoading"
-    class="home"
-  >
+  <div class="home">
     <div class="home__header">
       <div class="home__content">
         <h3 class="home__title">
@@ -78,7 +75,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isLoading: 'main/getIsLoading',
       blocks: 'blocks/getBlocks',
       txs: 'tx/getTxs',
       WUSDSymbol: 'tokens/getWUSDTokenSymbol',

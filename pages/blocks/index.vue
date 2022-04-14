@@ -1,6 +1,5 @@
 <template>
   <div class="blocks">
-    <slot name="search" />
     <base-table
       id="blocks-table"
       class="blocks__table"
@@ -37,7 +36,6 @@ export default {
     ...mapGetters({
       blocks: 'blocks/getBlocks',
       blocksCount: 'blocks/getBlocksCount',
-      isLoading: 'main/getIsLoading',
     }),
     totalPages() {
       return this.setTotalPages(this.blocksCount, this.limit);

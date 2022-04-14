@@ -52,7 +52,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isLoading: 'main/getIsLoading',
       txs: 'tx/getTxsByAccount',
       txsCount: 'tx/getTxsByAccountCount',
       WUSDSymbol: 'tokens/getWUSDTokenSymbol',

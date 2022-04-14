@@ -1,72 +1,70 @@
 <template>
   <div class="block">
-    <div class="block__content">
-      <button
-        class="block__back"
-        @click="back()"
-      >
-        <span class="icon-short_left" />
-        {{ $t('ui.back') }}
-      </button>
-      <h3 class="block__title">
-        {{ $t('ui.block.blockInfo') }}
-      </h3>
-      <div class="block__info">
-        <div class="block__number-field">
-          <button
-            :disabled="isBlockLoading"
-            type="button"
-            @click="changeBlock(previousBlockNumber ? +previousBlockNumber : 0)"
+    <button
+      class="block__back"
+      @click="back()"
+    >
+      <span class="icon-short_left" />
+      {{ $t('ui.back') }}
+    </button>
+    <h3 class="block__title">
+      {{ $t('ui.block.blockInfo') }}
+    </h3>
+    <div class="block__info">
+      <div class="block__number-field">
+        <button
+          :disabled="isBlockLoading"
+          type="button"
+          @click="changeBlock(previousBlockNumber ? +previousBlockNumber : 0)"
+        >
+          <span class="icon-caret_left" />
+        </button>
+        <span class="block__block">{{ $t('ui.block.block') }}</span>
+        <span
+          v-if="isBlockLoading"
+          class="block__number"
+        >
+          #<b-skeleton />
+        </span>
+        <span
+          v-else-if="currentBlockNumber"
+          class="block__number"
+        >#{{ currentBlockNumber }}</span>
+        <button
+          type="button"
+          :disabled="isBlockLoading"
+          @click="changeBlock(nextBlockNumber ? +nextBlockNumber : 0)"
+        >
+          <span class="icon-caret_right" />
+        </button>
+      </div>
+      <div class="block__columns">
+        <template v-if="isBlockLoading">
+          <info-item
+            v-for="(item, i) in blockColumns"
+            :key="`block-item-loader-${i}`"
+            :title="item.title"
+            :is-info-loading="true"
+          />
+        </template>
+        <template v-else>
+          <info-item
+            v-for="(item, i) in blockColumns"
+            :key="`block-item-${i}`"
+            :title.sync="item.title"
+            :info.sync="item.info"
+            :note.sync="item.note"
+            :item.sync="item.item"
+            :is-block-loading="isBlockLoading"
           >
-            <span class="icon-caret_left" />
-          </button>
-          <span class="block__block">{{ $t('ui.block.block') }}</span>
-          <span
-            v-if="isBlockLoading"
-            class="block__number"
-          >
-            #<b-skeleton />
-          </span>
-          <span
-            v-else-if="currentBlockNumber"
-            class="block__number"
-          >#{{ currentBlockNumber }}</span>
-          <button
-            type="button"
-            :disabled="isBlockLoading"
-            @click="changeBlock(nextBlockNumber ? +nextBlockNumber : 0)"
-          >
-            <span class="icon-caret_right" />
-          </button>
-        </div>
-        <div class="block__columns">
-          <template v-if="isBlockLoading">
-            <info-item
-              v-for="(item, i) in blockColumns"
-              :key="`block-item-loader-${i}`"
-              :title="item.title"
-              :is-info-loading="true"
-            />
-          </template>
-          <template v-else>
-            <info-item
-              v-for="(item, i) in blockColumns"
-              :key="`block-item-${i}`"
-              :title.sync="item.title"
-              :info.sync="item.info"
-              :note.sync="item.note"
-              :item.sync="item.item"
-              :is-block-loading="isBlockLoading"
+            <template
+              v-if="item.item === 'timestamp'"
+              #timestamp
             >
-              <template
-                v-if="item.item === 'timestamp'"
-                #timestamp
-              >
-                {{ dateFromNow }}
-              </template>
-            </info-item>
-          </template>
-        </div>
+              {{ dateFromNow }}
+            </template>
+          </info-item>
+        </template>
       </div>
     </div>
   </div>
@@ -92,7 +90,6 @@ export default {
   computed: {
     ...mapGetters({
       currentBlock: 'blocks/getCurrentBlock',
-      isLoading: 'main/getIsLoading',
       symbol: 'tokens/getWUSDTokenSymbol',
       decimals: 'tokens/getWUSDTokenDecimals',
     }),
@@ -275,6 +272,8 @@ export default {
 
 @include _767 {
   .block {
+    background: $white;
+    padding-top: 22px;
     &__columns {
       display: flex;
       flex-direction: column;
@@ -302,6 +301,8 @@ export default {
       position: absolute;
       right: -5px;
       top: 4px;
+      color: $black300;
+      font-size: 14px;
     }
     &:nth-child(3){
       display: flex;

@@ -61,7 +61,6 @@ export default {
       currentBlock: 'blocks/getCurrentBlock',
       currentBlockTransactions: 'blocks/getCurrentBlockTransactions',
       currentBlockTransactionsCount: 'blocks/getCurrentBlockTransactionsCount',
-      isLoading: 'main/getIsLoading',
     }),
     query() {
       return this.$route.query.block;
