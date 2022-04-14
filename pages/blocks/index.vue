@@ -1,6 +1,6 @@
 <template>
   <div class="blocks">
-    <search-filter class="blocks__search" />
+    <slot name="search" />
     <base-table
       id="blocks-table"
       class="blocks__table"
@@ -11,7 +11,6 @@
       type="blocks"
       :skeleton="{rows: limit, columns: tableHeaders.length}"
     />
-
     <paginator
       v-if="totalPages > 1"
       v-model="page"

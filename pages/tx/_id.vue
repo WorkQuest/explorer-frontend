@@ -1,7 +1,6 @@
 <template>
   <div class="transaction-wrapper">
     <div class="txs">
-      <search-filter class="txs__search" />
       <div class="txs__content">
         <button
           class="txs__back"

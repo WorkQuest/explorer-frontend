@@ -9,7 +9,7 @@
           {{ $t('home.title') }}
         </h3>
         <search-filter
-          :include-filter="false"
+          :include-filter="true"
           class="home__search"
         />
       </div>

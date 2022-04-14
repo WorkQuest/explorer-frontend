@@ -1,7 +1,5 @@
 <template>
   <div class="token">
-    <search-filter class="token__search" />
-
     <div class="token__header">
       <img
         :src="require(`~/assets/img/tokens/empty-token.svg`)"

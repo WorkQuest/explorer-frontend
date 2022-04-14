@@ -1,6 +1,5 @@
 <template>
   <div class="block">
-    <search-filter class="block__search" />
     <div class="block__content">
       <button
         class="block__back"

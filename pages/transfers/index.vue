@@ -3,7 +3,6 @@
     v-if="!isLoading"
     class="transfer transfer__container"
   >
-    <search-filter class="transfer__search" />
     <base-table
       id="transfers-table"
       class="transfer__table"

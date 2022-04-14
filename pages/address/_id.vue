@@ -1,6 +1,5 @@
 <template>
   <div class="address">
-    <search-filter class="address__search" />
     <div class="address__header">
       <h4 class="address__title">
         {{ $t('ui.token.address') }}

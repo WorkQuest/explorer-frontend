@@ -1,6 +1,5 @@
 <template>
   <div class="transactions">
-    <search-filter class="transactions__search" />
     <base-table
       id="transactions-table"
       class="transactions__table"

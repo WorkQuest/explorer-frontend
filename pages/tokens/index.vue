@@ -3,8 +3,6 @@
     v-if="!isLoading"
     class="tokens"
   >
-    <search-filter class="tokens__search" />
-
     <base-table
       id="tokens-table"
       class="tokens__table"

@@ -3,8 +3,6 @@
     v-if="!isLoading"
     class="contract"
   >
-    <search-filter class="contract__search" />
-
     <div class="contract__header">
       <h4 class="contract__title">
         {{ $t('ui.token.contract') }}

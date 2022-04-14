@@ -110,10 +110,16 @@
             </div>
           </div>
         </div>
+
         <div
           class="template__content"
           :class="{'hidden': isMobileMenu}"
         >
+          <search-filter
+            v-if="$route.fullPath != '/'"
+            class="search"
+          />
+
           <nuxt :key="$route.query.page || $route.path" />
         </div>
         <div class="template__footer footer">
@@ -314,6 +320,10 @@ export default {
 
 .primary {
   overflow-y: hidden;
+}
+
+.search {
+  @include container;
 }
 
 .template {
