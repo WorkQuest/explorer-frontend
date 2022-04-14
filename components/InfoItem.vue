@@ -1,10 +1,25 @@
 <template>
   <div class="item">
-    <p class="item__header">
+    <p
+      v-if="isInfoLoading"
+      class="item__header"
+    >
+      <b-skeleton width="50%" />
+    </p>
+    <p
+      v-if="!isInfoLoading"
+      class="item__header"
+    >
       {{ title }}
     </p>
     <p
-      v-if="item === 'link'"
+      v-if="isInfoLoading"
+      class="item__info"
+    >
+      <b-skeleton width="30%" />
+    </p>
+    <p
+      v-else-if="!isInfoLoading && item === 'link' "
       class="item__info"
     >
       <nuxt-link
@@ -15,7 +30,7 @@
       </nuxt-link>
     </p>
     <p
-      v-else-if="item === 'transactionsCount'"
+      v-else-if="!isInfoLoading && item === 'transactionsCount'"
       class="item__link"
     >
       <nuxt-link
@@ -26,7 +41,7 @@
       </nuxt-link>
     </p>
     <p
-      v-else-if="info && item === 'address'"
+      v-else-if="!isInfoLoading && info && item === 'address'"
       class="item__info item__info_blue"
     >
       <nuxt-link
@@ -41,7 +56,7 @@
       />
     </p>
     <p
-      v-else-if="item === 'status'"
+      v-else-if="!isInfoLoading && item === 'status'"
       class="item__info status"
       :class="{'status_green': info === 1, 'status_red': info === 0}"
     >
@@ -49,7 +64,7 @@
     </p>
 
     <p
-      v-else-if="item === 'timestamp'"
+      v-else-if="!isInfoLoading && item === 'timestamp'"
       class="item__info"
     >
       <slot name="timestamp" />
@@ -60,7 +75,11 @@
     >
       {{ info }}
     </p>
+    <p v-if="isInfoLoading">
+      <b-skeleton width="60%" />
+    </p>
     <p
+      v-else-if="!isInfoLoading && note"
       class="item__note"
       :class="{'item__note_red': info === 0}"
     >
@@ -88,6 +107,10 @@ export default {
     item: {
       type: String,
       default: '',
+    },
+    isInfoLoading: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
@@ -128,11 +151,11 @@ export default {
   &__info {
     @include text-simple;
     word-break: break-all;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 130%;
     &_blue {
       color: $blue;
-      font-size: 12px;
+      font-size: 18px;
     }
 
   }
@@ -149,7 +172,7 @@ export default {
   &__link {
     @include text-simple;
     @include link;
-    font-size: 16px;
+    font-size: 18px;
     color: $blue;
   }
 }

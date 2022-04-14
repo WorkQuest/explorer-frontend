@@ -1,17 +1,14 @@
 <template>
-  <div
-    v-if="!isLoading"
-    class="tokens"
-  >
-    <search-filter class="tokens__search" />
-
-    <table-tokens
+  <div class="tokens">
+    <base-table
       id="tokens-table"
       class="tokens__table"
       :title="$tc('ui.token.tracker')"
       :items="tokens"
       :fields="tableHeaders"
-      type="transfers"
+      type="tokens"
+      :table-busy="tableBusy"
+      :skeleton="{rows: limit, columns: tableHeaders.length}"
     />
     <paginator
       v-if="totalPages > 1"
@@ -24,23 +21,21 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import TableTokens from '~/components/TableTokens';
 
 export default {
   name: 'TokensTracker',
-  components: { TableTokens },
   data() {
     return {
       limit: 20,
       offset: 0,
       page: +this.$route.query?.page || 1,
+      tableBusy: false,
     };
   },
   computed: {
     ...mapGetters({
       allTokensCount: 'tokens/getAllTokensCount',
       allTokens: 'tokens/getAllTokens',
-      isLoading: 'main/getIsLoading',
     }),
     totalPages() {
       return this.setTotalPages(this.allTokensCount, this.limit);
@@ -59,19 +54,41 @@ export default {
     },
     tableHeaders() {
       return [
-        { key: 'number', label: '#', sortable: false },
-        { key: 'contract_address_hash.hex', label: this.$t('ui.token.token'), sortable: true },
         {
-          key: 'total_supply',
-          label: this.$t('ui.token.volume'),
-          sortable: true,
-          formatter: (value, key, item) => this.NumberFormat(this.ConvertFromDecimals(value, item.decimals)),
+          key: 'index',
+          label: '#',
+          sortable: false,
+          formatter: () => this.offset + 1,
         },
         {
-          key: 'holder_count',
+          key: 'token',
+          label: this.$t('ui.token.token'),
+          sortable: true,
+          formatter: (value, key, item) => {
+            const { name, symbol } = item;
+            const link = item.contract_address_hash.hex;
+            return {
+              name,
+              symbol,
+              link,
+            };
+          },
+        },
+        {
+          key: 'volume',
+          label: this.$t('ui.token.volume'),
+          sortable: true,
+          formatter: (value, key, item) => {
+            const { decimals } = item;
+            const convertedVolume = this.ConvertFromDecimals(item.total_supply, decimals);
+            return this.NumberFormat(convertedVolume);
+          },
+        },
+        {
+          key: 'holders',
           label: this.$t('ui.token.holders'),
           sortable: true,
-          formatter: (value) => this.NumberFormat(value),
+          formatter: (value, key, item) => this.NumberFormat(item.holder_count),
         },
       ];
     },
@@ -85,11 +102,11 @@ export default {
   },
   async mounted() {
     const isSearch = this.$route.query?.search;
+    this.tableBusy = true;
     if (!isSearch || !this.allTokensCount) {
-      await this.SetLoader(true);
       await this.$store.dispatch('tokens/getAllTokens', this.payload);
-      await this.SetLoader(false);
     }
+    this.tableBusy = false;
     sessionStorage.setItem('backRoute', this.$route.fullPath);
   },
   beforeDestroy() {

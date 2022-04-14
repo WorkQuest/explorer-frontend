@@ -1,25 +1,25 @@
 <template>
-  <div
-    v-if="!isLoading"
-    class="home"
-  >
+  <div class="home">
     <div class="home__header">
       <div class="home__content">
         <h3 class="home__title">
           {{ $t('home.title') }}
         </h3>
         <search-filter
-          :include-filter="false"
+          :include-filter="true"
           class="home__search"
         />
       </div>
     </div>
     <div class="home__tables">
       <div class="home__table">
-        <table-blocks
+        <base-table
           id="home-blocks"
           :items="blocks"
           :fields="tableHeadersBlocks"
+          :table-busy="tableBusy"
+          type="blocks"
+          :skeleton="{rows: limit, columns: tableHeadersBlocks.length}"
         >
           <template v-slot:table-caption>
             <div class="table__titles">
@@ -32,13 +32,16 @@
               </nuxt-link>
             </div>
           </template>
-        </table-blocks>
+        </base-table>
       </div>
       <div class="home__table">
-        <table-txs
+        <base-table
           id="home-transactions"
           :items="txs"
           :fields="tableHeadersTxs"
+          :table-busy="tableBusy"
+          type="transactions"
+          :skeleton="{rows: limit, columns: tableHeadersTxs.length}"
         >
           <template #table-caption>
             <div class="table__titles">
@@ -51,7 +54,7 @@
               </nuxt-link>
             </div>
           </template>
-        </table-txs>
+        </base-table>
       </div>
     </div>
   </div>
@@ -67,13 +70,15 @@ export default {
       search: '',
       limit: 5,
       offset: 0,
+      tableBusy: false,
     };
   },
   computed: {
     ...mapGetters({
-      isLoading: 'main/getIsLoading',
       blocks: 'blocks/getBlocks',
       txs: 'tx/getTxs',
+      WUSDSymbol: 'tokens/getWUSDTokenSymbol',
+      WUSDDecimal: 'tokens/getWUSDTokenDecimals',
     }),
     payload() {
       return {
@@ -84,16 +89,40 @@ export default {
     tableHeadersBlocks() {
       return [
         {
-          key: 'number', label: this.$t('ui.block.blockNumber'), sortable: true,
+          key: 'blockNumber',
+          label: this.$t('ui.block.blockNumber'),
+          sortable: true,
+          formatter: (value, key, item) => item.number,
         },
         {
-          key: 'timestamp', label: this.$t('ui.block.age'), sortable: true,
+          key: 'age',
+          label: this.$t('ui.block.age'),
+          sortable: true,
+          formatter: (value, key, item) => this.formatDataFromNow(item.timestamp),
         },
         {
           key: 'transactionsCount', label: this.$t('ui.block.txsCount'), sortable: true,
         },
         {
-          key: 'reward', label: this.$t('ui.block.reward'), sortable: true,
+          key: 'gasUsed',
+          label: this.$t('ui.block.gasUsed'),
+          sortable: true,
+          formatter: (value, key, item) => [
+            {
+              value: +item.gas_used,
+              class: '',
+            },
+            {
+              value: `${this.NumberFormat((+item.gas_used / +item.gas_limit) * 100, 4)}%`,
+              class: 'grey',
+            },
+          ],
+        },
+        {
+          key: 'gasLimit',
+          label: this.$t('ui.block.gasLimit'),
+          sortable: true,
+          formatter: (value, key, item) => this.NumberFormat(item.gas_limit),
         },
       ];
     },
@@ -103,22 +132,31 @@ export default {
           key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true,
         },
         {
-          key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true,
+          key: 'addressFrom',
+          label: this.$t('ui.tx.from'),
+          sortable: true,
+          formatter: (value, key, item) => item.from_address_hash?.hex || '',
         },
         {
-          key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true,
+          key: 'addressTo',
+          label: this.$t('ui.tx.to'),
+          sortable: true,
+          formatter: (value, key, item) => item.to_address_hash?.hex || '',
         },
         {
-          key: 'value', label: this.$t('ui.tx.amount'), sortable: true,
+          key: 'value',
+          label: this.$t('ui.tx.value'),
+          sortable: true,
+          formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
         },
       ];
     },
   },
   async mounted() {
-    await this.SetLoader(true);
+    this.tableBusy = true;
     await this.$store.dispatch('blocks/getBlocks', this.payload);
     await this.$store.dispatch('tx/getTxs', this.payload);
-    await this.SetLoader(false);
+    this.tableBusy = false;
   },
   beforeDestroy() {
     this.$store.commit('tx/resetTxs');

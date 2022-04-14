@@ -1,10 +1,5 @@
 <template>
-  <div
-    v-if="!isLoading"
-    class="contract"
-  >
-    <search-filter class="contract__search" />
-
+  <div class="contract">
     <div class="contract__header">
       <h4 class="contract__title">
         {{ $t('ui.token.contract') }}
@@ -37,12 +32,14 @@
         id="txs"
         class="tables__txs"
       >
-        <table-txs
+        <base-table
           id="contract-transactions-table"
           class="tables__table"
-          :is-only="false"
           :items="transactions"
           :fields="tableHeadersTxs"
+          :table-busy="tableBusy"
+          type="transactions"
+          :skeleton="{rows: limit, columns: tableHeadersTxs.length}"
         />
         <paginator
           v-if="totalPages > 1"
@@ -56,12 +53,14 @@
         id="internal"
         class="tables__internal"
       >
-        <table-txs
+        <base-table
           id="contract-internal-transactions-table"
           class="tables__table"
-          :is-only="false"
           :items="internalTransactions"
           :fields="tableHeadersInternal"
+          :table-busy="tableBusy"
+          type="transactions"
+          :skeleton="{rows: limit, columns: tableHeadersInternal.length}"
         />
         <paginator
           v-if="totalPages > 1"
@@ -75,11 +74,13 @@
         id="tokensTxns"
         class="tables__erc"
       >
-        <table-txs
+        <base-table
           class="tables__table"
-          :is-only="false"
-          :items="tokenTransfers"
+          :items="transactionWithTokensList"
           :fields="tableHeadersERC"
+          :table-busy="tableBusy"
+          type="transactions"
+          :skeleton="{rows: limit, columns: tableHeadersERC.length}"
         />
         <paginator
           v-if="totalPages > 1"
@@ -115,61 +116,151 @@ export default {
       offset: 0,
       tabs: ['txs', 'internal', 'tokensTxns', 'contract'],
       txs: [],
+      tableBusy: false,
     };
   },
   computed: {
     ...mapGetters({
-      isLoading: 'main/getIsLoading',
+      WUSDSymbol: 'tokens/getWUSDTokenSymbol',
+      WUSDDecimal: 'tokens/getWUSDTokenDecimals',
       transactions: 'account/getTransactions',
       transactionsCount: 'account/getTransactionsCount',
       internalTransactions: 'account/getInternalTransactions',
       internalTransactionsCount: 'account/getInternalTransactionsCount',
-      tokenTransfers: 'account/getTransactionWithTokensList',
-      tokenTransfersCount: 'account/getTransactionWithTokensListCount',
+      transactionWithTokensList: 'account/getTransactionWithTokensList',
+      transactionWithTokensListCount: 'account/getTransactionWithTokensListCount',
     }),
     totalPages() {
       if (this.activeTab === 'txs') return this.setTotalPages(this.transactionsCount, this.limit);
       if (this.activeTab === 'internal') return this.setTotalPages(this.internalTransactionsCount, this.limit);
-      if (this.activeTab === 'tokensTxns') return this.setTotalPages(this.tokenTransfersCount, this.limit);
+      if (this.activeTab === 'tokensTxns') return this.setTotalPages(this.transactionWithTokensListCount, this.limit);
       return 1;
     },
     tableHeadersTxs() {
       return [
         { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'age', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'block_number', label: this.$t('ui.block.blockNumber'), sortable: true },
-        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
-        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
-        { key: 'gas_used', label: this.$t('ui.tx.fee'), sortable: true },
+        {
+          key: 'age',
+          label: this.$t('ui.block.age'),
+          sortable: true,
+          formatter: (value, key, item) => this.formatDataFromNow(item.block.timestamp),
+        },
+        {
+          key: 'blockNumber',
+          label: this.$t('ui.block.blockNumber'),
+          sortable: true,
+          formatter: (value, key, item) => item.block_number,
+        },
+        {
+          key: 'addressFrom',
+          label: this.$t('ui.tx.from'),
+          sortable: true,
+          formatter: (value, key, item) => item.from_address_hash?.hex || '',
+        },
+        {
+          key: 'addressTo',
+          label: this.$t('ui.tx.to'),
+          sortable: true,
+          formatter: (value, key, item) => item.to_address_hash?.hex || '',
+        },
+        {
+          key: 'value',
+          label: this.$t('ui.tx.value'),
+          sortable: true,
+          formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
+        },
+        {
+          key: 'gasUsed',
+          label: this.$t('ui.tx.fee'),
+          sortable: true,
+          formatter: (value, key, item) => [
+            {
+              value: this.FormatSmallNumber(this.ConvertFromDecimals(item.gas_used * item.gas_price, this.WUSDDecimal)),
+              class: 'grey',
+            },
+          ],
+        },
       ];
     },
     tableHeadersInternal() {
       return [
-        { key: 'block_number', label: this.$t('ui.block.blockNumber'), sortable: true },
-        { key: 'age', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
-        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
+        {
+          key: 'blockNumber',
+          label: this.$t('ui.block.blockNumber'),
+          sortable: true,
+          formatter: (value, key, item) => item.block_number,
+        },
+        {
+          key: 'age',
+          label: this.$t('ui.block.age'),
+          sortable: true,
+          formatter: (value, key, item) => this.formatDataFromNow(item.block.timestamp),
+        },
+        {
+          key: 'addressFrom',
+          label: this.$t('ui.tx.from'),
+          sortable: true,
+          formatter: (value, key, item) => item.from_address_hash?.hex || '',
+        },
+        {
+          key: 'addressTo',
+          label: this.$t('ui.tx.to'),
+          sortable: true,
+          formatter: (value, key, item) => item.to_address_hash?.hex || '',
+        },
+        {
+          key: 'value',
+          label: this.$t('ui.tx.value'),
+          sortable: true,
+          formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
+        },
       ];
     },
     tableHeadersERC() {
       return [
         { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'age', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
         {
-          key: 'transfer_amount',
+          key: 'age',
+          label: this.$t('ui.block.age'),
+          sortable: true,
+          formatter: (value, key, item) => this.formatDataFromNow(item.block.timestamp),
+        },
+        {
+          key: 'addressFrom',
+          label: this.$t('ui.tx.from'),
+          sortable: true,
+          formatter: (value, key, item) => item.from_address_hash?.hex || '',
+        },
+        {
+          key: 'addressTo',
+          label: this.$t('ui.tx.to'),
+          sortable: true,
+          formatter: (value, key, item) => item.to_address_hash?.hex || '',
+        },
+        {
+          key: 'value',
           label: this.$t('ui.tx.value'),
           sortable: true,
           formatter: (value, key, item) => {
-            const { decimals } = item.tokenContractAddress?.token || '';
+            const { decimals } = item.tokenTransfers[0].tokenContractAddress.token;
             const rawValue = item.value || '';
             return this.ConvertFromDecimals(rawValue, decimals);
           },
         },
-        { key: 'tokenTransfers', label: this.$t('ui.token.token'), sortable: true },
+        {
+          key: 'token',
+          label: this.$t('ui.token.token'),
+          sortable: true,
+          formatter: (value, key, item) => {
+            const { name, symbol } = item.tokenTransfers[0]?.tokenContractAddress?.token || '';
+            const link = item.tokenTransfers[0]?.tokenContractAddress?.hash?.hex || '';
+            return {
+              name,
+              symbol,
+              link,
+            };
+          },
+        },
       ];
     },
     address() {
@@ -191,6 +282,7 @@ export default {
     },
   },
   async mounted() {
+    await this.SetLoader(false);
     if (isAddress(this.address)) {
       await this.getContractData();
       await this.hashNavigation();
@@ -205,12 +297,13 @@ export default {
       this.$router.push({ hash: `#${tab}` });
     },
     async getContractData() {
-      await this.SetLoader(true);
+      this.tableBusy = true;
       await this.$store.dispatch('account/getAccountByAddress', { address: this.address, commonLimit: this.limit });
-      await this.SetLoader(false);
+      this.tableBusy = false;
     },
     async getPage() {
       const { address, limit, offset } = this;
+      this.tableBusy = true;
       if (this.activeTab === 'txs') {
         await this.$store.dispatch('account/getAccountTransactions', { address, limit, offset });
       }
@@ -220,6 +313,7 @@ export default {
       if (this.activeTab === 'tokensTxns') {
         await this.$store.dispatch('account/getTransactionWithTokensList', { address, limit, offset });
       }
+      this.tableBusy = false;
     },
     async hashNavigation() {
       if (this.hash) {

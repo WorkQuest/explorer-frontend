@@ -1,18 +1,15 @@
 <template>
-  <div
-    v-if="!isLoading"
-    class="transfer transfer__container"
-  >
-    <search-filter class="transfer__search" />
-
-    <table-txs
+  <div class="transfer transfer__container">
+    <base-table
       id="transfers-table"
       class="transfer__table"
       :title="$t('ui.token.token')+' '+$t('ui.token.transfers')"
       :items="allTokenTransfers"
       :fields="tableHeaders"
+      :table-busy="tableBusy"
+      type="transfers"
+      :skeleton="{rows: limit, columns: tableHeaders.length}"
     />
-
     <paginator
       v-if="totalPages > 1"
       v-model="page"
@@ -30,13 +27,13 @@ export default {
       limit: 20,
       offset: 0,
       page: +this.$route.query?.page || 1,
+      tableBusy: false,
     };
   },
   computed: {
     ...mapGetters({
       allTokenTransfers: 'tokens/getAllTokenTransfers',
       allTokenTransfersCount: 'tokens/getAllTokenTransfersCount',
-      isLoading: 'main/getIsLoading',
     }),
     payload() {
       return {
@@ -49,20 +46,52 @@ export default {
     },
     tableHeaders() {
       return [
-        { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'age', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
         {
-          key: 'transfer_amount',
-          label: this.$t('ui.tx.value'),
+          key: 'hash',
+          label: this.$t('ui.tx.transaction'),
           sortable: true,
-          formatter: (value, key, item) => this.ConvertFromDecimals(item.amount, item.tokenContractAddress.token.decimals, 6),
+          formatter: (value, key, item) => item.transaction_hash,
         },
         {
-          key: 'tokenContractAddress',
+          key: 'age',
+          label: this.$t('ui.block.age'),
+          sortable: true,
+          formatter: (value, key, item) => this.formatDataFromNow(item.block.timestamp),
+        },
+        {
+          key: 'addressFrom',
+          label: this.$t('ui.tx.from'),
+          sortable: true,
+          formatter: (value, key, item) => item.from_address_hash.hex || '',
+        },
+        {
+          key: 'addressTo',
+          label: this.$t('ui.tx.to'),
+          sortable: true,
+          formatter: (value, key, item) => item.to_address_hash?.hex || '',
+        },
+        {
+          key: 'value',
+          label: this.$t('ui.tx.value'),
+          sortable: true,
+          formatter: (value, key, item) => {
+            const { decimals } = item.tokenContractAddress.token;
+            return this.ConvertFromDecimals(item.amount, decimals || 0, 6);
+          },
+        },
+        {
+          key: 'token',
           label: this.$t('ui.token.token'),
           sortable: true,
+          formatter: (value, key, item) => {
+            const { name, symbol } = item.tokenContractAddress?.token;
+            const link = item.tokenContractAddress.hash.hex;
+            return {
+              name,
+              symbol,
+              link,
+            };
+          },
         },
       ];
     },
@@ -85,9 +114,9 @@ export default {
   },
   methods: {
     async getTokenTransfers() {
-      await this.SetLoader(true);
+      this.tableBusy = true;
       await this.$store.dispatch('tokens/getAllTokensTransfers', this.payload);
-      await this.SetLoader(false);
+      this.tableBusy = false;
     },
   },
 };
@@ -97,10 +126,6 @@ export default {
 .transfer {
   animation: show 1s 1;
   @include container;
-
-  &__search {
-    margin: 25px 0;
-  }
 }
 
 </style>

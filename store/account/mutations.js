@@ -4,6 +4,7 @@ import {
   internalTransactionsList,
   tokenTransfersList,
   transactionsList,
+  transactionWithTokensList,
 } from '~/store/account/state';
 
 export default {
@@ -13,6 +14,7 @@ export default {
     state.internalTransactionsList = data.internalTransactionsList;
     state.tokenTransfersList = data.tokenTransfersList;
     state.transactionsList = data.transactionsList;
+    state.transactionWithTokensList = data.transactionWithTokensList;
   },
   setAccountInternalTransaction(state, data) {
     state.internalTransactionsList.count = data.count;
@@ -32,5 +34,6 @@ export default {
     Object.assign(state.internalTransactionsList, internalTransactionsList);
     Object.assign(state.tokenTransfersList, tokenTransfersList);
     Object.assign(state.transactionsList, transactionsList);
+    Object.assign(state.transactionWithTokensList, transactionWithTokensList);
   },
 };

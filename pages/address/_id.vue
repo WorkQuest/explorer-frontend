@@ -1,9 +1,5 @@
 <template>
-  <div
-    v-if="!isLoading && Object.keys(txs).length > 0"
-    class="address"
-  >
-    <search-filter class="address__search" />
+  <div class="address">
     <div class="address__header">
       <h4 class="address__title">
         {{ $t('ui.token.address') }}
@@ -20,12 +16,15 @@
       <overview />
     </div>
     <div class="address__txs">
-      <table-txs
+      <base-table
         id="address-transfers-table"
         class="address__table"
         :title="$tc('ui.txs')"
         :items="txs"
         :fields="tableFields"
+        :table-busy="tableBusy"
+        type="transactions"
+        :skeleton="{rows: limit, columns: tableFields.length}"
       />
     </div>
     <paginator
@@ -48,13 +47,15 @@ export default {
       page: 1,
       limit: 10,
       offset: 0,
+      tableBusy: false,
     };
   },
   computed: {
     ...mapGetters({
-      isLoading: 'main/getIsLoading',
       txs: 'tx/getTxsByAccount',
       txsCount: 'tx/getTxsByAccountCount',
+      WUSDSymbol: 'tokens/getWUSDTokenSymbol',
+      WUSDDecimal: 'tokens/getWUSDTokenDecimals',
       accountInfo: 'account/getAccountInfo',
     }),
     payload() {
@@ -73,12 +74,47 @@ export default {
     tableFields() {
       return [
         { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        { key: 'age', label: this.$t('ui.block.age'), sortable: true },
-        { key: 'block_number', label: this.$t('ui.block.blockNumber'), sortable: true },
-        { key: 'from_address_hash.hex', label: this.$t('ui.tx.from'), sortable: true },
-        { key: 'to_address_hash.hex', label: this.$t('ui.tx.to'), sortable: true },
-        { key: 'value', label: this.$t('ui.tx.value'), sortable: true },
-        { key: 'gas_used', label: this.$t('ui.tx.fee'), sortable: true },
+        {
+          key: 'age',
+          label: this.$t('ui.block.age'),
+          sortable: true,
+          formatter: (value, key, item) => this.formatDataFromNow(item.block.timestamp),
+        },
+        {
+          key: 'blockNumber',
+          label: this.$t('ui.block.blockNumber'),
+          sortable: true,
+          formatter: (value, key, item) => item.block_number,
+        },
+        {
+          key: 'addressFrom',
+          label: this.$t('ui.tx.from'),
+          sortable: true,
+          formatter: (value, key, item) => item.from_address_hash?.hex || '',
+        },
+        {
+          key: 'addressTo',
+          label: this.$t('ui.tx.to'),
+          sortable: true,
+          formatter: (value, key, item) => item.to_address_hash?.hex || '',
+        },
+        {
+          key: 'value',
+          label: this.$t('ui.tx.value'),
+          sortable: true,
+          formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
+        },
+        {
+          key: 'gasUsed',
+          label: this.$t('ui.tx.fee'),
+          sortable: true,
+          formatter: (value, key, item) => [
+            {
+              value: this.FormatSmallNumber(this.ConvertFromDecimals(item.gas_used * item.gas_price, this.WUSDDecimal)),
+              class: 'grey',
+            },
+          ],
+        },
       ];
     },
   },
@@ -103,7 +139,9 @@ export default {
         await this.$store.dispatch('account/getAccountByAddress', { address: this.address, commonLimit: this.limit });
         await this.SetLoader(false);
       }
+      this.tableBusy = true;
       await this.$store.dispatch('tx/getTxsByAccount', this.payload);
+      this.tableBusy = false;
     },
   },
 };

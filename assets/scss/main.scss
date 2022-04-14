@@ -149,16 +149,17 @@ body {
 }
 
 .page-enter-active {
-  transition: opacity .5s;
+  transition: opacity .1s;
 }
 .page-leave-active {
+  transition: opacity 0s;
   opacity: 0;
 }
 .page-enter {
   opacity: 0;
 }
 .page-leave-to {
-  opacity: 0;
+  display: none;
 }
 
 @keyframes show {

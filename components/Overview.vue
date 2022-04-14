@@ -57,8 +57,6 @@ import { mapGetters } from 'vuex';
 import BigNumber from 'bignumber.js';
 import ChoiceToken from '~/components/ChoiceToken.vue';
 
-/** @param { Object } accountInfo */
-
 export default {
   name: 'Overview',
   components: {
