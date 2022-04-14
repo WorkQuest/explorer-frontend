@@ -1,273 +1,72 @@
 <template>
-  <div
-    v-if="!isLoading"
-    class="transaction-wrapper"
-  >
-    <div class="txs">
-      <search-filter class="txs__search" />
-      <div class="txs__content">
-        <button
-          class="txs__back"
-          type="button"
-          @click="back()"
-        >
-          <span class="icon-short_left" />
-          {{ $t('ui.back') }}
-        </button>
-        <h3 class="txs__title">
-          {{ $t('ui.tx.txDetails') }}
-        </h3>
-        <div class="txs__info">
-          <div class="tab">
-            <span
-              v-for="(tab, i) in tabs"
-              :key="i"
-              class="tab__item"
-              :class="{ 'tab__item_active': activeTab === tab} "
-              @click="onClick(tab)"
-            >{{ $t(`ui.token.${tab}`) }}</span>
-          </div>
-          <div
-            v-if="txsColumns.length > 0 && activeTab === 'overview'"
-            id="overview"
-            class="overview"
-          >
-            <div class="overview__desktop txs__columns columns">
-              <info-item
-                v-for="(item, i) in txsColumns"
-                :key="i"
-                :class="item.class"
-                :title="item.title"
-                :info="item.info"
-                :note="item.note"
-                :item="item.item"
-              >
-                <template
-                  v-if="item.item === 'timestamp'"
-                  #timestamp
-                >
-                  {{ dateFromNow }}
-                </template>
-              </info-item>
-            </div>
-            <div class="overview__mobile">
-              <div class="overview__hash">
-                <p>{{ $t('ui.tx.transaction') }}</p>
-
-                <nuxt-link
-                  class="overview__link"
-                  :to="`/tx/${(tx.hash)}`"
-                >
-                  {{ formatItem(tx.hash, 9, 6) }}
-                </nuxt-link>
-                <button-copy
-                  v-if="tx.hash"
-                  :value="tx.hash"
-                  icon-color="primary"
-                />
-              </div>
-              <p class="overview__timestamp">
-                {{ dateFromNow }}
-              </p>
-              <div class="overview__subtitle">
-                {{ $t('ui.tx.status') }}
-                <p
-                  v-if="tx.status"
-                  class="overview__status"
-                  :class="{'overview__status_green': tx.status === 1, 'overview__status_red': tx.status === 2}"
-                >
-                  {{ tx.status === 1 ? this.$t('ui.tx.transactionSuccess') : this.$t('ui.tx.transactionFail') }}
-                </p>
-              </div>
-              <div class="overview__subtitle">
-                {{ $t('ui.block.blockNumber') }}
-                <nuxt-link
-                  v-if="tx.block_number"
-                  class="overview__link_small"
-                  :to="`/blocks/${tx.block_number}`"
-                >
-                  {{ tx.block_number }}
-                </nuxt-link>
-              </div>
-              <div class="overview__subtitle">
-                {{ $t('ui.tx.from') }}
-                <nuxt-link
-                  v-if="tx.from_address_hash"
-                  class="overview__link_small"
-                  :to="`/address/${tx.from_address_hash.hex}`"
-                >
-                  {{ formatItem(tx.from_address_hash.hex, 7, 6) }}
-                </nuxt-link>
-                <button-copy
-                  v-if="tx.from_address_hash"
-                  :value="tx.from_address_hash.hex"
-                  icon-color="primary"
-                />
-              </div>
-              <div class="overview__subtitle">
-                {{ $t('ui.tx.to') }}
-                <nuxt-link
-                  v-if="tx.to_address_hash"
-                  class="overview__link_small"
-                  :to="`/address/${tx.to_address_hash.hex}`"
-                >
-                  {{ formatItem(tx.to_address_hash.hex, 7, 6) }}
-                </nuxt-link>
-                <button-copy
-                  v-if="tx.to_address_hash"
-                  :value="tx.to_address_hash.hex"
-                  icon-color="primary"
-                />
-              </div>
-              <div class="overview__subtitle">
-                {{ $t('ui.tx.value') }}
-                <span class="overview__info">{{ value }} {{ symbol }}</span>
-              </div>
-              <div class="overview__subtitle  overview__subtitle_underlined">
-                {{ $t('ui.tx.fee') }}
-                <span class="overview__info">{{ NumberFormat(fee) }}</span>
-              </div>
-              <div class="overview__subtitle">
-                {{ $t('ui.block.gasLimit') }}
-                <span class="overview__info">{{ NumberFormat(gasLimit) }}</span>
-              </div>
-              <div class="overview__subtitle">
-                {{ $t('ui.block.gasUsed') }}
-                <span class="overview__info">{{ NumberFormat(gasUsed) }} ({{ NumberFormat((gasUsed / gasLimit) * 100, 4) }}%) </span>
-              </div>
-              <div class="overview__subtitle">
-                {{ $t('ui.tx.gasPrice') }}
-                <span class="overview__info">{{ gasPrice }}</span>
-              </div>
-            </div>
-          </div>
-          <!-- logs -->
-          <div
-            v-if="tx && activeTab === 'logs'"
-            id="logs"
-            class="txs__logs logs"
-          >
-            <template v-if="Array.isArray(tx.logs) && tx.logs.length === 0">
-              <empty-data :description="$tc('ui.tx.noLogs')" />
-            </template>
-            <div
-              v-else
-              class="content"
+  <div class="txs">
+    <button
+      class="txs__back"
+      type="button"
+      @click="back()"
+    >
+      <span class="icon-short_left" />
+      {{ $t('ui.back') }}
+    </button>
+    <h3 class="txs__title">
+      {{ $t('ui.tx.txDetails') }}
+    </h3>
+    <div class="txs__info">
+      <div class="tab">
+        <span
+          v-for="(tab, i) in tabs"
+          :key="i"
+          class="tab__item"
+          :class="{ 'tab__item_active': activeTab === tab} "
+          @click="onClick(tab)"
+        >{{ $t(`ui.token.${tab}`) }}</span>
+      </div>
+      <div
+        v-if="txsColumns.length > 0 && activeTab === 'overview'"
+        id="overview"
+      >
+        <div class="columns">
+          <template v-if="isTxLoading">
+            <info-item
+              v-for="(item, i) in txsColumns"
+              :key="`txs-item-loader-${i}`"
+              :class="item.class"
+              :title="item.title"
+              :is-info-loading="true"
+            />
+          </template>
+          <template v-else>
+            <info-item
+              v-for="(item, i) in txsColumns"
+              :key="`txs-item-${i}`"
+              :class="item.class"
+              :title="item.title"
+              :info="item.info"
+              :note="item.note"
+              :item="item.item"
             >
-              <p
-                v-if="Array.isArray(tx.logs) && tx.logs.length > 0"
-                class="content__header"
+              <template
+                v-if="item.item === 'timestamp'"
+                #timestamp
               >
-                {{ $t('ui.tx.logs') }}
-              </p>
-
-              <div class="content__table log">
-                <p
-                  v-if="Array.isArray(tx.logs) && tx.logs.length > 0"
-                  class="log__title"
-                >
-                  {{ $t('ui.tx.transactionFull') }}
-                </p>
-                <span
-                  v-if="tx.hash"
-                  class="log__number"
-                >
-                  {{ tx.hash }}
-                </span>
-                <template v-for="(item, index) in tx.logs">
-                  <template v-if="item.first_topic">
-                    <p
-                      :key="`${index}_title`"
-                      class="log__title"
-                    >
-                      {{ $t('ui.tx.topics') }}
-                    </p>
-                    <div
-                      :key="`${index}_firstTopic`"
-                      class="log__topic"
-                    >
-                      <div class="topic">
-                        <p class="topic__index">
-                          0
-                        </p>
-                        <p class="topic__item">
-                          {{ item.first_topic }}
-                        </p>
-                      </div>
-                      <div
-                        v-if="item.second_topic"
-                        :key="`${index}_secondTopic`"
-                        class="topic"
-                      >
-                        <p class="topic__index">
-                          1
-                        </p>
-                        <p class="topic__item">
-                          {{ item.second_topic }}
-                        </p>
-                      </div>
-                      <div
-                        v-if="item.third_topic"
-                        :key="`${index}_thirdTopic`"
-                        class="topic"
-                      >
-                        <p class="topic__index">
-                          2
-                        </p>
-                        <p class="topic__item">
-                          {{ item.third_topic }}
-                        </p>
-                      </div>
-                      <div
-                        v-if="item.fourth_topic"
-                        :key="`${index}_fourthTopic`"
-                        class="topic"
-                      >
-                        <p class="topic__index">
-                          3
-                        </p>
-                        <p class="topic__item">
-                          {{ item.fourth_topic }}
-                        </p>
-                      </div>
-                    </div>
-                    <p
-                      :key="`${index}_dataTitle`"
-                      class="log__title"
-                    >
-                      {{ $t('ui.tx.data') }}
-                    </p>
-                    <div
-                      :key="`${index}_dataContent`"
-                      class="log__data"
-                    >
-                      <div class="log__data">
-                        {{ item.data }}
-                      </div>
-                    </div>
-                  </template>
-                </template>
-              </div>
-            </div>
-          </div>
+                {{ dateFromNow }}
+              </template>
+            </info-item>
+          </template>
         </div>
       </div>
+      <tx-logs
+        v-if="tx && activeTab === 'logs'"
+        id="logs"
+        :logs="tx.logs"
+        :hash="tx.hash"
+      />
     </div>
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
 import BigNumber from 'bignumber.js';
-
-/** @param { array } txsColumns[] */
-/** @param {{ gas_limit: string }} tx   */
-/** @param {{ gas_price: string }} tx   */
-/** @param { array } tx.logs  */
-/** @param {{ transaction_hash: string }} tx.logs  */
-/** @param {{ first_topic: string }} tx.logs  */
-/** @param {{ second_topic: string }} tx.logs  */
-/** @param {{ third_topic: string }} tx.logs  */
-/** @param {{ fourth_topic: string }} tx.logs  */
 
 export default {
   name: 'Block',
@@ -278,6 +77,7 @@ export default {
       timer: null,
       time: Date.now(),
       minute: 60000,
+      isTxLoading: true,
     };
   },
   computed: {
@@ -285,7 +85,6 @@ export default {
       tx: 'tx/getTxsByHash',
       symbol: 'tokens/getWUSDTokenSymbol',
       decimals: 'tokens/getWUSDTokenDecimals',
-      isLoading: 'main/getIsLoading',
     }),
     gasLimit() {
       return +this.tx?.block?.gas_limit || 0;
@@ -372,12 +171,6 @@ export default {
       }
       return [];
     },
-    txsLogs() {
-      return [
-        { class: 'table__number_desktop', text: this.tx.hash },
-        { class: 'table__number_mobile', text: this.formatItem(this.tx.hash, 9, 6) },
-      ];
-    },
     hash() {
       return this.$route.hash;
     },
@@ -396,12 +189,12 @@ export default {
     },
   },
   async beforeCreate() {
+    this.isTxLoading = true;
     await this.$store.dispatch('tx/getTxsByHash', this.$route.params.id);
+    this.isTxLoading = false;
   },
   async mounted() {
-    await this.SetLoader(true);
     await this.hashNavigation();
-    await this.SetLoader(false);
     clearInterval(Number(this.timer));
     this.timer = setInterval(() => {
       this.time = Date.now();
@@ -490,18 +283,6 @@ export default {
     border-radius: 6px;
   }
 
-  &__columns {
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-gap: 20px;
-    margin-top: 28px;
-  }
-  &__mobile {
-    display: none;
-  }
-
-  &__logs {
-    margin-top: 25px;
-  }
 }
 
 .tab {
@@ -520,6 +301,9 @@ export default {
 }
 
 .columns {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 20px;
   &__item {
     &_six {
       grid-column: 1 / span 6;
@@ -565,85 +349,10 @@ export default {
   }
 }
 
-.content {
-  display: flex;
-  flex-direction: column;
-  &__header {
-    @include text-simple;
-    font-size: 20px;
-    margin-bottom: 20px;
-  }
-  &__table {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    grid-gap: 10px;
-  }
-}
-
-.log {
-  &__title {
-    @include text-simple;
-    font-weight: 600;
-    text-align: right;
-    margin: 0;
-  }
-  &__topic {
-    display: flex;
-    flex-direction: column;
-  }
-  &__data {
-    @include text-simple;
-    margin-bottom: 20px;
-    overflow-wrap: anywhere;
-    max-width: 600px;
-    text-align: justify;
-  }
-  &__number {
-    @include text-simple;
-    color: $blue;
-    margin-bottom: 5px;
-    overflow-wrap: anywhere;
-  }
-}
-
-.topic {
-  display: flex;
-  margin-bottom: 10px;
-  &:last-child {
-    margin-bottom: 5px;
-  }
-  &__index {
-    @include text-simple;
-    background: $black100;
-    color: $black600;
-    text-align: center;
-    border-radius: 3px;
-    width: 21px;
-    height: 21px;
-    margin-right: 10px;
-    font-size: 12px;
-    padding-right: 5px;
-    padding-left: 5px;
-  }
-  &__item {
-    @include text-simple;
-    overflow-wrap: anywhere;
-  }
-}
-
 .icon-short_left {
   color: $black600;
   font-size: 22px;
   margin-right: 12px;
-}
-
-.overview {
-  &__desktop {
-    display: grid;
-  }
-  &__mobile {
-    display: none;
-  }
 }
 
 @include _991 {
@@ -652,107 +361,108 @@ export default {
       padding: 16px;
     }
   }
-  .overview {
-    &__mobile {
-      display: grid;
-      background: $white;
-    }
+  .columns {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
 
-    &__desktop {
-      display: none;
+  ::v-deep .item {
+    display: flex;
+    align-items: center;
+    &__header {
+      margin-right: 10px;
+      align-self: flex-start;
+      margin-bottom: 0;
     }
-
-    &__hash {
-      font-weight: 600;
-      font-size: 14px;
+    &__note.item__note_red {
+      & > span {
+        visibility: hidden;
+      }
+    }
+    &:nth-child(1) {
+      // hash
+      flex-direction: column;
+      order: 1;
+    }
+    &:nth-child(1) .item__header {
+      margin-bottom: 5px;
       color: $black300;
     }
-
-    &__link {
-      @include link;
-      color: $blue !important;
+    &:nth-child(1) .item__info {
+      color: $blue;
       font-size: 20px;
-      font-weight: normal;
+      font-weight: 400;
+      align-self: flex-start;
     }
-
-    &__timestamp {
-      font-weight: normal;
+    &:nth-child(2) {
+      // timestamp
+      order: 2;
+      margin-bottom: -25px;
+    }
+    &:nth-child(2) .item__info {
+      position: absolute;
+      right: 0;
+      top: 4px;
+      color: $black300;
       font-size: 14px;
-      color: $black400;
-      justify-self: end;
     }
-
-    &__subtitle {
-      display: flex;
-      gap: 10px;
-      font-weight: 600;
-      grid-column: 1/3;
-      margin-top: 11px;
-      align-items: center;
-
-      &_underlined {
-        padding-bottom: 15px;
-        border-bottom: 1px solid $black100;
-      }
+    &:nth-child(2) .item__header {
+      display: none;
     }
-
-    &__link_small {
-      @include text-simple;
-      @include normal-font-size;
-      @include link;
-      margin-left: 10px;
+    &:nth-child(2) .item__note {
+      display: none;
     }
-
-    &__info {
-      font-weight: normal;
-      margin-left: 10px;
+    &:nth-child(3) {
+      // status
+      order: 3;
     }
-
-    &__status {
-      @include text-simple;
-      word-break: break-all;
-      padding: 4px 5px;
-      font-size: 12px;
-      line-height: 130%;
-      border-radius: 6px;
-      width: 61px;
-      &_green {
-        background: $green100;
-        color: $green;
-        text-align: center;
-        display: inline-block;
-      }
-
-      &_red {
-        background: rgba(223, 51, 51, 0.1);
-        color: $red;
-        text-align: center;
-        display: inline-block;
-      }
-
-      &_error-text {
-        width: auto;
-        color: $red;
-      }
+    &:nth-child(4) {
+      // block
+      order: 4;
+    }
+    &:nth-child(5) {
+      // from
+      order: 5;
+    }
+    &:nth-child(6) {
+      // to
+      order: 6;
+    }
+    &:nth-child(7) {
+      // value
+      order: 7;
+    }
+    &:nth-child(8) {
+      // gas price
+      order: 9;
+    }
+    &:nth-child(9) {
+      // gas limit
+      order: 10;
+    }
+    &:nth-child(10) {
+      // gas used
+      order: 11;
+    }
+    &:nth-child(11) {
+      // fee
+      order: 8;
+      padding-bottom: 10px;
+      border-bottom: 1px solid $black100;
     }
   }
+}
 
-  .log__title {
-    text-align: left;
+@include _767 {
+  .txs {
+    background: $white;
+    padding-top: 22px;
   }
-
-  .content__table {
-    grid-template-columns: 1fr
-  }
-
-  .table__title {
-    text-align: left;
-  }
-
-  .icon-copy {
-    color: $blue;
-    font-size: 20px;
-    cursor: pointer;
+  ::v-deep .item {
+    &__info_blue {
+      font-size: 18px;
+    }
   }
 }
 </style>

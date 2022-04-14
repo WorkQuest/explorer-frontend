@@ -1,18 +1,15 @@
 <template>
-  <div
-    v-if="!isLoading"
-    class="blocks"
-  >
-    <search-filter class="blocks__search" />
-
-    <table-blocks
+  <div class="blocks">
+    <base-table
       id="blocks-table"
       class="blocks__table"
       :title="$tc('ui.blocks')"
       :items="blocks"
       :fields="tableHeaders"
+      :table-busy="tableBusy"
+      type="blocks"
+      :skeleton="{rows: limit, columns: tableHeaders.length}"
     />
-
     <paginator
       v-if="totalPages > 1"
       v-model="page"
@@ -32,29 +29,53 @@ export default {
       limit: 20,
       offset: 0,
       page: +this.$route.query?.page || 1,
+      tableBusy: false,
     };
   },
   computed: {
     ...mapGetters({
       blocks: 'blocks/getBlocks',
       blocksCount: 'blocks/getBlocksCount',
-      isLoading: 'main/getIsLoading',
     }),
     totalPages() {
       return this.setTotalPages(this.blocksCount, this.limit);
     },
     tableHeaders() {
       return [
-        { key: 'number', label: this.$t('ui.block.blockNumber'), sortable: true },
-        { key: 'timestamp', label: this.$t('ui.block.age'), sortable: true },
+        {
+          key: 'blockNumber',
+          label: this.$t('ui.block.blockNumber'),
+          sortable: true,
+          formatter: (value, key, item) => item.number,
+        },
+        {
+          key: 'age',
+          label: this.$t('ui.block.age'),
+          sortable: true,
+          formatter: (value, key, item) => this.formatDataFromNow(item.timestamp),
+        },
         { key: 'transactionsCount', label: this.$t('ui.block.txn'), sortable: true },
         {
-          key: 'gas_used',
+          key: 'gasUsed',
           label: this.$t('ui.block.gasUsed'),
           sortable: true,
-          formatter: (value, key, item) => `${this.NumberFormat((+value / +item.gas_limit) * 100, 4)}%`,
+          formatter: (value, key, item) => [
+            {
+              value: +item.gas_used,
+              class: '',
+            },
+            {
+              value: `${this.NumberFormat((+item.gas_used / +item.gas_limit) * 100, 4)}%`,
+              class: 'grey',
+            },
+          ],
         },
-        { key: 'gas_limit', label: this.$t('ui.block.gasLimit'), sortable: true },
+        {
+          key: 'gasLimit',
+          label: this.$t('ui.block.gasLimit'),
+          sortable: true,
+          formatter: (value, key, item) => this.NumberFormat(item.gas_limit),
+        },
       ];
     },
     payload() {
@@ -82,9 +103,9 @@ export default {
   },
   methods: {
     async getBlocks() {
-      await this.SetLoader(true);
+      this.tableBusy = true;
       await this.$store.dispatch('blocks/getBlocks', this.payload);
-      await this.SetLoader(false);
+      this.tableBusy = false;
     },
   },
 };
