@@ -150,7 +150,8 @@
     "addressNotFound": "Адрес не найден",
     "contractNotFound": "Контракт не найден",
     "tokenNotFound": "Токен не найден",
-    "other": "Произошла ошибка"
+    "other": "Произошла ошибка",
+    "convertingToHex": "Ошибка конвертации"
   },
   "messages": {
     "required": "The {_field_} field is required",

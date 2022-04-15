@@ -137,7 +137,9 @@
 
 <script>
 
-import { isArrayType, splitString } from '~/utils';
+import { isAddress, toChecksumAddress } from 'web3-utils';
+import converter from 'bech32-converting';
+import { isArrayType, isValidBech32, splitString } from '~/utils';
 
 const type = ['read', 'write', 'nonpayable'];
 const abiType = ['function', 'constructor', 'event', 'fallback'];
@@ -197,10 +199,21 @@ export default {
         const isArray = isArrayType(this.abiItem.inputs[index].type);
         return isArray ? splitString(item) : item;
       });
+      let hexAddress = '';
+      if (isAddress(this.address)) {
+        hexAddress = this.address;
+      } else if (isValidBech32(this.address)) {
+        hexAddress = converter('wq').toHex(this.address);
+        try {
+          hexAddress = toChecksumAddress(hexAddress);
+        } catch (e) {
+          this.error = this.$t('errors.convertingToHex');
+        }
+      }
       const payload = {
         type: this.type,
         abi: this.abi,
-        address: this.address,
+        address: hexAddress,
         method: this.abiItem.name,
         params: this.value.length > 0 ? params : null,
       };
