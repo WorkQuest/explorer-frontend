@@ -17,6 +17,7 @@ import ButtonCopy from '~/components/ui/ButtonCopy';
 import Paginator from '~/components/ui/Paginator';
 import BaseTable from '~/components/BaseTable/BaseTable';
 import TxLogs from '~/components/TxLogs';
+import TokenImage from '~/components/ui/TokenImage';
 
 Vue.component('ctm-modal', CtmModal);
 Vue.component('base-btn', BaseButton);
@@ -35,3 +36,4 @@ Vue.component('button-copy', ButtonCopy);
 Vue.component('base-table', BaseTable);
 Vue.component('paginator', Paginator);
 Vue.component('txLogs', TxLogs);
+Vue.component('token-image', TokenImage);

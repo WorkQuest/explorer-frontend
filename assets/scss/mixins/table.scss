@@ -80,14 +80,6 @@ table {
     color: $black300;
     margin-left: 20px;
   }
-
-  &__image {
-    border-radius: 50%;
-    width: 15px;
-    height: 15px;
-    overflow: hidden;
-    object-fit: cover;
-  }
 }
 
 .skeleton-table {
