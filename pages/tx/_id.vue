@@ -133,13 +133,13 @@ export default {
           {
             class: 'columns__item_three-one',
             title: this.$t('ui.tx.from'),
-            info: this.tx.from_address_hash.hex,
+            info: this.tx.from_address_hash.bech32,
             item: 'address',
           },
           {
             class: 'columns__item_three-two',
             title: this.$t('ui.tx.to'),
-            info: this.tx.to_address_hash ? this.tx.to_address_hash.hex : null,
+            info: this.tx.to_address_hash ? this.tx.to_address_hash.bech32 : null,
             item: 'address',
           },
           {

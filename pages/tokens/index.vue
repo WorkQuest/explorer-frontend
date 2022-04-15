@@ -65,12 +65,16 @@ export default {
           label: this.$t('ui.token.token'),
           sortable: true,
           formatter: (value, key, item) => {
-            const { name, symbol } = item;
-            const link = item.contract_address_hash.hex;
+            const { name, symbol, metadata } = item;
+            const link = item.contract_address_hash.bech32;
+            const description = metadata ? metadata.description : null;
+            const iconUrl = metadata ? metadata.iconUrl : null;
             return {
               name,
               symbol,
               link,
+              description,
+              iconUrl,
             };
           },
         },
@@ -80,7 +84,7 @@ export default {
           sortable: true,
           formatter: (value, key, item) => {
             const { decimals } = item;
-            const convertedVolume = this.ConvertFromDecimals(item.total_supply, decimals);
+            const convertedVolume = this.ConvertFromDecimals(value, decimals, 2);
             return this.NumberFormat(convertedVolume);
           },
         },
@@ -105,6 +109,7 @@ export default {
     this.tableBusy = true;
     if (!isSearch || !this.allTokensCount) {
       await this.$store.dispatch('tokens/getAllTokens', this.payload);
+      await this.$store.dispatch('tokens/getTokenPrices');
     }
     this.tableBusy = false;
     sessionStorage.setItem('backRoute', this.$route.fullPath);

@@ -155,13 +155,13 @@ export default {
           key: 'addressFrom',
           label: this.$t('ui.tx.from'),
           sortable: true,
-          formatter: (value, key, item) => item.from_address_hash?.hex || '',
+          formatter: (value, key, item) => item.from_address_hash?.bech32 || '',
         },
         {
           key: 'addressTo',
           label: this.$t('ui.tx.to'),
           sortable: true,
-          formatter: (value, key, item) => item.to_address_hash?.hex || '',
+          formatter: (value, key, item) => item.to_address_hash?.bech32 || '',
         },
         {
           key: 'value',
@@ -200,13 +200,13 @@ export default {
           key: 'addressFrom',
           label: this.$t('ui.tx.from'),
           sortable: true,
-          formatter: (value, key, item) => item.from_address_hash?.hex || '',
+          formatter: (value, key, item) => item.from_address_hash?.bech32 || '',
         },
         {
           key: 'addressTo',
           label: this.$t('ui.tx.to'),
           sortable: true,
-          formatter: (value, key, item) => item.to_address_hash?.hex || '',
+          formatter: (value, key, item) => item.to_address_hash?.bech32 || '',
         },
         {
           key: 'value',
@@ -229,13 +229,13 @@ export default {
           key: 'addressFrom',
           label: this.$t('ui.tx.from'),
           sortable: true,
-          formatter: (value, key, item) => item.from_address_hash?.hex || '',
+          formatter: (value, key, item) => item.from_address_hash?.bech32 || '',
         },
         {
           key: 'addressTo',
           label: this.$t('ui.tx.to'),
           sortable: true,
-          formatter: (value, key, item) => item.to_address_hash?.hex || '',
+          formatter: (value, key, item) => item.to_address_hash?.bech32 || '',
         },
         {
           key: 'value',
@@ -253,7 +253,7 @@ export default {
           sortable: true,
           formatter: (value, key, item) => {
             const { name, symbol } = item.tokenTransfers[0]?.tokenContractAddress?.token || '';
-            const link = item.tokenTransfers[0]?.tokenContractAddress?.hash?.hex || '';
+            const link = item.tokenTransfers[0]?.tokenContractAddress?.hash?.bech32 || '';
             return {
               name,
               symbol,
@@ -283,7 +283,7 @@ export default {
   },
   async mounted() {
     await this.SetLoader(false);
-    if (isAddress(this.address)) {
+    if (this.IsValidBech32Address(this.address) || isAddress(this.address)) {
       await this.getContractData();
       await this.hashNavigation();
     } else {

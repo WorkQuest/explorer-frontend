@@ -78,15 +78,7 @@ table {
     @include normal-font-size;
     font-size: 12px;
     color: $black300;
-    margin-left: 8px;
-  }
-
-  &__image {
-    border-radius: 50%;
-    width: 15px;
-    height: 15px;
-    overflow: hidden;
-    object-fit: cover;
+    margin-left: 20px;
   }
 }
 

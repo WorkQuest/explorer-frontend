@@ -135,13 +135,13 @@ export default {
           key: 'addressFrom',
           label: this.$t('ui.tx.from'),
           sortable: true,
-          formatter: (value, key, item) => item.from_address_hash?.hex || '',
+          formatter: (value, key, item) => item.from_address_hash?.bech32 || '',
         },
         {
           key: 'addressTo',
           label: this.$t('ui.tx.to'),
           sortable: true,
-          formatter: (value, key, item) => item.to_address_hash?.hex || '',
+          formatter: (value, key, item) => item.to_address_hash?.bech32 || '',
         },
         {
           key: 'value',

@@ -18,14 +18,12 @@
         @click="onClick(token)"
       >
         <p class="token__item">
-          <!--          TODO base64 -->
-          <img
+          <token-image
             class="token__image"
-            :src="require(`~/assets/img/tokens/empty-token.svg`)"
-            width="15"
-            height="15"
-            :alt="token.symbol"
-          >
+            :link="tokenIconUrl(token)"
+            :symbol="tokenSymbol(token)"
+            size="small"
+          />
           {{ token.name }} ({{ token.symbol }})
         </p>
         <p class="token__code">
@@ -60,7 +58,13 @@ export default {
   },
   methods: {
     async onClick(token) {
-      await this.$router.push(`/tokens/${token.token_contract_address_hash?.hex || ''}`);
+      await this.$router.push(`/tokens/${token.token_contract_address_hash?.bech32 || ''}`);
+    },
+    tokenIconUrl(token) {
+      return token.token?.metadata?.iconUrl || '';
+    },
+    tokenSymbol(token) {
+      return token.symbol || '';
     },
   },
 };
@@ -105,15 +109,11 @@ export default {
     @include text-simple;
     @include normal-font-size;
     display: flex;
+    align-items: center;
   }
 
   &__image {
     margin-right: 10px;
-    border-radius: 50%;
-    width: 15px;
-    height: 15px;
-    overflow: hidden;
-    object-fit: cover;
   }
 
   &__code {
