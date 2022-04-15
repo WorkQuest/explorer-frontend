@@ -3,7 +3,7 @@ import moment from 'moment';
 import VueTippy, { TippyComponent } from 'vue-tippy';
 import BigNumber from 'bignumber.js';
 import modals from '~/store/modals/modals';
-import { isValidBech32 } from '~/utils';
+import { getKeyByValue, isValidBech32 } from '~/utils';
 
 Vue.use(VueTippy);
 Vue.component('tippy', TippyComponent);
@@ -112,6 +112,9 @@ Vue.mixin({
     },
     IsValidBech32Address(address) {
       return isValidBech32(address);
+    },
+    GetSortKeyByValue(table, value) {
+      return getKeyByValue(table, value);
     },
   },
 });

@@ -28,8 +28,22 @@ export const searchTypes = {
 };
 
 export const sortTables = {
-  transactions: ['hash', 'block.timestamp', 'block_number', 'from_address_hash', 'to_address_hash', 'value', 'gas_used'],
-  blocks: ['number', 'timestamp', 'gas_used', 'gas_limit'],
+  transactions: {
+    hash: 'hash',
+    age: 'block.timestamp',
+    blockNumber: 'block_number',
+    addressFrom: 'from_address_hash',
+    addressTo: 'to_address_hash',
+    value: 'value',
+    gasUsed: 'gas_used',
+  },
+  blocks: {
+    number: 'number',
+    blockNumber: 'number',
+    age: 'timestamp',
+    gasUsed: 'gas_used',
+    gasLimit: 'gas_limit',
+  },
   holders: ['value'],
   transfers: ['transaction_hash', 'block.timestamp', 'from_address_hash', 'to_address_hash', 'amount'],
   tokens: ['name', 'symbol', 'holder_count'],
@@ -39,6 +53,10 @@ export const sortDirections = {
   ASC: 'ASC',
   DESC: 'DESC',
 };
+
+export const isSortable = (table, key) => Object.keys(sortTables[table]).includes(key);
+
+export const getKeyByValue = (table, value) => Object.keys(sortTables[table]).find((key) => sortTables[table][key] === value);
 
 export const output = (res) => ({
   ok: true,

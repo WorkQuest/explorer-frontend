@@ -28,9 +28,14 @@
       tbody-tr-class="table__row"
       caption-top
       sort-icon-right
+      :sort-direction="sortDirection"
+      :sort-by.sync="sortBy"
+      :sort-desc.sync="sortDesc"
       responsive="xl"
       show-empty
       stacked="md"
+      :no-local-sorting="items.length <= 5"
+      @sort-changed="$emit('table-sort', $event, type)"
     >
       <template
         v-if="!tableBusy"
@@ -226,6 +231,18 @@ export default {
     skeleton: {
       type: Object,
       default: () => ({ rows: 5, columns: 5 }),
+    },
+    sortDirection: {
+      type: String,
+      default: 'desc',
+    },
+    sortBy: {
+      type: String,
+      default: '',
+    },
+    sortDesc: {
+      type: Boolean,
+      default: true,
     },
   },
   computed: {

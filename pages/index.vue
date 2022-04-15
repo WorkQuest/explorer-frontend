@@ -17,7 +17,7 @@
           id="home-blocks"
           :items="blocks"
           :fields="tableHeadersBlocks"
-          :table-busy="tableBusy"
+          :table-busy="blocksTableBusy"
           type="blocks"
           :skeleton="{rows: limit, columns: tableHeadersBlocks.length}"
         >
@@ -39,7 +39,7 @@
           id="home-transactions"
           :items="txs"
           :fields="tableHeadersTxs"
-          :table-busy="tableBusy"
+          :table-busy="transactionsTableBusy"
           type="transactions"
           :skeleton="{rows: limit, columns: tableHeadersTxs.length}"
         >
@@ -61,6 +61,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import { isSortable } from '~/utils';
 
 export default {
   name: 'Home',
@@ -70,7 +71,8 @@ export default {
       search: '',
       limit: 5,
       offset: 0,
-      tableBusy: false,
+      blocksTableBusy: false,
+      transactionsTableBusy: false,
     };
   },
   computed: {
@@ -80,10 +82,20 @@ export default {
       WUSDSymbol: 'tokens/getWUSDTokenSymbol',
       WUSDDecimal: 'tokens/getWUSDTokenDecimals',
     }),
-    payload() {
+    blocksTablePayload() {
       return {
         limit: this.limit,
         offset: this.offset,
+        'sort[field]': this.blocksTable.sortField,
+        'sort[type]': this.blocksTable.sortDirection,
+      };
+    },
+    transactionsTablePayload() {
+      return {
+        limit: this.limit,
+        offset: this.offset,
+        'sort[field]': this.transactionsTable.sortField,
+        'sort[type]': this.transactionsTable.sortDirection,
       };
     },
     tableHeadersBlocks() {
@@ -91,22 +103,22 @@ export default {
         {
           key: 'blockNumber',
           label: this.$t('ui.block.blockNumber'),
-          sortable: true,
+          sortable: isSortable('blocks', 'blockNumber'),
           formatter: (value, key, item) => item.number,
         },
         {
           key: 'age',
           label: this.$t('ui.block.age'),
-          sortable: true,
+          sortable: isSortable('blocks', 'age'),
           formatter: (value, key, item) => this.formatDataFromNow(item.timestamp),
         },
         {
-          key: 'transactionsCount', label: this.$t('ui.block.txsCount'), sortable: true,
+          key: 'transactionsCount', label: this.$t('ui.block.txsCount'), sortable: isSortable('blocks', 'transactionsCount'),
         },
         {
           key: 'gasUsed',
           label: this.$t('ui.block.gasUsed'),
-          sortable: true,
+          sortable: isSortable('blocks', 'gasUsed'),
           formatter: (value, key, item) => [
             {
               value: +item.gas_used,
@@ -121,7 +133,7 @@ export default {
         {
           key: 'gasLimit',
           label: this.$t('ui.block.gasLimit'),
-          sortable: true,
+          sortable: isSortable('blocks', 'gasLimit'),
           formatter: (value, key, item) => this.NumberFormat(item.gas_limit),
         },
       ];
@@ -129,34 +141,36 @@ export default {
     tableHeadersTxs() {
       return [
         {
-          key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true,
+          key: 'hash', label: this.$t('ui.tx.transaction'), sortable: isSortable('transactions', 'hash'),
         },
         {
           key: 'addressFrom',
           label: this.$t('ui.tx.from'),
-          sortable: true,
+          sortable: isSortable('transactions', 'addressFrom'),
           formatter: (value, key, item) => item.from_address_hash?.bech32 || '',
         },
         {
           key: 'addressTo',
           label: this.$t('ui.tx.to'),
-          sortable: true,
+          sortable: isSortable('transactions', 'addressTo'),
           formatter: (value, key, item) => item.to_address_hash?.bech32 || '',
         },
         {
           key: 'value',
           label: this.$t('ui.tx.value'),
-          sortable: true,
+          sortable: isSortable('transactions', 'value'),
           formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
         },
       ];
     },
   },
   async mounted() {
-    this.tableBusy = true;
-    await this.$store.dispatch('blocks/getBlocks', this.payload);
-    await this.$store.dispatch('tx/getTxs', this.payload);
-    this.tableBusy = false;
+    this.blocksTableBusy = true;
+    await this.$store.dispatch('blocks/getBlocks', this.blocksTablePayload);
+    this.blocksTableBusy = false;
+    this.transactionsTableBusy = true;
+    await this.$store.dispatch('tx/getTxs', this.transactionsTablePayload);
+    this.transactionsTableBusy = false;
   },
   beforeDestroy() {
     this.$store.commit('tx/resetTxs');

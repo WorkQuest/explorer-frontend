@@ -9,6 +9,10 @@
       :table-busy="tableBusy"
       type="transactions"
       :skeleton="{rows: limit, columns: tableHeaders.length}"
+      :sort-direction.sync="sortDirectionForTable"
+      :sort-by.sync="sortFieldForTable"
+      :sort-desc.sync="sortDescForTable"
+      @table-sort="changeSortParams"
     >
       <template
         v-if="query"
@@ -41,6 +45,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import { isSortable, sortDirections, sortTables } from '~/utils';
 
 export default {
   name: 'Transactions',
@@ -50,6 +55,8 @@ export default {
       offset: 0,
       page: +this.$route.query?.page || 1,
       tableBusy: false,
+      sortDirection: 'DESC',
+      sortField: 'block.timestamp',
     };
   },
   computed: {
@@ -74,6 +81,8 @@ export default {
       return {
         limit: this.limit,
         offset: (this.page - 1) * this.limit,
+        'sort[field]': this.sortField,
+        'sort[type]': this.sortDirection,
       };
     },
     totalPages() {
@@ -83,41 +92,41 @@ export default {
     },
     tableHeaders() {
       return [
-        { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
+        { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: isSortable('transactions', 'hash') },
         {
           key: 'age',
           label: this.$t('ui.block.age'),
-          sortable: true,
+          sortable: isSortable('transactions', 'age'),
           formatter: (value, key, item) => this.formatDataFromNow(item.block.timestamp),
         },
         {
           key: 'blockNumber',
           label: this.$t('ui.block.blockNumber'),
-          sortable: true,
+          sortable: isSortable('transactions', 'blockNumber'),
           formatter: (value, key, item) => item.block_number,
         },
         {
           key: 'addressFrom',
           label: this.$t('ui.tx.from'),
-          sortable: true,
+          sortable: isSortable('transactions', 'addressFrom'),
           formatter: (value, key, item) => item.from_address_hash?.bech32 || '',
         },
         {
           key: 'addressTo',
           label: this.$t('ui.tx.to'),
-          sortable: true,
+          sortable: isSortable('transactions', 'addressTo'),
           formatter: (value, key, item) => item.to_address_hash?.bech32 || '',
         },
         {
           key: 'value',
           label: this.$t('ui.tx.value'),
-          sortable: true,
+          sortable: isSortable('transactions', 'value'),
           formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
         },
         {
           key: 'gasUsed',
           label: this.$t('ui.tx.fee'),
-          sortable: true,
+          sortable: isSortable('transactions', 'gasUsed'),
           formatter: (value, key, item) => [
             {
               value: this.FormatSmallNumber(this.ConvertFromDecimals(item.gas_used * item.gas_price, this.WUSDDecimal)),
@@ -126,6 +135,15 @@ export default {
           ],
         },
       ];
+    },
+    sortFieldForTable() {
+      return this.GetSortKeyByValue('transactions', this.sortField);
+    },
+    sortDirectionForTable() {
+      return this.sortDirection.toLowerCase();
+    },
+    sortDescForTable() {
+      return this.sortDirectionForTable === 'desc';
     },
   },
   watch: {
@@ -160,6 +178,26 @@ export default {
         await this.$store.dispatch('tx/getTxs', this.payload);
       }
       this.tableBusy = false;
+    },
+    async changeSortParams(params) {
+      const { sortBy, sortDesc } = params;
+      console.log('params: ', params, sortBy, sortDesc);
+      if (sortBy !== this.sortDirectionForTable) {
+        this.sortDirection = sortDirections.DESC;
+      } else {
+        this.sortDirection = this.sortDirection === sortDirections.ASC;
+      }
+      // this.sortDirection = sortDesc ? sortDirections.DESC : sortDirections.ASC;
+      console.log('sortDirection: ', this.sortDirection);
+      this.sortField = sortTables.transactions[sortBy];
+      if (sortBy) {
+        console.log('payload: ', this.payload);
+        await this.getTransactions();
+        this.refreshTable();
+      }
+    },
+    refreshTable() {
+      this.$root.$emit('bv::table::refresh', 'transactions-table');
     },
   },
 };
