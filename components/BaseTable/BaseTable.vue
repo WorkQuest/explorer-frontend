@@ -158,7 +158,7 @@
             width="15"
             height="15"
             class="token-item__image"
-            :alt="el.item.symbol"
+            :alt="el.value.symbol"
           >
           <nuxt-link
             class="token-item__title table__link"
@@ -168,8 +168,11 @@
             <span class="table__token token token-item__symbol"> ({{ el.value.symbol }}) </span>
           </nuxt-link>
         </div>
-        <p class="token-item__description">
-          {{ el.item.description }}
+        <p
+          v-if="el.value.description"
+          class="token-item__description"
+        >
+          {{ el.value.description }}
         </p>
       </template>
 
