@@ -61,7 +61,7 @@ export default {
       await this.$router.push(`/tokens/${token.token_contract_address_hash?.hex || ''}`);
     },
     tokenIconUrl(token) {
-      return token.metadata?.urlLink || '';
+      return token.token?.metadata?.iconUrl || '';
     },
     tokenSymbol(token) {
       return token.symbol || '';
