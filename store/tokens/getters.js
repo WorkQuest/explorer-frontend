@@ -10,7 +10,6 @@ export default {
   getAccountTokens: (state) => state.accountTokens.tokens,
   getAllTokenTransfers: (state) => state.allTokenTransfers.transfers,
   getAllTokenTransfersCount: (state) => state.allTokenTransfers.count,
-  getWUSDTokenData: (state) => state.wusd,
   getWUSDTokenSymbol: (state) => state.wusd.symbol,
   getWUSDTokenDecimals: (state) => state.wusd.decimals,
   getTokenPrice: (state) => (tokenSymbol) => state.tokenPrices.find((token) => token.symbol === tokenSymbol)?.price,
