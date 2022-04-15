@@ -1,24 +1,6 @@
 @import './icons.scss';
 @import './_reset.css';
-@import './vue2Dropzone.min.css';
-@import './dropzone.scss';
 
-@font-face {
-  font-family: "GothamProMedium";
-  src: url(~assets/fonts/GothamProMedium/GothamPro-Medium.woff);
-  font-weight: 500;
-}
-@font-face {
-  font-family: "GothamProBlack";
-  src: url(~assets/fonts/GothamProBlack/GothamPro-Black.woff);
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: "GothamPro";
-  src: url(~assets/fonts/GothamPro/GothamPro.woff);
-  font-weight: 500;
-}
 
 @font-face {
   font-display: fallback;

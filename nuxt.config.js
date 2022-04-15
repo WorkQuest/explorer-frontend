@@ -1,3 +1,4 @@
+import shrinkRay from 'shrink-ray-current';
 import localeEn from './locales/en.json';
 import localeRu from './locales/ru.json';
 
@@ -47,19 +48,40 @@ export default {
     '@nuxtjs/style-resources',
     'bootstrap-vue/nuxt',
     'nuxt-i18n',
-    'cookie-universal-nuxt',
   ],
+  bootstrapVue: {
+    components: ['b-table', 'b-skeleton', 'b-collapse', 'b-toast', 'b-skeleton-table'],
+  },
   build: {
     productionGzip: true,
-    productionGzipExtensions: ['js', 'css', 'svg'],
-    extend(config) {
+    productionGzipExtensions: ['js', 'css', 'svg', 'scss', 'vue', 'html'],
+    extend(config, { isClient }) {
       config.node = { fs: 'empty' };
+      if (isClient) {
+        config.optimization.splitChunks.maxSize = 100000;
+      }
     },
     babel: {
       compact: false,
     },
     loaders: {
       scss: { sourceMap: false },
+    },
+    html: {
+      minify: {
+        collapseBooleanAttributes: true,
+        decodeEntities: true,
+        minifyCSS: true,
+        minifyJS: true,
+        processConditionalComments: true,
+        removeEmptyAttributes: true,
+        removeRedundantAttributes: true,
+        trimCustomFragments: true,
+        useShortDoctype: true,
+        removeComments: true,
+        preserveLineBreaks: false,
+        collapseWhitespace: true,
+      },
     },
   },
   axios: {
@@ -92,5 +114,8 @@ export default {
     BASE_URL: process.env.BASE_URL,
     WQ_PROVIDER: process.env.WQ_PROVIDER,
     WQ_ORACLE_URL: process.env.WQ_ORACLE_URL,
+  },
+  render: {
+    compressor: shrinkRay(),
   },
 };
