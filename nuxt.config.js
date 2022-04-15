@@ -88,8 +88,9 @@ export default {
     locales: ['ru'],
   },
   env: {
+    PRODUCTION: process.env.PRODUCTION,
     BASE_URL: process.env.BASE_URL,
     WQ_PROVIDER: process.env.WQ_PROVIDER,
-    PRODUCTION: process.env.PRODUCTION,
+    WQ_ORACLE_URL: process.env.WQ_ORACLE_URL,
   },
 };
