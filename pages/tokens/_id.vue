@@ -274,18 +274,14 @@ export default {
   watch: {
     async page() {
       this.offset = (this.page - 1) * this.limit;
-
+      this.tableBusy = true;
       if (this.activeTab === 'transfers') {
-        this.tableBusy = true;
         await this.$store.dispatch('tokens/getTokenTransfers', this.payload);
-        this.tableBusy = false;
       }
-
       if (this.activeTab === 'holders') {
-        this.tableBusy = true;
         await this.$store.dispatch('tokens/getTokenHolders', this.payload);
-        this.tableBusy = false;
       }
+      this.tableBusy = false;
     },
     async hash(current, previous) {
       if (current !== previous) {
