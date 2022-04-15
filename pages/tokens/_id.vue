@@ -142,6 +142,7 @@ export default {
       tokenTransfersCount: 'tokens/getCurrentTokenTransfersCount',
       tokenHolders: 'tokens/getCurrentTokenHolders',
       tokenHoldersCount: 'tokens/getCurrentTokenHoldersCount',
+      getTokenPrice: 'tokens/getTokenPrice',
     }),
     address() {
       return this.$route.params.id;
@@ -245,7 +246,7 @@ export default {
       return this.$route.hash;
     },
     tokenPrice() {
-      const price = this.$store.getters['tokens/getTokenPrice'](this.token.symbol) || 0;
+      const price = this.getTokenPrice(this.token.symbol) || 0;
       return new BigNumber(price).toString();
     },
     volume() {
