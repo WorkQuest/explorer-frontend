@@ -6,8 +6,6 @@ export default {
   getCurrentTokenTransfersCount: (state) => state.currentToken.transfersList.count,
   getCurrentTokenHolders: (state) => state.currentToken.holdersList.rows,
   getCurrentTokenHoldersCount: (state) => state.currentToken.holdersList.count,
-  getAccountTokensCount: (state) => state.accountTokens.count,
-  getAccountTokens: (state) => state.accountTokens.tokens,
   getAllTokenTransfers: (state) => state.allTokenTransfers.transfers,
   getAllTokenTransfersCount: (state) => state.allTokenTransfers.count,
   getWUSDTokenSymbol: (state) => state.wusd.symbol,
