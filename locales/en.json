@@ -150,7 +150,8 @@
     "addressNotFound": "Address not found",
     "contractNotFound": "Contract not found",
     "tokenNotFound": "Token not found",
-    "other": "An error occurred"
+    "other": "An error occurred",
+    "convertingToHex": "Conversion error"
   },
   "messages": {
     "required": "The {_field_} field is required",

@@ -66,7 +66,7 @@ export default {
       };
     },
     address() {
-      return Object.keys(this.accountInfo).length > 0 && this.accountInfo.hash?.hex ? this.accountInfo.hash.hex : this.$route.params.id;
+      return Object.keys(this.accountInfo).length > 0 && this.accountInfo.hash?.bech32 ? this.accountInfo.hash.bech32 : this.$route.params.id;
     },
     totalPages() {
       return this.setTotalPages(this.txsCount, this.limit);
@@ -90,13 +90,13 @@ export default {
           key: 'addressFrom',
           label: this.$t('ui.tx.from'),
           sortable: true,
-          formatter: (value, key, item) => item.from_address_hash?.hex || '',
+          formatter: (value, key, item) => item.from_address_hash?.bech32 || '',
         },
         {
           key: 'addressTo',
           label: this.$t('ui.tx.to'),
           sortable: true,
-          formatter: (value, key, item) => item.to_address_hash?.hex || '',
+          formatter: (value, key, item) => item.to_address_hash?.bech32 || '',
         },
         {
           key: 'value',
@@ -134,7 +134,7 @@ export default {
   },
   methods: {
     async getAccountData() {
-      if (!this.accountInfo.hash?.hex) {
+      if (!this.accountInfo.hash?.bech32) {
         await this.SetLoader(true);
         await this.$store.dispatch('account/getAccountByAddress', { address: this.address, commonLimit: this.limit });
         await this.SetLoader(false);

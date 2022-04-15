@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     async onClick(token) {
-      await this.$router.push(`/tokens/${token.token_contract_address_hash?.hex || ''}`);
+      await this.$router.push(`/tokens/${token.token_contract_address_hash?.bech32 || ''}`);
     },
     tokenIconUrl(token) {
       return token.token?.metadata?.iconUrl || '';

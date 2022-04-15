@@ -9,7 +9,7 @@ import {
 
 import * as rules from 'vee-validate/dist/rules';
 import {
-  isValidAddress, isValidByte, isValidUint, splitString,
+  isValidAddress, isValidByte, isValidInt, isValidUint, splitString,
 } from '~/utils';
 import { ValidateType } from '~/utils/VeeValidateTypes';
 
@@ -48,7 +48,7 @@ export default ({ app }) => {
       }
       if (type.includes(ValidateType.INT)) {
         const [, bits] = type.split(ValidateType.INT);
-        return !inputArray.map((val) => isValidUint(val, mustBeArray ? bits.replace('[]', '') : bits).some((v) => v === false));
+        return !inputArray.map((val) => isValidInt(val, mustBeArray ? bits.replace('[]', '') : bits).some((v) => v === false));
       }
       if (type.includes(ValidateType.BOOL)) {
         return value === 'true' || value === 'false';

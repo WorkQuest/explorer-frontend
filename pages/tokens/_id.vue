@@ -117,8 +117,8 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import { isAddress } from 'web3-utils';
 import BigNumber from 'bignumber.js';
+import { isAddress } from 'web3-utils';
 
 export default {
   name: 'Token',
@@ -183,13 +183,13 @@ export default {
           key: 'addressFrom',
           label: this.$t('ui.tx.from'),
           sortable: true,
-          formatter: (value, key, item) => item.from_address_hash.hex,
+          formatter: (value, key, item) => item.from_address_hash.bech32,
         },
         {
           key: 'addressTo',
           label: this.$t('ui.tx.to'),
           sortable: true,
-          formatter: (value, key, item) => item.to_address_hash.hex,
+          formatter: (value, key, item) => item.to_address_hash.bech32,
         },
         {
           key: 'amount',
@@ -211,7 +211,7 @@ export default {
           key: 'address',
           label: this.$t('ui.token.address'),
           sortable: true,
-          formatter: (value, key, item) => item.address_hash.hex,
+          formatter: (value, key, item) => item.address_hash.bech32,
         },
         {
           key: 'quantity',
@@ -291,7 +291,7 @@ export default {
     },
   },
   async mounted() {
-    if (isAddress(this.address)) {
+    if (this.IsValidBech32Address(this.address) || isAddress(this.address)) {
       await this.getTokenData();
       await this.hashNavigation();
     } else {
