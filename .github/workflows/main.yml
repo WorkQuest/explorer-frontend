@@ -27,6 +27,7 @@ jobs:
           echo PRODUCTION=${{ secrets.PRODUCTION }} >> .env
           echo BASE_URL=${{ secrets.BASE_URL }} >> .env
           echo WQ_PROVIDER=${{ secrets.WQ_PROVIDER }} >> .env
+          echo WQ_ORACLE_URL=${{ secrets.WQ_ORACLE_URL }} >> .env
 
       - name: Run generate static task
         run: npm run generate
@@ -63,6 +64,7 @@ jobs:
           echo PRODUCTION=${{ secrets.PRODUCTION }} >> .env
           echo BASE_URL=${{ secrets.BASE_URL }} >> .env
           echo WQ_PROVIDER=${{ secrets.WQ_PROVIDER }} >> .env
+          echo WQ_ORACLE_URL=${{ secrets.WQ_ORACLE_URL }} >> .env
 
       - name: Run generate static task
         run: npm run generate
@@ -99,6 +101,7 @@ jobs:
           echo PRODUCTION=${{ secrets.PRODUCTION }} >> .env
           echo BASE_URL=${{ secrets.BASE_URL }} >> .env
           echo WQ_PROVIDER=${{ secrets.WQ_PROVIDER }} >> .env
+          echo WQ_ORACLE_URL=${{ secrets.WQ_ORACLE_URL }} >> .env
 
       - name: Run generate static task
         run: npm run generate
