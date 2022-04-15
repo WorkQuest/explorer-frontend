@@ -68,11 +68,13 @@ export default {
             const { name, symbol, metadata } = item;
             const link = item.contract_address_hash.bech32;
             const description = metadata ? metadata.description : null;
+            const iconUrl = metadata ? metadata.iconUrl : null;
             return {
               name,
               symbol,
               link,
               description,
+              iconUrl,
             };
           },
         },

@@ -1,12 +1,11 @@
 <template>
   <div class="token">
     <div class="token__header">
-      <img
-        :src="require(`~/assets/img/tokens/empty-token.svg`)"
-        width="30"
-        class="token__image"
-        :alt="token.name"
-      >
+      <token-image
+        :link="iconUrl"
+        :symbol="symbol"
+        size="big"
+      />
       <h4 class="token__title">
         {{ $t('ui.token.token') }}
       </h4>
@@ -265,6 +264,12 @@ export default {
     },
     description() {
       return this.token.metadata?.description || '';
+    },
+    iconUrl() {
+      return this.token.metadata?.iconUrl || '';
+    },
+    symbol() {
+      return this.token?.symbol || '';
     },
   },
   watch: {
