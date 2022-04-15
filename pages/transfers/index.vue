@@ -1,10 +1,5 @@
 <template>
-  <div
-    v-if="!isLoading"
-    class="transfer transfer__container"
-  >
-    <search-filter class="transfer__search" />
-
+  <div class="transfer transfer__container">
     <base-table
       id="transfers-table"
       class="transfer__table"
@@ -15,7 +10,6 @@
       type="transfers"
       :skeleton="{rows: limit, columns: tableHeaders.length}"
     />
-
     <paginator
       v-if="totalPages > 1"
       v-model="page"
@@ -40,7 +34,6 @@ export default {
     ...mapGetters({
       allTokenTransfers: 'tokens/getAllTokenTransfers',
       allTokenTransfersCount: 'tokens/getAllTokenTransfersCount',
-      isLoading: 'main/getIsLoading',
     }),
     payload() {
       return {
@@ -133,10 +126,6 @@ export default {
 .transfer {
   animation: show 1s 1;
   @include container;
-
-  &__search {
-    margin: 25px 0;
-  }
 }
 
 </style>

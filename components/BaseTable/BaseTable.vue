@@ -1,6 +1,26 @@
 <template>
   <div class="table-wrapper">
+    <div
+      v-if="tableBusy"
+      class="skeleton-table"
+    >
+      <div
+        v-if="title"
+        class="table__titles"
+      >
+        <span class="table__title">{{ title }}</span>
+      </div>
+      <b-skeleton-table
+        :rows="skeleton.rows"
+        :columns="skeleton.columns"
+        :hide-header="false"
+        :show-footer="false"
+        class="skeleton-table"
+        :table-props="{ bordered: false, striped: false, outlined: false, small: false }"
+      />
+    </div>
     <b-table
+      v-else
       :items="items"
       :fields="fields"
       borderless
@@ -9,22 +29,13 @@
       caption-top
       sort-icon-right
       responsive="xl"
-      :busy="tableBusy"
-      :empty-text="emptyDescription"
       show-empty
       stacked="md"
     >
-      <template #table-busy>
-        <b-skeleton-table
-          :rows="skeleton.rows"
-          :columns="skeleton.columns"
-          :hide-header="true"
-          :show-footer="false"
-          :table-props="{ bordered: false, striped: false, outlined: false, sortIconRight: true, small: true }"
-        />
-      </template>
-
-      <template #empty>
+      <template
+        v-if="!tableBusy"
+        #empty
+      >
         <empty-data :description="emptyDescription" />
       </template>
 
@@ -147,7 +158,7 @@
             width="15"
             height="15"
             class="token-item__image"
-            :alt="el.item.symbol"
+            :alt="el.value.symbol"
           >
           <nuxt-link
             class="token-item__title table__link"
@@ -157,8 +168,11 @@
             <span class="table__token token token-item__symbol"> ({{ el.value.symbol }}) </span>
           </nuxt-link>
         </div>
-        <p class="token-item__description">
-          {{ el.item.description }}
+        <p
+          v-if="el.value.description"
+          class="token-item__description"
+        >
+          {{ el.value.description }}
         </p>
       </template>
 

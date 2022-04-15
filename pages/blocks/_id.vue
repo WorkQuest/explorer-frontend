@@ -1,53 +1,61 @@
 <template>
-  <div
-    v-if="!isLoading && Object.keys(currentBlock).length > 0"
-    class="block"
-  >
-    <search-filter class="block__search" />
-    <div
-      v-if="currentBlock"
-      class="block__content"
+  <div class="block">
+    <button
+      class="block__back"
+      @click="back()"
     >
-      <button
-        class="block__back"
-        @click="back()"
-      >
-        <span class="icon-short_left" />
-        {{ $t('ui.back') }}
-      </button>
-      <h3 class="block__title">
-        {{ $t('ui.block.blockInfo') }}
-      </h3>
-      <div class="block__info">
-        <div class="block__number-field">
-          <button
-            :disabled="isLoading"
-            type="button"
-            @click="changeBlock(+currentBlock.number - 1)"
-          >
-            <span class="icon-caret_left" />
-            <span class="block__block">{{ $t('ui.block.block') }}</span>
-          </button>
-          <span
-            v-if="currentBlock.number"
-            class="block__number"
-          >#{{ currentBlock.number }}</span>
-          <button
-            type="button"
-            :disabled="isLoading"
-            @click="changeBlock(+currentBlock.number + 1)"
-          >
-            <span class="icon-caret_right" />
-          </button>
-        </div>
-        <div class="block__columns">
+      <span class="icon-short_left" />
+      {{ $t('ui.back') }}
+    </button>
+    <h3 class="block__title">
+      {{ $t('ui.block.blockInfo') }}
+    </h3>
+    <div class="block__info">
+      <div class="block__number-field">
+        <button
+          :disabled="isBlockLoading"
+          type="button"
+          @click="changeBlock(previousBlockNumber ? +previousBlockNumber : 0)"
+        >
+          <span class="icon-caret_left" />
+        </button>
+        <span class="block__block">{{ $t('ui.block.block') }}</span>
+        <span
+          v-if="isBlockLoading"
+          class="block__number"
+        >
+          #<b-skeleton />
+        </span>
+        <span
+          v-else-if="currentBlockNumber"
+          class="block__number"
+        >#{{ currentBlockNumber }}</span>
+        <button
+          type="button"
+          :disabled="isBlockLoading"
+          @click="changeBlock(nextBlockNumber ? +nextBlockNumber : 0)"
+        >
+          <span class="icon-caret_right" />
+        </button>
+      </div>
+      <div class="block__columns">
+        <template v-if="isBlockLoading">
           <info-item
             v-for="(item, i) in blockColumns"
-            :key="i"
+            :key="`block-item-loader-${i}`"
             :title="item.title"
-            :info="item.info"
-            :note="item.note"
-            :item="item.item"
+            :is-info-loading="true"
+          />
+        </template>
+        <template v-else>
+          <info-item
+            v-for="(item, i) in blockColumns"
+            :key="`block-item-${i}`"
+            :title.sync="item.title"
+            :info.sync="item.info"
+            :note.sync="item.note"
+            :item.sync="item.item"
+            :is-block-loading="isBlockLoading"
           >
             <template
               v-if="item.item === 'timestamp'"
@@ -56,62 +64,12 @@
               {{ dateFromNow }}
             </template>
           </info-item>
-        </div>
-        <div class="block__columns_mobile columns">
-          <div class="columns__time">
-            <span class="columns__timestamp">
-              {{ dateFromNow }}
-            </span>
-            <div class="columns__subtitle">
-              {{ $t('ui.timestamp') }}
-            </div>
-            <span class="columns__info">
-              {{ ($moment(currentBlock.timestamp).format('MMM-DD-YYYY, h:mm')) }}
-            </span>
-          </div>
-          <p class="columns__subtitle">
-            {{ $t('ui.block.reward') }}
-          </p>
-          <p class="columns__subtitle">
-            {{ $t('ui.txs') }}
-          </p>
-          <nuxt-link
-            class="columns__link_small"
-            :to="{ path: '/tx', query: { block: currentBlock.number }}"
-          >
-            {{ currentBlock.transactionsCount }} txns
-          </nuxt-link>
-          <p class="columns__info_grey">
-            {{ $t('ui.block.inThisBlock') }}
-          </p>
-          <p class="columns__subtitle">
-            {{ $t('ui.block.gasUsed') }}
-            <span class="columns__info">
-              {{ currentBlock.gas_used }} ({{ (currentBlock.gas_used / currentBlock.gas_limit) * 100 }}%)
-            </span>
-          </p>
-          <p class="columns__subtitle">
-            {{ $t('ui.block.gasLimit') }}
-            <span class="columns__info">{{ currentBlock.gas_limit }}</span>
-          </p>
-          <p class="columns__subtitle">
-            {{ $t('ui.block.size') }}
-            <span class="columns__info">{{ currentBlock.size }} {{ $t('ui.block.bytes') }}</span>
-          </p>
-          <p class="columns__subtitle">
-            {{ $t('ui.block.hash') }}
-          </p>
-          <p class="columns__info columns__info_desktop">
-            {{ currentBlock.hash }}
-          </p>
-          <p class="columns__info columns__info_mobile">
-            {{ formatItem(currentBlock.hash, 9, 6) }}
-          </p>
-        </div>
+        </template>
       </div>
     </div>
   </div>
 </template>
+
 <script>
 import { mapGetters } from 'vuex';
 
@@ -126,51 +84,50 @@ export default {
       timer: null,
       time: Date.now(),
       minute: 60000,
+      isBlockLoading: true,
     };
   },
   computed: {
     ...mapGetters({
       currentBlock: 'blocks/getCurrentBlock',
-      isLoading: 'main/getIsLoading',
       symbol: 'tokens/getWUSDTokenSymbol',
       decimals: 'tokens/getWUSDTokenDecimals',
     }),
     blockColumns() {
-      if (Object.keys(this.currentBlock).length > 0) {
-        const gasUsed = `${this.currentBlock.gas_used} (${(this.currentBlock.gas_used / this.currentBlock.gas_limit) * 100}%)`;
-        return [
-          {
-            title: this.$t('ui.timestamp'),
-            info: this.currentBlock.timestamp,
-            note: `(${this.$moment(this.currentBlock.timestamp)
-              .format('MMM-DD-YYYY HH:mm:ss A +UTC')})`,
-            item: 'timestamp',
-          },
-          {
-            title: this.$t('ui.txs'),
-            info: this.currentBlock.transactionsCount,
-            note: this.$t('ui.block.inThisBlock'),
-            item: 'transactionsCount',
-          },
-          {
-            title: this.$t('ui.block.gasUsed'),
-            info: gasUsed,
-          },
-          {
-            title: this.$t('ui.block.gasLimit'),
-            info: this.NumberFormat(this.currentBlock.gas_limit),
-          },
-          {
-            title: this.$t('ui.block.size'),
-            info: `${this.currentBlock.size} bytes`,
-          },
-          {
-            title: this.$t('ui.block.hash'),
-            info: this.currentBlock.hash,
-          },
-        ];
-      }
-      return [];
+      const gasUsedValue = this.currentBlock?.gas_used || 0;
+      const gasLimitValue = this.currentBlock?.gas_limit || 1;
+      const gasUsed = `${gasUsedValue} (${(gasUsedValue / gasLimitValue) * 100}%)`;
+      return [
+        {
+          title: this.$t('ui.timestamp'),
+          info: this.dateFromNow,
+          note: `(${this.$moment(this.currentBlock.timestamp)
+            .format('MMM-DD-YYYY HH:mm:ss A +UTC')})`,
+          item: 'timestamp',
+        },
+        {
+          title: this.$t('ui.txs'),
+          info: this.currentBlock.transactionsCount,
+          note: this.$t('ui.block.inThisBlock'),
+          item: 'transactionsCount',
+        },
+        {
+          title: this.$t('ui.block.gasUsed'),
+          info: gasUsed,
+        },
+        {
+          title: this.$t('ui.block.gasLimit'),
+          info: this.NumberFormat(this.currentBlock.gas_limit),
+        },
+        {
+          title: this.$t('ui.block.size'),
+          info: `${this.currentBlock.size} bytes`,
+        },
+        {
+          title: this.$t('ui.block.hash'),
+          info: this.currentBlock.hash,
+        },
+      ];
     },
     payload() {
       return {
@@ -184,11 +141,22 @@ export default {
     dateFromNow() {
       return this.time && this.formatDataFromNow(this.currentBlock.timestamp);
     },
+    currentBlockNumber() {
+      return this.currentBlock?.number || 0;
+    },
+    nextBlockNumber() {
+      return (+this.currentBlock?.number + 1) || 0;
+    },
+    previousBlockNumber() {
+      return (+this.currentBlock?.number - 1) || 0;
+    },
+  },
+  async beforeCreate() {
+    this.isBlockLoading = true;
+    await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
+    this.isBlockLoading = false;
   },
   async mounted() {
-    await this.SetLoader(true);
-    await this.$store.dispatch('blocks/getBlockById', this.$route.params.id);
-    await this.SetLoader(false);
     clearInterval(Number(this.timer));
     this.timer = setInterval(() => {
       this.time = Date.now();
@@ -200,9 +168,9 @@ export default {
   },
   methods: {
     async changeBlock(blockId) {
-      await this.SetLoader(true);
-      await this.$router.push(`${blockId}`);
-      await this.SetLoader(false);
+      if (blockId) {
+        await this.$router.push(`${blockId}`);
+      }
     },
     back() {
       if (this.historyPath) {
@@ -255,14 +223,27 @@ export default {
   &__block {
     @include text-simple;
     margin-left: 10px;
+    margin-right: 5px;
   }
 
   &__number {
     @include text-simple;
     color: $black400;
     margin-right: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    & > .b-skeleton.b-skeleton-text {
+      min-width: 75px !important;
+      height: 24px !important;
+      margin-bottom: 0 !important;
+    }
+    &-field {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
   }
-
   &__columns {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -289,19 +270,13 @@ export default {
   cursor: pointer;
 }
 
-.columns {
-  display: none;
-  &__info {
-    &_mobile {
-      display: none;
-    }
-  }
-}
-
 @include _767 {
   .block {
+    background: $white;
+    padding-top: 22px;
     &__columns {
-      display: none;
+      display: flex;
+      flex-direction: column;
     }
 
     &__number {
@@ -312,62 +287,43 @@ export default {
       margin-left: 20px;
     }
   }
-  .columns {
-    padding: 20px 0;
-    display: block;
-
-    &__info {
-      &_desktop {
-        display: none;
-      }
-      &_mobile {
-          display: block;
-      }
+  ::v-deep .item {
+    &__header {
+      margin-bottom: 0;
     }
-
-    &__separator {
-      border: none;
+    &:nth-child(1) {
+      display: flex;
+      flex-direction: column;
+      position: relative;
     }
-
-    &__number {
-      font-weight: 600;
-      font-size: 14px;
+    &:nth-child(1) .item__info {
+      order: -1;
+      position: absolute;
+      right: -5px;
+      top: 4px;
       color: $black300;
-    }
-
-    &__link {
-      @include link;
-      font-size: 20px;
-      font-weight: normal;
-    }
-
-    &__timestamp {
-      font-weight: normal;
       font-size: 14px;
-      color: $black400;
-      float: right;
     }
-
-    &__subtitle {
-      font-weight: 600;
-      grid-column: 1/2;
-      margin-top: 11px;
+    &:nth-child(3){
+      display: flex;
+      align-items: center;
     }
-
-    &__link_small {
-      @include text-simple;
-      @include normal-font-size;
-      @include link;
+    &:nth-child(3) .item__header {
+      margin-right: 10px;
     }
-
-    &__info {
-      font-weight: normal;
-
-      &_grey {
-        color: $black400;
-        padding-bottom: 15px;
-        border-bottom: 1px solid $black100;
-      }
+    &:nth-child(4){
+      display: flex;
+      align-items: center;
+    }
+    &:nth-child(4) .item__header {
+      margin-right: 10px;
+    }
+    &:nth-child(5){
+      display: flex;
+      align-items: center;
+    }
+    &:nth-child(5) .item__header {
+      margin-right: 10px;
     }
   }
 }

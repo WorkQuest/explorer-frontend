@@ -1,21 +1,15 @@
 <template>
-  <div
-    v-if="!isLoading"
-    class="blocks"
-  >
-    <search-filter class="blocks__search" />
-
+  <div class="blocks">
     <base-table
       id="blocks-table"
       class="blocks__table"
       :title="$tc('ui.blocks')"
       :items="blocks"
       :fields="tableHeaders"
-      type="blocks"
       :table-busy="tableBusy"
+      type="blocks"
       :skeleton="{rows: limit, columns: tableHeaders.length}"
     />
-
     <paginator
       v-if="totalPages > 1"
       v-model="page"
@@ -42,7 +36,6 @@ export default {
     ...mapGetters({
       blocks: 'blocks/getBlocks',
       blocksCount: 'blocks/getBlocksCount',
-      isLoading: 'main/getIsLoading',
     }),
     totalPages() {
       return this.setTotalPages(this.blocksCount, this.limit);

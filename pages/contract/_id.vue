@@ -1,10 +1,5 @@
 <template>
-  <div
-    v-if="!isLoading"
-    class="contract"
-  >
-    <search-filter class="contract__search" />
-
+  <div class="contract">
     <div class="contract__header">
       <h4 class="contract__title">
         {{ $t('ui.token.contract') }}
@@ -126,7 +121,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isLoading: 'main/getIsLoading',
       WUSDSymbol: 'tokens/getWUSDTokenSymbol',
       WUSDDecimal: 'tokens/getWUSDTokenDecimals',
       transactions: 'account/getTransactions',
@@ -225,12 +219,11 @@ export default {
     tableHeadersERC() {
       return [
         { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
-        // TODO заменить на age
         {
-          key: 'blockNumber',
-          label: this.$t('ui.block.blockNumber'),
+          key: 'age',
+          label: this.$t('ui.block.age'),
           sortable: true,
-          formatter: (value, key, item) => item.block_number,
+          formatter: (value, key, item) => this.formatDataFromNow(item.block.timestamp),
         },
         {
           key: 'addressFrom',
@@ -310,21 +303,17 @@ export default {
     },
     async getPage() {
       const { address, limit, offset } = this;
+      this.tableBusy = true;
       if (this.activeTab === 'txs') {
-        this.tableBusy = true;
         await this.$store.dispatch('account/getAccountTransactions', { address, limit, offset });
-        this.tableBusy = false;
       }
       if (this.activeTab === 'internal') {
-        this.tableBusy = true;
         await this.$store.dispatch('account/getAccountInternalTransactions', { address, limit, offset });
-        this.tableBusy = false;
       }
       if (this.activeTab === 'tokensTxns') {
-        this.tableBusy = true;
         await this.$store.dispatch('account/getTransactionWithTokensList', { address, limit, offset });
-        this.tableBusy = false;
       }
+      this.tableBusy = false;
     },
     async hashNavigation() {
       if (this.hash) {

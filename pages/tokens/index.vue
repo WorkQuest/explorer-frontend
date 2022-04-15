@@ -1,10 +1,5 @@
 <template>
-  <div
-    v-if="!isLoading"
-    class="tokens"
-  >
-    <search-filter class="tokens__search" />
-
+  <div class="tokens">
     <base-table
       id="tokens-table"
       class="tokens__table"
@@ -41,7 +36,6 @@ export default {
     ...mapGetters({
       allTokensCount: 'tokens/getAllTokensCount',
       allTokens: 'tokens/getAllTokens',
-      isLoading: 'main/getIsLoading',
     }),
     totalPages() {
       return this.setTotalPages(this.allTokensCount, this.limit);
@@ -71,12 +65,14 @@ export default {
           label: this.$t('ui.token.token'),
           sortable: true,
           formatter: (value, key, item) => {
-            const { name, symbol } = item;
+            const { name, symbol, metadata } = item;
             const link = item.contract_address_hash.bech32;
+            const description = metadata ? metadata.description : null;
             return {
               name,
               symbol,
               link,
+              description,
             };
           },
         },
@@ -86,7 +82,7 @@ export default {
           sortable: true,
           formatter: (value, key, item) => {
             const { decimals } = item;
-            const convertedVolume = this.ConvertFromDecimals(item.total_supply, decimals);
+            const convertedVolume = this.ConvertFromDecimals(value, decimals, 2);
             return this.NumberFormat(convertedVolume);
           },
         },
@@ -111,6 +107,7 @@ export default {
     this.tableBusy = true;
     if (!isSearch || !this.allTokensCount) {
       await this.$store.dispatch('tokens/getAllTokens', this.payload);
+      await this.$store.dispatch('tokens/getTokenPrices');
     }
     this.tableBusy = false;
     sessionStorage.setItem('backRoute', this.$route.fullPath);

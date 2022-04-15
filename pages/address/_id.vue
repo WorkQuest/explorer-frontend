@@ -1,9 +1,5 @@
 <template>
-  <div
-    v-if="!isLoading && Object.keys(txs).length > 0"
-    class="address"
-  >
-    <search-filter class="address__search" />
+  <div class="address">
     <div class="address__header">
       <h4 class="address__title">
         {{ $t('ui.token.address') }}
@@ -56,7 +52,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isLoading: 'main/getIsLoading',
       txs: 'tx/getTxsByAccount',
       txsCount: 'tx/getTxsByAccountCount',
       WUSDSymbol: 'tokens/getWUSDTokenSymbol',

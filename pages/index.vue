@@ -1,15 +1,12 @@
 <template>
-  <div
-    v-if="!isLoading"
-    class="home"
-  >
+  <div class="home">
     <div class="home__header">
       <div class="home__content">
         <h3 class="home__title">
           {{ $t('home.title') }}
         </h3>
         <search-filter
-          :include-filter="false"
+          :include-filter="true"
           class="home__search"
         />
       </div>
@@ -78,7 +75,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isLoading: 'main/getIsLoading',
       blocks: 'blocks/getBlocks',
       txs: 'tx/getTxs',
       WUSDSymbol: 'tokens/getWUSDTokenSymbol',

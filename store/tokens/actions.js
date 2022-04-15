@@ -6,7 +6,26 @@ export default {
       const response = await this.$axios.$get('/tokens', {
         params: { ...queries },
       });
+
       commit('setAllTokens', response.result);
+
+      if (response.ok
+        && Array.isArray(response.result.tokens)
+        && response.result.tokens.length > 0
+        && !response.result.tokens.map((t) => Object.keys(t)).flat().includes('volume')
+      ) {
+        const getVolumes = [];
+
+        response.result.tokens.map(async (token) => {
+          const address = token.contract_address_hash?.hex || '';
+          getVolumes.push(this.$axios.$get(`/token/${address}`, {
+            params: { commonLimit: 0 },
+          }));
+        });
+        const tokens = await Promise.all(getVolumes);
+        commit('setTokensVolume', tokens);
+      }
+
       return response;
     } catch (e) {
       return error(e.code || 500, 'getAllTokens', e);
@@ -48,6 +67,16 @@ export default {
       return response.result;
     } catch (e) {
       return error(e.code || 500, 'getTokenHolders', e);
+    }
+  },
+  async getTokenPrices({ commit }) {
+    try {
+      const URL = process.env.WQ_ORACLE_URL;
+      const response = await this.$axios.$get(`${URL}oracle/current-prices`);
+      commit('setTokenPrices', response.result);
+      return response.result;
+    } catch (e) {
+      return error(e.code || 500, 'getTokenPrices', e);
     }
   },
 };

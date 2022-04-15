@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     setPage(value) {
-      if (+value > 0 && this.value !== +value && +value <= this.totalPages) {
+      if (+value > 0 && this.value !== +value && +value <= this.totalPages && +value % 1 === 0) {
         this.$emit('input', Math.ceil(+value));
         this.input = '';
       } else {
