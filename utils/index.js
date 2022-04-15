@@ -142,7 +142,7 @@ export const isValidUint = (uint, bits) => {
   if (!uint) return false;
   const valueToCheck = new BigNumber(uint);
   const maxValue = new BigNumber(2).pow(bits ? +bits : 1).minus(1);
-  return valueToCheck.isGreaterThanOrEqualTo(0) && valueToCheck.isLessThanOrEqualTo(maxValue);
+  return valueToCheck.isGreaterThanOrEqualTo(0) && valueToCheck.isLessThanOrEqualTo(maxValue) && valueToCheck.isInteger();
 };
 
 export const isValidInt = (int, bits) => {
@@ -150,7 +150,7 @@ export const isValidInt = (int, bits) => {
   const valueToCheck = new BigNumber(int);
   const minValue = new BigNumber(-2).pow(bits ? 1 : +bits - 1);
   const maxValue = new BigNumber(2).pow(bits ? 1 : +bits - 2);
-  return valueToCheck.isGreaterThanOrEqualTo(minValue) && valueToCheck.isLessThanOrEqualTo(maxValue);
+  return valueToCheck.isGreaterThanOrEqualTo(minValue) && valueToCheck.isLessThanOrEqualTo(maxValue) && valueToCheck.isInteger();
 };
 
 export const isValidBech32 = (address) => {
