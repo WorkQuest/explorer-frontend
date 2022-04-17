@@ -1,19 +1,21 @@
 <template>
   <div class="tokens">
     <base-table
-      id="tokens-table"
+      :id="`${id}-table`"
       class="tokens__table"
       :title="$tc('ui.token.tracker')"
       :items="tokens"
       :fields="tableHeaders"
-      type="tokens"
+      :type="id"
       :table-busy="tableBusy"
       :skeleton="{rows: limit, columns: tableHeaders.length}"
+      :sort-by.sync="sortFieldForTable"
+      :sort-desc.sync="isSortDesc"
+      @table-sort="changeSortParams"
     />
     <paginator
       v-if="totalPages > 1"
       v-model="page"
-      class="tokens__pager"
       :total-pages="totalPages"
     />
   </div>
@@ -21,15 +23,19 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { isSortable, sortDirections, sortTables } from '~/utils';
 
 export default {
-  name: 'TokensTracker',
+  name: 'Tokens',
   data() {
     return {
       limit: 20,
       offset: 0,
       page: +this.$route.query?.page || 1,
       tableBusy: false,
+      sortDirection: sortDirections.DESC,
+      sortField: sortTables.tokens.holders,
+      id: 'tokens',
     };
   },
   computed: {
@@ -39,12 +45,6 @@ export default {
     }),
     totalPages() {
       return this.setTotalPages(this.allTokensCount, this.limit);
-    },
-    payload() {
-      return {
-        limit: this.limit,
-        offset: (this.page - 1) * this.limit,
-      };
     },
     tokens() {
       if (this.allTokensCount > 0) {
@@ -57,13 +57,13 @@ export default {
         {
           key: 'index',
           label: '#',
-          sortable: false,
+          sortable: isSortable(this.id, 'index'),
           formatter: () => this.offset + 1,
         },
         {
           key: 'token',
           label: this.$t('ui.token.token'),
-          sortable: true,
+          sortable: isSortable(this.id, 'token'),
           formatter: (value, key, item) => {
             const { name, symbol, metadata } = item;
             const link = item.contract_address_hash.bech32;
@@ -81,7 +81,7 @@ export default {
         {
           key: 'volume',
           label: this.$t('ui.token.volume'),
-          sortable: true,
+          sortable: isSortable(this.id, 'volume'),
           formatter: (value, key, item) => {
             const { decimals } = item;
             const convertedVolume = this.ConvertFromDecimals(value, decimals, 2);
@@ -91,10 +91,27 @@ export default {
         {
           key: 'holders',
           label: this.$t('ui.token.holders'),
-          sortable: true,
+          sortable: isSortable(this.id, 'holders'),
           formatter: (value, key, item) => this.NumberFormat(item.holder_count),
         },
       ];
+    },
+    payload() {
+      return {
+        limit: this.limit,
+        offset: (this.page - 1) * this.limit,
+        'sort[field]': this.sortField,
+        'sort[type]': this.sortDirection,
+      };
+    },
+    sortFieldForTable() {
+      return this.GetSortKeyByValue(this.id, this.sortField);
+    },
+    sortDirectionForTable() {
+      return this.sortDirection.toLowerCase();
+    },
+    isSortDesc() {
+      return this.sortDirectionForTable === 'desc';
     },
   },
   watch: {
@@ -105,18 +122,35 @@ export default {
     },
   },
   async mounted() {
-    const isSearch = this.$route.query?.search;
-    this.tableBusy = true;
-    if (!isSearch || !this.allTokensCount) {
-      await this.$store.dispatch('tokens/getAllTokens', this.payload);
-      await this.$store.dispatch('tokens/getTokenPrices');
-    }
-    this.tableBusy = false;
+    await this.getTokens();
     sessionStorage.setItem('backRoute', this.$route.fullPath);
   },
   beforeDestroy() {
     this.$store.commit('tokens/resetTokens');
     sessionStorage.removeItem('backRoute');
+  },
+  methods: {
+    async getTokens() {
+      const isSearch = this.$route.query?.search;
+      this.tableBusy = true;
+      if (!isSearch || !this.allTokensCount) {
+        await this.$store.dispatch('tokens/getAllTokens', this.payload);
+        await this.$store.dispatch('tokens/getTokenPrices');
+      }
+      this.tableBusy = false;
+    },
+    async changeSortParams(params) {
+      const { sortBy, sortDesc } = params;
+      if (sortBy !== this.sortFieldForTable) {
+        this.sortDirection = sortDirections.DESC;
+      } else {
+        this.sortDirection = this.sortDirection === sortDirections.ASC ? sortDirections.DESC : sortDirections.ASC;
+      }
+      this.sortField = sortTables[this.id][sortBy];
+      if (sortBy) {
+        await this.getTokens();
+      }
+    },
   },
 };
 </script>

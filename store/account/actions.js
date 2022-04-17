@@ -10,10 +10,10 @@ export default {
       return error(e.code || 500, 'getAccountByAddress', e);
     }
   },
-  async getAccountInternalTransactions({ commit }, { address, limit, offset }) {
+  async getAccountInternalTransactions({ commit }, { address, query }) {
     try {
       const response = await this.$axios.$get(`/account/${address}/internal-transactions`, {
-        params: { limit, offset },
+        params: { ...query },
       });
       commit('setAccountInternalTransaction', response.result);
       return response;
@@ -21,9 +21,9 @@ export default {
       return error(e.code || 500, 'getAccountInternalTransactions', e);
     }
   },
-  async getAccountTransactions({ commit }, { address, limit, offset }) {
+  async getAccountTransactions({ commit }, { address, query }) {
     try {
-      const response = await this.$axios.$get(`/account/${address}/transactions`, { params: { limit, offset } });
+      const response = await this.$axios.$get(`/account/${address}/transactions`, { params: { ...query } });
       commit('setAccountTransactions', response.result);
       return response;
     } catch (e) {

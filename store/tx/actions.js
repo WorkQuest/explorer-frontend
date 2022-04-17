@@ -1,10 +1,10 @@
 import { error } from '~/utils';
 
 export default {
-  async getTxsByAccount({ commit }, { address, limit, offset }) {
+  async getTxsByAccount({ commit }, { address, query }) {
     try {
       const response = await this.$axios.$get(`/account/${address}/transactions`, {
-        params: { limit, offset },
+        params: { ...query },
       });
       commit('setTxsByAccount', response.result);
       return response;

@@ -17,20 +17,22 @@
     </div>
     <div class="address__txs">
       <base-table
-        id="address-transfers-table"
+        :id="`address-${id}-table`"
         class="address__table"
         :title="$tc('ui.txs')"
         :items="txs"
         :fields="tableFields"
         :table-busy="tableBusy"
-        type="transactions"
+        :type="id"
         :skeleton="{rows: limit, columns: tableFields.length}"
+        :sort-by.sync="sortFieldForTable"
+        :sort-desc.sync="isSortDesc"
+        @table-sort="changeSortParams"
       />
     </div>
     <paginator
       v-if="totalPages > 1"
       v-model="page"
-      class="address__pager"
       :total-pages="totalPages"
     />
   </div>
@@ -38,6 +40,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { isSortable, sortDirections, sortTables } from '~/utils';
 
 export default {
   name: 'AddressId',
@@ -48,6 +51,9 @@ export default {
       limit: 10,
       offset: 0,
       tableBusy: false,
+      id: 'transactions',
+      sortDirection: sortDirections.DESC,
+      sortField: sortTables.transactions.blockNumber,
     };
   },
   computed: {
@@ -61,8 +67,12 @@ export default {
     payload() {
       return {
         address: this.address,
-        limit: this.limit,
-        offset: (this.page - 1) * this.limit,
+        query: {
+          limit: this.limit,
+          offset: (this.page - 1) * this.limit,
+          'sort[field]': this.sortField,
+          'sort[type]': this.sortDirection,
+        },
       };
     },
     address() {
@@ -73,41 +83,46 @@ export default {
     },
     tableFields() {
       return [
-        { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
+        {
+          key: 'hash',
+          label: this.$t('ui.tx.transaction'),
+          sortable: isSortable(this.id, 'hash'),
+        },
         {
           key: 'age',
           label: this.$t('ui.block.age'),
-          sortable: true,
+          // TODO при сортировке по этому полю появляется ошибка
+          sortable: false, // isSortable(this.id, 'age'),
           formatter: (value, key, item) => this.formatDataFromNow(item.block.timestamp),
         },
         {
           key: 'blockNumber',
           label: this.$t('ui.block.blockNumber'),
-          sortable: true,
+          sortable: isSortable(this.id, 'blockNumber'),
           formatter: (value, key, item) => item.block_number,
         },
         {
           key: 'addressFrom',
           label: this.$t('ui.tx.from'),
-          sortable: true,
+          sortable: isSortable(this.id, 'addressFrom'),
           formatter: (value, key, item) => item.from_address_hash?.bech32 || '',
         },
         {
           key: 'addressTo',
           label: this.$t('ui.tx.to'),
-          sortable: true,
+          sortable: isSortable(this.id, 'addressTo'),
           formatter: (value, key, item) => item.to_address_hash?.bech32 || '',
         },
         {
           key: 'value',
           label: this.$t('ui.tx.value'),
-          sortable: true,
+          sortable: isSortable(this.id, 'value'),
           formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
         },
         {
           key: 'gasUsed',
           label: this.$t('ui.tx.fee'),
-          sortable: true,
+          sortable: isSortable(this.id, 'gasUsed'),
           formatter: (value, key, item) => [
             {
               value: this.FormatSmallNumber(this.ConvertFromDecimals(item.gas_used * item.gas_price, this.WUSDDecimal)),
@@ -117,16 +132,26 @@ export default {
         },
       ];
     },
+    sortFieldForTable() {
+      return this.GetSortKeyByValue(this.id, this.sortField);
+    },
+    sortDirectionForTable() {
+      return this.sortDirection.toLowerCase();
+    },
+    isSortDesc() {
+      return this.sortDirectionForTable === 'desc';
+    },
   },
   watch: {
     async page(current, previous) {
       if (current !== previous) {
-        await this.getAccountData();
+        await this.getTxsByAccount();
       }
     },
   },
   async mounted() {
     await this.getAccountData();
+    await this.getTxsByAccount();
   },
   beforeDestroy() {
     this.$store.commit('account/resetAccountInfo');
@@ -139,9 +164,23 @@ export default {
         await this.$store.dispatch('account/getAccountByAddress', { address: this.address, commonLimit: this.limit });
         await this.SetLoader(false);
       }
+    },
+    async getTxsByAccount() {
       this.tableBusy = true;
       await this.$store.dispatch('tx/getTxsByAccount', this.payload);
       this.tableBusy = false;
+    },
+    async changeSortParams(params) {
+      const { sortBy, sortDesc } = params;
+      if (sortBy !== this.sortFieldForTable) {
+        this.sortDirection = sortDirections.DESC;
+      } else {
+        this.sortDirection = this.sortDirection === sortDirections.ASC ? sortDirections.DESC : sortDirections.ASC;
+      }
+      this.sortField = sortTables[this.id][sortBy];
+      if (sortBy) {
+        await this.getTxsByAccount();
+      }
     },
   },
 };

@@ -42,9 +42,9 @@ export default {
       return error(e.code || 500, 'getToken', e);
     }
   },
-  async getTokenTransfers({ commit }, { address, limit, offset }) {
+  async getTokenTransfers({ commit }, { address, query }) {
     try {
-      const response = await this.$axios.$get(`/token/${address}/transfers`, { params: { limit, offset } });
+      const response = await this.$axios.$get(`/token/${address}/transfers`, { params: { ...query } });
       commit('setCurrentTokenTransfers', response.result);
       return response.result;
     } catch (e) {
@@ -60,9 +60,9 @@ export default {
       return error(e.code || 500, 'getAllTokensTransfers', e);
     }
   },
-  async getTokenHolders({ commit }, { address, limit, offset }) {
+  async getTokenHolders({ commit }, { address, query }) {
     try {
-      const response = await this.$axios.$get(`/token/${address}/holders`, { params: { limit, offset } });
+      const response = await this.$axios.$get(`/token/${address}/holders`, { params: { ...query } });
       commit('setCurrentTokenHolders', response.result);
       return response.result;
     } catch (e) {

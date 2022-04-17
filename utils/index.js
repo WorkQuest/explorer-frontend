@@ -38,15 +38,22 @@ export const sortTables = {
     gasUsed: 'gas_used',
   },
   blocks: {
-    number: 'number',
     blockNumber: 'number',
     age: 'timestamp',
     gasUsed: 'gas_used',
     gasLimit: 'gas_limit',
   },
-  holders: ['value'],
-  transfers: ['transaction_hash', 'block.timestamp', 'from_address_hash', 'to_address_hash', 'amount'],
-  tokens: ['name', 'symbol', 'holder_count'],
+  holders: {
+    value: 'value',
+  },
+  transfers: {
+    hash: 'transaction_hash',
+    age: 'block.timestamp',
+    addressFrom: 'from_address_hash',
+    addressTo: 'to_address_hash',
+    value: 'amount',
+  },
+  tokens: { token: 'name', symbol: 'symbol', holders: 'holder_count' },
 };
 
 export const sortDirections = {

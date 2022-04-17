@@ -137,7 +137,13 @@
       },
       "method": "метод",
       "response": "ответ",
-      "viewTransactions": "Перейти"
+      "viewTransactions": "Перейти",
+      "tabs": {
+        "allTxs": "Транзакции",
+        "internalTxs": "Внутренние транз",
+        "tokensTxs": "Транзакции токенов",
+        "contract": "Контракт"
+      }
     }
   },
   "home": {

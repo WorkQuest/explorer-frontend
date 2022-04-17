@@ -137,7 +137,13 @@
       },
       "method": "method",
       "response": "response",
-      "viewTransactions": "View"
+      "viewTransactions": "View",
+      "tabs": {
+        "allTxs": "Transactions",
+        "internalTxs": "Internal Transactions",
+        "tokensTxs": "Tokens Transactions",
+        "contract": "Contract"
+      }
     }
   },
   "home": {

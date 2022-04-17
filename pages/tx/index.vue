@@ -1,17 +1,16 @@
 <template>
   <div class="transactions">
     <base-table
-      id="transactions-table"
+      :id="`${id}-table`"
       class="transactions__table"
       :title="query ? '' : $tc('ui.txs')"
       :items="txsTable"
       :fields="tableHeaders"
       :table-busy="tableBusy"
-      type="transactions"
+      :type="id"
       :skeleton="{rows: limit, columns: tableHeaders.length}"
-      :sort-direction.sync="sortDirectionForTable"
       :sort-by.sync="sortFieldForTable"
-      :sort-desc.sync="sortDescForTable"
+      :sort-desc.sync="isSortDesc"
       @table-sort="changeSortParams"
     >
       <template
@@ -38,7 +37,6 @@
     <paginator
       v-if="totalPages > 1"
       v-model="page"
-      class="transactions__pager"
       :total-pages="totalPages"
     />
   </div>
@@ -55,8 +53,9 @@ export default {
       offset: 0,
       page: +this.$route.query?.page || 1,
       tableBusy: false,
-      sortDirection: 'DESC',
-      sortField: 'block.timestamp',
+      sortDirection: sortDirections.DESC,
+      sortField: sortTables.transactions.age,
+      id: 'transactions',
     };
   },
   computed: {
@@ -92,41 +91,45 @@ export default {
     },
     tableHeaders() {
       return [
-        { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: isSortable('transactions', 'hash') },
+        {
+          key: 'hash',
+          label: this.$t('ui.tx.transaction'),
+          sortable: isSortable(this.id, 'hash'),
+        },
         {
           key: 'age',
           label: this.$t('ui.block.age'),
-          sortable: isSortable('transactions', 'age'),
+          sortable: isSortable(this.id, 'age'),
           formatter: (value, key, item) => this.formatDataFromNow(item.block.timestamp),
         },
         {
           key: 'blockNumber',
           label: this.$t('ui.block.blockNumber'),
-          sortable: isSortable('transactions', 'blockNumber'),
+          sortable: isSortable(this.id, 'blockNumber'),
           formatter: (value, key, item) => item.block_number,
         },
         {
           key: 'addressFrom',
           label: this.$t('ui.tx.from'),
-          sortable: isSortable('transactions', 'addressFrom'),
+          sortable: isSortable(this.id, 'addressFrom'),
           formatter: (value, key, item) => item.from_address_hash?.bech32 || '',
         },
         {
           key: 'addressTo',
           label: this.$t('ui.tx.to'),
-          sortable: isSortable('transactions', 'addressTo'),
+          sortable: isSortable(this.id, 'addressTo'),
           formatter: (value, key, item) => item.to_address_hash?.bech32 || '',
         },
         {
           key: 'value',
           label: this.$t('ui.tx.value'),
-          sortable: isSortable('transactions', 'value'),
+          sortable: isSortable(this.id, 'value'),
           formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
         },
         {
           key: 'gasUsed',
           label: this.$t('ui.tx.fee'),
-          sortable: isSortable('transactions', 'gasUsed'),
+          sortable: isSortable(this.id, 'gasUsed'),
           formatter: (value, key, item) => [
             {
               value: this.FormatSmallNumber(this.ConvertFromDecimals(item.gas_used * item.gas_price, this.WUSDDecimal)),
@@ -137,12 +140,12 @@ export default {
       ];
     },
     sortFieldForTable() {
-      return this.GetSortKeyByValue('transactions', this.sortField);
+      return this.GetSortKeyByValue(this.id, this.sortField);
     },
     sortDirectionForTable() {
       return this.sortDirection.toLowerCase();
     },
-    sortDescForTable() {
+    isSortDesc() {
       return this.sortDirectionForTable === 'desc';
     },
   },
@@ -181,23 +184,15 @@ export default {
     },
     async changeSortParams(params) {
       const { sortBy, sortDesc } = params;
-      console.log('params: ', params, sortBy, sortDesc);
-      if (sortBy !== this.sortDirectionForTable) {
+      if (sortBy !== this.sortFieldForTable) {
         this.sortDirection = sortDirections.DESC;
       } else {
-        this.sortDirection = this.sortDirection === sortDirections.ASC;
+        this.sortDirection = this.sortDirection === sortDirections.ASC ? sortDirections.DESC : sortDirections.ASC;
       }
-      // this.sortDirection = sortDesc ? sortDirections.DESC : sortDirections.ASC;
-      console.log('sortDirection: ', this.sortDirection);
-      this.sortField = sortTables.transactions[sortBy];
+      this.sortField = sortTables[this.id][sortBy];
       if (sortBy) {
-        console.log('payload: ', this.payload);
         await this.getTransactions();
-        this.refreshTable();
       }
-    },
-    refreshTable() {
-      this.$root.$emit('bv::table::refresh', 'transactions-table');
     },
   },
 };

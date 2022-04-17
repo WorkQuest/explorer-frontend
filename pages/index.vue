@@ -14,11 +14,11 @@
     <div class="home__tables">
       <div class="home__table">
         <base-table
-          id="home-blocks"
+          :id="`home-${blocksId}`"
           :items="blocks"
           :fields="tableHeadersBlocks"
           :table-busy="blocksTableBusy"
-          type="blocks"
+          :type="blocksId"
           :skeleton="{rows: limit, columns: tableHeadersBlocks.length}"
         >
           <template v-slot:table-caption>
@@ -36,11 +36,11 @@
       </div>
       <div class="home__table">
         <base-table
-          id="home-transactions"
+          :id="`home-${transactionsId}`"
           :items="txs"
           :fields="tableHeadersTxs"
           :table-busy="transactionsTableBusy"
-          type="transactions"
+          :type="transactionsId"
           :skeleton="{rows: limit, columns: tableHeadersTxs.length}"
         >
           <template #table-caption>
@@ -61,7 +61,6 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import { isSortable } from '~/utils';
 
 export default {
   name: 'Home',
@@ -73,6 +72,8 @@ export default {
       offset: 0,
       blocksTableBusy: false,
       transactionsTableBusy: false,
+      blocksId: 'blocks',
+      transactionsId: 'transactions',
     };
   },
   computed: {
@@ -82,20 +83,10 @@ export default {
       WUSDSymbol: 'tokens/getWUSDTokenSymbol',
       WUSDDecimal: 'tokens/getWUSDTokenDecimals',
     }),
-    blocksTablePayload() {
+    payload() {
       return {
         limit: this.limit,
         offset: this.offset,
-        'sort[field]': this.blocksTable.sortField,
-        'sort[type]': this.blocksTable.sortDirection,
-      };
-    },
-    transactionsTablePayload() {
-      return {
-        limit: this.limit,
-        offset: this.offset,
-        'sort[field]': this.transactionsTable.sortField,
-        'sort[type]': this.transactionsTable.sortDirection,
       };
     },
     tableHeadersBlocks() {
@@ -103,22 +94,20 @@ export default {
         {
           key: 'blockNumber',
           label: this.$t('ui.block.blockNumber'),
-          sortable: isSortable('blocks', 'blockNumber'),
           formatter: (value, key, item) => item.number,
         },
         {
           key: 'age',
           label: this.$t('ui.block.age'),
-          sortable: isSortable('blocks', 'age'),
           formatter: (value, key, item) => this.formatDataFromNow(item.timestamp),
         },
         {
-          key: 'transactionsCount', label: this.$t('ui.block.txsCount'), sortable: isSortable('blocks', 'transactionsCount'),
+          key: 'transactionsCount',
+          label: this.$t('ui.block.txsCount'),
         },
         {
           key: 'gasUsed',
           label: this.$t('ui.block.gasUsed'),
-          sortable: isSortable('blocks', 'gasUsed'),
           formatter: (value, key, item) => [
             {
               value: +item.gas_used,
@@ -133,7 +122,6 @@ export default {
         {
           key: 'gasLimit',
           label: this.$t('ui.block.gasLimit'),
-          sortable: isSortable('blocks', 'gasLimit'),
           formatter: (value, key, item) => this.NumberFormat(item.gas_limit),
         },
       ];
@@ -141,40 +129,46 @@ export default {
     tableHeadersTxs() {
       return [
         {
-          key: 'hash', label: this.$t('ui.tx.transaction'), sortable: isSortable('transactions', 'hash'),
+          key: 'hash',
+          label: this.$t('ui.tx.transaction'),
         },
         {
           key: 'addressFrom',
           label: this.$t('ui.tx.from'),
-          sortable: isSortable('transactions', 'addressFrom'),
           formatter: (value, key, item) => item.from_address_hash?.bech32 || '',
         },
         {
           key: 'addressTo',
           label: this.$t('ui.tx.to'),
-          sortable: isSortable('transactions', 'addressTo'),
           formatter: (value, key, item) => item.to_address_hash?.bech32 || '',
         },
         {
           key: 'value',
           label: this.$t('ui.tx.value'),
-          sortable: isSortable('transactions', 'value'),
           formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
         },
       ];
     },
   },
   async mounted() {
-    this.blocksTableBusy = true;
-    await this.$store.dispatch('blocks/getBlocks', this.blocksTablePayload);
-    this.blocksTableBusy = false;
-    this.transactionsTableBusy = true;
-    await this.$store.dispatch('tx/getTxs', this.transactionsTablePayload);
-    this.transactionsTableBusy = false;
+    await this.getBlocks();
+    await this.getTransactions();
   },
   beforeDestroy() {
     this.$store.commit('tx/resetTxs');
     this.$store.commit('blocks/resetBlocksInfo');
+  },
+  methods: {
+    async getBlocks() {
+      this.blocksTableBusy = true;
+      await this.$store.dispatch('blocks/getBlocks', this.payload);
+      this.blocksTableBusy = false;
+    },
+    async getTransactions() {
+      this.transactionsTableBusy = true;
+      await this.$store.dispatch('tx/getTxs', this.payload);
+      this.transactionsTableBusy = false;
+    },
   },
 };
 </script>
