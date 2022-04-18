@@ -35,6 +35,7 @@ export default {
       sortDirection: sortDirections.DESC,
       sortField: sortTables.transfers.age,
       id: 'transfers',
+      sessionKey: 'transfersPagination',
     };
   },
   computed: {
@@ -117,17 +118,22 @@ export default {
   watch: {
     async page(current, previous) {
       if (current !== previous) {
+        this.SaveToStorage(this.sessionKey, this.payload);
         await this.$router.push({ query: { ...this.$route.query, page: this.page.toString() } });
       }
     },
   },
   async mounted() {
+    this.updateFromSessionStorage();
     await this.getTokenTransfers();
     sessionStorage.setItem('backRoute', this.$route.fullPath);
   },
   beforeDestroy() {
     if (this.$route.name !== 'tx-id') {
       sessionStorage.removeItem('backRoute');
+    }
+    if (this.$route.name !== this.id) {
+      this.DeleteFromStorage(this.sessionKey);
     }
   },
   methods: {
@@ -145,7 +151,15 @@ export default {
       }
       this.sortField = sortTables[this.id][sortBy];
       if (sortBy) {
+        this.SaveToStorage(this.sessionKey, this.payload);
         await this.getTokenTransfers();
+      }
+    },
+    updateFromSessionStorage() {
+      if (this.IsStorageHaveKey(this.sessionKey)) {
+        const payload = { ...this.GetFromStorage(this.sessionKey) };
+        this.sortField = payload['sort[field]'];
+        this.sortDirection = payload['sort[type]'];
       }
     },
   },

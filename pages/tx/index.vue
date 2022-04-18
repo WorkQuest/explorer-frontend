@@ -56,6 +56,7 @@ export default {
       sortDirection: sortDirections.DESC,
       sortField: sortTables.transactions.age,
       id: 'transactions',
+      sessionKey: 'transactionsPagination',
     };
   },
   computed: {
@@ -152,6 +153,7 @@ export default {
   watch: {
     async page(current, previous) {
       if (current !== previous) {
+        this.SaveToStorage(this.sessionKey, this.payload);
         await this.$router.push({ query: { ...this.$route.query, page: this.page.toString() } });
       }
     },
@@ -162,6 +164,7 @@ export default {
     },
   },
   async mounted() {
+    this.updateFromSessionStorage();
     await this.getTransactions();
     sessionStorage.setItem('backRoute', this.$route.fullPath);
   },
@@ -170,6 +173,9 @@ export default {
     this.$store.commit('tx/resetTxs');
     if (this.$route.name !== 'tx-id') {
       sessionStorage.removeItem('backRoute');
+    }
+    if (this.$route.name !== 'tx') {
+      this.DeleteFromStorage(this.sessionKey);
     }
   },
   methods: {
@@ -191,7 +197,15 @@ export default {
       }
       this.sortField = sortTables[this.id][sortBy];
       if (sortBy) {
+        this.SaveToStorage(this.sessionKey, this.payload);
         await this.getTransactions();
+      }
+    },
+    updateFromSessionStorage() {
+      if (this.IsStorageHaveKey(this.sessionKey)) {
+        const payload = { ...this.GetFromStorage(this.sessionKey) };
+        this.sortField = payload['sort[field]'];
+        this.sortDirection = payload['sort[type]'];
       }
     },
   },

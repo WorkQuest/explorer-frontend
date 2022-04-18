@@ -165,8 +165,7 @@ export default {
         {
           key: 'age',
           label: this.$t('ui.block.age'),
-          // TODO при сортировке по этому полю появляется ошибка
-          sortable: false, // isSortable('transactions', 'age'),
+          sortable: isSortable('transactions', 'age'),
           formatter: (value, key, item) => this.formatDataFromNow(item.block.timestamp),
         },
         {
