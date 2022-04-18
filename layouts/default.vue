@@ -116,7 +116,7 @@
           :class="{'hidden': isMobileMenu}"
         >
           <search-filter
-            v-if="$route.fullPath != '/'"
+            v-if="$route.fullPath !== '/'"
             class="search"
           />
 
@@ -155,7 +155,6 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import moment from 'moment';
 import ClickOutside from 'vue-click-outside';
 import { links } from '~/utils/config';
 
@@ -223,7 +222,8 @@ export default {
   mounted() {
     this.currentLocale = this.$i18n.locale;
     this.locales = this.$i18n.locales;
-    moment.locale(this.currentLocale);
+    this.$moment.locale(this.currentLocale);
+    document.documentElement.setAttribute('lang', this.currentLocale);
   },
   methods: {
     toRoute(path) {
@@ -237,10 +237,6 @@ export default {
     toMain() {
       this.$router.push('/');
     },
-    closeMenuByLink() {
-      this.toMain();
-      this.toggleMobileMenu();
-    },
     goToMessages() {
       this.$router.push('/messages');
       this.closeAll();
@@ -248,10 +244,6 @@ export default {
     showProfile() {
       this.closeAnother('profile');
       this.isShowProfile = !this.isShowProfile;
-    },
-    showNotification() {
-      this.closeAnother('notify');
-      this.isShowNotify = !this.isShowNotify;
     },
     showAdditionalMenu() {
       this.closeAnother('instruments');
@@ -266,6 +258,7 @@ export default {
       this.isShowLocale = !this.isShowLocale;
       this.$i18n.setLocale(this.currentLocale);
       this.$moment.locale(this.currentLocale);
+      document.documentElement.setAttribute('lang', this.currentLocale);
     },
     closeAnother(value) {
       switch (value) {
