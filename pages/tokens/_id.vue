@@ -36,13 +36,16 @@
         class="tables__tf"
       >
         <base-table
-          id="tokens-transfers-table"
+          :id="`tokens-${transfersId}-table`"
           class="tables__table"
           :items="tokenTransfers"
           :fields="tableHeadersTransfers"
           :table-busy="tableBusy"
-          type="transfers"
+          :type="transfersId"
           :skeleton="{rows: limit, columns: tableHeadersTransfers.length}"
+          :sort-by.sync="sortFieldForTable"
+          :sort-desc.sync="isSortDesc"
+          @table-sort="changeSortParams"
         />
         <paginator
           v-if="totalPagesValue > 1"
@@ -58,13 +61,16 @@
         class="tables__holders"
       >
         <base-table
-          id="tokens-holders-table"
+          :id="`tokens-${holdersId}-table`"
           class="tables__table"
           :items="tokenHolders"
           :fields="tableHeadersHolders"
-          type="holders"
+          :type="holdersId"
           :table-busy="tableBusy"
           :skeleton="{rows: limit, columns: tableHeadersHolders.length}"
+          :sort-by.sync="sortFieldForTable"
+          :sort-desc.sync="isSortDesc"
+          @table-sort="changeSortParams"
         />
         <paginator
           v-if="totalPagesValue > 1"
@@ -119,6 +125,7 @@
 import { mapGetters } from 'vuex';
 import BigNumber from 'bignumber.js';
 import { isAddress } from 'web3-utils';
+import { isSortable, sortDirections, sortTables } from '~/utils';
 
 export default {
   name: 'Token',
@@ -133,6 +140,12 @@ export default {
       offset: 0,
       tabs: ['transfers', 'holders', 'info', 'contract'],
       tableBusy: false,
+      transfersSortDirection: sortDirections.DESC,
+      transfersSortField: sortTables.transfers.age,
+      holdersSortDirection: sortDirections.DESC,
+      holdersSortField: sortTables.holders.value,
+      transfersId: 'transfers',
+      holdersId: 'holders',
     };
   },
   computed: {
@@ -148,53 +161,66 @@ export default {
       return this.$route.params.id;
     },
     totalPagesValue() {
-      if (this.activeTab === 'transfers') return this.setTotalPages(this.tokenTransfersCount, this.limit);
-      if (this.activeTab === 'holders') return this.setTotalPages(this.tokenHoldersCount, this.limit);
+      if (this.activeTab === this.transfersId) return this.setTotalPages(this.tokenTransfersCount, this.limit);
+      if (this.activeTab === this.holdersId) return this.setTotalPages(this.tokenHoldersCount, this.limit);
       return 1;
     },
     payload() {
       return {
         address: this.address,
-        limit: this.limit,
-        offset: this.offset,
+        query: {
+          limit: this.limit,
+          offset: this.offset,
+          'sort[field]': this[`${this.activeTab}SortField`],
+          'sort[type]': this[`${this.activeTab}SortDirection`],
+        },
       };
+    },
+    sortFieldForTable() {
+      return this.GetSortKeyByValue(this.activeTab, this[`${this.activeTab}SortField`]);
+    },
+    sortDirectionForTable() {
+      return this[`${this.activeTab}SortDirection`].toLowerCase();
+    },
+    isSortDesc() {
+      return this.sortDirectionForTable === 'desc';
     },
     tableHeadersTransfers() {
       return [
         {
           key: 'hash',
           label: this.$t('ui.tx.transaction'),
-          sortable: true,
+          sortable: isSortable(this.transfersId, 'hash'),
           formatter: (value, key, item) => item.transaction_hash,
         },
         {
           key: 'age',
           label: this.$t('ui.block.age'),
-          sortable: true,
+          sortable: isSortable(this.transfersId, 'age'),
           formatter: (value, key, item) => this.formatDataFromNow(item.block.timestamp),
         },
         {
           key: 'method',
           label: this.$t('ui.token.method'),
-          sortable: true,
+          sortable: isSortable(this.transfersId, 'method'),
           formatter: () => this.$t('ui.token.transfer'),
         },
         {
           key: 'addressFrom',
           label: this.$t('ui.tx.from'),
-          sortable: true,
+          sortable: isSortable(this.transfersId, 'addressFrom'),
           formatter: (value, key, item) => item.from_address_hash.bech32,
         },
         {
           key: 'addressTo',
           label: this.$t('ui.tx.to'),
-          sortable: true,
+          sortable: isSortable(this.transfersId, 'addressTo'),
           formatter: (value, key, item) => item.to_address_hash.bech32,
         },
         {
           key: 'amount',
           label: this.$t('ui.token.quantity'),
-          sortable: true,
+          sortable: isSortable(this.transfersId, 'amount'),
           formatter: (value, key, item) => this.ConvertFromDecimals(item.amount, this.token.decimals, 4),
         },
       ];
@@ -204,25 +230,25 @@ export default {
         {
           key: 'index',
           label: this.$t('ui.token.rank'),
-          sortable: true,
+          sortable: isSortable(this.holdersId, 'index'),
           formatter: () => this.offset + 1,
         },
         {
           key: 'address',
           label: this.$t('ui.token.address'),
-          sortable: true,
+          sortable: isSortable(this.holdersId, 'address'),
           formatter: (value, key, item) => item.address_hash.bech32,
         },
         {
           key: 'quantity',
           label: this.$t('ui.token.quantity'),
-          sortable: true,
+          sortable: isSortable(this.holdersId, 'quantity'),
           formatter: (value, key, item) => this.NumberFormat(new BigNumber(item.value).shiftedBy(-this.token.decimals).dp(0, 1)),
         },
         {
           key: 'percentage',
           label: this.$t('ui.token.percentage'),
-          sortable: true,
+          sortable: isSortable(this.holdersId, 'percentage'),
           formatter: (
             (value, key, item) => new BigNumber(item.value)
               .dividedBy(this.token.total_supply)
@@ -233,7 +259,7 @@ export default {
         {
           key: 'value',
           label: this.$t('ui.tx.value'),
-          sortable: true,
+          sortable: isSortable(this.holdersId, 'value'),
           formatter: (value, key, item) => {
             const price = new BigNumber(this.tokenPrice).shiftedBy(-this.token.decimals);
             const valueFromBN = new BigNumber(item.value).shiftedBy(-this.token.decimals);
@@ -275,14 +301,12 @@ export default {
   watch: {
     async page() {
       this.offset = (this.page - 1) * this.limit;
-      this.tableBusy = true;
-      if (this.activeTab === 'transfers') {
-        await this.$store.dispatch('tokens/getTokenTransfers', this.payload);
+      if (this.activeTab === this.transfersId) {
+        await this.getTokensTransfers();
       }
-      if (this.activeTab === 'holders') {
-        await this.$store.dispatch('tokens/getTokenHolders', this.payload);
+      if (this.activeTab === this.holdersId) {
+        await this.getTokensHolders();
       }
-      this.tableBusy = false;
     },
     async hash(current, previous) {
       if (current !== previous) {
@@ -307,6 +331,16 @@ export default {
       this.page = 1;
       this.$router.push({ hash: `#${tab}` });
     },
+    async getTokensTransfers() {
+      this.tableBusy = true;
+      await this.$store.dispatch('tokens/getTokenTransfers', this.payload);
+      this.tableBusy = false;
+    },
+    async getTokensHolders() {
+      this.tableBusy = true;
+      await this.$store.dispatch('tokens/getTokenHolders', this.payload);
+      this.tableBusy = false;
+    },
     async getTokenData() {
       await this.SetLoader(true);
       await this.$store.dispatch('tokens/getToken', { address: this.address, commonLimit: this.limit });
@@ -318,6 +352,21 @@ export default {
         await this.$router.push({ hash: this.hash });
         const replacedHash = this.hash ? this.hash.replace('#', '') : '';
         this.activeTab = this.tabs.includes(replacedHash) ? replacedHash : this.tabs[0];
+      }
+    },
+    async changeSortParams(params, table) {
+      const { sortBy, sortDesc } = params;
+      if (sortBy !== this.sortFieldForTable) {
+        this[`${this.activeTab}SortDirection`] = sortDirections.DESC;
+      } else {
+        this[`${this.activeTab}SortDirection`] = this[`${this.activeTab}SortDirection`] === sortDirections.ASC ? sortDirections.DESC : sortDirections.ASC;
+      }
+      this[`${this.activeTab}SortField`] = sortTables[table][sortBy];
+      if (sortBy && table === this.transfersId) {
+        await this.getTokensTransfers();
+      }
+      if (sortBy && table === this.holdersId) {
+        await this.getTokensHolders();
       }
     },
   },

@@ -27,6 +27,44 @@ export const searchTypes = {
   tokens: 2,
 };
 
+export const sortTables = {
+  transactions: {
+    hash: 'hash',
+    age: 'block.timestamp',
+    blockNumber: 'block_number',
+    addressFrom: 'from_address_hash',
+    addressTo: 'to_address_hash',
+    value: 'value',
+    gasUsed: 'gas_used',
+  },
+  blocks: {
+    blockNumber: 'number',
+    age: 'timestamp',
+    gasUsed: 'gas_used',
+    gasLimit: 'gas_limit',
+  },
+  holders: {
+    value: 'value',
+  },
+  transfers: {
+    hash: 'transaction_hash',
+    age: 'block.timestamp',
+    addressFrom: 'from_address_hash',
+    addressTo: 'to_address_hash',
+    value: 'amount',
+  },
+  tokens: { token: 'name', symbol: 'symbol', holders: 'holder_count' },
+};
+
+export const sortDirections = {
+  ASC: 'ASC',
+  DESC: 'DESC',
+};
+
+export const isSortable = (table, key) => Object.keys(sortTables[table]).includes(key);
+
+export const getKeyByValue = (table, value) => Object.keys(sortTables[table]).find((key) => sortTables[table][key] === value);
+
 export const output = (res) => ({
   ok: true,
   result: res,

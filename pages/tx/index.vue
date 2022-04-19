@@ -1,14 +1,17 @@
 <template>
   <div class="transactions">
     <base-table
-      id="transactions-table"
+      :id="`${id}-table`"
       class="transactions__table"
       :title="query ? '' : $tc('ui.txs')"
       :items="txsTable"
       :fields="tableHeaders"
       :table-busy="tableBusy"
-      type="transactions"
+      :type="id"
       :skeleton="{rows: limit, columns: tableHeaders.length}"
+      :sort-by.sync="sortFieldForTable"
+      :sort-desc.sync="isSortDesc"
+      @table-sort="changeSortParams"
     >
       <template
         v-if="query"
@@ -34,13 +37,13 @@
     <paginator
       v-if="totalPages > 1"
       v-model="page"
-      class="transactions__pager"
       :total-pages="totalPages"
     />
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import { isSortable, sortDirections, sortTables } from '~/utils';
 
 export default {
   name: 'Transactions',
@@ -50,6 +53,10 @@ export default {
       offset: 0,
       page: +this.$route.query?.page || 1,
       tableBusy: false,
+      sortDirection: sortDirections.DESC,
+      sortField: sortTables.transactions.age,
+      id: 'transactions',
+      sessionKey: 'transactionsPagination',
     };
   },
   computed: {
@@ -74,6 +81,8 @@ export default {
       return {
         limit: this.limit,
         offset: (this.page - 1) * this.limit,
+        'sort[field]': this.sortField,
+        'sort[type]': this.sortDirection,
       };
     },
     totalPages() {
@@ -83,41 +92,45 @@ export default {
     },
     tableHeaders() {
       return [
-        { key: 'hash', label: this.$t('ui.tx.transaction'), sortable: true },
+        {
+          key: 'hash',
+          label: this.$t('ui.tx.transaction'),
+          sortable: isSortable(this.id, 'hash'),
+        },
         {
           key: 'age',
           label: this.$t('ui.block.age'),
-          sortable: true,
+          sortable: isSortable(this.id, 'age'),
           formatter: (value, key, item) => this.formatDataFromNow(item.block.timestamp),
         },
         {
           key: 'blockNumber',
           label: this.$t('ui.block.blockNumber'),
-          sortable: true,
+          sortable: isSortable(this.id, 'blockNumber'),
           formatter: (value, key, item) => item.block_number,
         },
         {
           key: 'addressFrom',
           label: this.$t('ui.tx.from'),
-          sortable: true,
+          sortable: isSortable(this.id, 'addressFrom'),
           formatter: (value, key, item) => item.from_address_hash?.bech32 || '',
         },
         {
           key: 'addressTo',
           label: this.$t('ui.tx.to'),
-          sortable: true,
+          sortable: isSortable(this.id, 'addressTo'),
           formatter: (value, key, item) => item.to_address_hash?.bech32 || '',
         },
         {
           key: 'value',
           label: this.$t('ui.tx.value'),
-          sortable: true,
+          sortable: isSortable(this.id, 'value'),
           formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
         },
         {
           key: 'gasUsed',
           label: this.$t('ui.tx.fee'),
-          sortable: true,
+          sortable: isSortable(this.id, 'gasUsed'),
           formatter: (value, key, item) => [
             {
               value: this.FormatSmallNumber(this.ConvertFromDecimals(item.gas_used * item.gas_price, this.WUSDDecimal)),
@@ -127,10 +140,20 @@ export default {
         },
       ];
     },
+    sortFieldForTable() {
+      return this.GetSortKeyByValue(this.id, this.sortField);
+    },
+    sortDirectionForTable() {
+      return this.sortDirection.toLowerCase();
+    },
+    isSortDesc() {
+      return this.sortDirectionForTable === 'desc';
+    },
   },
   watch: {
     async page(current, previous) {
       if (current !== previous) {
+        this.SaveToStorage(this.sessionKey, this.payload);
         await this.$router.push({ query: { ...this.$route.query, page: this.page.toString() } });
       }
     },
@@ -141,6 +164,7 @@ export default {
     },
   },
   async mounted() {
+    this.updateFromSessionStorage();
     await this.getTransactions();
     sessionStorage.setItem('backRoute', this.$route.fullPath);
   },
@@ -149,6 +173,9 @@ export default {
     this.$store.commit('tx/resetTxs');
     if (this.$route.name !== 'tx-id') {
       sessionStorage.removeItem('backRoute');
+    }
+    if (this.$route.name !== 'tx') {
+      this.DeleteFromStorage(this.sessionKey);
     }
   },
   methods: {
@@ -160,6 +187,26 @@ export default {
         await this.$store.dispatch('tx/getTxs', this.payload);
       }
       this.tableBusy = false;
+    },
+    async changeSortParams(params) {
+      const { sortBy, sortDesc } = params;
+      if (sortBy !== this.sortFieldForTable) {
+        this.sortDirection = sortDirections.DESC;
+      } else {
+        this.sortDirection = this.sortDirection === sortDirections.ASC ? sortDirections.DESC : sortDirections.ASC;
+      }
+      this.sortField = sortTables[this.id][sortBy];
+      if (sortBy) {
+        this.SaveToStorage(this.sessionKey, this.payload);
+        await this.getTransactions();
+      }
+    },
+    updateFromSessionStorage() {
+      if (this.IsStorageHaveKey(this.sessionKey)) {
+        const payload = { ...this.GetFromStorage(this.sessionKey) };
+        this.sortField = payload['sort[field]'];
+        this.sortDirection = payload['sort[type]'];
+      }
     },
   },
 };

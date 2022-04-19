@@ -2,7 +2,7 @@ import Vue from 'vue';
 import moment from 'moment';
 import BigNumber from 'bignumber.js';
 import modals from '~/store/modals/modals';
-import { isValidBech32 } from '~/utils';
+import { getKeyByValue, isValidBech32 } from '~/utils';
 
 BigNumber.config({ EXPONENTIAL_AT: 60 });
 
@@ -109,6 +109,27 @@ Vue.mixin({
     },
     IsValidBech32Address(address) {
       return isValidBech32(address);
+    },
+    GetSortKeyByValue(table, value) {
+      return getKeyByValue(table, value);
+    },
+    IsStorageHaveKey(key) {
+      return sessionStorage.getItem(key);
+    },
+    SaveToStorage(key, value) {
+      sessionStorage.setItem(key, JSON.stringify(value));
+    },
+    GetFromStorage(key) {
+      let value;
+      try {
+        value = JSON.parse(sessionStorage.getItem(key));
+      } catch (e) {
+        value = null;
+      }
+      return value;
+    },
+    DeleteFromStorage(key) {
+      sessionStorage.removeItem(key);
     },
   },
 });
