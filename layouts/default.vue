@@ -149,8 +149,6 @@
     <transition name="fade">
       <loader v-if="isLoading" />
     </transition>
-
-    <ctm-modal />
   </div>
 </template>
 <script>

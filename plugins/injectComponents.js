@@ -1,6 +1,5 @@
 import Vue from 'vue';
 
-import CtmModal from '~/components/CtmModal';
 import Loader from '~/components/ui/Loader';
 import BaseButton from '~/components/ui/BaseButton';
 import BaseInput from '~/components/ui/BaseInput';
@@ -19,7 +18,6 @@ import BaseTable from '~/components/BaseTable/BaseTable';
 import TxLogs from '~/components/TxLogs';
 import TokenImage from '~/components/ui/TokenImage';
 
-Vue.component('ctm-modal', CtmModal);
 Vue.component('base-btn', BaseButton);
 Vue.component('base-field', BaseInput);
 Vue.component('base-dd', BaseDD);

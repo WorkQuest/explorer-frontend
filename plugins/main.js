@@ -1,29 +1,20 @@
 import Vue from 'vue';
 import moment from 'moment';
 import BigNumber from 'bignumber.js';
-import modals from '~/store/modals/modals';
 import { getKeyByValue, isValidBech32 } from '~/utils';
 
+BigNumber.set({ ROUNDING_MODE: BigNumber.ROUND_DOWN });
 BigNumber.config({ EXPONENTIAL_AT: 60 });
 
 Vue.mixin({
 
   methods: {
-    async ShowModal(payload) {
-      await this.$store.dispatch('modals/show', {
-        key: modals.default,
-        ...payload,
-      });
-    },
     cropTxt(str) {
       if (str.length > 66) str = `${str.slice(0, 10)}...${str.slice(-10)}`;
       return str;
     },
     async SetLoader(value) {
       await this.$store.dispatch('main/setLoading', value);
-    },
-    async CloseModal() {
-      await this.$store.dispatch('modals/hide');
     },
     async ClipboardSuccessHandler(value) {
       await this.$store.dispatch('main/showToast', {
@@ -37,34 +28,13 @@ Vue.mixin({
         text: value,
       });
     },
-    ShowError(label) {
-      this.$bvToast.toast(label, {
-        title: 'Ошибка',
-        variant: 'warning',
-        solid: true,
-        toaster: 'b-toaster-bottom-right',
-        appendToast: true,
-      });
-    },
     Floor: (value, precision = 4) => {
       const form = 10 ** precision;
-      return Math.floor(value * form) / form || 0;
+      return new BigNumber(Math.floor(value * form) / form || 0).toString();
     },
     Ceil: (value, precision = 4) => {
       const form = 10 ** precision;
       return Math.ceil(value * form) / form || 0;
-    },
-    GetFormTimestamp(timestamp, format = 'DD.MM.YY H:mm') {
-      if (timestamp !== 0 && timestamp !== '-' && timestamp !== '' && timestamp !== undefined) {
-        // timestamp = +timestamp * 1000;
-        timestamp = +timestamp;
-        return moment(new Date(timestamp)).format(format);
-      }
-      return '-';
-    },
-    Require(img) {
-      // eslint-disable-next-line global-require
-      return require(`~/assets/img/${img}`);
     },
     NumberFormat(value, fixed) {
       return (+value && new Intl.NumberFormat('ru', { maximumFractionDigits: fixed || 8 }).format(value || 0)) || 0;
@@ -75,9 +45,6 @@ Vue.mixin({
     },
     setTotalPages(itemsNum, itemsPerPage) {
       return Math.ceil(itemsNum / itemsPerPage);
-    },
-    formatData(data) {
-      return moment(data).format('dd mm yy');
     },
     formatDataFromNow(data) {
       return moment(data).fromNow();
