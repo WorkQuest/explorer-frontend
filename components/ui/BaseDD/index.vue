@@ -5,6 +5,7 @@
     :class="[{'dd__top': mode === 'top' }]"
   >
     <button
+      ref="ddBtn"
       class="dd__btn"
       :class="ddClass"
       @click="isShown = !isShown"
@@ -38,38 +39,39 @@
         class="dd__caret icon-caret_down"
       />
     </button>
-    <transition name="fade">
-      <div
-        v-if="isShown && isIcon"
-        class="dd__items"
+    <!--    <transition name="fade">-->
+    <div
+      v-if="isShown && isIcon"
+      class="dd__items"
+    >
+      <button
+        v-for="(item, i) in items"
+        :key="`dd__item-${i}`"
+        class="dd__item dd__item_icon"
+        @click="selectItem(i)"
+        @keydown.enter="hideDd"
       >
-        <button
-          v-for="(item, i) in items"
-          :key="`dd__item-${i}`"
-          class="dd__item dd__item_icon"
-          @click="selectItem(i)"
+        <img
+          :src="item.icon"
+          :alt="item.title"
         >
-          <img
-            :src="item.icon"
-            :alt="item.title"
-          >
-          {{ item.title }}
-        </button>
-      </div>
-      <div
-        v-if="isShown && !isIcon"
-        class="dd__items"
+        {{ item.title }}
+      </button>
+    </div>
+    <div
+      v-if="isShown && !isIcon"
+      class="dd__items"
+    >
+      <button
+        v-for="(item, i) in items"
+        :key="`dd__item-${i}`"
+        class="dd__item"
+        @click="selectItem(i)"
       >
-        <button
-          v-for="(item, i) in items"
-          :key="`dd__item-${i}`"
-          class="dd__item"
-          @click="selectItem(i)"
-        >
-          {{ item }}
-        </button>
-      </div>
-    </transition>
+        {{ item }}
+      </button>
+    </div>
+    <!--    </transition>-->
   </div>
 </template>
 
@@ -141,9 +143,11 @@ export default {
   min-width: 131px;
   position: relative;
   text-align: left;
+
   &__top {
     align-items: flex-start;
   }
+
   &__items {
     @include box;
     width: 100%;
@@ -157,33 +161,41 @@ export default {
     padding: 15px 20px;
     z-index: 1;
   }
+
   &__item {
     text-align: left;
     width: 100%;
     color: $black500;
     min-height: 21px;
+
     &:hover {
       color: $black800;
     }
+
     &_icon {
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       img {
         margin-right: 5px;
       }
     }
   }
+
   &__icon {
     display: flex;
     align-items: center;
+
     img {
       margin-right: 5px;
     }
+
     span {
       margin-right: 5px;
     }
   }
+
   &__caret {
     &::before {
       padding-left: 10px;
@@ -191,10 +203,12 @@ export default {
       font-size: 24px;
 
     }
+
     &_dark::before {
       color: $black700;
     }
   }
+
   &__btn {
     height: 43px;
     display: flex;
@@ -204,9 +218,11 @@ export default {
     width: 100%;
     background: #FFFFFF;
     border-radius: 6px;
+
     &_dark {
       background: #151552;
     }
+
     &_gray {
       background-color: $black0;
     }

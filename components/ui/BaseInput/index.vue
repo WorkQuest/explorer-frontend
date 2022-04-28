@@ -38,6 +38,7 @@
         :type="type"
         :autocomplete="autocomplete"
         @input="input"
+        @keyup.enter.self="enter"
       >
       <div
         v-if="value && isSearch"
@@ -135,6 +136,9 @@ export default {
     },
   },
   methods: {
+    enter($event) {
+      this.$emit('enter', $event.target.value);
+    },
     input($event) {
       this.$emit('input', $event.target.value);
       if (this.selector) {
@@ -157,52 +161,63 @@ export default {
     right: 0;
     z-index: 120;
   }
+
   &__right {
     min-height: 100%;
     display: flex;
   }
+
   &__clear {
     position: absolute;
     right: 20px;
     padding-top: 6px;
     cursor: pointer;
+
     span::before {
       color: $blue;
       font-size: 24px;
     }
   }
+
   &__right-absolute {
     position: absolute;
     right: 12px;
   }
+
   &__left {
     position: absolute;
     left: 12px;
     padding-left: 5px;
   }
+
   &__body {
     display: flex;
     align-items: center;
     position: relative;
     width: 100%;
   }
+
   &__header {
     letter-spacing: -0.025em;
     margin-bottom: 13px;
     height: 24px;
     color: #fff;
+
     &_black {
       @include text-simple;
     }
   }
+
   &__err {
     color: #F82727;
     font-size: 12px;
     min-height: 23px;
   }
+
   &__search {
     position: absolute;
     left: 13px;
+
     &:before {
       font-size: 24px;
       background: #0083C7;
@@ -210,6 +225,7 @@ export default {
       -webkit-text-fill-color: transparent;
     }
   }
+
   &__input {
     height: 46px;
     border-radius: 6px;
@@ -218,56 +234,68 @@ export default {
     transition: .3s;
     width: 100%;
   }
+
   &_disabled {
     .ctm-field__input {
       pointer-events: none;
     }
   }
+
   &_search {
     .ctm-field__input {
       padding: 0 50px 0 50px;
       background: transparent !important;
+
       &:hover {
         border: 1px solid #E6EAEE !important;
       }
+
       &:focus {
         border: 1px solid #E6EAEE !important;
       }
+
       &_padding {
         padding: 0 0 0 50px;
       }
     }
   }
+
   &_default {
     .ctm-field__input {
       color: $black700;
       background: #F3F7FA;
       border-radius: 6px;
       border: 1px solid transparent;
+
       &::placeholder {
         color: $black300;
       }
+
       &:focus {
         background: #FFFFFF;
         border: 1px solid #0083C7;
       }
     }
   }
+
   &_white {
     .ctm-field__input {
       color: $black700;
       background: #FFFFFF;
       border-radius: 6px;
       border: 1px solid #F3F7FA;
+
       &::placeholder {
         color: $black300;
       }
+
       &:focus {
         background: #FFFFFF;
         border: 1px solid #0083C7;
       }
     }
   }
+
   &_icon {
     .ctm-field {
       &__input {
@@ -275,6 +303,7 @@ export default {
       }
     }
   }
+
   &_big {
     .ctm-field {
       &__input {

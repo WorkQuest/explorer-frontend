@@ -12,8 +12,9 @@
           :class="includeFilter ? 'fields__input_filtered' : ''"
           :is-search="true"
           :is-hide-error="true"
-          :rules="'required'"
+          rules="required"
           :placeholder="$tc('ui.forms.searchPlaceholder')"
+          @enter="handleSubmit(onSearch)"
         />
         <div class="fields__buttons-field">
           <div
@@ -21,6 +22,7 @@
             class="fields__filters"
           >
             <base-dd
+              ref="dd"
               v-model="currentType"
               :items="types"
             />
@@ -40,14 +42,10 @@
 <script>
 
 import { mapActions } from 'vuex';
-import ClickOutside from 'vue-click-outside';
 import { searchTypes } from '~/utils';
 
 export default {
   name: 'SearchFilter',
-  directives: {
-    ClickOutside,
-  },
 
   props: {
     includeFilter: {
@@ -78,6 +76,7 @@ export default {
     }),
     async onSearch() {
       if (this.search) {
+        this.$refs.dd.hideDd();
         const q = this.search.trim();
         let type = null;
         if (this.includeFilter) {
@@ -101,9 +100,11 @@ export default {
   align-items: center;
   margin-top: 30px;
   margin-bottom: 25px;
+
   & > form {
     width: 100%;
   }
+
   &__search-field {
     background: $white;
     height: 83px;
@@ -113,16 +114,20 @@ export default {
     padding: 0 20px;
     border-radius: 6px;
   }
+
   &__input {
     flex-basis: 100%;
     margin-right: 20px;
+
     &_filtered {
       flex-basis: 60%;
     }
   }
+
   &__buttons-field {
     display: flex;
   }
+
   &__filters {
     width: 200px;
     height: 83px;
@@ -131,6 +136,7 @@ export default {
     justify-content: center;
     align-items: center;
   }
+
   &__filter {
     display: flex;
     justify-content: center;
@@ -139,21 +145,25 @@ export default {
     position: relative;
     padding: 11px 20px;
     border-radius: 6px;
+
     &:hover {
       border: $black0 1px solid;
     }
   }
+
   &__button-field {
     height: 83px;
     display: flex;
     align-items: center;
     border-left: $black0 1px solid;
   }
+
   &__search-button {
     width: 220px !important;
     margin-left: 20px;
   }
 }
+
 .filter {
   position: absolute;
   top: 50px;
@@ -162,11 +172,13 @@ export default {
   border-radius: 6px;
   min-width: 200px;
   z-index: 10000000;
+
   &__items {
     padding: 10px 15px;
     display: grid;
     grid-template-columns: 1fr;
     color: $black500;
+
     &:hover {
       color: $black800;
     }
@@ -185,11 +197,14 @@ export default {
       height: auto;
       box-shadow: 0 17px 17px rgba(0, 0, 0, 0.05), 0 5.125px 5.125px rgba(0, 0, 0, 0.0325794), 0 2.12866px 2.12866px rgba(0, 0, 0, 0.025), 0 0.769896px 0.769896px rgba(0, 0, 0, 0.0174206);
     }
+
     &__buttons-field {
       display: none;
     }
+
     &__input {
       margin-right: 0;
+
       &_filtered {
         flex-basis: 100%;
       }
