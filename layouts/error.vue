@@ -71,6 +71,7 @@ export default {
   }
 
   &__footer {
+    height: 46px;
     margin: 20px auto;
     width: 220px;
   }

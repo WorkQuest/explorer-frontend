@@ -8,7 +8,7 @@
       ref="ddBtn"
       class="dd__btn"
       :class="ddClass"
-      @click.prevent="isShown = !isShown"
+      @click="isShown = !isShown"
     >
       <div
         v-if="isIcon"
