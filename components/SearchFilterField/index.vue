@@ -118,8 +118,10 @@ export default {
 
 @include _767 {
   .search {
-    height: auto;
-    grid-template-areas: "field field" "dd btn";
+    &__wrapper {
+      height: auto;
+      grid-template-areas: "field field" "dd btn";
+    }
 
     &__field {
       margin-bottom: 5px;
