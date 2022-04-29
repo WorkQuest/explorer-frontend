@@ -1,31 +1,33 @@
 <template>
-  <validation-observer
-    v-slot="{ handleSubmit }"
-    tag="div"
-    class="search"
-  >
-    <base-field
-      v-model="search"
-      class="search__field"
-      :class="includeFilter ? 'fields__input_filtered' : ''"
-      :is-search="true"
-      :is-hide-error="true"
-      rules="required"
-      :auto-focus="true"
-      :placeholder="$tc('ui.forms.searchPlaceholder')"
-      @enter="handleSubmit(onSearch)"
-    />
-    <base-dd
-      v-model="currentType"
-      class="search__dd"
-      :items="types"
-    />
-    <base-btn
-      class="search__btn"
-      :text="$tc('ui.forms.search')"
-      @click="handleSubmit(onSearch)"
-    />
-  </validation-observer>
+  <div class="search">
+    <validation-observer
+      v-slot="{ handleSubmit }"
+      tag="div"
+      class="search__wrapper"
+    >
+      <base-field
+        v-model="search"
+        class="search__field"
+        :class="includeFilter ? 'fields__input_filtered' : ''"
+        :is-search="true"
+        :is-hide-error="true"
+        rules="required"
+        :auto-focus="true"
+        :placeholder="$tc('ui.forms.searchPlaceholder')"
+        @enter="handleSubmit(onSearch)"
+      />
+      <base-dd
+        v-model="currentType"
+        class="search__dd"
+        :items="types"
+      />
+      <base-btn
+        class="search__btn"
+        :text="$tc('ui.forms.search')"
+        @click="handleSubmit(onSearch)"
+      />
+    </validation-observer>
+  </div>
 </template>
 <script>
 
@@ -83,18 +85,21 @@ export default {
 </script>
 <style lang="scss" scoped>
 .search {
-  display: grid;
-  grid-template-areas: "field field field field field dd btn btn";
-  background-color: $white;
-  height: 83px;
-  width: 100%;
-  min-width: 0;
-  grid-gap: 5px;
-  padding: 20px;
-  border-radius: 6px;
-  align-items: center;
-  margin-top: 30px;
-  margin-bottom: 25px;
+  max-width: 1200px;
+
+  &__wrapper {
+    background-color: $white;
+    height: 83px;
+    min-width: 0;
+    border-radius: 6px;
+    margin-top: 30px;
+    margin-bottom: 25px;
+    display: grid;
+    grid-template-areas: "field field field field field dd btn btn";
+    grid-gap: 5px;
+    padding: 20px;
+    align-items: center;
+  }
 
   &__field {
     width: 6fr;
@@ -112,7 +117,7 @@ export default {
   }
 }
 
-@include _991 {
+@include _767 {
   .search {
     height: auto;
     grid-template-areas: "field field" "dd btn";
