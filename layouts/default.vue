@@ -330,6 +330,7 @@ export default {
   &__header {
     min-height: 72px;
   }
+
   &__footer {
     min-height: 75px;
   }
@@ -582,6 +583,7 @@ export default {
     &__text {
       display: none;
     }
+
     &__btn {
       display: none !important;
     }
@@ -619,6 +621,7 @@ export default {
 
     &__mobile {
       z-index: 2;
+
       &_visible {
         display: block;
       }
@@ -662,9 +665,11 @@ export default {
     &__links {
       flex-direction: column;
       align-items: flex-start;
-      &>span {
+
+      & > span {
         width: 100%;
-        &:nth-child(3){
+
+        &:nth-child(3) {
           border-bottom: 1px solid $black100;
           padding-bottom: 10px;
         }

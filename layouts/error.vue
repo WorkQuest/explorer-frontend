@@ -42,7 +42,8 @@ export default {
   },
   methods: {
     toMain() {
-      this.$router.push('/');
+      if (this.$route.path === '/') this.$router.go(0);
+      else this.$router.push('/');
     },
   },
 };
