@@ -425,6 +425,7 @@ export default {
     margin-bottom: 25px;
     border-radius: 6px;
   }
+
   &__title, &__contract {
     margin-bottom: 0;
   }

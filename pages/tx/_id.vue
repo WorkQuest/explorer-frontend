@@ -287,12 +287,14 @@ export default {
 
 .tab {
   margin-bottom: 30px;
+
   &__item {
     @include text-simple;
     margin-right: 20px;
     padding-bottom: 12px;
     color: $black500;
     cursor: pointer;
+
     &_active {
       @include text-simple;
       border-bottom: 2px solid $blue;
@@ -304,6 +306,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 20px;
+
   &__item {
     &_six {
       grid-column: 1 / span 6;
@@ -370,36 +373,43 @@ export default {
   ::v-deep .item {
     display: flex;
     align-items: center;
+
     &__header {
       margin-right: 10px;
       align-self: flex-start;
       margin-bottom: 0;
     }
+
     &__note.item__note_red {
       & > span {
         visibility: hidden;
       }
     }
+
     &:nth-child(1) {
       // hash
       flex-direction: column;
       order: 1;
     }
+
     &:nth-child(1) .item__header {
       margin-bottom: 5px;
       color: $black300;
     }
+
     &:nth-child(1) .item__info {
       color: $blue;
       font-size: 20px;
       font-weight: 400;
       align-self: flex-start;
     }
+
     &:nth-child(2) {
       // timestamp
       order: 2;
       margin-bottom: -25px;
     }
+
     &:nth-child(2) .item__info {
       position: absolute;
       right: 0;
@@ -407,44 +417,55 @@ export default {
       color: $black300;
       font-size: 14px;
     }
+
     &:nth-child(2) .item__header {
       display: none;
     }
+
     &:nth-child(2) .item__note {
       display: none;
     }
+
     &:nth-child(3) {
       // status
       order: 3;
     }
+
     &:nth-child(4) {
       // block
       order: 4;
     }
+
     &:nth-child(5) {
       // from
       order: 5;
     }
+
     &:nth-child(6) {
       // to
       order: 6;
     }
+
     &:nth-child(7) {
       // value
       order: 7;
     }
+
     &:nth-child(8) {
       // gas price
       order: 9;
     }
+
     &:nth-child(9) {
       // gas limit
       order: 10;
     }
+
     &:nth-child(10) {
       // gas used
       order: 11;
     }
+
     &:nth-child(11) {
       // fee
       order: 8;

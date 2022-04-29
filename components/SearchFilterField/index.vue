@@ -1,53 +1,40 @@
 <template>
-  <validation-observer
-    v-slot="{ handleSubmit }"
-    tag="div"
-    class="fields"
-  >
-    <form @submit.prevent>
-      <div class="fields__search-field">
-        <base-field
-          v-model="search"
-          class="fields__input"
-          :class="includeFilter ? 'fields__input_filtered' : ''"
-          :is-search="true"
-          :is-hide-error="true"
-          :rules="'required'"
-          :placeholder="$tc('ui.forms.searchPlaceholder')"
-        />
-        <div class="fields__buttons-field">
-          <div
-            v-if="includeFilter"
-            class="fields__filters"
-          >
-            <base-dd
-              v-model="currentType"
-              :items="types"
-            />
-          </div>
-          <div class="fields__button-field">
-            <base-btn
-              class="fields__search-button"
-              :text="$tc('ui.forms.search')"
-              @click="handleSubmit(onSearch)"
-            />
-          </div>
-        </div>
-      </div>
-    </form>
-  </validation-observer>
+  <div class="search">
+    <validation-observer
+      v-slot="{ handleSubmit }"
+      tag="div"
+      class="search__wrapper"
+    >
+      <base-field
+        v-model="search"
+        class="search__field"
+        :is-search="true"
+        :is-hide-error="true"
+        rules="required"
+        :auto-focus="true"
+        :placeholder="$tc('ui.forms.searchPlaceholder')"
+        @enter="handleSubmit(onSearch)"
+      />
+      <base-dd
+        v-model="currentType"
+        class="search__dd"
+        :items="types"
+      />
+      <base-btn
+        class="search__btn"
+        :text="$tc('ui.forms.search')"
+        @click="handleSubmit(onSearch)"
+      />
+    </validation-observer>
+  </div>
 </template>
 <script>
 
 import { mapActions } from 'vuex';
-import ClickOutside from 'vue-click-outside';
 import { searchTypes } from '~/utils';
 
 export default {
   name: 'SearchFilter',
-  directives: {
-    ClickOutside,
-  },
 
   props: {
     includeFilter: {
@@ -96,103 +83,59 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.fields {
-  display: flex;
-  align-items: center;
-  margin-top: 30px;
-  margin-bottom: 25px;
-  & > form {
-    width: 100%;
-  }
-  &__search-field {
-    background: $white;
-    height: 83px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
+.search {
+  max-width: 1200px;
+
+  &__wrapper {
+    height: auto;
+    background-color: $white;
+    min-width: 0;
     border-radius: 6px;
-  }
-  &__input {
-    flex-basis: 100%;
-    margin-right: 20px;
-    &_filtered {
-      flex-basis: 60%;
-    }
-  }
-  &__buttons-field {
-    display: flex;
-  }
-  &__filters {
-    width: 200px;
-    height: 83px;
-    border-left: 1px $black0 solid;
-    display: flex;
-    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 25px;
+    display: grid;
+    grid-template-areas: "field field field field field dd btn btn";
+    grid-gap: 5px;
+    padding: 20px;
     align-items: center;
   }
-  &__filter {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    position: relative;
-    padding: 11px 20px;
-    border-radius: 6px;
-    &:hover {
-      border: $black0 1px solid;
-    }
+
+  &__field {
+    width: 6fr;
+    grid-area: field;
   }
-  &__button-field {
-    height: 83px;
-    display: flex;
-    align-items: center;
-    border-left: $black0 1px solid;
+
+  &__dd {
+    width: 1fr;
+    height: 100%;
+    grid-area: dd;
   }
-  &__search-button {
-    width: 220px !important;
-    margin-left: 20px;
+
+  &__btn {
+    width: 4fr;
+    height: 100%;
+    grid-area: btn;
   }
 }
-.filter {
-  position: absolute;
-  top: 50px;
-  background: $white;
-  box-shadow: 0 17px 17px rgba(0, 0, 0, 0.05), 0 5.125px 5.125px rgba(0, 0, 0, 0.03), 0 2.12866px 2.12866px rgba(0, 0, 0, 0.025), 0 0.769896px 0.769896px rgba(0, 0, 0, 0.0174206);
-  border-radius: 6px;
-  min-width: 200px;
-  z-index: 10000000;
-  &__items {
-    padding: 10px 15px;
-    display: grid;
-    grid-template-columns: 1fr;
-    color: $black500;
-    &:hover {
-      color: $black800;
+
+@include _767 {
+  .search {
+    &__wrapper {
+      grid-template-areas: "field field field" "dd . btn";
+      grid-gap: 20px;
+    }
+
+    &__field, &__dd, &__btn {
+      height: 45px;
     }
   }
 }
 
-@include _991 {
-  .mobile {
-    display: flex;
-  }
-  .fields {
-    &__search-field {
-      background: $white;
-      border-radius: 6px;
-      padding: 10px 14px;
-      height: auto;
-      box-shadow: 0 17px 17px rgba(0, 0, 0, 0.05), 0 5.125px 5.125px rgba(0, 0, 0, 0.0325794), 0 2.12866px 2.12866px rgba(0, 0, 0, 0.025), 0 0.769896px 0.769896px rgba(0, 0, 0, 0.0174206);
-    }
-    &__buttons-field {
-      display: none;
-    }
-    &__input {
-      margin-right: 0;
-      &_filtered {
-        flex-basis: 100%;
-      }
+@include _480 {
+  .search {
+    &__wrapper {
+      grid-template-areas: "field field" "dd btn";
+      grid-gap: 20px;
     }
   }
 }

@@ -5,6 +5,7 @@
     :class="[{'dd__top': mode === 'top' }]"
   >
     <button
+      ref="ddBtn"
       class="dd__btn"
       :class="ddClass"
       @click="isShown = !isShown"
@@ -17,9 +18,7 @@
           :src="items[value].icon"
           :alt="items[value].title"
         >
-        <span
-          class="dd__title"
-        >
+        <span class="dd__title">
           {{ items[value].title }}
         </span>
       </div>
@@ -40,33 +39,22 @@
     </button>
     <transition name="fade">
       <div
-        v-if="isShown && isIcon"
-        class="dd__items"
-      >
-        <button
-          v-for="(item, i) in items"
-          :key="`dd__item-${i}`"
-          class="dd__item dd__item_icon"
-          @click="selectItem(i)"
-        >
-          <img
-            :src="item.icon"
-            :alt="item.title"
-          >
-          {{ item.title }}
-        </button>
-      </div>
-      <div
-        v-if="isShown && !isIcon"
+        v-if="isShown"
         class="dd__items"
       >
         <button
           v-for="(item, i) in items"
           :key="`dd__item-${i}`"
           class="dd__item"
+          :class="[{'dd__item_icon': isIcon}]"
           @click="selectItem(i)"
         >
-          {{ item }}
+          <img
+            v-if="isIcon"
+            :src="item.icon"
+            :alt="item.title"
+          >
+          {{ isIcon ? item.title : item }}
         </button>
       </div>
     </transition>
@@ -141,49 +129,63 @@ export default {
   min-width: 131px;
   position: relative;
   text-align: left;
+
   &__top {
     align-items: flex-start;
   }
+
   &__items {
     @include box;
     width: 100%;
+    flex-basis: 100%;
     position: absolute;
-    background: #FFFFFF;
+    background: $white;
     top: calc(100% + 4px);
-    display: grid;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    grid-gap: 15px;
+    gap: 15px;
     padding: 15px 20px;
     z-index: 1;
   }
+
   &__item {
     text-align: left;
     width: 100%;
+    flex-basis: 100%;
+    height: 100%;
     color: $black500;
     min-height: 21px;
+
     &:hover {
       color: $black800;
     }
+
     &_icon {
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       img {
         margin-right: 5px;
       }
     }
   }
+
   &__icon {
     display: flex;
     align-items: center;
+
     img {
       margin-right: 5px;
     }
+
     span {
       margin-right: 5px;
     }
   }
+
   &__caret {
     &::before {
       padding-left: 10px;
@@ -191,22 +193,26 @@ export default {
       font-size: 24px;
 
     }
+
     &_dark::before {
       color: $black700;
     }
   }
+
   &__btn {
-    height: 43px;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
     width: 100%;
-    background: #FFFFFF;
+    background: $white;
     border-radius: 6px;
+
     &_dark {
       background: #151552;
     }
+
     &_gray {
       background-color: $black0;
     }

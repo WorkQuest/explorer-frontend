@@ -225,6 +225,7 @@ export default {
       font-weight: normal;
       margin-left: 10px;
     }
+
     &__image {
       border-radius: 50%;
       width: 15px;
