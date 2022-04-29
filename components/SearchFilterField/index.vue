@@ -8,7 +8,6 @@
       <base-field
         v-model="search"
         class="search__field"
-        :class="includeFilter ? 'fields__input_filtered' : ''"
         :is-search="true"
         :is-hide-error="true"
         rules="required"
