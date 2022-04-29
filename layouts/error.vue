@@ -3,27 +3,29 @@
     v-if="error"
     class="error"
   >
-    <template v-if="error.statusCode === 404">
-      <h1 class="error__title error__notFound">
-        {{ $t('errors.pageNotFound') }}
-      </h1>
-    </template>
-    <template v-else>
-      <h1 class="error__title error__other">
-        {{ $t('errors.other') }}
-      </h1>
-    </template>
+    <div class="error__wrapper">
+      <template v-if="error.statusCode === 404">
+        <h1 class="error__title error__notFound">
+          {{ $t('errors.pageNotFound') }}
+        </h1>
+      </template>
+      <template v-else>
+        <h1 class="error__title error__other">
+          {{ $t('errors.other') }}
+        </h1>
+      </template>
 
-    <div class="error__content">
-      {{ error.message }}
-    </div>
+      <div class="error__content">
+        {{ error.message }}
+      </div>
 
-    <div class="error__footer">
-      <base-btn
-        class="error__btn"
-        :text="$tc('ui.home')"
-        @click="toMain"
-      />
+      <div class="error__footer">
+        <base-btn
+          class="error__btn"
+          :text="$tc('ui.home')"
+          @click="toMain"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -34,7 +36,8 @@ export default {
   props: {
     error: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
   },
   methods: {
@@ -47,9 +50,16 @@ export default {
 <style lang="scss" scoped>
 
 .error {
+  width: 100%;
+  max-width: 1180px;
   margin: auto auto;
-  width: 1180px;
-  text-align: center;
+
+  &__wrapper {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+  }
+
   &__title {
     font-family: 'Inter', sans-serif;
     font-style: normal;
@@ -59,9 +69,7 @@ export default {
     font-size: 34px;
     margin-top: 20px;
   }
-  &__content {
-    margin-top: 20px;
-  }
+
   &__footer {
     margin: 20px auto;
     width: 220px;
