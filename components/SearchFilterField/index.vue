@@ -13,6 +13,7 @@
           :is-search="true"
           :is-hide-error="true"
           rules="required"
+          :auto-focus="true"
           :placeholder="$tc('ui.forms.searchPlaceholder')"
           @enter="handleSubmit(onSearch)"
         />
@@ -25,6 +26,7 @@
               ref="dd"
               v-model="currentType"
               :items="types"
+              @blur="onSearch"
             />
           </div>
           <div class="fields__button-field">

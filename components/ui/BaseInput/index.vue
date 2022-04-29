@@ -31,6 +31,7 @@
         <slot name="left" />
       </div>
       <input
+        ref="input"
         class="ctm-field__input"
         :class="isSearch && !value ? 'ctm-field__input_padding' : ''"
         :placeholder="placeholder"
@@ -68,6 +69,10 @@
 <script>
 export default {
   props: {
+    autoFocus: {
+      type: Boolean,
+      default: () => false,
+    },
     value: {
       type: String,
       default: '',
@@ -135,7 +140,13 @@ export default {
       default: '',
     },
   },
+  mounted() {
+    this.focus();
+  },
   methods: {
+    focus() {
+      if (this.autoFocus) this.$refs.input.focus();
+    },
     enter($event) {
       this.$emit('enter', $event.target.value);
     },

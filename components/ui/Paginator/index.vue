@@ -32,7 +32,6 @@
         min="1"
         :title="`${$tc('paginator.page')} ${value} ${$tc('paginator.of')} ${totalPages}`"
         :max="totalPages"
-        @keyup.enter="setPage(input)"
         @focusout="setPage(input)"
       >
     </div>
@@ -118,31 +117,38 @@ export default {
   align-items: center;
   border-radius: 6px;
   justify-content: flex-end;
+
   &__item {
     margin-left: 2px;
     margin-right: 2px;
     background-color: $white;
     padding: 5px 10px;
     border-radius: 6px;
+
     &:first-child {
       margin-left: 0;
     }
   }
+
   &__icon {
     color: $blue;
   }
+
   &__link {
     &_disabled {
       pointer-events: none;
+
       & > span {
         color: $black200;
       }
     }
+
     &_inverted > span:before {
       display: inline-block;
       transform: scale(-1);
     }
   }
+
   &__input {
     padding: 0 10px;
     border-width: 0;
@@ -150,9 +156,11 @@ export default {
     width: auto;
     min-width: 170px;
     text-align: center;
+
     &:focus::placeholder {
       color: transparent;
     }
+
     &::placeholder {
       font-size: 13px;
     }

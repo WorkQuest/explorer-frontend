@@ -8,7 +8,7 @@
       ref="ddBtn"
       class="dd__btn"
       :class="ddClass"
-      @click="isShown = !isShown"
+      @click.prevent="isShown = !isShown"
     >
       <div
         v-if="isIcon"
@@ -18,9 +18,7 @@
           :src="items[value].icon"
           :alt="items[value].title"
         >
-        <span
-          class="dd__title"
-        >
+        <span class="dd__title">
           {{ items[value].title }}
         </span>
       </div>
@@ -39,39 +37,29 @@
         class="dd__caret icon-caret_down"
       />
     </button>
-    <!--    <transition name="fade">-->
-    <div
-      v-if="isShown && isIcon"
-      class="dd__items"
-    >
-      <button
-        v-for="(item, i) in items"
-        :key="`dd__item-${i}`"
-        class="dd__item dd__item_icon"
-        @click="selectItem(i)"
-        @keydown.enter="hideDd"
+    <transition name="fade">
+      <div
+        v-if="isShown"
+        class="dd__items"
       >
-        <img
-          :src="item.icon"
-          :alt="item.title"
+        <button
+          v-for="(item, i) in items"
+          :key="`dd__item-${i}`"
+          class="dd__item"
+          :class="[{'dd__item_icon': isIcon}]"
+          @click="selectItem(i)"
+          @keyup.enter="hideDd"
+          @keypress.enter="hideDd"
         >
-        {{ item.title }}
-      </button>
-    </div>
-    <div
-      v-if="isShown && !isIcon"
-      class="dd__items"
-    >
-      <button
-        v-for="(item, i) in items"
-        :key="`dd__item-${i}`"
-        class="dd__item"
-        @click="selectItem(i)"
-      >
-        {{ item }}
-      </button>
-    </div>
-    <!--    </transition>-->
+          <img
+            v-if="isIcon"
+            :src="item.icon"
+            :alt="item.title"
+          >
+          {{ isIcon ? item.title : item }}
+        </button>
+      </div>
+    </transition>
   </div>
 </template>
 
