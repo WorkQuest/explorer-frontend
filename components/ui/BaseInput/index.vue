@@ -212,7 +212,7 @@ export default {
     letter-spacing: -0.025em;
     margin-bottom: 13px;
     height: 24px;
-    color: #fff;
+    color: $white;
 
     &_black {
       @include text-simple;
@@ -220,7 +220,7 @@ export default {
   }
 
   &__err {
-    color: #F82727;
+    color: $red;
     font-size: 12px;
     min-height: 23px;
   }
@@ -231,7 +231,7 @@ export default {
 
     &:before {
       font-size: 24px;
-      background: #0083C7;
+      background: $blue;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -283,8 +283,8 @@ export default {
       }
 
       &:focus {
-        background: #FFFFFF;
-        border: 1px solid #0083C7;
+        background: $white;
+        border: 1px solid $blue;
       }
     }
   }
@@ -292,7 +292,7 @@ export default {
   &_white {
     .ctm-field__input {
       color: $black700;
-      background: #FFFFFF;
+      background: $white;
       border-radius: 6px;
       border: 1px solid #F3F7FA;
 
@@ -301,8 +301,8 @@ export default {
       }
 
       &:focus {
-        background: #FFFFFF;
-        border: 1px solid #0083C7;
+        background: $white;
+        border: 1px solid $blue;
       }
     }
   }

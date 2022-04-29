@@ -200,7 +200,7 @@ export default {
   }
 
   &__btn {
-    height: 43px;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;

@@ -32,6 +32,7 @@
         min="1"
         :title="`${$tc('paginator.page')} ${value} ${$tc('paginator.of')} ${totalPages}`"
         :max="totalPages"
+        @keyup.enter="setPage(input)"
         @focusout="setPage(input)"
       >
     </div>

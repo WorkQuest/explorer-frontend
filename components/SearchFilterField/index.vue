@@ -87,8 +87,8 @@ export default {
   max-width: 1200px;
 
   &__wrapper {
+    height: auto;
     background-color: $white;
-    height: 83px;
     min-width: 0;
     border-radius: 6px;
     margin-top: 30px;
@@ -107,11 +107,13 @@ export default {
 
   &__dd {
     width: 1fr;
+    height: 100%;
     grid-area: dd;
   }
 
   &__btn {
     width: 4fr;
+    height: 100%;
     grid-area: btn;
   }
 }
@@ -119,12 +121,21 @@ export default {
 @include _767 {
   .search {
     &__wrapper {
-      height: auto;
-      grid-template-areas: "field field" "dd btn";
+      grid-template-areas: "field field field" "dd . btn";
+      grid-gap: 20px;
     }
 
-    &__field {
-      margin-bottom: 5px;
+    &__field, &__dd, &__btn {
+      height: 45px;
+    }
+  }
+}
+
+@include _480 {
+  .search {
+    &__wrapper {
+      grid-template-areas: "field field" "dd btn";
+      grid-gap: 20px;
     }
   }
 }
