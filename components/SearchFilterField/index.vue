@@ -6,6 +6,7 @@
   >
     <base-field
       v-model="search"
+      class="search__field"
       :class="includeFilter ? 'fields__input_filtered' : ''"
       :is-search="true"
       :is-hide-error="true"
@@ -16,11 +17,11 @@
     />
     <base-dd
       v-model="currentType"
+      class="search__dd"
       :items="types"
-      @blur="onSearch"
     />
     <base-btn
-      class="fields__search-button"
+      class="search__btn"
       :text="$tc('ui.forms.search')"
       @click="handleSubmit(onSearch)"
     />
@@ -83,7 +84,7 @@ export default {
 <style lang="scss" scoped>
 .search {
   display: grid;
-  grid-template-columns: 1fr 155px 260px;
+  grid-template-areas: "field field field field field dd btn btn";
   background-color: $white;
   height: 83px;
   width: 100%;
@@ -94,5 +95,31 @@ export default {
   align-items: center;
   margin-top: 30px;
   margin-bottom: 25px;
+
+  &__field {
+    width: 6fr;
+    grid-area: field;
+  }
+
+  &__dd {
+    width: 1fr;
+    grid-area: dd;
+  }
+
+  &__btn {
+    width: 4fr;
+    grid-area: btn;
+  }
+}
+
+@include _991 {
+  .search {
+    height: auto;
+    grid-template-areas: "field field" "dd btn";
+
+    &__field {
+      margin-bottom: 5px;
+    }
+  }
 }
 </style>

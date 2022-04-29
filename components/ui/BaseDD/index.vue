@@ -137,13 +137,15 @@ export default {
   &__items {
     @include box;
     width: 100%;
+    flex-basis: 100%;
     position: absolute;
-    background: #FFFFFF;
+    background: $white;
     top: calc(100% + 4px);
-    display: grid;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    grid-gap: 15px;
+    gap: 15px;
     padding: 15px 20px;
     z-index: 1;
   }
@@ -151,6 +153,8 @@ export default {
   &__item {
     text-align: left;
     width: 100%;
+    flex-basis: 100%;
+    height: 100%;
     color: $black500;
     min-height: 21px;
 
@@ -202,7 +206,7 @@ export default {
     justify-content: space-between;
     padding: 0 20px;
     width: 100%;
-    background: #FFFFFF;
+    background: $white;
     border-radius: 6px;
 
     &_dark {
