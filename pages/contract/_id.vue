@@ -406,6 +406,8 @@ export default {
 .contract {
   animation: show 1s 1;
   @include container;
+  padding-left: 0;
+  padding-right: 0;
 
   &__search {
     margin: 25px 0;
@@ -425,6 +427,7 @@ export default {
     margin-bottom: 25px;
     border-radius: 6px;
   }
+
   &__title, &__contract {
     margin-bottom: 0;
   }

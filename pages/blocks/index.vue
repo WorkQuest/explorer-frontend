@@ -158,6 +158,8 @@ export default {
 .blocks {
   @include container;
   animation: show 1s 1;
+  padding-left: 0;
+  padding-right: 0;
 
   &__search {
     margin: 25px 0;

@@ -187,6 +187,8 @@ export default {
 .block {
   animation: show 1s 1;
   @include container;
+  padding-left: 0;
+  padding-right: 0;
 
   &__search {
     margin: 25px 0;
@@ -233,23 +235,27 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
+
     & > .b-skeleton.b-skeleton-text {
       min-width: 75px !important;
       height: 24px !important;
       margin-bottom: 0 !important;
     }
+
     &-field {
       display: flex;
       flex-direction: row;
       align-items: center;
     }
   }
+
   &__columns {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 23px;
     margin-top: 25px;
   }
+
   &__columns > :last-child {
     grid-column-start: 1;
     grid-column-end: 4;
@@ -274,6 +280,7 @@ export default {
   .block {
     background: $white;
     padding-top: 22px;
+
     &__columns {
       display: flex;
       flex-direction: column;
@@ -291,11 +298,13 @@ export default {
     &__header {
       margin-bottom: 0;
     }
+
     &:nth-child(1) {
       display: flex;
       flex-direction: column;
       position: relative;
     }
+
     &:nth-child(1) .item__info {
       order: -1;
       position: absolute;
@@ -304,24 +313,30 @@ export default {
       color: $black300;
       font-size: 14px;
     }
-    &:nth-child(3){
+
+    &:nth-child(3) {
       display: flex;
       align-items: center;
     }
+
     &:nth-child(3) .item__header {
       margin-right: 10px;
     }
-    &:nth-child(4){
+
+    &:nth-child(4) {
       display: flex;
       align-items: center;
     }
+
     &:nth-child(4) .item__header {
       margin-right: 10px;
     }
-    &:nth-child(5){
+
+    &:nth-child(5) {
       display: flex;
       align-items: center;
     }
+
     &:nth-child(5) .item__header {
       margin-right: 10px;
     }

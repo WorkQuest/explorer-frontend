@@ -48,8 +48,6 @@
           class="dd__item"
           :class="[{'dd__item_icon': isIcon}]"
           @click="selectItem(i)"
-          @keyup.enter="hideDd"
-          @keypress.enter="hideDd"
         >
           <img
             v-if="isIcon"

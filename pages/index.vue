@@ -5,10 +5,7 @@
         <h3 class="home__title">
           {{ $t('home.title') }}
         </h3>
-        <search-filter
-          :include-filter="true"
-          class="home__search"
-        />
+        <search-filter :include-filter="true" />
       </div>
     </div>
     <div class="home__tables">

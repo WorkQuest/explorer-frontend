@@ -170,6 +170,8 @@ export default {
 .transfer {
   animation: show 1s 1;
   @include container;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 </style>
