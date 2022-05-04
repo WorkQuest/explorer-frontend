@@ -208,12 +208,12 @@ export default {
 @include _767 {
   .home {
     &__header {
-      height: 228px;
+      height: 300px;
     }
 
     &__title {
       font-size: 28px;
-      max-width: 200px;
+      max-width: 100%;
       margin-left: 16px;
     }
   }
