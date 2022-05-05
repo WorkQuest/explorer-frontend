@@ -140,8 +140,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      WUSDSymbol: 'tokens/getWUSDTokenSymbol',
-      WUSDDecimal: 'tokens/getWUSDTokenDecimals',
+      WQTSymbol: 'tokens/getWQTTokenSymbol',
+      WQTDecimal: 'tokens/getWQTTokenDecimals',
       transactions: 'account/getTransactions',
       transactionsCount: 'account/getTransactionsCount',
       internalTransactions: 'account/getInternalTransactions',
@@ -190,7 +190,7 @@ export default {
           key: 'value',
           label: this.$t('ui.tx.value'),
           sortable: isSortable('transactions', 'value'),
-          formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
+          formatter: (value) => `${this.ConvertFromDecimals(value, this.WQTDecimal, 4)} ${this.WQTSymbol}`,
         },
         {
           key: 'gasUsed',
@@ -198,7 +198,7 @@ export default {
           sortable: isSortable('transactions', 'gasUsed'),
           formatter: (value, key, item) => [
             {
-              value: this.FormatSmallNumber(this.ConvertFromDecimals(item.gas_used * item.gas_price, this.WUSDDecimal)),
+              value: this.FormatSmallNumber(this.ConvertFromDecimals(item.gas_used * item.gas_price, this.WQTDecimal)),
               class: 'grey',
             },
           ],
@@ -235,7 +235,7 @@ export default {
           key: 'value',
           label: this.$t('ui.tx.value'),
           sortable: isSortable('transactions', 'value'),
-          formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
+          formatter: (value) => `${this.ConvertFromDecimals(value, this.WQTDecimal, 4)} ${this.WQTSymbol}`,
         },
       ];
     },
