@@ -83,8 +83,8 @@ export default {
   computed: {
     ...mapGetters({
       tx: 'tx/getTxsByHash',
-      symbol: 'tokens/getWUSDTokenSymbol',
-      decimals: 'tokens/getWUSDTokenDecimals',
+      symbol: 'tokens/getWQTTokenSymbol',
+      decimals: 'tokens/getWQTTokenDecimals',
     }),
     gasLimit() {
       return +this.tx?.block?.gas_limit || 0;
