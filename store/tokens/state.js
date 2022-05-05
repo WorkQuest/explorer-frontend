@@ -126,10 +126,6 @@ export default () => ({
   currentToken,
   accountTokens,
   allTokenTransfers,
-  wusd: {
-    symbol: 'WUSD',
-    decimals: 18,
-  },
   wqt: {
     symbol: 'WQT',
     decimals: 18,
