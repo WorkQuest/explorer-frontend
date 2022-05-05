@@ -77,8 +77,8 @@ export default {
     ...mapGetters({
       blocks: 'blocks/getBlocks',
       txs: 'tx/getTxs',
-      WUSDSymbol: 'tokens/getWUSDTokenSymbol',
-      WUSDDecimal: 'tokens/getWUSDTokenDecimals',
+      WQTSymbol: 'tokens/getWQTTokenSymbol',
+      WQTDecimal: 'tokens/getWQTTokenDecimals',
     }),
     payload() {
       return {
@@ -142,7 +142,7 @@ export default {
         {
           key: 'value',
           label: this.$t('ui.tx.value'),
-          formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
+          formatter: (value) => `${this.ConvertFromDecimals(value, this.WQTDecimal, 4)} ${this.WQTSymbol}`,
         },
       ];
     },

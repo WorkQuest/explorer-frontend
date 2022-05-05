@@ -63,8 +63,8 @@ export default {
     ...mapGetters({
       txs: 'tx/getTxs',
       txsCount: 'tx/getTxsCount',
-      WUSDSymbol: 'tokens/getWUSDTokenSymbol',
-      WUSDDecimal: 'tokens/getWUSDTokenDecimals',
+      WQTSymbol: 'tokens/getWQTTokenSymbol',
+      WQTDecimal: 'tokens/getWQTTokenDecimals',
       currentBlock: 'blocks/getCurrentBlock',
       currentBlockTransactions: 'blocks/getCurrentBlockTransactions',
       currentBlockTransactionsCount: 'blocks/getCurrentBlockTransactionsCount',
@@ -125,7 +125,7 @@ export default {
           key: 'value',
           label: this.$t('ui.tx.value'),
           sortable: isSortable(this.id, 'value'),
-          formatter: (value) => `${this.ConvertFromDecimals(value, this.WUSDDecimal, 4)} ${this.WUSDSymbol}`,
+          formatter: (value) => `${this.ConvertFromDecimals(value, this.WQTDecimal, 4)} ${this.WQTSymbol}`,
         },
         {
           key: 'gasUsed',
@@ -133,7 +133,7 @@ export default {
           sortable: isSortable(this.id, 'gasUsed'),
           formatter: (value, key, item) => [
             {
-              value: this.FormatSmallNumber(this.ConvertFromDecimals(item.gas_used * item.gas_price, this.WUSDDecimal)),
+              value: this.FormatSmallNumber(this.ConvertFromDecimals(item.gas_used * item.gas_price, this.WQTDecimal)),
               class: 'grey',
             },
           ],

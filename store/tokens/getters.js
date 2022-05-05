@@ -8,7 +8,7 @@ export default {
   getCurrentTokenHoldersCount: (state) => state.currentToken.holdersList.count,
   getAllTokenTransfers: (state) => state.allTokenTransfers.transfers,
   getAllTokenTransfersCount: (state) => state.allTokenTransfers.count,
-  getWUSDTokenSymbol: (state) => state.wusd.symbol,
-  getWUSDTokenDecimals: (state) => state.wusd.decimals,
+  getWQTTokenSymbol: (state) => state.wqt.symbol,
+  getWQTTokenDecimals: (state) => state.wqt.decimals,
   getTokenPrice: (state) => (tokenSymbol) => state.tokenPrices.find((token) => token.symbol === tokenSymbol)?.price,
 };

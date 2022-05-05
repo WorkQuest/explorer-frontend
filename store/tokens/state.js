@@ -1,20 +1,20 @@
 /** @typedef {object} allTokens
-  * @property {object[]} tokens
-  * @property {object} tokens.contract_address_hash
-  * @property {string} tokens.contract_address_hash.hex
-  * @property {string} tokens.contract_address_hash.bech32
-  * @property {string} tokens.name
-  * @property {string} tokens.symbol
-  * @property {string} tokens.total_supply
-  * @property {string} tokens.decimals
-  * @property {string} tokens.type
-  * @property {string} tokens.inserted_at
-  * @property {string} tokens.updated_at
-  * @property {number} tokens.holder_count
-  * @property {string|null} tokens.bridged
-  * @property {string|null} tokens.skip_metadata
-  * @property {number} count
-  */
+ * @property {object[]} tokens
+ * @property {object} tokens.contract_address_hash
+ * @property {string} tokens.contract_address_hash.hex
+ * @property {string} tokens.contract_address_hash.bech32
+ * @property {string} tokens.name
+ * @property {string} tokens.symbol
+ * @property {string} tokens.total_supply
+ * @property {string} tokens.decimals
+ * @property {string} tokens.type
+ * @property {string} tokens.inserted_at
+ * @property {string} tokens.updated_at
+ * @property {number} tokens.holder_count
+ * @property {string|null} tokens.bridged
+ * @property {string|null} tokens.skip_metadata
+ * @property {number} count
+ */
 
 export const allTokens = {
   count: 0,
@@ -126,8 +126,8 @@ export default () => ({
   currentToken,
   accountTokens,
   allTokenTransfers,
-  wusd: {
-    symbol: 'WUSD',
+  wqt: {
+    symbol: 'WQT',
     decimals: 18,
   },
   tokenPrices,
