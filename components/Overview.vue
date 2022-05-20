@@ -82,8 +82,8 @@ export default {
       nativeBalance: 'account/getNativeBalance',
       accountInfo: 'account/getAccountInfo',
       accountTokens: 'account/getAccountTokens',
-      nativeSymbol: 'tokens/getWUSDTokenSymbol',
-      nativeDecimals: 'tokens/getWUSDTokenDecimals',
+      nativeSymbol: 'tokens/getWQTTokenSymbol',
+      nativeDecimals: 'tokens/getWQTTokenDecimals',
       token: 'tokens/getCurrentToken',
       transfersCount: 'tokens/getCurrentTokenTransfersCount',
     }),
@@ -157,13 +157,16 @@ export default {
     border-radius: 6px;
     color: $black200;
   }
+
   &__select {
     position: absolute;
     z-index: 1;
     width: 100%;
     left: 0;
+
     &-field {
       cursor: pointer;
+
       &_disabled {
         pointer-events: none;
         color: $black100;
@@ -182,6 +185,7 @@ export default {
   .overview {
     width: 100%;
     max-width: 100%;
+
     &__title {
       display: block;
     }
