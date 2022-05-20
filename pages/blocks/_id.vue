@@ -90,8 +90,8 @@ export default {
   computed: {
     ...mapGetters({
       currentBlock: 'blocks/getCurrentBlock',
-      symbol: 'tokens/getWUSDTokenSymbol',
-      decimals: 'tokens/getWUSDTokenDecimals',
+      symbol: 'tokens/getWQTTokenSymbol',
+      decimals: 'tokens/getWQTTokenDecimals',
     }),
     blockColumns() {
       const gasUsedValue = this.currentBlock?.gas_used || 0;
