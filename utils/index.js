@@ -21,10 +21,9 @@ export const searchResponseTypes = (type, value) => {
 export const searchTypes = {
   all: null,
   address: 0,
-  txnHash: null,
-  block: null,
-  token: 1,
-  tokens: 2,
+  txnHash: 1,
+  block: 2,
+  token: 3,
 };
 
 export const sortTables = {

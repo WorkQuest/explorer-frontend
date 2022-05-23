@@ -50,7 +50,8 @@ export default {
     'nuxt-i18n',
   ],
   bootstrapVue: {
-    components: ['b-table', 'b-skeleton', 'b-collapse', 'b-toast', 'b-skeleton-table'],
+    componentPlugins: ['ToastPlugin'],
+    components: ['b-table', 'b-skeleton', 'b-collapse', 'b-skeleton-table'],
   },
   build: {
     productionGzip: true,

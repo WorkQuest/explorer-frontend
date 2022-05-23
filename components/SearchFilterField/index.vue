@@ -30,7 +30,7 @@
 </template>
 <script>
 
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import { searchTypes } from '~/utils';
 
 export default {
@@ -64,20 +64,21 @@ export default {
       searchHandler: 'main/searchHandler',
     }),
     async onSearch() {
-      if (this.search) {
-        const q = this.search.trim();
-        let type = null;
-        if (this.includeFilter) {
-          type = /^[A-Za-z]+$/.test(q) && this.currentType === 0
-            ? searchTypes.tokens
-            : Object.values(searchTypes)[this.currentType];
-        }
-        const payload = { q, type };
-        const response = await this.searchHandler(payload);
-        if (response.ok) {
-          await this.$router.push(response.result);
-        }
+      if (!this.search) return;
+      const q = this.search.trim();
+      let type = null;
+      if (this.includeFilter) {
+        type = /^[A-Za-z]+$/.test(q) && this.currentType === 0
+          ? searchTypes.token
+          : Object.values(searchTypes)[this.currentType];
       }
+      const payload = { q, type, nuxt: this.$nuxt };
+      const response = await this.searchHandler(payload);
+      if (!response.ok) {
+        await this.$router.push('/error');
+        return;
+      }
+      await this.$router.push(response.result);
     },
   },
 };

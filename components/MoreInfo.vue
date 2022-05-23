@@ -111,7 +111,7 @@ export default {
       const totalSupply = this.createdContract && this.accountInfo.token ? this.accountInfo.token.total_supply : 0;
       const decimals = this.createdContract && this.accountInfo.token ? this.accountInfo.token.decimals : 0;
       if (totalSupply && decimals) {
-        return this.ConvertFromDecimals(totalSupply, decimals());
+        return this.ConvertFromDecimals(totalSupply, decimals);
       }
       return '';
     },
