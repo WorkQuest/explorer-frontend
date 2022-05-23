@@ -5,6 +5,7 @@ import { serverErrorMessage } from '~/utils';
 export default function ({ $axios, app, error: nuxtError }) {
   const { locale } = app.i18n;
   $axios.onError(async (config) => {
+    console.dir(config.request.responseURL);
     const serverMessage = config.response.data?.msg || '';
     if (config.response.status === 404) {
       nuxtError({ statusCode: 404, message: serverErrorMessage(app, locale, serverMessage) });

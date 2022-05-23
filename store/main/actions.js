@@ -36,7 +36,7 @@ export default {
       bodyClass: 'custom-toast-width',
     });
   },
-  async searchHandler({ dispatch, commit }, { q, type, nuxt }) {
+  async searchHandler({ dispatch, commit }, { q, type }) {
     try {
       const response = await this.$axios.$get('search', { params: { q, type } });
       /** @typedef {object} response
