@@ -52,15 +52,15 @@ export default {
         const { locale } = this.$i18n;
         let result;
         switch (searchType) {
-          case 0:
+          case 0: // block
             if (!response.result?.searchResult?.number) return error();
             result = response.result.searchResult.number;
             break;
-          case 5:
+          case 5: // TokenName
             result = q;
             commit('tokens/setSearchResult', response.result.searchResult, { root: true });
             break;
-          case 7:
+          case 7: // None
             if (!response.result?.searchResult) return error();
             result = response.result.searchResult;
             break;
