@@ -74,7 +74,7 @@ export default {
   data() {
     return {
       isChoosing: false,
-      currentPrice: 0,
+      currentPrice: 1,
     };
   },
   computed: {
