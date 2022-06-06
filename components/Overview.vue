@@ -24,7 +24,7 @@
         </template>
         <template v-else>
           <span class="overview__title">{{ symbol }} {{ $t('ui.tx.value') }}</span>
-          ${{ Floor(balance) }} ($1.00/{{ symbol }})
+          ${{ Floor(balance*currentPrice) }}  {{ `($${currentPrice}/${symbol})` }}
         </template>
       </p>
       <template v-if="!isToken">
@@ -74,6 +74,7 @@ export default {
   data() {
     return {
       isChoosing: false,
+      currentPrice: 1,
     };
   },
   computed: {
@@ -102,12 +103,20 @@ export default {
         : this.nativeBalance).shiftedBy(-this.decimals).toString();
     },
   },
+  mounted() {
+    this.getSymbolPrice(this.symbol);
+  },
   methods: {
     toggleChoice() {
       this.isChoosing = !this.isChoosing;
     },
     hideChoice() {
       this.isChoosing = false;
+    },
+    async getSymbolPrice(symbol) {
+      const prices = await this.$store.dispatch('tokens/getTokenPrices');
+      const { price } = prices.find((el) => el.symbol === symbol);
+      this.currentPrice = +new BigNumber(price).shiftedBy(-this.decimals).toString();
     },
   },
 };
