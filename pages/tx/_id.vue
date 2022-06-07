@@ -165,7 +165,7 @@ export default {
           {
             class: 'columns__item_four-three',
             title: this.$t('ui.tx.feeFull'),
-            info: `${this.fee} ${this.symbol}`,
+            info: `${new BigNumber(this.fee).shiftedBy(-18).toString()} ${this.symbol}`,
           },
         ];
       }
