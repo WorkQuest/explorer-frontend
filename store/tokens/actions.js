@@ -71,8 +71,7 @@ export default {
   },
   async getTokenPrices({ commit }) {
     try {
-      const URL = process.env.WQ_ORACLE_URL;
-      const response = await this.$axios.$get(`${URL}oracle/current-prices`);
+      const response = await this.$axios.$get(`${process.env.WQ_ORACLE_URL}/oracle/current-prices`);
       commit('setTokenPrices', response.result);
       return response.result;
     } catch (e) {
