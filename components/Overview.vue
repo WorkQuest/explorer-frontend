@@ -38,7 +38,7 @@
           @click="toggleChoice"
         >
           <div class="overview__input">
-            {{ $t('ui.token.selectToken') }}
+            {{ $t('ui.token.wusdValue') }}
             <span class="icon-caret_down" />
           </div>
           <ChoiceToken

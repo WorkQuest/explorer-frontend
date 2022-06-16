@@ -111,7 +111,7 @@
       "internal": "Internal Txns",
       "tokensTxns": "ERC-20 Token Txns",
       "transfer": "Transfer",
-      "selectToken": "Select token"
+      "wusdValue": "WUSD Value"
     },
     "contract": {
       "contract": "Contract",
