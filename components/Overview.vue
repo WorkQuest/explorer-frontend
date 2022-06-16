@@ -23,7 +23,7 @@
           {{ NumberFormat(transfersCount) }}
         </template>
         <template v-else>
-          <span class="overview__title">{{ symbol }} {{ $t('ui.tx.value') }}</span>
+          <span class="overview__title"> {{ $t('ui.token.wusd') }}  {{ $t('ui.tx.value') }}</span>
           ${{ Floor(balance*currentPrice) }}  {{ `($${currentPrice}/${symbol})` }}
         </template>
       </p>
@@ -161,7 +161,11 @@ export default {
   &__input {
     @include text-simple;
     @include normal-font-size;
-    padding: 11px 20px 11px 15px;
+    padding: 11px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
     background: $black0;
     border-radius: 6px;
     color: $black200;
