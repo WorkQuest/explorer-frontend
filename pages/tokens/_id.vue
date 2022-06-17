@@ -138,7 +138,6 @@ export default {
       page: 1,
       limit: 10,
       offset: 0,
-      tabs: ['transfers', 'holders', 'info', 'contract'],
       tableBusy: false,
       transfersSortDirection: sortDirections.DESC,
       transfersSortField: sortTables.transfers.age,
@@ -150,6 +149,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      accountInfo: 'account/getAccountInfo',
       token: 'tokens/getCurrentToken',
       tokenTransfers: 'tokens/getCurrentTokenTransfers',
       tokenTransfersCount: 'tokens/getCurrentTokenTransfersCount',
@@ -157,6 +157,14 @@ export default {
       tokenHoldersCount: 'tokens/getCurrentTokenHoldersCount',
       getTokenPrice: 'tokens/getTokenPrice',
     }),
+    tabs() {
+      return [
+        'transfers',
+        'holders',
+        'info',
+        ...(this.showContractInfo ? ['contract'] : []),
+      ];
+    },
     address() {
       return this.$route.params.id;
     },
@@ -296,6 +304,9 @@ export default {
     },
     symbol() {
       return this.token?.symbol || '';
+    },
+    showContractInfo() {
+      return this.accountInfo?.smartContract;
     },
   },
   watch: {
