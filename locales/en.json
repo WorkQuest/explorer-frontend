@@ -58,7 +58,8 @@
       "found": "transactions found",
       "noTxs": "There are no transactions...",
       "gasUsed": "Gas Used by Transaction",
-      "gasPrice": "Gas Price"
+      "gasPrice": "Gas Price",
+      "includedIntoBlock": "This transaction has been included into Block No #{n} and will be reflected in a shortwhile"
     },
     "forms": {
       "searchPlaceholder": "Search by Address / Txn Hash / Block / Token",
