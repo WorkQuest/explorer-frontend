@@ -208,8 +208,8 @@ export default {
       await getTransactionByTxHash(hash),
     ]);
     if (!res.ok) {
-      if (tx) {
-        this.pendingToBlock = tx.blockNumber;
+      if (tx.ok) {
+        this.pendingToBlock = tx.result.blockNumber;
         this.isTxPending = true;
         this.updateTimer = setInterval(async () => {
           const updateRes = await this.$store.dispatch('tx/getTxsByHash', hash);

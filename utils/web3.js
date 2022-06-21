@@ -233,8 +233,8 @@ export const connectWallet = async () => {
 export const getTransactionByTxHash = async (txHash) => {
   try {
     if (!web3Anonymous) web3Anonymous = new Web3(process.env.WQ_PROVIDER);
-    return await web3Anonymous.eth.getTransaction(txHash);
+    return output(await web3Anonymous.eth.getTransaction(txHash));
   } catch (e) {
-    return null;
+    return error();
   }
 };

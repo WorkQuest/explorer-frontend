@@ -12,7 +12,7 @@ export default function ({
     if (config.response.status === 404) {
       if (route.name === 'tx-id' && route.params.id) {
         const tx = await getTransactionByTxHash(route.params.id);
-        if (tx) return true;
+        if (tx.ok) return true;
       }
       nuxtError({ statusCode: 404, message: serverErrorMessage(app, locale, serverMessage) });
       throw config;
