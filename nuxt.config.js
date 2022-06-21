@@ -89,7 +89,7 @@ export default {
     baseURL: process.env.BASE_URL,
   },
   i18n: {
-    locales: ['en', 'ru'],
+    locales: ['en'],
     fallbackLocale: 'en',
     defaultLocale: 'en',
     strategy: 'no_prefix',
