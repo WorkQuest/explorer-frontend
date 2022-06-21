@@ -203,9 +203,11 @@ export default {
   async beforeCreate() {
     this.isTxLoading = true;
     const hash = this.$route.params.id;
-    const res = await this.$store.dispatch('tx/getTxsByHash', hash);
+    const [res, tx] = await Promise.all([
+      this.$store.dispatch('tx/getTxsByHash', hash),
+      await getTransactionByTxHash(hash),
+    ]);
     if (!res.ok) {
-      const tx = await getTransactionByTxHash(hash);
       if (tx) {
         this.pendingToBlock = tx.blockNumber;
         this.isTxPending = true;
