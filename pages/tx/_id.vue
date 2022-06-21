@@ -20,6 +20,13 @@
           :class="{ 'tab__item_active': activeTab === tab} "
           @click="onClick(tab)"
         >{{ $t(`ui.token.${tab}`) }}</span>
+        <DotsFlashing
+          v-if="isTxPending"
+          class="txs__dots"
+        />
+      </div>
+      <div v-if="isTxPending">
+        <empty-data :description="$t('ui.tx.includedIntoBlock', { n: pendingToBlock })" />
       </div>
       <div
         v-if="txsColumns.length > 0 && activeTab === 'overview'"
@@ -56,7 +63,7 @@
         </div>
       </div>
       <tx-logs
-        v-if="tx && activeTab === 'logs'"
+        v-if="!isTxPending && tx && activeTab === 'logs'"
         id="logs"
         :logs="tx.logs"
         :hash="tx.hash"
@@ -67,6 +74,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import BigNumber from 'bignumber.js';
+import { getTransactionByTxHash } from '~/utils/web3';
 
 export default {
   name: 'Block',
@@ -78,6 +86,10 @@ export default {
       time: Date.now(),
       minute: 60000,
       isTxLoading: true,
+
+      isTxPending: false,
+      pendingToBlock: null,
+      updateTimer: null,
     };
   },
   computed: {
@@ -190,8 +202,25 @@ export default {
   },
   async beforeCreate() {
     this.isTxLoading = true;
-    await this.$store.dispatch('tx/getTxsByHash', this.$route.params.id);
-    this.isTxLoading = false;
+    const hash = this.$route.params.id;
+    const [res, tx] = await Promise.all([
+      this.$store.dispatch('tx/getTxsByHash', hash),
+      await getTransactionByTxHash(hash),
+    ]);
+    if (!res.ok) {
+      if (tx.ok) {
+        this.pendingToBlock = tx.result.blockNumber;
+        this.isTxPending = true;
+        this.updateTimer = setInterval(async () => {
+          const updateRes = await this.$store.dispatch('tx/getTxsByHash', hash);
+          if (updateRes.ok) {
+            this.isTxPending = false;
+            this.isTxLoading = false;
+            clearInterval(this.updateTimer);
+          }
+        }, 1000 * 30);
+      }
+    } else this.isTxLoading = false;
   },
   async mounted() {
     await this.hashNavigation();
@@ -201,6 +230,7 @@ export default {
     }, this.minute);
   },
   beforeDestroy() {
+    clearInterval(Number(this.updateTimer));
     clearInterval(Number(this.timer));
     this.$store.commit('tx/resetTxsByHash');
   },
@@ -275,6 +305,10 @@ export default {
     font-size: 28px;
     line-height: 36px;
     margin: 15px 0 10px 0;
+  }
+
+  &__dots {
+    float: right;
   }
 
   &__info {
