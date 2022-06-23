@@ -7,12 +7,12 @@ on:
 jobs:
   build-prod:
     if: github.ref == 'refs/heads/master'
-    environment: develop
+    environment: master
     runs-on: ubuntu-18.04
 
     steps:
       - name: Copy code files to container
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Node.js
         uses: actions/setup-node@v1
