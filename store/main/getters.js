@@ -3,6 +3,8 @@ export default {
   getLoaderStatusText: (state) => state.loaderStatusText,
   getLoaderMode: (state) => state.loaderMode,
   getLoaderProgress: (state) => state.loaderProgress,
-  getProjects: (state) => state.projects,
   getIsLoaderBackgroundHider: (state) => state.isLoaderBackgroundHider,
+  getIsWalletConnected: (state) => state.isWalletConnected,
+  getWalletAddress: (state) => state.walletAddress,
+  getIsDefaultChainId: (state) => state.isDefaultChainId,
 };

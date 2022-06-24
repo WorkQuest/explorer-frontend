@@ -22,9 +22,11 @@ import { mapGetters } from 'vuex';
 import loaderModes from '~/store/main/loaderModes';
 
 export default {
-  data: () => ({
-    loaderModes,
-  }),
+  data() {
+    return {
+      loaderModes,
+    };
+  },
   computed: {
     ...mapGetters({
       loaderStatusText: 'main/getLoaderStatusText',

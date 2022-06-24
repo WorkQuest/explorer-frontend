@@ -22,6 +22,7 @@
     :class="btnClass"
     @click="$emit('click')"
   >
+    {{ text }}
     <div class="icon-btn_left">
       <slot name="left" />
     </div>
@@ -47,6 +48,10 @@ export default {
       default: false,
     },
     mode: {
+      type: String,
+      default: '',
+    },
+    text: {
       type: String,
       default: '',
     },
@@ -80,18 +85,20 @@ export default {
     &_left {
       margin: 0 5px 0 0;
     }
+
     &_right {
       margin: 0 0 0 5px;
     }
   }
 }
+
 .base-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 43px;
-  color: #ffffff;
+  height: 100%;
+  color: $white;
   font-family: 'Inter', sans-serif;
   font-style: normal;
   font-weight: normal;
@@ -99,122 +106,149 @@ export default {
   line-height: 130%;
   text-align: center;
   transition: .3s;
-  background: #0083C7;
+  background: $blue;
   border-radius: 6px;
+
   &:hover {
     background: #103D7C;
   }
+
   &_back {
     transition: .3s;
     background-color: transparent;
     color: $black500;
+
     &:hover {
       background-color: transparent;
       color: $black500;
     }
   }
+
   &_approve {
     background-color: $green;
     color: $white;
     border-radius: 6px;
     border: 1px solid $green;
+
     &:hover {
       background-color: $white;
       color: $green;
       border-radius: 6px;
     }
   }
+
   &_agree {
     background-color: $green;
     color: $white;
+
     &:hover {
       background-color: $green;
       color: $white;
-      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     }
   }
+
   &_delete {
     background-color: $red;
     color: $white;
+
     &:hover {
       background-color: #cc0000;
       color: $white;
     }
   }
+
   &_show-messages {
     background-color: transparent;
     color: $blue;
   }
+
   &_messages {
     background-color: $white;
     color: $green;
     border-radius: 6px;
     transition: .3s;
     border: 1px solid $green;
+
     &:hover {
       background-color: $green;
       color: $white;
       border-radius: 6px;
     }
   }
+
   &_goToChat {
     background-color: $white;
     color: $green;
     border: 1px solid $black400;
+
     &:hover {
       background-color: $white;
       color: $green;
       border: 1px solid $black600;
-      box-shadow: 0 0 2px rgba(0,0,0,0.5);
+      box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
     }
   }
+
   &_dispute {
     background-color: $red;
+
     &:hover {
-      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
       background-color: $red;
     }
   }
+
   &_disabled {
     pointer-events: none;
     background: #D1D1CF;
   }
+
   &_outline {
     border: 1px solid rgba(0, 131, 199, 0.1);
-    background: #FFFFFF;
+    background: $white;
     color: $blue;
+
     &:hover {
       background: #F7F8FA;
       color: $blue;
     }
   }
+
   &_borderless {
-    background: #FFFFFF;
+    background: $white;
     color: $blue;
+
     &-left {
       @extend .base-btn_borderless;
       justify-content: flex-start;
     }
+
     &-right {
       @extend .base-btn_borderless;
       justify-content: flex-end;
     }
+
     &:hover {
       background: #F7F8FA;
       color: $blue;
     }
   }
+
   &_tag {
     background: rgba(0, 131, 199, 0.1);
     border-radius: 3px;
     color: $blue;
+
     &:hover {
       background: rgba(0, 131, 199, 0.2);
     }
   }
+
   &_light {
-    background: #FFFFFF;
+    background: $white;
     color: $black800;
+
     &:hover {
       background: $black100;
     }

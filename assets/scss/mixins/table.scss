@@ -1,0 +1,235 @@
+@import "typography";
+@import "../vars";
+
+.table {
+  font-size: 16px;
+  line-height: 130%;
+  &__titles {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0 30px 0 20px;
+  }
+  &__title {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: $black800;
+  }
+  &__link {
+    color: $blue !important;
+    border: none !important;
+    background: $white !important;
+    width: 200px !important;
+    overflow-wrap: anywhere;
+
+    &:hover {
+      color: $blue;
+    }
+
+    &_disabled {
+      pointer-events: none;
+    }
+  }
+  &__header {
+    @include text-simple;
+    @include normal-font-size;
+    background: rgba(0, 131, 199, 0.1);
+    font-weight: 500;
+    height: 27px;
+    color: $blue;
+    word-break: break-word;
+    & > tr > th {
+      font-weight: 500;
+    }
+  }
+}
+
+.table td {
+  white-space: nowrap;
+}
+
+.table-responsive-xl {
+  border-radius: 6px;
+  overflow: auto;
+}
+
+table {
+  background: $white;
+  & > caption {
+    background: $white;
+  }
+}
+
+.token-item {
+  &__header {
+    display: flex;
+    align-items: center;
+  }
+
+  &__title {
+    @include text-simple;
+    @include normal-font-size;
+    margin-left: 5px;
+    flex-basis: 100%;
+  }
+
+  &__description {
+    @include text-simple;
+    @include normal-font-size;
+    font-size: 12px;
+    color: $black300;
+    margin-left: 20px;
+  }
+}
+
+.skeleton-table {
+  border-radius: 6px;
+  overflow: auto;
+  & > table {
+    & > thead > tr {
+      background: rgba(0, 131, 199, 0.1);
+      & > th {
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+      }
+    }
+    & > tbody > tr {
+      & > td {
+        vertical-align: middle;
+        border-top: 1px solid transparent;
+      }
+    }
+  }
+  & .table__titles  {
+    background-color: $white;
+    padding-top: 10px;
+    padding-bottom: 11px;
+  }
+}
+
+@media (max-width: 1199px) {
+  #transfers,
+  #blocks-table,
+  #transactions-table,
+  #transfers-table,
+  #address-transactions-table,
+  #contract-transactions-table,
+  #contract-internal-transactions-table,
+  #tokens-transfers-table,
+  #tokens-holders-table {
+    display: grid;
+    width: 100%;
+    max-width: 100%;
+    & > .table-responsive-xl > table {
+      position: relative;
+      overflow: auto;
+      width: 1160px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .table.b-table.b-table-stacked-md {
+    font-family: 'Inter', sans-serif;
+  }
+  .table.b-table.b-table-stacked-md > tbody > tr > [data-label]::before {
+    text-align: left !important;
+    font-size: 16px;
+    width: auto;
+  }
+  .table.b-table.b-table-stacked-md > tbody > tr > [data-label] > div {
+    font-size: 16px;
+  }
+  .table__row {
+    padding-bottom: 10px;
+    &:not(:last-child) {
+      border-bottom: 1px solid $black100;
+    }
+    &:not(:first-child) {
+      padding-top: 10px;
+    }
+  }
+  .table th, .table td {
+    padding: 0.75rem 0.75rem 0.75rem 20px;
+  }
+  .b-table-empty-row {
+    justify-content: center;
+  }
+
+  #tokens-holders-table {
+    & > .table-responsive-xl > table {
+      width: 100%;
+    }
+    .table td {
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  // stacked table first two columns as rows
+  #transfers,
+  #home-blocks,
+  #blocks-table, #transactions-table,
+  #transfers-table, #address-transactions-table,
+  #contract-transactions-table,
+  #contract-internal-transactions-table,
+  #tokens-transfers-table {
+
+    & > .table-responsive-xl {
+      overflow: auto;
+      position: static;
+    }
+    & > .table-responsive-xl > table {
+      width: 100%;
+    }
+
+    .skeleton-table > table > tbody > tr,.table.b-table.b-table-stacked-md > tbody > tr {
+      display: flex;
+      flex-direction: column;
+      flex-flow: wrap;
+    }
+
+    .skeleton-table > table > tbody > tr > td,.table.b-table.b-table-stacked-md > tbody > tr > td {
+      display: flex;
+      flex-direction: row;
+      flex-basis: 100%;
+
+      &:nth-of-type(1), &:nth-of-type(2) {
+        flex-direction: column;
+        max-width: 50%;
+        &:before {
+          white-space: nowrap;
+        }
+        & > div {
+          padding-left: 0;
+          white-space: nowrap;
+        }
+      }
+
+      &:nth-of-type(1) {
+        &:before {
+          color: $black300;
+          font-weight: 600;
+          margin-bottom: 5px;
+        }
+        & > div > a {
+          font-size: 20px;
+          font-weight: 400;
+        }
+      }
+
+      &:nth-of-type(2) {
+        align-items: flex-end;
+        &:before {
+          display: none;
+        }
+        & > div {
+          display: contents;
+          text-align: right !important;
+          color: $black300;
+        }
+      }
+    }
+
+  }
+}

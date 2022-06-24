@@ -1,10 +1,186 @@
 {
   "ui": {
+    "home": "Home",
     "txs": "Транзакции",
     "blocks": "Блоки",
+    "transfers": "View ERC-20 Transfers",
+    "tokens": "ERC20 Top Tokens",
+    "latestBlocks": "Latest Blocks",
+    "latestTxs": "Latest Transactions",
+    "allBlocks": "Show all blocks",
+    "allTxs": "Show all transactions",
+    "back": "Back",
+    "rights": "All rights reserved",
+    "timestamp": "Timestamp",
+    "terms": "Terms and conditions",
+    "privacy": "Privacy policy",
+    "loading": "Loading...",
+    "noData": "Нет данных",
     "locals": {
       "en": "EN",
       "ru": "RU"
+    },
+    "block": {
+      "noBlocks": "There are no blocks...",
+      "block": "Block",
+      "blockNumber": "Block Number",
+      "txsCount": "Transactions in the block",
+      "age": "Age",
+      "reward": "Block reward",
+      "txn": "Txn",
+      "gasUsed": "Gas Used",
+      "gasLimit": "Gas Limit",
+      "blockInfo": "Block info",
+      "inThisBlock": "in this block",
+      "size": "Size",
+      "hash": "Hash",
+      "bytes": "bytes"
+    },
+    "tx": {
+      "transaction": "Txn hash",
+      "transactionFull": "Transaction Hash",
+      "transactionSuccess": "Success",
+      "transactionFail": "Fail",
+      "from": "From",
+      "to": "To",
+      "noLogs": "There are no logs...",
+      "amount": "Amount",
+      "value": "Value",
+      "fee": "Txn Fee",
+      "feeFull": "Transaction Fee",
+      "txDetails": "Transaction Details",
+      "status": "Status",
+      "logs": "Transaction Receipt Event Logs",
+      "topics": "Topics",
+      "data": "Data",
+      "forBlock": "For Block",
+      "total": "A total of",
+      "found": "transactions found",
+      "noTxs": "There are no transactions...",
+      "gasUsed": "Gas Used by Transaction",
+      "gasPrice": "Цена газа",
+      "includedIntoBlock": "This transaction has been included into Block No #{n} and will be reflected in a shortwhile"
+    },
+    "forms": {
+      "searchPlaceholder": "Search by Address / Txn Hash / Block / Token",
+      "search": "Search",
+      "filterTypes": {
+        "all": "All filters",
+        "address": "Address",
+        "txnHash": "Txn Hash",
+        "block": "Block",
+        "token": "Token"
+      },
+      "filters": "All filters"
+    },
+    "token": {
+      "noTokens": "There are no tokens...",
+      "noTransfers": "There are no transfers...",
+      "noHolders": "There are no holders...",
+      "txs": "Transactions",
+      "tracker": "Token Tracker",
+      "token": "Token",
+      "volume": "Volume (24H)",
+      "holders": "Holders",
+      "method": "Method",
+      "quantity": "Quantity",
+      "rank": "Rank",
+      "address": "Address",
+      "percentage": "Percentage",
+      "transfers": "Transfers",
+      "info": "Info",
+      "contract": "Contract",
+      "overview": "Overview",
+      "logs": "Logs",
+      "tether": "Tether gives you the joint benefits of open blockchain technology and traditional currency by converting your cash into a stable digital currency equivalent.",
+      "market": "Market",
+      "capitalization": "Market Capitalization",
+      "supply": "Circulating Supply",
+      "name": "Name",
+      "deprecated": "Deprecated",
+      "balances": "Balances",
+      "balance": "Balance",
+      "input": "<input> (address)",
+      "query": "Query",
+      "summary": "Profile Summary",
+      "decimals": "Decimals",
+      "more": "More Info",
+      "creator": "ContractCreator",
+      "atTxn": "at txn",
+      "maxSupply": "Max Total Supply",
+      "placeholder": "Placeholder",
+      "internal": "Internal Txns",
+      "tokensTxns": "ERC-20 Token Txns",
+      "transfer": "Transfer",
+      "selectToken": "Select token",
+      "wusd": "WUSD"
+    },
+    "contract": {
+      "contract": "Контракт",
+      "read": "Прочитать контракт",
+      "write": "Записать на контракт",
+      "contractSourceCode": "Исходный код контракта",
+      "name": "Название контракта",
+      "compiler": "Версия компилятора",
+      "optimization": "Оптимизация включена",
+      "other": "Другие настройки",
+      "yes": "Да",
+      "no": "Нет",
+      "with": "с",
+      "runs": "проходами",
+      "default": "по умолчанию",
+      "abi": "ABI контракта",
+      "bytecode": "Байткод контракта",
+      "deployedBytecode": "Задеплоенный байткод",
+      "buttons": {
+        "read": "Прочитать",
+        "write": "Запись",
+        "connectWallet": "Подключить кошелек"
+      },
+      "method": "метод",
+      "response": "ответ",
+      "viewTransactions": "Перейти",
+      "tabs": {
+        "allTxs": "Транзакции",
+        "internalTxs": "Внутренние транз",
+        "tokensTxs": "Транзакции токенов",
+        "contract": "Контракт"
+      }
     }
+  },
+  "home": {
+    "title": "WorkQuest Chain Explorer"
+  },
+  "errors": {
+    "pageNotFound": "Страница не найдена",
+    "blockNotFound": "Блок не найден",
+    "transactionNotFound": "Транзакция не найдена",
+    "addressNotFound": "Адрес не найден",
+    "contractNotFound": "Контракт не найден",
+    "tokenNotFound": "Токен не найден",
+    "other": "Произошла ошибка",
+    "convertingToHex": "Ошибка конвертации"
+  },
+  "messages": {
+    "required": "The {_field_} field is required",
+    "isArray": "The {_field_} must be one value or multiple values separated"
+  },
+  "web3": {
+    "errors": {
+      "installMetamask": "Пожалуйста установите Metamask",
+      "networkMissing": "Не удается переключиться на подходящую сеть",
+      "connectAccount": "Не удается подключить Metamask",
+      "addNetwork": "Не удается добавить подходящую сеть",
+      "default": "Неизвестная ошибка"
+    }
+  },
+  "paginator": {
+    "page": "Стр.",
+    "of": "из",
+    "toFirstPage": "На первую страницу",
+    "toPreviousPage": "На предыдущюю страницу",
+    "toLastPage": "На последнюю страницу",
+    "toNextPage": "На следующую страницу"
   }
 }
+

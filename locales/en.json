@@ -1,20 +1,185 @@
 {
   "ui": {
+    "home": "Home",
     "txs": "Transactions",
     "blocks": "Blocks",
+    "transfers": "View ERC-20 Transfers",
+    "tokens": "ERC20 Top Tokens",
+    "latestBlocks": "Latest Blocks",
+    "latestTxs": "Latest Transactions",
+    "allBlocks": "Show all blocks",
+    "allTxs": "Show all transactions",
+    "back": "Back",
+    "rights": "All rights reserved",
+    "timestamp": "Timestamp",
+    "terms": "Terms and conditions",
+    "privacy": "Privacy policy",
+    "loading": "Loading...",
+    "noData": "No data",
     "locals": {
       "en": "EN",
       "ru": "RU"
     },
     "block": {
-      "height": "Height",
-      "txsCount": "Tx count",
-      "timestamp": "Timestamp"
+      "noBlocks": "There are no blocks...",
+      "block": "Block",
+      "blockNumber": "Block Number",
+      "txsCount": "Transactions in the block",
+      "age": "Age",
+      "reward": "Block reward",
+      "txn": "Txn",
+      "gasUsed": "Gas Used",
+      "gasLimit": "Gas Limit",
+      "blockInfo": "Block info",
+      "inThisBlock": "in this block",
+      "size": "Size",
+      "hash": "Hash",
+      "bytes": "bytes"
     },
     "tx": {
-      "hash": "Hash",
-      "from": "Sender",
-      "to": "Recipient"
+      "transaction": "Txn hash",
+      "transactionFull": "Transaction Hash",
+      "transactionSuccess": "Success",
+      "transactionFail": "Fail",
+      "from": "From",
+      "to": "To",
+      "noLogs": "There are no logs...",
+      "amount": "Amount",
+      "value": "Value",
+      "fee": "Txn Fee",
+      "feeFull": "Transaction Fee",
+      "txDetails": "Transaction Details",
+      "status": "Status",
+      "logs": "Transaction Receipt Event Logs",
+      "topics": "Topics",
+      "data": "Data",
+      "forBlock": "For Block",
+      "total": "A total of",
+      "found": "transactions found",
+      "noTxs": "There are no transactions...",
+      "gasUsed": "Gas Used by Transaction",
+      "gasPrice": "Gas Price",
+      "includedIntoBlock": "This transaction has been included into Block No #{n} and will be reflected in a shortwhile"
+    },
+    "forms": {
+      "searchPlaceholder": "Search by Address / Txn Hash / Block / Token",
+      "search": "Search",
+      "filterTypes": {
+        "all": "All filters",
+        "address": "Address",
+        "txnHash": "Txn Hash",
+        "block": "Block",
+        "token": "Token"
+      },
+      "filters": "All filters"
+    },
+    "token": {
+      "noTokens": "There are no tokens...",
+      "noTransfers": "There are no transfers...",
+      "noHolders": "There are no holders...",
+      "txs": "Transactions",
+      "tracker": "Token Tracker",
+      "token": "Token",
+      "volume": "Volume (24H)",
+      "holders": "Holders",
+      "method": "Method",
+      "quantity": "Quantity",
+      "rank": "Rank",
+      "address": "Address",
+      "percentage": "Percentage",
+      "transfers": "Transfers",
+      "info": "Info",
+      "contract": "Contract",
+      "overview": "Overview",
+      "logs": "Logs",
+      "tether": "Tether gives you the joint benefits of open blockchain technology and traditional currency by converting your cash into a stable digital currency equivalent.",
+      "market": "Market",
+      "capitalization": "Market Capitalization",
+      "supply": "Circulating Supply",
+      "name": "Name",
+      "deprecated": "Deprecated",
+      "balances": "Balances",
+      "balance": "Balance",
+      "input": "<input> (address)",
+      "query": "Query",
+      "summary": "Profile Summary",
+      "decimals": "Decimals",
+      "more": "More Info",
+      "creator": "ContractCreator",
+      "atTxn": "at txn",
+      "maxSupply": "Max Total Supply",
+      "placeholder": "Placeholder",
+      "internal": "Internal Txns",
+      "tokensTxns": "ERC-20 Token Txns",
+      "transfer": "Transfer",
+      "selectToken": "Select token",
+      "wusd": "WUSD"
+    },
+    "contract": {
+      "contract": "Contract",
+      "read": "Read contract",
+      "write": "Write contract",
+      "contractSourceCode": "Contract Source Code",
+      "name": "Contract Name",
+      "compiler": "Compiler Version",
+      "optimization": "Optimization Enabled",
+      "other": "Other Settings",
+      "yes": "Yes",
+      "no": "Yo",
+      "with": "with",
+      "runs": "runs",
+      "default": "default",
+      "abi": "Contract ABI",
+      "bytecode": "Contract Bytecode",
+      "deployedBytecode": "Deployed Bytecode",
+      "buttons": {
+        "read": "Query",
+        "write": "Write",
+        "connectWallet": "Connect wallet"
+      },
+      "method": "method",
+      "response": "response",
+      "viewTransactions": "View",
+      "tabs": {
+        "allTxs": "Transactions",
+        "internalTxs": "Internal Transactions",
+        "tokensTxs": "Tokens Transactions",
+        "contract": "Contract"
+      }
     }
+  },
+  "home": {
+    "title": "WorkQuest Chain Explorer"
+  },
+  "errors": {
+    "pageNotFound": "Page not found",
+    "blockNotFound": "Block not found",
+    "transactionNotFound": "Transaction not found",
+    "addressNotFound": "Address not found",
+    "contractNotFound": "Contract not found",
+    "tokenNotFound": "Token not found",
+    "other": "An error occurred",
+    "convertingToHex": "Conversion error"
+  },
+  "messages": {
+    "required": "The {_field_} field is required",
+    "isArray": "The {_field_} must be one value or multiple values separated"
+  },
+  "web3": {
+    "errors": {
+      "installMetamask": "Please install Metamask",
+      "networkMissing": "Unable switch to appropriate network",
+      "connectAccount": "Metamask is not connected",
+      "addNetwork": "Unable to add appropriate network",
+      "default": "Unknown error"
+    }
+  },
+  "paginator": {
+    "page": "Page",
+    "of": "of",
+    "toFirstPage": "To first page",
+    "toPreviousPage": "To previous page",
+    "toLastPage": "To last page",
+    "toNextPage": "To next page"
   }
- }
+}
