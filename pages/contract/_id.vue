@@ -124,7 +124,6 @@ export default {
       page: 1,
       limit: 10,
       offset: 0,
-      tabs: ['allTxs', 'internalTxs', 'tokensTxs', 'contract'],
       txs: [],
       tableBusy: false,
       allTxsId: 'allTxs',
@@ -148,6 +147,7 @@ export default {
       internalTransactionsCount: 'account/getInternalTransactionsCount',
       transactionWithTokensList: 'account/getTransactionWithTokensList',
       transactionWithTokensListCount: 'account/getTransactionWithTokensListCount',
+      accountInfo: 'account/getAccountInfo',
     }),
     totalPages() {
       if (this.activeTab === this.allTxsId) return this.setTotalPages(this.transactionsCount, this.limit);
@@ -315,6 +315,17 @@ export default {
     },
     isSortDesc() {
       return this.sortDirectionForTable === 'desc';
+    },
+    showContractInfo() {
+      return this.accountInfo?.smartContract;
+    },
+    tabs() {
+      return [
+        'allTxs',
+        'internalTxs',
+        'tokensTxs',
+        ...(this.showContractInfo ? ['contract'] : []),
+      ];
     },
   },
   watch: {
