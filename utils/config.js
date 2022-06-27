@@ -2,20 +2,20 @@
 
 export const NetworkData = new Map([
   ['MAIN', {
-    chainId: '0x0000001',
-    chainName: 'WorkQuest',
-    rpcUrls: ['https://dev-node-nyc3.workquest.co'],
+    chainId: '0x7D9',
+    chainName: 'WorkNet',
+    rpcUrls: ['https://mainnet-gate.workquest.co/'],
     nativeCurrency: {
       name: 'WQT',
       symbol: 'WQT',
       decimals: 18,
     },
-    blockExplorerUrls: ['https://dev-explorer.workquest.co'],
+    blockExplorerUrls: ['https://explorer.workquest.co'],
   }],
   ['TEST', {
     chainId: '0x7C7',
-    chainName: 'WorkQuest TEST',
-    rpcUrls: ['https://testnet-gate.workquest.co/rpc/'],
+    chainName: 'WorkNet TEST',
+    rpcUrls: ['https://testnet-gate.workquest.co/'],
     nativeCurrency: {
       name: 'WQT',
       symbol: 'WQT',
@@ -25,7 +25,7 @@ export const NetworkData = new Map([
   }],
   ['DEV', {
     chainId: '0x13488D0',
-    chainName: 'WorkQuest DEV',
+    chainName: 'WorkNet DEV',
     rpcUrls: ['https://dev-node-nyc3.workquest.co'],
     nativeCurrency: {
       name: 'WQT',
