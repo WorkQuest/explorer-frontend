@@ -37,6 +37,8 @@
       "bytes": "bytes"
     },
     "tx": {
+      "for": "For",
+      "tokensTransferred": "Tokens transferred",
       "transaction": "Txn hash",
       "transactionFull": "Transaction Hash",
       "transactionSuccess": "Success",
@@ -149,7 +151,7 @@
     }
   },
   "home": {
-    "title": "WorkQuest Chain Explorer"
+    "title": "WorkNet Chain Explorer"
   },
   "errors": {
     "pageNotFound": "Страница не найдена",
