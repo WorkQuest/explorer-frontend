@@ -161,7 +161,7 @@ export default {
               // TODO: need to integrate back
               from: item.from || 'wq1khck2m34qnnwgevz6cmksrm73duvgp2t6ddgyv',
               to: item.to || 'wq1khck2m34qnnwgevz6cmksrm73duvgp2t6ddgyv',
-              amount: new BigNumber(item.amount).shiftedBy(item.decimals || -18).toNumber(),
+              amount: new BigNumber(item.amount).shiftedBy(item.decimals || -18).toString(),
               token: item.token || 'WorkQuest Token',
               tokenAddress: item.tokenAddress || 'wq1l900z8g2786qn9fp3wetvlhepx70xqrcgemgtr',
               tokenIconUrl: item.tokenIconUrl || require('~/assets/img/tokens/empty-token.svg'),
@@ -176,7 +176,7 @@ export default {
           {
             class: 'columns__item_three-two',
             title: this.$t('ui.tx.gasPrice'),
-            info: new BigNumber(this.tx.gas_price).shiftedBy(-18).toNumber(),
+            info: new BigNumber(this.tx.gas_price).shiftedBy(-18).toString(),
           },
           {
             class: 'columns__item_four-one',
