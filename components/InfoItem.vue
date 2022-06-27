@@ -55,6 +55,44 @@
         icon-color="primary"
       />
     </p>
+    <div
+      v-else-if="!isInfoLoading && item === 'tokenTransfers' && info.length"
+      class="item__info tokens-transferred-wrapper"
+    >
+      <div
+        v-for="(row,i) in info"
+        :key="i"
+        class="tokens-transferred"
+      >
+        <span class="tokens-transferred__title">{{ $t('ui.tx.from') }}</span>
+        <nuxt-link
+          :to="{ path: '/address/'+row.from }"
+          class="tokens-transferred__value"
+        >
+          {{ row.from }}
+        </nuxt-link>
+        <span class="tokens-transferred__title">{{ $t('ui.tx.to') }}</span>
+        <nuxt-link
+          :to="{ path: '/address/'+row.to }"
+          class="tokens-transferred__value"
+        >
+          {{ row.to }}
+        </nuxt-link>
+        <span class="tokens-transferred__title">{{ $t('ui.tx.for') }}</span> <span class="tokens-transferred__value">{{ row.amount }}</span>
+        <nuxt-link
+          :to="{path: '/tokens/'+row.tokenAddress }"
+          class="tokens-transferred__link"
+        >
+          <img
+            :src="row.tokenIconUrl"
+            :alt="row.token"
+            width="20px"
+            height="20px"
+          >
+          {{ row.token }}
+        </nuxt-link>
+      </div>
+    </div>
     <p
       v-else-if="!isInfoLoading && item === 'status'"
       class="item__info status"
@@ -97,7 +135,7 @@ export default {
       default: '',
     },
     info: {
-      type: [String, Number],
+      type: [String, Number, Array],
       default: '',
     },
     note: {
@@ -123,6 +161,9 @@ export default {
 <style lang="scss" scoped>
 .btn {
   &__copy {
+    position: absolute;
+    margin: -5px 0 0 10px;
+
     height: 35px;
     width: 35px;
     align-items: center;
@@ -155,7 +196,6 @@ export default {
     line-height: 130%;
     &_blue {
       color: $blue;
-      font-size: 18px;
     }
 
   }
@@ -198,4 +238,73 @@ export default {
   font-size: 20px;
   cursor: pointer;
 }
+
+.tokens-transferred {
+  display: flex;
+  margin-left: 25px;
+
+  &__title {
+    margin-right: 5px;
+    font-weight: 500;
+  }
+  &__value {
+    max-width: fit-content;
+    width: 150px;
+    margin-right: 15px;
+
+    font-size: 18px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: unset;
+    white-space: nowrap;
+  }
+  &__link {
+    display: flex;
+    & img {
+      width: 23px;
+      height: 23px;
+      margin-right: 5px;
+    }
+  }
+}
+
+@include _1024 {
+  .tokens-transferred {
+    margin-top: 15px;
+  }
+
+  .item {
+    &__link {
+      font-size: 17px;
+    }
+  }
+}
+
+@include _991 {
+  .item {
+    &__link {
+      font-size: 20px;
+    }
+  }
+}
+
+@include _575 {
+  .tokens-transferred {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 10px;
+
+    &__value {
+      width: 100%;
+    }
+
+    &__link {
+      grid-column: span 2;
+      padding-bottom: 10px;
+      border-bottom: 1px solid $black100;
+    }
+  }
+}
+
 </style>

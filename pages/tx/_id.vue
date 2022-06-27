@@ -155,6 +155,20 @@ export default {
             item: 'address',
           },
           {
+            class: this.tx.tokenTransfers?.length ? 'columns__item_six' : 'columns__item_hidden',
+            title: this.$t('ui.tx.tokensTransferred'),
+            info: this.tx.tokenTransfers.map((item) => ({
+              // TODO: need to integrate back
+              from: item.from || 'wq1khck2m34qnnwgevz6cmksrm73duvgp2t6ddgyv',
+              to: item.to || 'wq1khck2m34qnnwgevz6cmksrm73duvgp2t6ddgyv',
+              amount: new BigNumber(item.amount).shiftedBy(item.decimals || -18).toNumber(),
+              token: item.token || 'WorkQuest Token',
+              tokenAddress: item.tokenAddress || 'wq1l900z8g2786qn9fp3wetvlhepx70xqrcgemgtr',
+              tokenIconUrl: item.tokenIconUrl || require('~/assets/img/tokens/empty-token.svg'),
+            })),
+            item: 'tokenTransfers',
+          },
+          {
             class: 'columns__item_three-one',
             title: this.$t('ui.tx.value'),
             info: this.ConvertFromDecimals(this.tx.value, this.decimals),
@@ -162,7 +176,7 @@ export default {
           {
             class: 'columns__item_three-two',
             title: this.$t('ui.tx.gasPrice'),
-            info: this.NumberFormat(this.tx.gas_price),
+            info: new BigNumber(this.tx.gas_price).shiftedBy(-18).toNumber(),
           },
           {
             class: 'columns__item_four-one',
@@ -342,6 +356,10 @@ export default {
   grid-gap: 20px;
 
   &__item {
+    &_hidden {
+      display: none !important;
+    }
+
     &_six {
       grid-column: 1 / span 6;
     }
@@ -481,28 +499,34 @@ export default {
     }
 
     &:nth-child(7) {
-      // value
+      // tokens transferred
       order: 7;
+      display: grid;
     }
 
     &:nth-child(8) {
-      // gas price
-      order: 9;
+      // value
+      order: 8
     }
 
     &:nth-child(9) {
-      // gas limit
+      // gas price
       order: 10;
     }
 
     &:nth-child(10) {
-      // gas used
+      // gas limit
       order: 11;
     }
 
     &:nth-child(11) {
+      // gas used
+      order: 12;
+    }
+
+    &:nth-child(12) {
       // fee
-      order: 8;
+      order: 9;
       padding-bottom: 10px;
       border-bottom: 1px solid $black100;
     }
