@@ -251,6 +251,7 @@ export default {
     max-width: fit-content;
     width: 150px;
     margin-right: 15px;
+    margin-bottom: 10px;
 
     font-size: 18px;
 
@@ -258,6 +259,7 @@ export default {
     text-overflow: ellipsis;
     word-break: unset;
     white-space: nowrap;
+    text-decoration: none;
 
     &_blue {
       color: $blue;
@@ -265,6 +267,7 @@ export default {
   }
   &__link {
     display: flex;
+    text-decoration: none;
     color: $blue;
     & img {
       width: 23px;
