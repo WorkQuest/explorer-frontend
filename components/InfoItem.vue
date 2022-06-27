@@ -67,14 +67,14 @@
         <span class="tokens-transferred__title">{{ $t('ui.tx.from') }}</span>
         <nuxt-link
           :to="{ path: '/address/'+row.from }"
-          class="tokens-transferred__value"
+          class="tokens-transferred__value tokens-transferred__value_blue"
         >
           {{ row.from }}
         </nuxt-link>
         <span class="tokens-transferred__title">{{ $t('ui.tx.to') }}</span>
         <nuxt-link
           :to="{ path: '/address/'+row.to }"
-          class="tokens-transferred__value"
+          class="tokens-transferred__value tokens-transferred__value_blue"
         >
           {{ row.to }}
         </nuxt-link>
@@ -258,9 +258,14 @@ export default {
     text-overflow: ellipsis;
     word-break: unset;
     white-space: nowrap;
+
+    &_blue {
+      color: $blue;
+    }
   }
   &__link {
     display: flex;
+    color: $blue;
     & img {
       width: 23px;
       height: 23px;
