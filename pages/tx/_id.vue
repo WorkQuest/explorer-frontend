@@ -450,7 +450,6 @@ export default {
     }
 
     &:nth-child(1) .item__info {
-      color: $blue;
       font-size: 20px;
       font-weight: 400;
       align-self: flex-start;
