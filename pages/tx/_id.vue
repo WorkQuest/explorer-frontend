@@ -158,13 +158,12 @@ export default {
             class: this.tx.tokenTransfers?.length ? 'columns__item_six' : 'columns__item_hidden',
             title: this.$t('ui.tx.tokensTransferred'),
             info: this.tx.tokenTransfers.map((item) => ({
-              // TODO: need to integrate back
-              from: item.from || 'wq1khck2m34qnnwgevz6cmksrm73duvgp2t6ddgyv',
-              to: item.to || 'wq1khck2m34qnnwgevz6cmksrm73duvgp2t6ddgyv',
+              from: item.from || item.fromAddress.smartContract ? item.fromAddress.smartContract.address_hash.hex : item.fromAddress.hash.bech32,
+              to: item.to || item.toAddress.smartContract ? item.toAddress.smartContract.address_hash.hex : item.toAddress.hash.bech32,
               amount: new BigNumber(item.amount).shiftedBy(item.decimals || -18).toString(),
-              token: item.token || 'WorkQuest Token',
-              tokenAddress: item.tokenAddress || 'wq1l900z8g2786qn9fp3wetvlhepx70xqrcgemgtr',
-              tokenIconUrl: item.tokenIconUrl || require('~/assets/img/tokens/empty-token.svg'),
+              token: item.token || item.tokenContractAddress.token.name,
+              tokenAddress: item.tokenAddress || item.tokenContractAddress.hash.hex,
+              tokenIconUrl: item.tokenIconUrl || item.tokenContractAddress.token.metadata.iconUrl,
             })),
             item: 'tokenTransfers',
           },
