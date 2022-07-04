@@ -259,9 +259,7 @@ export default {
     width: 150px;
     margin-right: 15px;
     margin-bottom: 10px;
-
     font-size: 18px;
-
     overflow: hidden;
     text-overflow: ellipsis;
     word-break: unset;
