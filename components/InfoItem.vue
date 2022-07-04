@@ -214,7 +214,6 @@ export default {
     @include link;
     font-size: 18px;
     color: $blue;
-
     max-width: fit-content;
     overflow: hidden;
     text-overflow: ellipsis;
