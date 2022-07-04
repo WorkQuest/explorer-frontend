@@ -214,6 +214,13 @@ export default {
     @include link;
     font-size: 18px;
     color: $blue;
+
+    max-width: fit-content;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: unset;
+    white-space: nowrap;
+    text-decoration: none;
   }
 }
 
@@ -297,7 +304,7 @@ export default {
   }
 }
 
-@include _575 {
+@include _767 {
   .tokens-transferred {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -315,4 +322,54 @@ export default {
   }
 }
 
+@include _575 {
+  .item {
+    &__link {
+      display: block;
+      max-width: 400px;
+      width: 100%;
+      font-size: 18px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: unset;
+      white-space: nowrap;
+    }
+
+    &__info {
+      &_blue {
+        display: flex;
+      }
+    }
+  }
+
+  .btn {
+    &__copy {
+      right: 0;
+    }
+  }
+}
+
+@include _480 {
+  .item {
+    &__link {
+      max-width: 300px;
+    }
+  }
+}
+
+@include _380 {
+  .item {
+    &__link {
+      max-width: 210px;
+    }
+  }
+}
+
+@include _350 {
+  .item {
+    &__link {
+      max-width: 180px;
+    }
+  }
+}
 </style>
