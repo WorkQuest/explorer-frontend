@@ -158,8 +158,8 @@ export default {
             class: this.tx.tokenTransfers?.length ? 'columns__item_six' : 'columns__item_hidden',
             title: this.$t('ui.tx.tokensTransferred'),
             info: this.tx.tokenTransfers.map((item) => ({
-              from: item.fromAddress.smartContract ? item.fromAddress.smartContract.address_hash.hex : item.fromAddress.hash.bech32,
-              to: item.toAddress.smartContract ? item.toAddress.smartContract.address_hash.hex : item.toAddress.hash.bech32,
+              from: item.fromAddress.smartContract ? item.fromAddress?.smartContract?.address_hash.hex : item.fromAddress.hash.bech32,
+              to: item.toAddress.smartContract ? item.toAddress?.smartContract?.address_hash.hex : item.toAddress.hash.bech32,
               amount: new BigNumber(item.amount).shiftedBy(item.decimals || -18).toString(),
               token: item.tokenContractAddress.token.name,
               tokenAddress: item.tokenContractAddress.hash.hex,

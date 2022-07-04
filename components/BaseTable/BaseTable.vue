@@ -271,4 +271,18 @@ export default {
 .icon-error {
   color: $red;
 }
+
+@include _991 {
+  .token-item__description {
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@include _767 {
+  .token-item__description {
+    max-width: unset;
+  }
+}
 </style>
