@@ -158,6 +158,7 @@
         <div class="token-item__header">
           <token-image
             v-if="type === 'tokens'"
+            class="token-symbol"
             :link="el.value.iconUrl"
             :symbol="el.value.symbol"
           />
@@ -272,17 +273,28 @@ export default {
   color: $red;
 }
 
-@include _991 {
-  .token-item__description {
-    max-width: 400px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.token-item {
+  &__description {
+    white-space: initial;
+    word-break: break-word;
+  }
+
+  &__header {
+    white-space: initial;
+    word-break: break-word;
   }
 }
 
-@include _769 {
-  .token-item__description {
-    max-width: unset;
+.token-symbol {
+  position: relative;
+  top: 3px;
+}
+
+@include _575 {
+  .token-item {
+    &__header {
+      align-items: flex-start;
+    }
   }
 }
 </style>

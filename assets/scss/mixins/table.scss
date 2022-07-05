@@ -37,6 +37,7 @@
     font-weight: 500;
     height: 27px;
     color: $blue;
+    white-space: pre;
     word-break: break-word;
     & > tr > th {
       font-weight: 500;
@@ -152,6 +153,13 @@ table {
   .table th, .table td {
     padding: 0.75rem 0.75rem 0.75rem 20px;
   }
+
+  @include _480 {
+    .table th, .table td {
+      padding: 0.50rem 0.50rem 10px;
+    }
+  }
+
   .b-table-empty-row {
     justify-content: center;
   }
