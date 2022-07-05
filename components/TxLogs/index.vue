@@ -158,7 +158,6 @@ export default {
   }
   &__number {
     @include text-simple;
-    color: $blue;
     margin-bottom: 5px;
     overflow-wrap: anywhere;
   }
