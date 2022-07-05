@@ -280,7 +280,7 @@ export default {
   }
 }
 
-@include _767 {
+@include _769 {
   .token-item__description {
     max-width: unset;
   }

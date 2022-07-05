@@ -281,18 +281,6 @@ export default {
   }
 }
 
-@include _1024 {
-  .tokens-transferred {
-    margin-top: 15px;
-  }
-
-  .item {
-    &__link {
-      font-size: 17px;
-    }
-  }
-}
-
 @include _991 {
   .item {
     &__link {
@@ -301,11 +289,12 @@ export default {
   }
 }
 
-@include _767 {
+@include _769 {
   .tokens-transferred {
     display: grid;
     grid-template-columns: auto 1fr;
     grid-gap: 10px;
+    margin-top: 15px;
 
     &__value {
       width: 100%;
