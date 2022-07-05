@@ -158,13 +158,12 @@ export default {
             class: this.tx.tokenTransfers?.length ? 'columns__item_six' : 'columns__item_hidden',
             title: this.$t('ui.tx.tokensTransferred'),
             info: this.tx.tokenTransfers.map((item) => ({
-              // TODO: need to integrate back
-              from: item.from || 'wq1khck2m34qnnwgevz6cmksrm73duvgp2t6ddgyv',
-              to: item.to || 'wq1khck2m34qnnwgevz6cmksrm73duvgp2t6ddgyv',
+              from: item.fromAddress.smartContract ? item.fromAddress?.smartContract?.address_hash.hex : item.fromAddress.hash.bech32,
+              to: item.toAddress.smartContract ? item.toAddress?.smartContract?.address_hash.hex : item.toAddress.hash.bech32,
               amount: new BigNumber(item.amount).shiftedBy(item.decimals || -18).toString(),
-              token: item.token || 'WorkQuest Token',
-              tokenAddress: item.tokenAddress || 'wq1l900z8g2786qn9fp3wetvlhepx70xqrcgemgtr',
-              tokenIconUrl: item.tokenIconUrl || require('~/assets/img/tokens/empty-token.svg'),
+              token: item.tokenContractAddress.token.name,
+              tokenAddress: item.tokenContractAddress.hash.hex,
+              tokenIconUrl: item.tokenContractAddress.token.metadata.iconUrl || require('~/assets/img/tokens/empty-token.svg'),
             })),
             item: 'tokenTransfers',
           },
@@ -291,6 +290,7 @@ export default {
 }
 
 .txs {
+  border-radius: 6px;
   animation: show 1s 1;
   @include container;
 
@@ -450,7 +450,6 @@ export default {
     }
 
     &:nth-child(1) .item__info {
-      color: $blue;
       font-size: 20px;
       font-weight: 400;
       align-self: flex-start;
@@ -541,6 +540,56 @@ export default {
   ::v-deep .item {
     &__info_blue {
       font-size: 18px;
+    }
+  }
+}
+
+@include _575 {
+  .columns {
+    &__item {
+      &_three {
+        &-one {
+          max-width: 500px;
+        }
+        &-two {
+          max-width: 500px;
+        }
+      }
+    }
+  }
+}
+
+@include _480 {
+  .columns {
+    &__item {
+      &_three {
+        &-one {
+          max-width: 370px;
+        }
+        &-two {
+          max-width: 370px;
+        }
+      }
+    }
+  }
+}
+
+@include _380 {
+  .columns {
+    &__item {
+      &_three {
+        &-one {
+          max-width: 300px;
+        }
+        &-two {
+          max-width: 300px;
+        }
+      }
+    }
+  }
+  .txs {
+    &__info {
+      padding: 5px;
     }
   }
 }

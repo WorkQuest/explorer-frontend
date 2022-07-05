@@ -214,6 +214,12 @@ export default {
     @include link;
     font-size: 18px;
     color: $blue;
+    max-width: fit-content;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: unset;
+    white-space: nowrap;
+    text-decoration: none;
   }
 }
 
@@ -252,9 +258,7 @@ export default {
     width: 150px;
     margin-right: 15px;
     margin-bottom: 10px;
-
     font-size: 18px;
-
     overflow: hidden;
     text-overflow: ellipsis;
     word-break: unset;
@@ -277,18 +281,6 @@ export default {
   }
 }
 
-@include _1024 {
-  .tokens-transferred {
-    margin-top: 15px;
-  }
-
-  .item {
-    &__link {
-      font-size: 17px;
-    }
-  }
-}
-
 @include _991 {
   .item {
     &__link {
@@ -297,11 +289,12 @@ export default {
   }
 }
 
-@include _575 {
+@include _769 {
   .tokens-transferred {
     display: grid;
     grid-template-columns: auto 1fr;
     grid-gap: 10px;
+    margin-top: 15px;
 
     &__value {
       width: 100%;
@@ -315,4 +308,54 @@ export default {
   }
 }
 
+@include _575 {
+  .item {
+    &__link {
+      display: block;
+      max-width: 400px;
+      width: 100%;
+      font-size: 18px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: unset;
+      white-space: nowrap;
+    }
+
+    &__info {
+      &_blue {
+        display: flex;
+      }
+    }
+  }
+
+  .btn {
+    &__copy {
+      right: 0;
+    }
+  }
+}
+
+@include _480 {
+  .item {
+    &__link {
+      max-width: 300px;
+    }
+  }
+}
+
+@include _380 {
+  .item {
+    &__link {
+      max-width: 210px;
+    }
+  }
+}
+
+@include _350 {
+  .item {
+    &__link {
+      max-width: 180px;
+    }
+  }
+}
 </style>
