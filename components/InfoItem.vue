@@ -191,7 +191,7 @@ export default {
 
   &__info {
     @include text-simple;
-    word-break: break-all;
+    word-break: break-word;
     font-size: 18px;
     line-height: 130%;
     &_blue {

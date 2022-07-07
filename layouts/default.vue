@@ -612,6 +612,10 @@ export default {
       font-size: 17px;
       white-space: nowrap;
     }
+
+    &__left {
+      grid-gap: 10px;
+    }
   }
 }
 

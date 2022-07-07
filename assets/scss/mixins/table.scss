@@ -241,3 +241,15 @@ table {
 
   }
 }
+
+@media (max-width: 380px) {
+  .table {
+    &__titles {
+      padding: 0 10px;
+    }
+
+    &__link {
+      width: 175px !important;
+    }
+  }
+}

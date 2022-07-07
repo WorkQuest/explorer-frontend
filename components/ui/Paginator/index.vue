@@ -167,4 +167,12 @@ export default {
     }
   }
 }
+
+@include _380 {
+  .paginator {
+    &__input {
+      min-width: 120px;
+    }
+  }
+}
 </style>
