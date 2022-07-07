@@ -90,6 +90,7 @@ export default {
       isTxPending: false,
       pendingToBlock: null,
       updateTimer: null,
+      currentPrice: null,
     };
   },
   computed: {
@@ -170,12 +171,12 @@ export default {
           {
             class: 'columns__item_three-one',
             title: this.$t('ui.tx.value'),
-            info: this.ConvertFromDecimals(this.tx.value, this.decimals),
+            info: `${this.ConvertFromDecimals(this.tx.value, this.decimals)} ${this.symbol} ($ ${this.convertNativeToDollar(this.ConvertFromDecimals(this.tx.value, this.decimals))})`,
           },
           {
             class: 'columns__item_three-two',
-            title: this.$t('ui.tx.gasPrice'),
-            info: new BigNumber(this.tx.gas_price).shiftedBy(-18).toString(),
+            title: this.$t('ui.tx.feeFull'),
+            info: `${new BigNumber(this.fee).shiftedBy(-18).toString()} ${this.symbol} ($ ${this.convertNativeToDollar(new BigNumber(this.fee).shiftedBy(-18).toString())})`,
           },
           {
             class: 'columns__item_four-one',
@@ -189,8 +190,8 @@ export default {
           },
           {
             class: 'columns__item_four-three',
-            title: this.$t('ui.tx.feeFull'),
-            info: `${new BigNumber(this.fee).shiftedBy(-18).toString()} ${this.symbol}`,
+            title: this.$t('ui.tx.gasPrice'),
+            info: `${new BigNumber(this.tx.gas_price).shiftedBy(-18).toString()} ${this.symbol} (${new BigNumber(this.tx.gas_price).shiftedBy(-9).toString()} Gwei)`,
           },
         ];
       }
@@ -241,6 +242,8 @@ export default {
     this.timer = setInterval(() => {
       this.time = Date.now();
     }, this.minute);
+
+    await this.price();
   },
   beforeDestroy() {
     clearInterval(Number(this.updateTimer));
@@ -248,6 +251,14 @@ export default {
     this.$store.commit('tx/resetTxsByHash');
   },
   methods: {
+    convertNativeToDollar(value) {
+      return (value * this.currentPrice).toFixed(3);
+    },
+    async price() {
+      const prices = await this.$store.dispatch('tokens/getTokenPrices');
+      const { price } = prices.find((el) => el.symbol === this.symbol);
+      this.currentPrice = +new BigNumber(price).shiftedBy(-this.decimals).toFixed(3).toString();
+    },
     onClick(tab) {
       this.activeTab = tab;
       this.$router.push({ hash: `#${tab}` });
@@ -410,18 +421,62 @@ export default {
   margin-right: 12px;
 }
 
-@include _991 {
+@include _1024 {
   .txs {
     &__info {
       padding: 16px;
     }
   }
+
   .columns {
     display: flex;
     flex-direction: column;
     position: relative;
   }
 
+  ::v-deep .item {
+    &:nth-child(1) .item__header {
+      margin-bottom: 10px;
+    }
+    &__header {
+      margin-right: 10px;
+      margin-bottom: 0;
+      align-self: flex-start;
+    }
+
+    &:nth-child(2) .item__info {
+      position: absolute;
+      right: 0;
+      top: 4px;
+      color: $black300;
+      font-size: 14px;
+    }
+    &:nth-child(2) {
+      // timestamp
+      margin-bottom: -25px;
+    }
+
+    &:nth-child(2) .item__header {
+      display: none;
+    }
+
+    &:nth-child(2) .item__note {
+      display: none;
+    }
+    &:nth-child(3), &:nth-child(4), &:nth-child(5), &:nth-child(6), &:nth-child(8), &:nth-child(9), &:nth-child(10), &:nth-child(11), &:nth-child(12) {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0;
+    }
+    &:nth-child(9) {
+      // gas price
+      padding-bottom: 15px;
+      border-bottom: 1px solid $black100;
+    }
+  }
+}
+
+@include _991 {
   ::v-deep .item {
     display: flex;
     align-items: center;
@@ -445,12 +500,10 @@ export default {
     }
 
     &:nth-child(1) .item__header {
-      margin-bottom: 5px;
-      color: $black300;
+      margin-bottom: 10px;
     }
 
     &:nth-child(1) .item__info {
-      font-size: 20px;
       font-weight: 400;
       align-self: flex-start;
     }
@@ -458,23 +511,6 @@ export default {
     &:nth-child(2) {
       // timestamp
       order: 2;
-      margin-bottom: -25px;
-    }
-
-    &:nth-child(2) .item__info {
-      position: absolute;
-      right: 0;
-      top: 4px;
-      color: $black300;
-      font-size: 14px;
-    }
-
-    &:nth-child(2) .item__header {
-      display: none;
-    }
-
-    &:nth-child(2) .item__note {
-      display: none;
     }
 
     &:nth-child(3) {
@@ -510,24 +546,22 @@ export default {
 
     &:nth-child(9) {
       // gas price
-      order: 10;
+      order: 9;
     }
 
     &:nth-child(10) {
       // gas limit
-      order: 11;
+      order: 10;
     }
 
     &:nth-child(11) {
       // gas used
-      order: 12;
+      order: 11;
     }
 
     &:nth-child(12) {
       // fee
-      order: 9;
-      padding-bottom: 10px;
-      border-bottom: 1px solid $black100;
+      order: 12;
     }
   }
 }
