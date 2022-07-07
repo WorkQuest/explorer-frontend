@@ -283,14 +283,6 @@ export default {
   }
 }
 
-@include _991 {
-  .item {
-    &__link {
-      font-size: 20px;
-    }
-  }
-}
-
 @include _769 {
   .tokens-transferred {
     display: grid;
