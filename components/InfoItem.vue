@@ -252,6 +252,7 @@ export default {
   &__title {
     margin-right: 5px;
     font-weight: 500;
+    white-space: pre;
   }
   &__value {
     max-width: fit-content;
@@ -273,18 +274,11 @@ export default {
     display: flex;
     text-decoration: none;
     color: $blue;
+    word-break: break-word;
     & img {
       width: 23px;
       height: 23px;
       margin-right: 5px;
-    }
-  }
-}
-
-@include _991 {
-  .item {
-    &__link {
-      font-size: 20px;
     }
   }
 }

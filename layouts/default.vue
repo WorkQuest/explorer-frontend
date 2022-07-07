@@ -619,6 +619,14 @@ export default {
   }
 }
 
+@include _769 {
+  .header {
+    &__left {
+      grid-gap: 15px;
+    }
+  }
+}
+
 @include _767 {
   .header {
     z-index: 5;
