@@ -612,13 +612,9 @@ export default {
       font-size: 17px;
       white-space: nowrap;
     }
-  }
-}
 
-@include _769 {
-  .header {
     &__left {
-      grid-gap: 15px;
+      grid-gap: 10px;
     }
   }
 }
