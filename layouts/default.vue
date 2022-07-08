@@ -41,6 +41,34 @@
             </div>
             <div class="header__right">
               <button
+                class="header__button header__button_network"
+                @click="showNetwork()"
+              >
+                {{ currentNetwork }}
+                <span class="icon-caret_down" />
+                <transition name="fade">
+                  <div
+                    v-if="isSHowNetwork"
+                    class="locale"
+                  >
+                    <div
+                      v-for="(item, i) in networks"
+                      :key="`${i}-locale`"
+                      class="locale__container"
+                    >
+                      <div
+                        class="locale__items"
+                        @click="setNetwork(item)"
+                      >
+                        <div class="locale__text">
+                          {{ item }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </transition>
+              </button>
+              <button
                 class="header__button header__button_locale"
                 @click="showLocale()"
               >
@@ -174,6 +202,12 @@ export default {
       isNotFlexContainer: true,
       currentLocale: '',
       locales: [],
+      isSHowNetwork: false,
+      networks: {
+        mainnet: 'MainNet',
+        testnet: 'TestNet',
+      },
+      currentNetwork: '',
     };
   },
   computed: {
@@ -222,6 +256,7 @@ export default {
     this.locales = this.$i18n.locales;
     this.$moment.locale(this.currentLocale);
     document.documentElement.setAttribute('lang', this.currentLocale);
+    this.currentNetwork = process.env.PRODUCTION === 'TEST' ? this.networks.testnet : this.networks.mainnet;
   },
   methods: {
     toRoute(path) {
@@ -250,6 +285,14 @@ export default {
     showLocale() {
       this.closeAnother('locale');
       this.isShowLocale = !this.isShowLocale;
+    },
+    showNetwork() {
+      this.isSHowNetwork = !this.isSHowNetwork;
+    },
+    setNetwork(item) {
+      this.currentNetwork = item;
+      const partOfDomen = item === 'MainNet' ? '' : 'testnet-';
+      window.open(`https://${partOfDomen}explorer.workquest.co`, '_self');
     },
     changeLocale() {
       this.closeAnother('locale');
@@ -435,7 +478,16 @@ export default {
     }
 
     &_locale {
-      width: 86px;
+       width: 86px;
+       height: 46px;
+
+       span {
+         padding-left: 3px;
+       }
+     }
+
+    &_network {
+      width: 100px;
       height: 46px;
 
       span {
@@ -452,8 +504,8 @@ export default {
 
   &__right {
     display: grid;
-    grid-template-columns: repeat(2, auto);
-    grid-gap: 10px;
+    grid-template-columns: 1fr max-content;
+    column-gap: 10px;
     align-items: center;
   }
 
@@ -570,30 +622,35 @@ export default {
     }
   }
   .header {
-    &__right {
-      grid-gap: 0;
-    }
-
     &__button {
       &_profile {
         display: none;
       }
+    }
+
+    &__links {
+      grid-gap: 15px;
+    }
+  }
+}
+
+@include _1024 {
+  .header {
+    &__text {
+      display: none;
     }
   }
 }
 
 @include _991 {
   .header {
-    &__text {
-      display: none;
-    }
-
     &__btn {
       display: none !important;
     }
 
     &__right {
       grid-gap: 0;
+      grid-template-columns: 1fr 1fr max-content;
     }
 
     &__logo {
@@ -605,6 +662,10 @@ export default {
 
       span {
         font-size: 19px;
+      }
+
+      &_mobile {
+        display: block;
       }
     }
 
@@ -619,6 +680,48 @@ export default {
 
     &__left {
       grid-gap: 10px;
+      display: none;
+    }
+
+    &__button_menu {
+      display: flex;
+    }
+
+    &__mobile {
+      z-index: 2;
+
+      &_visible {
+        display: block;
+      }
+    }
+
+    &__left {
+      display: none;
+
+      &_mobile {
+        display: inline-block;
+        background: $white;
+        padding: 20px;
+        height: 100vh;
+        width: 100vw;
+        position: absolute;
+        left: 0;
+        top: 72px;
+      }
+    }
+
+    &__links {
+      flex-direction: column;
+      align-items: flex-start;
+
+      & > span {
+        width: 100%;
+
+        &:nth-child(3) {
+          border-bottom: 1px solid $black100;
+          padding-bottom: 10px;
+        }
+      }
     }
   }
 }
