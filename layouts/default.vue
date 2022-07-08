@@ -527,12 +527,12 @@ export default {
 .footer {
   @include container;
   padding: 25px 0;
+  max-width: 1160px;
   margin-top: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-top: 1px solid $black100;
-
   &_mobile {
     display: none;
   }
@@ -560,6 +560,10 @@ export default {
 }
 
 @include _1199 {
+  .footer {
+    padding: 25px 20px;
+  }
+
   .ctm-menu {
     &__toggle {
       display: flex;
@@ -684,6 +688,9 @@ export default {
     display: flex;
     justify-content: space-between;
     padding: 25px 15px;
+    &__left, &__right {
+      flex-wrap: wrap;
+    }
   }
   .hidden {
     overflow: hidden;
@@ -759,6 +766,18 @@ export default {
 @include _380 {
   .notify {
     min-width: 250px;
+  }
+}
+
+@include _350 {
+  .footer {
+    flex-direction: column;
+    padding: 25px 10px;
+    grid-gap: 15px;
+    &__left, &__right {
+      flex-direction: row;
+      flex-wrap: nowrap;
+    }
   }
 }
 </style>
