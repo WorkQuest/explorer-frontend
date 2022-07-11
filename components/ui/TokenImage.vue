@@ -77,7 +77,6 @@ export default {
 
 <style scoped lang="scss">
 .image {
-  //border-radius: 50%;
   overflow: hidden;
   object-fit: contain;
   &__small {
