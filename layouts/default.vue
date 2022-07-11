@@ -57,7 +57,7 @@
                       class="locale__container"
                     >
                       <div
-                        class="locale__items"
+                        class="locale__items networks"
                         @click="setNetwork(item)"
                       >
                         <div class="locale__text">
@@ -338,6 +338,7 @@ export default {
       this.isShowNotify = false;
       this.isShowAdditionalMenu = false;
       this.isShowLocale = false;
+      this.isSHowNetwork = false;
     },
     setLocale(item) {
       this.currentLocale = item;
@@ -487,7 +488,7 @@ export default {
      }
 
     &_network {
-      width: 100px;
+      width: 110px;
       height: 46px;
 
       span {
@@ -547,6 +548,10 @@ export default {
     padding: 10px 15px;
     display: grid;
     grid-template-columns: 1fr 1fr;
+  }
+
+  & .networks {
+    grid-template-columns: 80px;
   }
 
   &__item {
@@ -880,6 +885,12 @@ export default {
     &__left, &__right {
       flex-direction: row;
       flex-wrap: nowrap;
+    }
+  }
+
+  .header {
+    &__right {
+      grid-template-columns: 1fr max-content max-content;
     }
   }
 }
