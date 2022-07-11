@@ -41,7 +41,7 @@ export default {
   },
   data() {
     return {
-      defaultLink: 'tokens/empty-token.svg',
+      defaultLink: 'tokens/logo_gray.svg',
       iconSizes: {
         small: 15,
         big: 30,
@@ -77,12 +77,12 @@ export default {
 
 <style scoped lang="scss">
 .image {
-  border-radius: 50%;
+  //border-radius: 50%;
   overflow: hidden;
-  object-fit: cover;
+  object-fit: contain;
   &__small {
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
   }
   &__big {
     width: 30px;

@@ -164,7 +164,7 @@ export default {
               amount: new BigNumber(item.amount).shiftedBy(item.decimals || -18).toString(),
               token: item.tokenContractAddress.token.name,
               tokenAddress: item.tokenContractAddress.hash.hex,
-              tokenIconUrl: item.tokenContractAddress.token.metadata.iconUrl || require('~/assets/img/tokens/empty-token.svg'),
+              tokenIconUrl: item.tokenContractAddress.token.metadata.iconUrl || require('~/assets/img/tokens/logo_gray.svg'),
             })),
             item: 'tokenTransfers',
           },
