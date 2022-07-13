@@ -171,12 +171,12 @@ export default {
           {
             class: 'columns__item_two-one',
             title: this.$t('ui.tx.amount'),
-            info: `${this.ConvertFromDecimals(this.tx.value, this.decimals)} ${this.symbol}`,
+            info: `${this.normalizeText(this.ConvertFromDecimals(this.tx.value, this.decimals))} ${this.symbol}`,
           },
           {
             class: 'columns__item_two-two',
             title: this.$t('ui.tx.value'),
-            info: `$ ${this.convertNativeToDollar(this.ConvertFromDecimals(this.tx.value, this.decimals))}`,
+            info: `$ ${this.normalizeText(this.convertNativeToDollar(this.ConvertFromDecimals(this.tx.value, this.decimals)))}`,
           },
           {
             class: 'columns__item_two-three',
@@ -238,7 +238,7 @@ export default {
             await this.price();
             clearInterval(this.updateTimer);
           }
-        }, 1000 * 30);
+        }, 1000 * 10);
       }
     } else {
       await this.price();
@@ -262,14 +262,17 @@ export default {
       priceByTimestamp: 'tx/getPriceByTimestamp',
     }),
     convertNativeToDollar(value) {
+      const valueInDollars = (value * this.currentPrice);
+      return valueInDollars;
+    },
+    normalizeText(text) {
       const regExp = /(?=\B(?:\d{3})+(?!\d))/g;
-      const fixedValue = (value * this.currentPrice).toFixed(2);
-      const correctValue = fixedValue.toString().replace(regExp, ',');
-      return correctValue;
+      const correctText = Number(text).toFixed(2).toString().replace(regExp, ',');
+      return correctText;
     },
     async price() {
-      const temp = this.$moment(this.tx.block.timestamp).format('YYYY-MM-DD');
-      const priceByDate = await this.priceByTimestamp(temp);
+      const unix = this.$moment(this.tx.block.timestamp).unix();
+      const priceByDate = await this.priceByTimestamp(unix);
       const shiftedByPrice = new BigNumber(priceByDate).shiftedBy(-18).toString();
       this.currentPrice = shiftedByPrice;
     },

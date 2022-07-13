@@ -32,11 +32,9 @@ export default {
       return error(e.code || 500, 'getTxs', e);
     }
   },
-  async getPriceByTimestamp({ commit }, currentDate) {
+  async getPriceByTimestamp({ commit }, unix) {
     try {
-      const date = new Date(currentDate);
-      const timestamp = date.getTime();
-      const response = await this.$axios.$get(`${process.env.WQ_ORACLE_URL}/oracle/WQT/price?timestamp=${timestamp}`);
+      const response = await this.$axios.$get(`${process.env.WQ_ORACLE_URL}/oracle/WQT/price?timestamp=${unix}`);
       return response.result;
     } catch (e) {
       return error(e.code || 500, 'getPriceByTimestamp', e);
