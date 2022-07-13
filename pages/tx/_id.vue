@@ -235,11 +235,15 @@ export default {
           if (updateRes.ok) {
             this.isTxPending = false;
             this.isTxLoading = false;
+            await this.price();
             clearInterval(this.updateTimer);
           }
         }, 1000 * 30);
       }
-    } else this.isTxLoading = false;
+    } else {
+      await this.price();
+      this.isTxLoading = false;
+    }
   },
   async mounted() {
     await this.hashNavigation();
@@ -247,8 +251,6 @@ export default {
     this.timer = setInterval(() => {
       this.time = Date.now();
     }, this.minute);
-
-    await this.price();
   },
   beforeDestroy() {
     clearInterval(Number(this.updateTimer));
@@ -260,13 +262,16 @@ export default {
       priceByTimestamp: 'tx/getPriceByTimestamp',
     }),
     convertNativeToDollar(value) {
-      return (value * this.currentPrice).toFixed(3);
+      const regExp = /(?=\B(?:\d{3})+(?!\d))/g;
+      const fixedValue = (value * this.currentPrice).toFixed(2);
+      const correctValue = fixedValue.toString().replace(regExp, ',');
+      return correctValue;
     },
     async price() {
-      const temp = this.$moment(this.tx.block.timestamp)
-        .format('DD-MM-YYYY');
-      const pric = await this.priceByTimestamp(temp);
-      this.currentPrice = pric.current_price.usd.toFixed(3);
+      const temp = this.$moment(this.tx.block.timestamp).format('YYYY-MM-DD');
+      const priceByDate = await this.priceByTimestamp(temp);
+      const shiftedByPrice = new BigNumber(priceByDate).shiftedBy(-18).toString();
+      this.currentPrice = shiftedByPrice;
     },
     onClick(tab) {
       this.activeTab = tab;
@@ -658,4 +663,5 @@ export default {
     }
   }
 }
+
 </style>

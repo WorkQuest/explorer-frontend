@@ -32,10 +32,12 @@ export default {
       return error(e.code || 500, 'getTxs', e);
     }
   },
-  async getPriceByTimestamp({ commit }, timestamp) {
+  async getPriceByTimestamp({ commit }, currentDate) {
     try {
-      const response = await this.$axios.$get(`https://api.coingecko.com/api/v3/coins/work-quest/history?date=${timestamp}`);
-      return response.market_data;
+      const date = new Date(currentDate);
+      const timestamp = date.getTime();
+      const response = await this.$axios.$get(`${process.env.WQ_ORACLE_URL}/oracle/WQT/price?timestamp=${timestamp}`);
+      return response.result;
     } catch (e) {
       return error(e.code || 500, 'getPriceByTimestamp', e);
     }
