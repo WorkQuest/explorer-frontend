@@ -282,19 +282,12 @@ export default {
   &__header {
     white-space: initial;
     word-break: break-word;
+    align-items: baseline;
   }
 }
 
 .token-symbol {
   position: relative;
   top: 3px;
-}
-
-@include _575 {
-  .token-item {
-    &__header {
-      align-items: flex-start;
-    }
-  }
 }
 </style>
