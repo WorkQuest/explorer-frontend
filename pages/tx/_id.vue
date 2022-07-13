@@ -181,7 +181,7 @@ export default {
           {
             class: 'columns__item_two-three',
             title: this.$t('ui.tx.feeFull'),
-            info: `${new BigNumber(this.fee).shiftedBy(-18).toString()} ${this.symbol} ($ ${this.convertNativeToDollar(new BigNumber(this.fee).shiftedBy(-18).toString())})`,
+            info: `${new BigNumber(this.fee).shiftedBy(-18).toString()} ${this.symbol} ($ ${this.normalizeText(this.convertNativeToDollar(new BigNumber(this.fee).shiftedBy(-18).toString()))})`,
           },
           {
             class: 'columns__item_four-one',
@@ -260,6 +260,7 @@ export default {
   methods: {
     ...mapActions({
       priceByTimestamp: 'tx/getPriceByTimestamp',
+      priceCoingecko: 'tx/getPriceInCoingecko',
     }),
     convertNativeToDollar(value) {
       const valueInDollars = (value * this.currentPrice);
@@ -272,9 +273,15 @@ export default {
     },
     async price() {
       const unix = this.$moment(this.tx.block.timestamp).unix();
-      const priceByDate = await this.priceByTimestamp(unix);
-      const shiftedByPrice = new BigNumber(priceByDate).shiftedBy(-18).toString();
-      this.currentPrice = shiftedByPrice;
+      const response = await this.priceByTimestamp(unix);
+      if (response.result) {
+        const shiftedByPrice = new BigNumber(response.result).shiftedBy(-18).toString();
+        this.currentPrice = shiftedByPrice;
+      } else {
+        const date = this.$moment(this.tx.block.timestamp).format('DD-MM-YYYY');
+        const r = await this.priceCoingecko(date);
+        this.currentPrice = r.market_data.current_price.usd;
+      }
     },
     onClick(tab) {
       this.activeTab = tab;
