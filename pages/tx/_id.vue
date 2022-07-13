@@ -72,7 +72,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import BigNumber from 'bignumber.js';
 import { getTransactionByTxHash } from '~/utils/web3';
 
@@ -169,12 +169,17 @@ export default {
             item: 'tokenTransfers',
           },
           {
-            class: 'columns__item_three-one',
-            title: this.$t('ui.tx.value'),
-            info: `${this.ConvertFromDecimals(this.tx.value, this.decimals)} ${this.symbol} ($ ${this.convertNativeToDollar(this.ConvertFromDecimals(this.tx.value, this.decimals))})`,
+            class: 'columns__item_two-one',
+            title: this.$t('ui.tx.amount'),
+            info: `${this.ConvertFromDecimals(this.tx.value, this.decimals)} ${this.symbol}`,
           },
           {
-            class: 'columns__item_three-two',
+            class: 'columns__item_two-two',
+            title: this.$t('ui.tx.value'),
+            info: `$ ${this.convertNativeToDollar(this.ConvertFromDecimals(this.tx.value, this.decimals))}`,
+          },
+          {
+            class: 'columns__item_two-three',
             title: this.$t('ui.tx.feeFull'),
             info: `${new BigNumber(this.fee).shiftedBy(-18).toString()} ${this.symbol} ($ ${this.convertNativeToDollar(new BigNumber(this.fee).shiftedBy(-18).toString())})`,
           },
@@ -251,13 +256,17 @@ export default {
     this.$store.commit('tx/resetTxsByHash');
   },
   methods: {
+    ...mapActions({
+      priceByTimestamp: 'tx/getPriceByTimestamp',
+    }),
     convertNativeToDollar(value) {
       return (value * this.currentPrice).toFixed(3);
     },
     async price() {
-      const prices = await this.$store.dispatch('tokens/getTokenPrices');
-      const { price } = prices.find((el) => el.symbol === this.symbol);
-      this.currentPrice = +new BigNumber(price).shiftedBy(-this.decimals).toFixed(3).toString();
+      const temp = this.$moment(this.tx.block.timestamp)
+        .format('DD-MM-YYYY');
+      const pric = await this.priceByTimestamp(temp);
+      this.currentPrice = pric.current_price.usd.toFixed(3);
     },
     onClick(tab) {
       this.activeTab = tab;
@@ -574,6 +583,28 @@ export default {
   ::v-deep .item {
     &__info_blue {
       font-size: 18px;
+    }
+
+    &:nth-child(2) {
+      flex-direction: column;
+      align-items: baseline;
+      margin-bottom: 0;
+      & .item__header {
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      & .item__note {
+        display: block;
+      }
+
+      & .item__info {
+        position: relative;
+        right: unset;
+        top: unset;
+        color: #1D2127;
+        font-size: 18px;
+      }
     }
   }
 }

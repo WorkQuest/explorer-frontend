@@ -32,4 +32,12 @@ export default {
       return error(e.code || 500, 'getTxs', e);
     }
   },
+  async getPriceByTimestamp({ commit }, timestamp) {
+    try {
+      const response = await this.$axios.$get(`https://api.coingecko.com/api/v3/coins/work-quest/history?date=${timestamp}`);
+      return response.market_data;
+    } catch (e) {
+      return error(e.code || 500, 'getPriceByTimestamp', e);
+    }
+  },
 };
