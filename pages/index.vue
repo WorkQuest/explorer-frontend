@@ -3,7 +3,7 @@
     <div class="home__header">
       <div class="home__content">
         <h3 class="home__title">
-          {{ $t('home.title') }}
+          {{ currentTitle }}
         </h3>
         <search-filter :include-filter="true" />
       </div>
@@ -71,6 +71,7 @@ export default {
       transactionsTableBusy: false,
       blocksId: 'blocks',
       transactionsId: 'transactions',
+      currentTitle: '',
     };
   },
   computed: {
@@ -150,6 +151,7 @@ export default {
   async mounted() {
     await this.getBlocks();
     await this.getTransactions();
+    this.currentTitle = process.env.PRODUCTION === 'TEST' ? this.$t('home.titleTestnet') : this.$t('home.titleMainnet');
   },
   beforeDestroy() {
     this.$store.commit('tx/resetTxs');

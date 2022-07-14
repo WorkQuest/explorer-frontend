@@ -151,7 +151,8 @@
     }
   },
   "home": {
-    "title": "WorkNet Chain Explorer"
+    "titleTestnet": "WorkNet Chain Testnet Explorer",
+    "titleMainnet": "WorkNet Chain Explorer"
   },
   "errors": {
     "pageNotFound": "Page not found",
