@@ -10,7 +10,7 @@
             <div class="header__left">
               <div
                 class="header__logo"
-                @click="toMain()"
+                @click="toMain"
               >
                 <img
                   src="~assets/img/app/logo.svg"
@@ -32,7 +32,7 @@
             </div>
             <div
               class="header__logo_mobile"
-              @click="toMain()"
+              @click="toMain"
             >
               <img
                 src="~assets/img/app/logo.svg"
@@ -41,26 +41,26 @@
             </div>
             <div class="header__right">
               <button
-                class="header__button header__button_network"
-                @click="showNetwork()"
+                class="header__button header__network"
+                @click="showNetwork"
               >
                 {{ currentNetwork }}
                 <span class="icon-caret_down" />
                 <transition name="fade">
                   <div
-                    v-if="isSHowNetwork"
-                    class="locale"
+                    v-if="isShowNetwork"
+                    class="network"
                   >
                     <div
                       v-for="(item, i) in networks"
                       :key="`${i}-locale`"
-                      class="locale__container"
+                      class="network__container"
                     >
                       <div
-                        class="locale__items networks"
+                        class="network__items networks"
                         @click="setNetwork(item)"
                       >
-                        <div class="locale__text">
+                        <div class="network__text">
                           {{ item }}
                         </div>
                       </div>
@@ -103,7 +103,7 @@
               </button>
               <div
                 class="ctm-menu__toggle"
-                @click="toggleMobileMenu()"
+                @click="toggleMobileMenu"
               >
                 <button class="header__button header__button_menu">
                   <span :class="{'icon-hamburger': !isMobileMenu, 'icon-close_big': isMobileMenu}" />
@@ -125,7 +125,7 @@
               <span
                 v-for="(item, i) in menuLinks"
                 :key="`${i}-mobileMenuLinks`"
-                @click="toggleMobileMenu()"
+                @click="toggleMobileMenu"
               >
                 <nuxt-link
                   :to="item.path"
@@ -202,7 +202,7 @@ export default {
       isNotFlexContainer: true,
       currentLocale: '',
       locales: [],
-      isSHowNetwork: false,
+      isShowNetwork: false,
       networks: {
         mainnet: 'MainNet',
         testnet: 'TestNet',
@@ -287,7 +287,7 @@ export default {
       this.isShowLocale = !this.isShowLocale;
     },
     showNetwork() {
-      this.isSHowNetwork = !this.isSHowNetwork;
+      this.isShowNetwork = !this.isShowNetwork;
     },
     setNetwork(item) {
       this.currentNetwork = item;
@@ -338,7 +338,7 @@ export default {
       this.isShowNotify = false;
       this.isShowAdditionalMenu = false;
       this.isShowLocale = false;
-      this.isSHowNetwork = false;
+      this.isShowNetwork = false;
     },
     setLocale(item) {
       this.currentLocale = item;
@@ -487,7 +487,7 @@ export default {
        }
      }
 
-    &_network {
+    &_networks {
       width: 110px;
       height: 46px;
 
@@ -533,9 +533,17 @@ export default {
       color: $black700;
     }
   }
+  &__network {
+    width: 110px;
+    height: 46px;
+
+    span {
+      padding-left: 3px;
+    }
+  }
 }
 
-.locale {
+.locale, .network {
   position: absolute;
   top: calc(72px + 5px);
   background: $white;
