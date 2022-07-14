@@ -72,7 +72,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import BigNumber from 'bignumber.js';
 import { getTransactionByTxHash } from '~/utils/web3';
 
@@ -164,19 +164,24 @@ export default {
               amount: new BigNumber(item.amount).shiftedBy(item.decimals || -18).toString(),
               token: item.tokenContractAddress.token.name,
               tokenAddress: item.tokenContractAddress.hash.hex,
-              tokenIconUrl: item.tokenContractAddress.token.metadata.iconUrl || require('~/assets/img/tokens/empty-token.svg'),
+              tokenIconUrl: item.tokenContractAddress.token.metadata.iconUrl || require('~/assets/img/tokens/logo_gray.svg'),
             })),
             item: 'tokenTransfers',
           },
           {
-            class: 'columns__item_three-one',
-            title: this.$t('ui.tx.value'),
-            info: `${this.ConvertFromDecimals(this.tx.value, this.decimals)} ${this.symbol} ($ ${this.convertNativeToDollar(this.ConvertFromDecimals(this.tx.value, this.decimals))})`,
+            class: 'columns__item_two-one',
+            title: this.$t('ui.tx.amount'),
+            info: `${this.normalizeText(this.ConvertFromDecimals(this.tx.value, this.decimals))} ${this.symbol}`,
           },
           {
-            class: 'columns__item_three-two',
+            class: 'columns__item_two-two',
+            title: this.$t('ui.tx.value'),
+            info: `$ ${this.normalizeText(this.convertNativeToDollar(this.ConvertFromDecimals(this.tx.value, this.decimals)))}`,
+          },
+          {
+            class: 'columns__item_two-three',
             title: this.$t('ui.tx.feeFull'),
-            info: `${new BigNumber(this.fee).shiftedBy(-18).toString()} ${this.symbol} ($ ${this.convertNativeToDollar(new BigNumber(this.fee).shiftedBy(-18).toString())})`,
+            info: `${new BigNumber(this.fee).shiftedBy(-18).toString()} ${this.symbol} ($ ${this.normalizeText(this.convertNativeToDollar(new BigNumber(this.fee).shiftedBy(-18).toString()))})`,
           },
           {
             class: 'columns__item_four-one',
@@ -230,11 +235,15 @@ export default {
           if (updateRes.ok) {
             this.isTxPending = false;
             this.isTxLoading = false;
+            await this.price();
             clearInterval(this.updateTimer);
           }
-        }, 1000 * 30);
+        }, 1000 * 10);
       }
-    } else this.isTxLoading = false;
+    } else {
+      await this.price();
+      this.isTxLoading = false;
+    }
   },
   async mounted() {
     await this.hashNavigation();
@@ -242,8 +251,6 @@ export default {
     this.timer = setInterval(() => {
       this.time = Date.now();
     }, this.minute);
-
-    await this.price();
   },
   beforeDestroy() {
     clearInterval(Number(this.updateTimer));
@@ -251,13 +258,30 @@ export default {
     this.$store.commit('tx/resetTxsByHash');
   },
   methods: {
+    ...mapActions({
+      priceByTimestamp: 'tx/getPriceByTimestamp',
+      priceCoingecko: 'tx/getPriceInCoingecko',
+    }),
     convertNativeToDollar(value) {
-      return (value * this.currentPrice).toFixed(3);
+      const valueInDollars = (value * this.currentPrice);
+      return valueInDollars;
+    },
+    normalizeText(text) {
+      const regExp = /(?=\B(?:\d{3})+(?!\d))/g;
+      const correctText = Number(text).toFixed(2).toString().replace(regExp, ',');
+      return correctText;
     },
     async price() {
-      const prices = await this.$store.dispatch('tokens/getTokenPrices');
-      const { price } = prices.find((el) => el.symbol === this.symbol);
-      this.currentPrice = +new BigNumber(price).shiftedBy(-this.decimals).toFixed(3).toString();
+      const unix = this.$moment(this.tx.block.timestamp).unix();
+      const response = await this.priceByTimestamp(unix);
+      if (response.result) {
+        const shiftedByPrice = new BigNumber(response.result).shiftedBy(-18).toString();
+        this.currentPrice = shiftedByPrice;
+      } else {
+        const date = this.$moment(this.tx.block.timestamp).format('DD-MM-YYYY');
+        const r = await this.priceCoingecko(date);
+        this.currentPrice = r.market_data.current_price.usd;
+      }
     },
     onClick(tab) {
       this.activeTab = tab;
@@ -575,6 +599,28 @@ export default {
     &__info_blue {
       font-size: 18px;
     }
+
+    &:nth-child(2) {
+      flex-direction: column;
+      align-items: baseline;
+      margin-bottom: 0;
+      & .item__header {
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      & .item__note {
+        display: block;
+      }
+
+      & .item__info {
+        position: relative;
+        right: unset;
+        top: unset;
+        color: #1D2127;
+        font-size: 18px;
+      }
+    }
   }
 }
 
@@ -627,4 +673,5 @@ export default {
     }
   }
 }
+
 </style>
