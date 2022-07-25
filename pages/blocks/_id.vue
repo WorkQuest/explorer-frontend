@@ -292,7 +292,7 @@ export default {
       margin-left: 20px;
     }
   }
-  ::v-deep .item {
+  :deep(.item) {
     &__header {
       margin-bottom: 0;
     }
