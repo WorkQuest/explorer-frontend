@@ -48,4 +48,12 @@ export default {
       return error(e.code || 500, 'getPriceInCoingecko', e);
     }
   },
+  async getTransactionsByTime({ commit }, date) {
+    try {
+      const response = await this.$axios.$get(`${process.env.BASE_URL}/transactions/count?fromDate=${date.dayFrom}&toDate=${date.dayTo}`);
+      return response;
+    } catch (e) {
+      return error(e.code || 500, 'getTransactionsByTime', e);
+    }
+  },
 };
