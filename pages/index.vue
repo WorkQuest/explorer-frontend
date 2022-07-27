@@ -71,7 +71,7 @@
             <p
               class="value"
             >
-              $0.0005
+              {{ price }}
             </p>
           </div>
           <div class="info-capitalization capitalization">
@@ -88,7 +88,7 @@
             <p
               class="value"
             >
-              $213 321 738 30.99
+              ----
             </p>
           </div>
           <div class="info-gas gas">
@@ -105,7 +105,7 @@
             <p
               class="value"
             >
-              0.00002 WQT
+              ----
             </p>
           </div>
           <div class="info-transactions transactions">
@@ -192,6 +192,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import { GChart } from 'vue-google-charts/legacy';
 import ClickOutside from 'vue-click-outside';
+import BigNumber from 'bignumber.js';
 
 export default {
   name: 'Home',
@@ -215,21 +216,14 @@ export default {
       isShowTokens: false,
       tokens: ['WQT'],
       currentToken: 'wqt',
-      chartData: [
-        // ['Year', 'Transactions'],
-        // [new Date(2022, 7, 12), 150],
-        // ['2022-07-13', 350],
-        // [new Date(2022, 7, 15), 550],
-        // [new Date(2022, 7, 19), 340],
-        // [new Date(2022, 7, 22), 570],
-        // [new Date(2022, 7, 26), 470],
-      ],
+      price: '',
+      chartData: [],
       chartOptions: {
         curveType: 'function',
         width: 550,
         height: 150,
         chartArea: {
-          width: '460',
+          width: 460,
           height: '110',
         },
         legend: {
@@ -339,7 +333,11 @@ export default {
     await this.getBlocks();
     await this.getTransactions();
     await this.getTransactionsByDate();
+    await this.currentPrice();
     this.currentTitle = process.env.PRODUCTION === 'TEST' ? this.$t('home.titleTestnet') : this.$t('home.titleMainnet');
+  },
+  created() {
+    window.addEventListener('resize', this.updateWidth);
   },
   beforeDestroy() {
     this.$store.commit('tx/resetTxs');
@@ -348,7 +346,41 @@ export default {
   methods: {
     ...mapActions({
       getTransactionsByTime: 'tx/getTransactionsByTime',
+      priceByTimestamp: 'tx/getPriceByTimestamp',
+      priceCoingecko: 'tx/getPriceInCoingecko',
     }),
+    updateWidth() {
+      this.width = window.innerWidth;
+      if (window.innerWidth > 600) {
+        this.chartOptions.width = 550;
+        this.chartOptions.chartArea.width = 480;
+      }
+      if (window.innerWidth > 510 && window.innerWidth < 600) {
+        this.chartOptions.width = 450;
+        this.chartOptions.chartArea.width = 400;
+      }
+      if (window.innerWidth > 400 && window.innerWidth < 509) {
+        this.chartOptions.width = 350;
+        this.chartOptions.chartArea.width = 290;
+      }
+      if (window.innerWidth > 300 && window.innerWidth < 399) {
+        this.chartOptions.width = 250;
+        this.chartOptions.chartArea.width = 200;
+      }
+    },
+    async currentPrice() {
+      let date = new Date();
+      const unix = this.$moment(date).unix();
+      const response = await this.priceByTimestamp(unix);
+      if (response.result) {
+        const shiftedByPrice = new BigNumber(response.result).shiftedBy(-18).toString();
+        this.price = `$${Number(shiftedByPrice).toFixed(4)}`;
+      } else {
+        date = this.$moment(date).format('DD-MM-YYYY');
+        const r = await this.priceCoingecko(date);
+        this.price = `$${Number(r.market_data.current_price.usd).toFixed(4)}`;
+      }
+    },
     showTokens() {
       this.isShowTokens = !this.isShowTokens;
     },
@@ -364,20 +396,18 @@ export default {
       const currentDay = new Date();
       const timestamp = currentDay.setDate(currentDay.getDate() - 14);
       const dayFrom = new Date(timestamp).toISOString();
-      const trans = await this.getTransactionsByTime({ dayFrom, dayTo });
-      console.log(trans.result.count);
-      let min = trans.result.count[0].count;
-      let max = trans.result.count[0].count;
-      trans.result.count.forEach((item) => {
+      const transactionsInfo = await this.getTransactionsByTime({ dayFrom, dayTo });
+      let min = transactionsInfo.result.count[0].count;
+      let max = transactionsInfo.result.count[0].count;
+      transactionsInfo.result.count.forEach((item) => {
         if (+item.count > max) {
           max = +item.count;
         } else if (+item.count < min) {
           min = +item.count;
         }
       });
-      this.chartOptions.vAxis.ticks = [min, max];
-      this.chartData = trans.result.count.reduce((acc, item) => [...acc, [new Date(item.date), +item.count]], [['Year', 'Transactions']]);
-      console.log(this.chartData);
+      this.chartOptions.vAxis.ticks = [min, max + 25];
+      this.chartData = transactionsInfo.result.count.reduce((acc, item) => [...acc, [new Date(item.date), +item.count]], [['Year', 'Transactions']]);
     },
     async getBlocks() {
       this.blocksTableBusy = true;
@@ -401,7 +431,7 @@ defs {
 
   &__header {
     background: $darkblue;
-    height: 350px;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -448,14 +478,15 @@ defs {
 }
 
 .info {
+  margin-right: 10px;
   display: grid;
-  grid-template-columns: 230px 280px;
+  grid-template-columns: auto auto;
   grid-template-rows: 46px 50px 50px;
   gap: 20px 20px;
   grid-template-areas:
     "info-text info-dropdown"
     "info-price info-capitalization"
-    "info-gas info-transactions";
+    "info-transactions info-gas";
   align-items: center;
   &-text {
     grid-area: info-text;
@@ -612,16 +643,69 @@ defs {
   text-align: right;
 }
 
+@include _1199 {
+  .home {
+    &__statistics {
+      padding: 0 20px;
+    }
+  }
+}
+
+@include _1080 {
+  .home {
+    &__statistics {
+      flex-direction: column;
+      margin-bottom: 0;
+    }
+  }
+
+  .statistics {
+    &__history {
+      margin-bottom: 20px;
+    }
+  }
+
+  .info {
+    margin: 0 0 10px 0;
+  }
+}
+
 @include _767 {
   .home {
-    &__header {
-      height: 300px;
+    //&__header {
+    //  height: 730px;
+    //}
+
+    &__statistics {
+      padding: 0 10px;
     }
 
     &__title {
       font-size: 28px;
       max-width: 100%;
-      margin-left: 16px;
+      margin: 10px 0 0 16px;
+    }
+  }
+}
+
+@include _480 {
+  .info {
+    display: grid;
+    grid-template-columns: max-content;
+    grid-template-rows: 50px 50px 50px 50px 50px 50px;
+    gap: 20px 20px;
+    grid-template-areas:
+    "info-text"
+    "info-dropdown"
+    "info-price"
+    "info-capitalization"
+    "info-gas"
+    "info-transactions";
+  }
+
+  .dropdown__button {
+    &_token {
+      margin: 0 auto 0 0;
     }
   }
 }
