@@ -78,4 +78,12 @@ export default {
       return error(e.code || 500, 'getTokenPrices', e);
     }
   },
+  async getCirculatingSupply({ commit }) {
+    try {
+      const response = await this.$axios.$get(`${process.env.BASE_URL}/coin/circulating-supply`);
+      return response;
+    } catch (e) {
+      return error(e.code || 500, 'getCirculatingSupply', e);
+    }
+  },
 };

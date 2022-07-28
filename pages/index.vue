@@ -71,7 +71,7 @@
             <p
               class="value"
             >
-              {{ price }}
+              ${{ price }}
             </p>
           </div>
           <div class="info-capitalization capitalization">
@@ -88,7 +88,7 @@
             <p
               class="value"
             >
-              ----
+              ${{ marketCap }}
             </p>
           </div>
           <div class="info-gas gas">
@@ -105,7 +105,7 @@
             <p
               class="value"
             >
-              ----
+              {{ gasPrice }}
             </p>
           </div>
           <div class="info-transactions transactions">
@@ -193,6 +193,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { GChart } from 'vue-google-charts/legacy';
 import ClickOutside from 'vue-click-outside';
 import BigNumber from 'bignumber.js';
+import { gasPrice } from '~/utils/web3';
 
 export default {
   name: 'Home',
@@ -216,15 +217,17 @@ export default {
       isShowTokens: false,
       tokens: ['WQT'],
       currentToken: 'wqt',
+      marketCap: '',
       price: '',
+      gasPrice: '',
       chartData: [],
       chartOptions: {
         curveType: 'function',
         width: 550,
-        height: 150,
+        height: 200,
         chartArea: {
           width: 460,
-          height: '110',
+          height: 110,
         },
         legend: {
           position: 'none',
@@ -234,7 +237,6 @@ export default {
           gridlines: {
             color: '#FFF',
           },
-          format: 'MMMM d',
           textStyle: {
             fontSize: '12',
             color: '#AAB0B9',
@@ -332,8 +334,10 @@ export default {
   async mounted() {
     await this.getBlocks();
     await this.getTransactions();
-    await this.getTransactionsByDate();
+    await this.createChartData();
     await this.currentPrice();
+    await this.calcMarketCap();
+    await this.getGasPrice();
     this.currentTitle = process.env.PRODUCTION === 'TEST' ? this.$t('home.titleTestnet') : this.$t('home.titleMainnet');
   },
   created() {
@@ -345,14 +349,25 @@ export default {
   },
   methods: {
     ...mapActions({
-      getTransactionsByTime: 'tx/getTransactionsByTime',
+      transactionsByTime: 'tx/getTransactionsByTime',
       priceByTimestamp: 'tx/getPriceByTimestamp',
       priceCoingecko: 'tx/getPriceInCoingecko',
+      circulatingSupply: 'tokens/getCirculatingSupply',
     }),
+    showTokens() {
+      this.isShowTokens = !this.isShowTokens;
+    },
+    closeTokens() {
+      this.isShowTokens = false;
+    },
+    setToken(item) {
+      this.currentToken = item;
+      this.closeTokens();
+    },
     updateWidth() {
       this.width = window.innerWidth;
       if (window.innerWidth > 600) {
-        this.chartOptions.width = 550;
+        this.chartOptions.width = 530;
         this.chartOptions.chartArea.width = 480;
       }
       if (window.innerWidth > 510 && window.innerWidth < 600) {
@@ -368,35 +383,33 @@ export default {
         this.chartOptions.chartArea.width = 200;
       }
     },
+    async getGasPrice() {
+      const price = await gasPrice();
+      this.gasPrice = `${new BigNumber(price).shiftedBy(-9).toString()} Gwei`;
+    },
+    async calcMarketCap() {
+      const supply = await this.circulatingSupply();
+      this.marketCap = new BigNumber(supply.result.supply).shiftedBy(-18).toString() * this.price;
+    },
     async currentPrice() {
       let date = new Date();
       const unix = this.$moment(date).unix();
       const response = await this.priceByTimestamp(unix);
       if (response.result) {
         const shiftedByPrice = new BigNumber(response.result).shiftedBy(-18).toString();
-        this.price = `$${Number(shiftedByPrice).toFixed(4)}`;
+        this.price = Number(shiftedByPrice).toFixed(4);
       } else {
         date = this.$moment(date).format('DD-MM-YYYY');
         const r = await this.priceCoingecko(date);
-        this.price = `$${Number(r.market_data.current_price.usd).toFixed(4)}`;
+        this.price = Number(r.market_data.current_price.usd).toFixed(4);
       }
     },
-    showTokens() {
-      this.isShowTokens = !this.isShowTokens;
-    },
-    closeTokens() {
-      this.isShowTokens = false;
-    },
-    setToken(item) {
-      this.currentToken = item;
-      this.closeTokens();
-    },
-    async getTransactionsByDate() {
+    async createChartData() {
       const dayTo = new Date().toISOString();
       const currentDay = new Date();
       const timestamp = currentDay.setDate(currentDay.getDate() - 14);
       const dayFrom = new Date(timestamp).toISOString();
-      const transactionsInfo = await this.getTransactionsByTime({ dayFrom, dayTo });
+      const transactionsInfo = await this.transactionsByTime({ dayFrom, dayTo });
       let min = transactionsInfo.result.count[0].count;
       let max = transactionsInfo.result.count[0].count;
       transactionsInfo.result.count.forEach((item) => {
@@ -407,7 +420,7 @@ export default {
         }
       });
       this.chartOptions.vAxis.ticks = [min, max + 25];
-      this.chartData = transactionsInfo.result.count.reduce((acc, item) => [...acc, [new Date(item.date), +item.count]], [['Year', 'Transactions']]);
+      this.chartData = transactionsInfo.result.count.reduce((acc, item) => [...acc, [this.$moment(new Date(item.date)).format('DD MMMM'), +item.count]], [['Year', 'Transactions']]);
     },
     async getBlocks() {
       this.blocksTableBusy = true;
