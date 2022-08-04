@@ -385,7 +385,7 @@ export default {
     },
     async getGasPrice() {
       const price = await gasPrice();
-      this.gasPrice = `${new BigNumber(price).shiftedBy(-9).toString()} Gwei`;
+      this.gasPrice = `${new BigNumber(price).shiftedBy(-18).toString()} WQT`;
     },
     async calcMarketCap() {
       const supply = await this.circulatingSupply();
