@@ -19,4 +19,7 @@ export default {
   resetTxs(state) {
     Object.assign(state.txs, txs);
   },
+  setPrice(state, data) {
+    state.temp.price = data;
+  },
 };

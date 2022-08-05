@@ -152,8 +152,13 @@ export const txs = {
   transactions: [],
 };
 
+export const temp = {
+  price: 0,
+};
+
 export default () => ({
   txsByAccount,
   txsByHash,
   txs,
+  temp,
 });

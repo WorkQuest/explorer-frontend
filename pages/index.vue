@@ -7,20 +7,16 @@
         </h3>
         <search-filter :include-filter="true" />
       </div>
-      <div
-        class="home__statistics statistics"
-      >
+      <div class="home__statistics statistics">
         <div class="statistics__info info">
           <div class="info-text">
             {{ $t('ui.statistics.info') }}
           </div>
-          <div
-            class="info-dropdown dropdown"
-          >
+          <div class="info-dropdown dropdown">
             <button
               v-click-outside="closeTokens"
               class="dropdown__button dropdown__button_token"
-              @click="showTokens()"
+              @click="showTokens"
             >
               <img
                 :src="require(`~/assets/img/statistics/${currentToken.toUpperCase()}.svg`)"
@@ -57,73 +53,23 @@
               </transition>
             </button>
           </div>
-          <div class="info-price price">
-            <img
-              class="icon"
-              src="~assets/img/statistics/ticket.svg"
-              alt="icon"
-            >
-            <p
-              class="text"
-            >
-              {{ currentToken.toUpperCase() }} {{ $t('ui.statistics.price') }}
-            </p>
-            <p
-              class="value"
-            >
-              ${{ price }}
-            </p>
-          </div>
-          <div class="info-capitalization capitalization">
-            <img
-              class="icon"
-              src="~assets/img/statistics/market-cap.svg"
-              alt="icon"
-            >
-            <p
-              class="text"
-            >
-              {{ currentToken.toUpperCase() }} {{ $t('ui.statistics.marketCap') }}
-            </p>
-            <p
-              class="value"
-            >
-              ${{ marketCap }}
-            </p>
-          </div>
-          <div class="info-gas gas">
-            <img
-              class="icon"
-              src="~assets/img/statistics/min-gas.svg"
-              alt="icon"
-            >
-            <p
-              class="text"
-            >
-              {{ $t('ui.statistics.minGasPrice') }}
-            </p>
-            <p
-              class="value"
-            >
-              {{ gasPrice }}
-            </p>
-          </div>
-          <div class="info-transactions transactions">
-            <img
-              class="icon"
-              src="~assets/img/statistics/transaction.svg"
-              alt="icon"
-            >
-            <p
-              class="text"
-            >
-              {{ $t('ui.txs') }}
-            </p>
-            <p
-              class="value"
-            >
-              {{ txsCount }}
-            </p>
+          <div
+            v-for="(item, i) in statisticsBlocks"
+            :key="i"
+          >
+            <div :class="`info-${item.class} ${item.class}`">
+              <img
+                :class="item.img.class"
+                :src="require(`~/assets/img/statistics/${item.img.icon}.svg`)"
+                :alt="item.img.alt"
+              >
+              <p class="text">
+                {{ item.text }}
+              </p>
+              <p class="value">
+                ${{ item.value }}
+              </p>
+            </div>
           </div>
         </div>
         <div class="statistics__history history">
@@ -132,11 +78,7 @@
           >
             {{ $t('ui.statistics.history') }}
           </p>
-          <GChart
-            type="LineChart"
-            :data="chartData"
-            :options="chartOptions"
-          />
+          <Chart />
         </div>
       </div>
     </div>
@@ -188,21 +130,23 @@
     </div>
   </div>
 </template>
+
 <script>
+import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
-import { GChart } from 'vue-google-charts/legacy';
 import ClickOutside from 'vue-click-outside';
 import BigNumber from 'bignumber.js';
+import Chart from '~/components/Chart';
 import { gasPrice } from '~/utils/web3';
 
-export default {
+export default Vue.extend({
   name: 'Home',
   layout: 'default',
   directives: {
     ClickOutside,
   },
   components: {
-    GChart,
+    Chart,
   },
   data() {
     return {
@@ -220,40 +164,6 @@ export default {
       marketCap: '',
       price: '',
       gasPrice: '',
-      chartData: [],
-      chartOptions: {
-        curveType: 'function',
-        width: 550,
-        height: 200,
-        chartArea: {
-          width: 460,
-          height: 110,
-        },
-        legend: {
-          position: 'none',
-        },
-        hAxis: {
-          baselineColor: '#FFF',
-          gridlines: {
-            color: '#FFF',
-          },
-          textStyle: {
-            fontSize: '12',
-            color: '#AAB0B9',
-          },
-        },
-        vAxis: {
-          baselineColor: '#FFF',
-          gridlines: {
-            color: '#FFF',
-          },
-          ticks: [200, 500, 800],
-          textStyle: {
-            fontSize: '12',
-            color: '#AAB0B9',
-          },
-        },
-      },
     };
   },
   computed: {
@@ -263,7 +173,52 @@ export default {
       WQTSymbol: 'tokens/getWQTTokenSymbol',
       WQTDecimal: 'tokens/getWQTTokenDecimals',
       txsCount: 'tx/getTxsCount',
+      getPrice: 'tx/getPrice',
     }),
+    statisticsBlocks() {
+      return [
+        {
+          class: 'price',
+          img: {
+            class: 'icon',
+            icon: 'ticket',
+            alt: 'icon ticket',
+          },
+          text: `${this.currentToken.toUpperCase()} ${this.$t('ui.statistics.price')}`,
+          value: this.getPrice,
+        },
+        {
+          class: 'capitalization',
+          img: {
+            class: 'icon',
+            icon: 'market-cap',
+            alt: 'icon market-cap',
+          },
+          text: `${this.currentToken.toUpperCase()} ${this.$t('ui.statistics.marketCap')}`,
+          value: this.FormatSmallNumber(this.calcMarketCap),
+        },
+        {
+          class: 'gas',
+          img: {
+            class: 'icon',
+            icon: 'min-gas',
+            alt: 'icon min-gas',
+          },
+          text: this.$t('ui.statistics.minGasPrice'),
+          value: this.getGasPrice,
+        },
+        {
+          class: 'transactions',
+          img: {
+            class: 'icon',
+            icon: 'transaction',
+            alt: 'icon transaction',
+          },
+          text: this.$t('ui.txs'),
+          value: this.txsCount,
+        },
+      ];
+    },
     payload() {
       return {
         limit: this.limit,
@@ -330,18 +285,16 @@ export default {
         },
       ];
     },
+    getGasPrice() {
+      return `${new BigNumber(this.gasPrice).shiftedBy(-18).toString()} WQT`;
+    },
+    calcMarketCap() {
+      return new BigNumber(this.marketCap.result?.supply).shiftedBy(-18).toString() * this.getPrice;
+    },
   },
   async mounted() {
-    await this.getBlocks();
-    await this.getTransactions();
-    await this.createChartData();
-    await this.currentPrice();
-    await this.calcMarketCap();
-    await this.getGasPrice();
+    this.getAllData();
     this.currentTitle = process.env.PRODUCTION === 'TEST' ? this.$t('home.titleTestnet') : this.$t('home.titleMainnet');
-  },
-  created() {
-    window.addEventListener('resize', this.updateWidth);
   },
   beforeDestroy() {
     this.$store.commit('tx/resetTxs');
@@ -354,6 +307,13 @@ export default {
       priceCoingecko: 'tx/getPriceInCoingecko',
       circulatingSupply: 'tokens/getCirculatingSupply',
     }),
+    async getAllData() {
+      await this.currentPrice();
+      await this.getBlocks();
+      await this.getTransactions();
+      this.gasPrice = await gasPrice();
+      this.marketCap = await this.circulatingSupply();
+    },
     showTokens() {
       this.isShowTokens = !this.isShowTokens;
     },
@@ -364,63 +324,8 @@ export default {
       this.currentToken = item;
       this.closeTokens();
     },
-    updateWidth() {
-      this.width = window.innerWidth;
-      if (window.innerWidth > 600) {
-        this.chartOptions.width = 530;
-        this.chartOptions.chartArea.width = 480;
-      }
-      if (window.innerWidth > 510 && window.innerWidth < 600) {
-        this.chartOptions.width = 450;
-        this.chartOptions.chartArea.width = 400;
-      }
-      if (window.innerWidth > 400 && window.innerWidth < 509) {
-        this.chartOptions.width = 350;
-        this.chartOptions.chartArea.width = 290;
-      }
-      if (window.innerWidth > 300 && window.innerWidth < 399) {
-        this.chartOptions.width = 250;
-        this.chartOptions.chartArea.width = 200;
-      }
-    },
-    async getGasPrice() {
-      const price = await gasPrice();
-      this.gasPrice = `${new BigNumber(price).shiftedBy(-18).toString()} WQT`;
-    },
-    async calcMarketCap() {
-      const supply = await this.circulatingSupply();
-      this.marketCap = new BigNumber(supply.result.supply).shiftedBy(-18).toString() * this.price;
-    },
     async currentPrice() {
-      let date = new Date();
-      const unix = this.$moment(date).unix();
-      const response = await this.priceByTimestamp(unix);
-      if (response.result) {
-        const shiftedByPrice = new BigNumber(response.result).shiftedBy(-18).toString();
-        this.price = Number(shiftedByPrice).toFixed(4);
-      } else {
-        date = this.$moment(date).format('DD-MM-YYYY');
-        const r = await this.priceCoingecko(date);
-        this.price = Number(r.market_data.current_price.usd).toFixed(4);
-      }
-    },
-    async createChartData() {
-      const dayTo = new Date().toISOString();
-      const currentDay = new Date();
-      const timestamp = currentDay.setDate(currentDay.getDate() - 14);
-      const dayFrom = new Date(timestamp).toISOString();
-      const transactionsInfo = await this.transactionsByTime({ dayFrom, dayTo });
-      let min = transactionsInfo.result.count[0].count;
-      let max = transactionsInfo.result.count[0].count;
-      transactionsInfo.result.count.forEach((item) => {
-        if (+item.count > max) {
-          max = +item.count;
-        } else if (+item.count < min) {
-          min = +item.count;
-        }
-      });
-      this.chartOptions.vAxis.ticks = [min, max + 25];
-      this.chartData = transactionsInfo.result.count.reduce((acc, item) => [...acc, [this.$moment(new Date(item.date)).format('DD MMMM'), +item.count]], [['Year', 'Transactions']]);
+      await this.priceByTimestamp(this.$moment(new Date()).unix());
     },
     async getBlocks() {
       this.blocksTableBusy = true;
@@ -433,12 +338,9 @@ export default {
       this.transactionsTableBusy = false;
     },
   },
-};
+});
 </script>
 <style lang="scss" scoped>
-defs {
-  display: none;
-}
 .home {
   animation: show 1s 1;
 
@@ -454,6 +356,7 @@ defs {
 
   &__content {
     @include container;
+    margin-top: 30px;
   }
 
   &__tables {
@@ -685,10 +588,6 @@ defs {
 
 @include _767 {
   .home {
-    //&__header {
-    //  height: 730px;
-    //}
-
     &__statistics {
       padding: 0 10px;
     }

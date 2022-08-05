@@ -4,4 +4,5 @@ export default {
   getTxsByHash: (state) => state.txsByHash,
   getTxs: (state) => state.txs.transactions,
   getTxsCount: (state) => state.txs.count,
+  getPrice: (state) => state.temp.price,
 };
