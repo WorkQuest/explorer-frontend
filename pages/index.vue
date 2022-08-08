@@ -79,6 +79,15 @@
             {{ $t('ui.statistics.history') }}
           </p>
           <Chart />
+          <div class="history-days">
+            <span
+              v-for="day in historyDays"
+              :key="day"
+              class="history-days_day"
+            >
+              {{ day }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -175,6 +184,16 @@ export default Vue.extend({
       txsCount: 'tx/getTxsCount',
       getPrice: 'tx/getPrice',
     }),
+    historyDays() {
+      const day1 = new Date().setDate(new Date().getDate() - 14);
+      const day2 = new Date().setDate(new Date().getDate() - 7);
+      const day3 = new Date();
+      return [
+        this.$moment(day1).format('DD MMMM'),
+        this.$moment(day2).format('DD MMMM'),
+        this.$moment(day3).format('DD MMMM'),
+      ];
+    },
     statisticsBlocks() {
       return [
         {
@@ -286,14 +305,18 @@ export default Vue.extend({
       ];
     },
     getGasPrice() {
-      return `${new BigNumber(this.gasPrice).shiftedBy(-18).toString()} WQT`;
+      return `${this.FormatSmallNumber(new BigNumber(this.gasPrice).shiftedBy(-18))} WQT`;
     },
     calcMarketCap() {
-      return new BigNumber(this.marketCap.result?.supply).shiftedBy(-18).toString() * this.getPrice;
+      return new BigNumber(this.marketCap.result?.supply).shiftedBy(-18) * this.getPrice;
     },
   },
-  async mounted() {
+  mounted() {
     this.getAllData();
+    const currentDay = new Date();
+    const value1 = new Date().setDate(new Date().getDate() - 14);
+    const value2 = new Date().setDate(new Date().getDate() - 7);
+    console.log(this.$moment(value1).format('DD MMMM'), this.$moment(value2).format('DD MMMM'));
     this.currentTitle = process.env.PRODUCTION === 'TEST' ? this.$t('home.titleTestnet') : this.$t('home.titleMainnet');
   },
   beforeDestroy() {
@@ -308,11 +331,13 @@ export default Vue.extend({
       circulatingSupply: 'tokens/getCirculatingSupply',
     }),
     async getAllData() {
+      await this.SetLoader(true);
       await this.currentPrice();
       await this.getBlocks();
       await this.getTransactions();
       this.gasPrice = await gasPrice();
       this.marketCap = await this.circulatingSupply();
+      await this.SetLoader(false);
     },
     showTokens() {
       this.isShowTokens = !this.isShowTokens;
@@ -340,6 +365,28 @@ export default Vue.extend({
   },
 });
 </script>
+<style lang="scss" scoped>
+:deep(.google-visualization-tooltip) {
+  border-radius: 8px;
+  border: 1px solid #F7F8FA;
+  width: 130px!important;
+  height: 65px!important;
+}
+:deep(.google-visualization-tooltip-item span) {
+  font-family: 'Inter',sans-serif!important;
+}
+:deep(.google-visualization-tooltip-item span) {
+  color: #AAB0B9!important;
+  font-size: 12px!important;
+  font-weight: 400!important;
+}
+:deep(.google-visualization-tooltip-item:nth-child(2)){
+  display: flex;
+}
+:deep(.google-visualization-tooltip-item span:nth-child(2)) {
+  color: black!important;
+}
+</style>
 <style lang="scss" scoped>
 .home {
   animation: show 1s 1;
@@ -451,6 +498,9 @@ export default Vue.extend({
 
   .value {
     grid-area: value;
+    overflow-x: scroll;
+    white-space: nowrap;
+    max-width: 200px;
   }
 }
 
@@ -459,6 +509,16 @@ export default Vue.extend({
     font-weight: 600;
     font-size: 24px;
     line-height: 32px;
+  }
+  &-days {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    &_day {
+      font-size: 12px;
+      line-height: 16px;
+      color: #AAB0B9;
+    }
   }
 }
 
@@ -570,19 +630,72 @@ export default Vue.extend({
 @include _1080 {
   .home {
     &__statistics {
-      flex-direction: column;
-      margin-bottom: 0;
+      width: unset;
+    }
+    &__header {
+      align-items: flex-start;
     }
   }
 
   .statistics {
     &__history {
-      margin-bottom: 20px;
+      max-width: unset;
     }
   }
 
   .info {
-    margin: 0 0 10px 0;
+    display: grid;
+    grid-template-columns: max-content;
+    grid-template-rows: 46px 50px 50px 50px 50px 50px;
+    gap: 20px 20px;
+    grid-template-areas:
+    "info-text"
+    "info-dropdown"
+    "info-price"
+    "info-capitalization"
+    "info-transactions"
+    "info-gas";
+    align-items: center;
+  }
+
+  .dropdown {
+    &__button {
+      &_token {
+        margin-left: unset;
+        margin-right: auto;
+      }
+    }
+  }
+}
+
+@include _769 {
+  .home {
+    &__statistics {
+      flex-direction: column;
+      margin-bottom: 0;
+      //width: unset;
+    }
+  }
+  .info {
+    margin-right: 10px;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: 46px 50px 50px;
+    gap: 20px 20px;
+    grid-template-areas:
+    "info-text info-dropdown"
+    "info-price info-capitalization"
+    "info-transactions info-gas";
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .history {
+    margin-bottom: 20px;
+  }
+  .capitalization {
+    .value {
+      max-width: 200px;
+    }
   }
 }
 
@@ -598,9 +711,15 @@ export default Vue.extend({
       margin: 10px 0 0 16px;
     }
   }
+  .statistics {
+    width: 100%;
+    &__info {
+      max-width: unset;
+    }
+  }
 }
 
-@include _480 {
+@include _575 {
   .info {
     display: grid;
     grid-template-columns: max-content;

@@ -23,6 +23,9 @@ export default {
         curveType: 'function',
         width: 550,
         height: 200,
+        tooltip: {
+          isHtml: true,
+        },
         chartArea: {
           width: 460,
           height: 110,
@@ -35,6 +38,7 @@ export default {
           gridlines: {
             color: '#FFF',
           },
+          textPosition: 'none',
           textStyle: {
             fontSize: '12',
             color: '#AAB0B9',
@@ -69,21 +73,50 @@ export default {
     }),
     updateWidth() {
       this.width = window.innerWidth;
-      if (window.innerWidth > 600) {
+      console.log('this.width :', this.width);
+      if (window.innerWidth > 1080) {
         this.chartOptions.width = 530;
+        this.chartOptions.height = 200;
         this.chartOptions.chartArea.width = 480;
+        this.chartOptions.chartArea.height = 110;
       }
-      if (window.innerWidth > 510 && window.innerWidth < 600) {
-        this.chartOptions.width = 450;
-        this.chartOptions.chartArea.width = 400;
+      if (window.innerWidth > 1075 && window.innerWidth < 1080) {
+        this.chartOptions.width = this.width - 370;
+        this.chartOptions.height = this.width - 750;
+        this.chartOptions.chartArea.width = this.width - 500;
+        this.chartOptions.chartArea.height = this.width - 850;
       }
-      if (window.innerWidth > 400 && window.innerWidth < 509) {
-        this.chartOptions.width = 350;
-        this.chartOptions.chartArea.width = 290;
+      if (window.innerWidth > 1000 && window.innerWidth < 1070) {
+        this.chartOptions.width = this.width - 370;
+        this.chartOptions.chartArea.width = this.width - 500;
       }
-      if (window.innerWidth > 300 && window.innerWidth < 399) {
-        this.chartOptions.width = 250;
-        this.chartOptions.chartArea.width = 200;
+      if (window.innerWidth > 900 && window.innerWidth < 1000) {
+        this.chartOptions.width = this.width - 380;
+        this.chartOptions.chartArea.width = this.width - 440;
+      }
+      if (window.innerWidth > 875 && window.innerWidth < 900) {
+        this.chartOptions.width = this.width - 380;
+        this.chartOptions.chartArea.width = this.width - 440;
+      }
+      if (window.innerWidth > 768 && window.innerWidth < 875) {
+        this.chartOptions.width = this.width - 380;
+        this.chartOptions.chartArea.width = this.width - 440;
+      }
+      if (window.innerWidth > 710 && window.innerWidth < 765) {
+        this.chartOptions.width = this.width - 100;
+        this.chartOptions.height = this.width - 500;
+        this.chartOptions.chartArea.width = this.width - 150;
+        this.chartOptions.chartArea.height = this.width - 600;
+      }
+      if (window.innerWidth > 640 && window.innerWidth < 710) {
+        this.chartOptions.width = this.width - 100;
+        this.chartOptions.height = this.width - 450;
+        this.chartOptions.chartArea.width = this.width - 150;
+        this.chartOptions.chartArea.height = this.width - 550;
+      }
+      if (window.innerWidth > 300 && window.innerWidth < 640) {
+        this.chartOptions.width = this.width - 100;
+        this.chartOptions.chartArea.width = this.width - 150;
       }
     },
     async createChartData() {
@@ -102,7 +135,8 @@ export default {
         }
       });
       this.chartOptions.vAxis.ticks = [min, max + 25];
-      this.chartData = transactionsInfo.result.count.reduce((acc, item) => [...acc, [this.$moment(new Date(item.date)).format('DD MMMM'), +item.count]], [['Year', 'Transactions']]);
+      console.log('array :', transactionsInfo.result.count);
+      this.chartData = transactionsInfo.result.count.reduce((acc, item) => [...acc, [this.$moment(new Date(item.date)).format('DD MMMM'), +item.count]], [['Date', 'Transactions']]);
     },
   },
 };
