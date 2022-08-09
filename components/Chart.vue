@@ -135,8 +135,7 @@ export default {
         }
       });
       this.chartOptions.vAxis.ticks = [min, max + 25];
-      console.log('array :', transactionsInfo.result.count);
-      this.chartData = transactionsInfo.result.count.reduce((acc, item) => [...acc, [this.$moment(new Date(item.date)).format('DD MMMM'), +item.count]], [['Date', 'Transactions']]);
+      this.chartData = transactionsInfo.result.count.reduce((acc, item) => [...acc, [this.$moment(new Date(item.date)).format('DD MMMM, YYYY'), +item.count]], [['Date', 'Transactions']]);
     },
   },
 };

@@ -370,10 +370,13 @@ export default Vue.extend({
   border-radius: 8px;
   border: 1px solid #F7F8FA;
   width: 130px!important;
-  height: 65px!important;
+  height: 45px!important;
 }
 :deep(.google-visualization-tooltip-item span) {
   font-family: 'Inter',sans-serif!important;
+}
+:deep(.google-visualization-tooltip-item) {
+  margin: 0.2em 0 0.2em 0!important;
 }
 :deep(.google-visualization-tooltip-item span) {
   color: #AAB0B9!important;
@@ -385,6 +388,7 @@ export default Vue.extend({
 }
 :deep(.google-visualization-tooltip-item span:nth-child(2)) {
   color: black!important;
+  padding-left: 5px;
 }
 </style>
 <style lang="scss" scoped>
