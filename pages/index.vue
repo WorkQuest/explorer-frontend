@@ -67,7 +67,7 @@
                 {{ item.text }}
               </p>
               <p class="value">
-                ${{ item.value }}
+                ${{ item.value || $t('ui.loading') }}
               </p>
             </div>
           </div>
@@ -79,15 +79,6 @@
             {{ $t('ui.statistics.history') }}
           </p>
           <Chart />
-          <div class="history-days">
-            <span
-              v-for="day in historyDays"
-              :key="day"
-              class="history-days_day"
-            >
-              {{ day }}
-            </span>
-          </div>
         </div>
       </div>
     </div>
@@ -184,16 +175,6 @@ export default Vue.extend({
       txsCount: 'tx/getTxsCount',
       getPrice: 'tx/getPrice',
     }),
-    historyDays() {
-      const day1 = new Date().setDate(new Date().getDate() - 14);
-      const day2 = new Date().setDate(new Date().getDate() - 7);
-      const day3 = new Date();
-      return [
-        this.$moment(day1).format('DD MMMM'),
-        this.$moment(day2).format('DD MMMM'),
-        this.$moment(day3).format('DD MMMM'),
-      ];
-    },
     statisticsBlocks() {
       return [
         {
@@ -305,7 +286,7 @@ export default Vue.extend({
       ];
     },
     getGasPrice() {
-      return `${this.FormatSmallNumber(new BigNumber(this.gasPrice).shiftedBy(-18))} WQT`;
+      return this.gasPrice ? `${this.FormatSmallNumber(new BigNumber(this.gasPrice).shiftedBy(-18))} WQT` : 'Waiting';
     },
     calcMarketCap() {
       return new BigNumber(this.marketCap.result?.supply).shiftedBy(-18) * this.getPrice;
@@ -313,10 +294,6 @@ export default Vue.extend({
   },
   mounted() {
     this.getAllData();
-    const currentDay = new Date();
-    const value1 = new Date().setDate(new Date().getDate() - 14);
-    const value2 = new Date().setDate(new Date().getDate() - 7);
-    console.log(this.$moment(value1).format('DD MMMM'), this.$moment(value2).format('DD MMMM'));
     this.currentTitle = process.env.PRODUCTION === 'TEST' ? this.$t('home.titleTestnet') : this.$t('home.titleMainnet');
   },
   beforeDestroy() {
@@ -365,6 +342,7 @@ export default Vue.extend({
   },
 });
 </script>
+
 <style lang="scss" scoped>
 :deep(.google-visualization-tooltip) {
   border-radius: 8px;
@@ -391,6 +369,7 @@ export default Vue.extend({
   padding-left: 5px;
 }
 </style>
+
 <style lang="scss" scoped>
 .home {
   animation: show 1s 1;
@@ -513,16 +492,6 @@ export default Vue.extend({
     font-weight: 600;
     font-size: 24px;
     line-height: 32px;
-  }
-  &-days {
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-    &_day {
-      font-size: 12px;
-      line-height: 16px;
-      color: #AAB0B9;
-    }
   }
 }
 

@@ -1,13 +1,32 @@
 <template>
-  <GChart
-    type="LineChart"
-    :data="chartData"
-    :options="chartOptions"
-  />
+  <div class="wrapper">
+    <div
+      v-if="chartData"
+      class="wrapper__content content"
+    >
+      <GChart
+        type="LineChart"
+        :data="chartData"
+        :options="chartOptions"
+        class="content-chart"
+      />
+      <div class="content-days">
+        <span
+          v-for="day in historyDays"
+          :key="day"
+          class="content-days_day"
+        >
+          {{ day }}
+        </span>
+      </div>
+    </div>
+    <span v-else>
+      {{ $t('ui.loading') }}
+    </span>
+  </div>
 </template>
 
 <script>
-
 import { mapActions } from 'vuex';
 import { GChart } from 'vue-google-charts/legacy';
 
@@ -58,6 +77,18 @@ export default {
       },
     };
   },
+  computed: {
+    historyDays() {
+      const day1 = new Date().setDate(new Date().getDate() - 14);
+      const day2 = new Date().setDate(new Date().getDate() - 7);
+      const day3 = new Date();
+      return [
+        this.$moment(day1).format('DD MMMM'),
+        this.$moment(day2).format('DD MMMM'),
+        this.$moment(day3).format('DD MMMM'),
+      ];
+    },
+  },
   beforeDestroy() {
     window.removeEventListener('resize', this.updateWidth);
   },
@@ -73,7 +104,6 @@ export default {
     }),
     updateWidth() {
       this.width = window.innerWidth;
-      console.log('this.width :', this.width);
       if (window.innerWidth > 1080) {
         this.chartOptions.width = 530;
         this.chartOptions.height = 200;
@@ -135,8 +165,24 @@ export default {
         }
       });
       this.chartOptions.vAxis.ticks = [min, max + 25];
+      console.log(transactionsInfo);
       this.chartData = transactionsInfo.result.count.reduce((acc, item) => [...acc, [this.$moment(new Date(item.date)).format('DD MMMM, YYYY'), +item.count]], [['Date', 'Transactions']]);
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.content {
+  &-days {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    &_day {
+      font-size: 12px;
+      line-height: 16px;
+      color: #AAB0B9;
+    }
+  }
+}
+</style>

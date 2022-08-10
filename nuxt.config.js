@@ -68,6 +68,7 @@ export default {
     loaders: {
       scss: { sourceMap: false },
     },
+    postcss: null,
     html: {
       minify: {
         collapseBooleanAttributes: true,
