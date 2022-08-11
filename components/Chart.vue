@@ -100,7 +100,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      transactionsByTime: 'tx/getTransactionsByTime',
+      transactionsByTime: 'statistics/getTransactionsByTime',
     }),
     updateWidth() {
       this.width = window.innerWidth;

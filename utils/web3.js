@@ -117,11 +117,7 @@ const connectProvider = async (type = 'read') => {
 
 export const gasPrice = async () => {
   await connectProvider('read');
-  try {
-    return await web3Anonymous.eth.getGasPrice();
-  } catch (e) {
-    return error(500 || e.code, e.message, e);
-  }
+  return await web3Anonymous.eth.getGasPrice();
 };
 
 export const fetchContractData = async (type = 'read', abi, address, method, params = null) => {

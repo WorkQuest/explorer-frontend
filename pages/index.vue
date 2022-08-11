@@ -147,7 +147,6 @@ import { mapActions, mapGetters } from 'vuex';
 import ClickOutside from 'vue-click-outside';
 import BigNumber from 'bignumber.js';
 import Chart from '~/components/Chart';
-import { gasPrice } from '~/utils/web3';
 
 export default Vue.extend({
   name: 'Home',
@@ -171,9 +170,6 @@ export default Vue.extend({
       isShowTokens: false,
       tokens: ['WQT'],
       currentToken: 'wqt',
-      marketCap: '',
-      price: '',
-      gasPrice: '',
     };
   },
   computed: {
@@ -183,7 +179,9 @@ export default Vue.extend({
       WQTSymbol: 'tokens/getWQTTokenSymbol',
       WQTDecimal: 'tokens/getWQTTokenDecimals',
       txsCount: 'tx/getTxsCount',
-      getPrice: 'tx/getPrice',
+      getPrice: 'statistics/getPrice',
+      getGasPrice: 'statistics/getGasPrice',
+      getSupply: 'tokens/getSupply',
     }),
     statisticsBlocks() {
       return [
@@ -215,7 +213,7 @@ export default Vue.extend({
             alt: 'icon min-gas',
           },
           text: this.$t('ui.statistics.minGasPrice'),
-          value: this.getGasPrice,
+          value: this.CurrentGasPrice,
         },
         {
           class: 'transactions',
@@ -295,13 +293,13 @@ export default Vue.extend({
         },
       ];
     },
-    getGasPrice() {
-      return this.gasPrice
-        ? `${this.FormatSmallNumber(new BigNumber(this.gasPrice).shiftedBy(-18))} WQT`
+    CurrentGasPrice() {
+      return this.getGasPrice
+        ? `${this.FormatSmallNumber(new BigNumber(this.getGasPrice).shiftedBy(-18))} WQT`
         : this.$t('ui.loading');
     },
     calcMarketCap() {
-      return new BigNumber(this.marketCap.result?.supply).shiftedBy(-18) * this.getPrice;
+      return new BigNumber(this.getSupply).shiftedBy(-18) * this.getPrice;
     },
   },
   async mounted() {
@@ -314,15 +312,16 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions({
-      transactionsByTime: 'tx/getTransactionsByTime',
-      priceByTimestamp: 'tx/getPriceByTimestamp',
-      priceCoingecko: 'tx/getPriceInCoingecko',
+      transactionsByTime: 'statistics/getTransactionsByTime',
+      priceByTimestamp: 'statistics/getPriceByTimestamp',
+      priceCoingecko: 'statistics/getPriceInCoingecko',
       circulatingSupply: 'tokens/getCirculatingSupply',
+      gasPrice: 'statistics/getGasPrice',
     }),
     async getAllData() {
-      [this.gasPrice, this.marketCap] = await Promise.all([
-        gasPrice(),
+      await Promise.all([
         this.circulatingSupply(),
+        this.gasPrice(),
         this.priceByTimestamp(this.$moment().unix()),
         this.getBlocks(),
         this.getTransactions(),
