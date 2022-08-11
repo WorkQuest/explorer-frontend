@@ -66,9 +66,21 @@
               <p class="text">
                 {{ item.text }}
               </p>
-              <p class="value">
-                ${{ item.value || $t('ui.loading') }}
+              <p
+                v-if="item.value"
+                class="value"
+              >
+                ${{ item.value }}
               </p>
+              <div
+                v-else
+                class="loader-cont"
+              >
+                <loader
+                  class="loader-cont__loader"
+                  is-mini-loader
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -371,6 +383,16 @@ export default Vue.extend({
 </style>
 
 <style lang="scss" scoped>
+.loader-cont {
+  height: 20px;
+  width: 20px;
+  position: relative;
+
+  &__loader {
+    position: absolute !important;
+    background: transparent !important;
+  }
+}
 .home {
   animation: show 1s 1;
 

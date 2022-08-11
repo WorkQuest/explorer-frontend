@@ -6,7 +6,10 @@
     <div
       class="loader__body"
     >
-      <div class="sk-chase">
+      <div
+        class="sk-chase"
+        :class="{'sk-chase_small' : isMiniLoader}"
+      >
         <div class="sk-chase-dot" />
         <div class="sk-chase-dot" />
         <div class="sk-chase-dot" />
@@ -22,6 +25,12 @@ import { mapGetters } from 'vuex';
 import loaderModes from '~/store/main/loaderModes';
 
 export default {
+  props: {
+    isMiniLoader: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       loaderModes,
@@ -68,7 +77,13 @@ export default {
   width: 40px;
   height: 40px;
   position: relative;
+  z-index: 1500;
   animation: sk-chase 2.5s infinite linear both;
+
+  &_small {
+    height: 20px;
+    width: 20px;
+  }
 }
 
 .sk-chase-dot {
