@@ -389,6 +389,7 @@ export default Vue.extend({
     background: transparent !important;
   }
 }
+
 .home {
   animation: show 1s 1;
 

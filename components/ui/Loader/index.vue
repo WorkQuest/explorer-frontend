@@ -77,7 +77,6 @@ export default {
   width: 40px;
   height: 40px;
   position: relative;
-  z-index: 1500;
   animation: sk-chase 2.5s infinite linear both;
 
   &_small {

@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div
-      v-if="chartData"
+      v-if="chartData.length"
       class="wrapper__content content"
     >
       <GChart
@@ -20,9 +20,15 @@
         </span>
       </div>
     </div>
-    <span v-else>
-      {{ $t('ui.loading') }}
-    </span>
+    <div
+      v-else
+      class="loader-cont"
+    >
+      <loader
+        class="loader-cont__loader"
+        is-mini-loader
+      />
+    </div>
   </div>
 </template>
 
@@ -103,56 +109,47 @@ export default {
       transactionsByTime: 'statistics/getTransactionsByTime',
     }),
     updateWidth() {
-      this.width = window.innerWidth;
-      if (window.innerWidth > 1080) {
+      const width = window.innerWidth;
+      if (width > 1080) {
         this.chartOptions.width = 550;
         this.chartOptions.height = 150;
         this.chartOptions.chartArea.width = 500;
         this.chartOptions.chartArea.height = 110;
-      }
-      if (window.innerWidth > 1075 && window.innerWidth < 1080) {
-        this.chartOptions.width = this.width - 370;
-        this.chartOptions.height = this.width - 750;
-        this.chartOptions.chartArea.width = this.width - 500;
-        this.chartOptions.chartArea.height = this.width - 850;
-      }
-      if (window.innerWidth > 1000 && window.innerWidth < 1070) {
-        this.chartOptions.width = this.width - 370;
+      } else if (width > 1075 && width < 1080) {
+        this.chartOptions.width = width - 370;
+        this.chartOptions.height = width - 750;
+        this.chartOptions.chartArea.width = width - 500;
+        this.chartOptions.chartArea.height = width - 850;
+      } else if (width > 1000 && width < 1070) {
+        this.chartOptions.width = width - 370;
         this.chartOptions.height = 350;
-        this.chartOptions.chartArea.width = this.width - 500;
+        this.chartOptions.chartArea.width = width - 500;
         this.chartOptions.chartArea.height = 250;
-      }
-      if (window.innerWidth > 900 && window.innerWidth < 1000) {
-        this.chartOptions.width = this.width - 380;
-        this.chartOptions.chartArea.width = this.width - 440;
-      }
-      if (window.innerWidth > 875 && window.innerWidth < 900) {
-        this.chartOptions.width = this.width - 380;
-        this.chartOptions.chartArea.width = this.width - 440;
-      }
-      if (window.innerWidth > 769 && window.innerWidth < 875) {
-        this.chartOptions.width = this.width - 380;
-        this.chartOptions.chartArea.width = this.width - 440;
-      }
-      if (window.innerWidth > 710 && window.innerWidth < 769) {
-        this.chartOptions.width = this.width - 100;
-        this.chartOptions.height = this.width - 500;
-        this.chartOptions.chartArea.width = this.width - 150;
-        this.chartOptions.chartArea.height = this.width - 600;
-      }
-      if (window.innerWidth > 640 && window.innerWidth < 710) {
-        this.chartOptions.width = this.width - 100;
-        this.chartOptions.height = this.width - 450;
-        this.chartOptions.chartArea.width = this.width - 150;
-        this.chartOptions.chartArea.height = this.width - 550;
-      }
-      if (window.innerWidth > 481 && window.innerWidth < 640) {
-        this.chartOptions.width = this.width - 100;
-        this.chartOptions.chartArea.width = this.width - 150;
-      }
-      if (window.innerWidth > 300 && window.innerWidth < 481) {
-        this.chartOptions.width = this.width - 40;
-        this.chartOptions.chartArea.width = this.width - 90;
+      } else if (width > 900 && width < 1000) {
+        this.chartOptions.width = width - 380;
+        this.chartOptions.chartArea.width = width - 440;
+      } else if (width > 875 && width < 900) {
+        this.chartOptions.width = width - 380;
+        this.chartOptions.chartArea.width = width - 440;
+      } else if (width > 769 && width < 875) {
+        this.chartOptions.width = width - 380;
+        this.chartOptions.chartArea.width = width - 440;
+      } else if (width > 710 && width < 769) {
+        this.chartOptions.width = width - 100;
+        this.chartOptions.height = width - 500;
+        this.chartOptions.chartArea.width = width - 150;
+        this.chartOptions.chartArea.height = width - 600;
+      } else if (width > 640 && width < 710) {
+        this.chartOptions.width = width - 100;
+        this.chartOptions.height = width - 450;
+        this.chartOptions.chartArea.width = width - 150;
+        this.chartOptions.chartArea.height = width - 550;
+      } else if (width > 481 && width < 640) {
+        this.chartOptions.width = width - 100;
+        this.chartOptions.chartArea.width = width - 150;
+      } else {
+        this.chartOptions.width = width - 40;
+        this.chartOptions.chartArea.width = width - 90;
       }
     },
     async createChartData() {
@@ -161,6 +158,7 @@ export default {
       const timestamp = currentDay.setDate(currentDay.getDate() - 14);
       const dayFrom = new Date(timestamp).toISOString();
       const transactionsInfo = await this.transactionsByTime({ dayFrom, dayTo });
+      if (!transactionsInfo.ok) return;
       let min = transactionsInfo.result.count[0].count;
       let max = null;
       transactionsInfo.result.count.forEach((item) => {
@@ -188,6 +186,18 @@ export default {
       line-height: 16px;
       color: #AAB0B9;
     }
+  }
+}
+
+.loader-cont {
+  margin: 60px auto 0;
+  height: 20px;
+  width: 20px;
+  position: relative;
+
+  &__loader {
+    position: absolute !important;
+    background: transparent !important;
   }
 }
 </style>
