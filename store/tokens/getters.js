@@ -11,4 +11,5 @@ export default {
   getWQTTokenSymbol: (state) => state.wqt.symbol,
   getWQTTokenDecimals: (state) => state.wqt.decimals,
   getTokenPrice: (state) => (tokenSymbol) => state.tokenPrices.find((token) => token.symbol === tokenSymbol)?.price,
+  getSupply: (state) => state.supply.count,
 };
