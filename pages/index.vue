@@ -428,8 +428,6 @@ export default Vue.extend({
     display: flex;
     margin-bottom: 30px;
     justify-content: space-between;
-    //width: 100%;
-    //max-width: 1160px;
   }
 }
 
@@ -451,9 +449,9 @@ export default Vue.extend({
 }
 
 .info {
-  margin-right: 10px;
+  margin-right: 20px;
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 1fr 1fr;
   grid-template-rows: 46px 50px 50px;
   gap: 20px 20px;
   grid-template-areas:
@@ -641,7 +639,7 @@ export default Vue.extend({
 
   .info {
     display: grid;
-    grid-template-columns: max-content;
+    grid-template-columns: 1fr;
     grid-template-rows: 46px 50px 50px 50px 50px 50px;
     gap: 20px 20px;
     grid-template-areas:
