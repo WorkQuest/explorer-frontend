@@ -41,7 +41,7 @@ export default {
       chartOptions: {
         curveType: 'function',
         width: 550,
-        height: 200,
+        height: 150,
         tooltip: {
           isHtml: true,
         },
@@ -105,9 +105,9 @@ export default {
     updateWidth() {
       this.width = window.innerWidth;
       if (window.innerWidth > 1080) {
-        this.chartOptions.width = 530;
-        this.chartOptions.height = 200;
-        this.chartOptions.chartArea.width = 480;
+        this.chartOptions.width = 550;
+        this.chartOptions.height = 150;
+        this.chartOptions.chartArea.width = 500;
         this.chartOptions.chartArea.height = 110;
       }
       if (window.innerWidth > 1075 && window.innerWidth < 1080) {
@@ -118,7 +118,9 @@ export default {
       }
       if (window.innerWidth > 1000 && window.innerWidth < 1070) {
         this.chartOptions.width = this.width - 370;
+        this.chartOptions.height = 350;
         this.chartOptions.chartArea.width = this.width - 500;
+        this.chartOptions.chartArea.height = 250;
       }
       if (window.innerWidth > 900 && window.innerWidth < 1000) {
         this.chartOptions.width = this.width - 380;
@@ -128,11 +130,11 @@ export default {
         this.chartOptions.width = this.width - 380;
         this.chartOptions.chartArea.width = this.width - 440;
       }
-      if (window.innerWidth > 768 && window.innerWidth < 875) {
+      if (window.innerWidth > 769 && window.innerWidth < 875) {
         this.chartOptions.width = this.width - 380;
         this.chartOptions.chartArea.width = this.width - 440;
       }
-      if (window.innerWidth > 710 && window.innerWidth < 765) {
+      if (window.innerWidth > 710 && window.innerWidth < 769) {
         this.chartOptions.width = this.width - 100;
         this.chartOptions.height = this.width - 500;
         this.chartOptions.chartArea.width = this.width - 150;
@@ -165,7 +167,6 @@ export default {
         }
       });
       this.chartOptions.vAxis.ticks = [min, max + 25];
-      console.log(transactionsInfo);
       this.chartData = transactionsInfo.result.count.reduce((acc, item) => [...acc, [this.$moment(new Date(item.date)).format('DD MMMM, YYYY'), +item.count]], [['Date', 'Transactions']]);
     },
   },

@@ -196,7 +196,7 @@ export default Vue.extend({
             icon: 'ticket',
             alt: 'icon ticket',
           },
-          text: `${this.currentToken.toUpperCase()} ${this.$t('ui.statistics.price')}`,
+          text: this.$t('ui.statistics.price'),
           value: this.getPrice,
         },
         {
@@ -206,8 +206,8 @@ export default Vue.extend({
             icon: 'market-cap',
             alt: 'icon market-cap',
           },
-          text: `${this.currentToken.toUpperCase()} ${this.$t('ui.statistics.marketCap')}`,
-          value: this.FormatSmallNumber(this.calcMarketCap),
+          text: this.$t('ui.statistics.marketCap'),
+          value: this.FormattingLargeNumber(this.calcMarketCap),
         },
         {
           class: 'gas',
@@ -320,13 +320,11 @@ export default Vue.extend({
       circulatingSupply: 'tokens/getCirculatingSupply',
     }),
     async getAllData() {
-      await this.SetLoader(true);
       await this.currentPrice();
       await this.getBlocks();
       await this.getTransactions();
       this.gasPrice = await gasPrice();
       this.marketCap = await this.circulatingSupply();
-      await this.SetLoader(false);
     },
     showTokens() {
       this.isShowTokens = !this.isShowTokens;
@@ -426,11 +424,12 @@ export default Vue.extend({
   }
 
   &__statistics {
+    @include container;
     display: flex;
     margin-bottom: 30px;
     justify-content: space-between;
-    width: 100%;
-    max-width: 1160px;
+    //width: 100%;
+    //max-width: 1160px;
   }
 }
 
@@ -439,9 +438,15 @@ export default Vue.extend({
     width: 100%;
     max-width: 570px;
     background-color: $white;
-    padding: 27px 20px 20px;
+    padding: 20px;
     border-radius: 7px;
     color: $black800;
+  }
+}
+
+.statistics {
+  &__history {
+    padding: 27px 20px 20px;
   }
 }
 
@@ -505,7 +510,6 @@ export default Vue.extend({
     grid-area: value;
     overflow-x: scroll;
     white-space: nowrap;
-    max-width: 200px;
   }
 }
 
@@ -624,9 +628,6 @@ export default Vue.extend({
 
 @include _1080 {
   .home {
-    &__statistics {
-      width: unset;
-    }
     &__header {
       align-items: flex-start;
     }
@@ -668,11 +669,9 @@ export default Vue.extend({
     &__statistics {
       flex-direction: column;
       margin-bottom: 0;
-      //width: unset;
     }
   }
   .info {
-    margin-right: 10px;
     display: grid;
     grid-template-columns: auto auto;
     grid-template-rows: 46px 50px 50px;
@@ -683,14 +682,10 @@ export default Vue.extend({
     "info-transactions info-gas";
     align-items: center;
     margin-bottom: 20px;
+    max-width: none;
   }
   .history {
     margin-bottom: 20px;
-  }
-  .capitalization {
-    .value {
-      max-width: 200px;
-    }
   }
 }
 
@@ -732,6 +727,14 @@ export default Vue.extend({
   .dropdown__button {
     &_token {
       margin: 0 auto 0 0;
+    }
+  }
+}
+
+@include _480 {
+  .statistics {
+    &__info, &__history {
+      padding: 10px;
     }
   }
 }

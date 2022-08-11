@@ -80,7 +80,7 @@ export default {
   },
   async getCirculatingSupply({ commit }) {
     try {
-      const response = await this.$axios.$get(`${process.env.BASE_URL}/coin/circulating-supply`);
+      const response = await this.$axios.$get('/coin/circulating-supply');
       return response;
     } catch (e) {
       return error(e.code || 500, 'getCirculatingSupply', e);
