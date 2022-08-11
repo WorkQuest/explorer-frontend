@@ -146,9 +146,13 @@ export default {
         this.chartOptions.chartArea.width = this.width - 150;
         this.chartOptions.chartArea.height = this.width - 550;
       }
-      if (window.innerWidth > 300 && window.innerWidth < 640) {
+      if (window.innerWidth > 481 && window.innerWidth < 640) {
         this.chartOptions.width = this.width - 100;
         this.chartOptions.chartArea.width = this.width - 150;
+      }
+      if (window.innerWidth > 300 && window.innerWidth < 481) {
+        this.chartOptions.width = this.width - 40;
+        this.chartOptions.chartArea.width = this.width - 90;
       }
     },
     async createChartData() {

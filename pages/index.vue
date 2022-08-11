@@ -730,6 +730,9 @@ export default Vue.extend({
 }
 
 @include _480 {
+  .info {
+    grid-template-rows: 32px 46px 50px 50px 50px 50px;
+  }
   .statistics {
     &__info, &__history {
       padding: 10px;
