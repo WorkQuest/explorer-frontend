@@ -41,7 +41,7 @@ export default {
         const price = Number(shiftedByPrice).toFixed(4);
         commit('setPrice', price);
       } else {
-        const date = this.$moment(new Date()).format('DD-MM-YYYY');
+        const date = this.$moment().format('DD-MM-YYYY');
         dispatch('getPriceInCoingecko', date);
       }
       return response;

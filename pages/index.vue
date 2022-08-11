@@ -85,9 +85,7 @@
           </div>
         </div>
         <div class="statistics__history history">
-          <p
-            class="history-chart"
-          >
+          <p class="history-chart">
             {{ $t('ui.statistics.history') }}
           </p>
           <Chart />
@@ -298,14 +296,16 @@ export default Vue.extend({
       ];
     },
     getGasPrice() {
-      return this.gasPrice ? `${this.FormatSmallNumber(new BigNumber(this.gasPrice).shiftedBy(-18))} WQT` : 'Waiting';
+      return this.gasPrice
+        ? `${this.FormatSmallNumber(new BigNumber(this.gasPrice).shiftedBy(-18))} WQT`
+        : this.$t('ui.loading');
     },
     calcMarketCap() {
       return new BigNumber(this.marketCap.result?.supply).shiftedBy(-18) * this.getPrice;
     },
   },
-  mounted() {
-    this.getAllData();
+  async mounted() {
+    await this.getAllData();
     this.currentTitle = process.env.PRODUCTION === 'TEST' ? this.$t('home.titleTestnet') : this.$t('home.titleMainnet');
   },
   beforeDestroy() {
@@ -320,11 +320,13 @@ export default Vue.extend({
       circulatingSupply: 'tokens/getCirculatingSupply',
     }),
     async getAllData() {
-      await this.currentPrice();
-      await this.getBlocks();
-      await this.getTransactions();
-      this.gasPrice = await gasPrice();
-      this.marketCap = await this.circulatingSupply();
+      [this.gasPrice, this.marketCap] = await Promise.all([
+        gasPrice(),
+        this.circulatingSupply(),
+        this.priceByTimestamp(this.$moment().unix()),
+        this.getBlocks(),
+        this.getTransactions(),
+      ]);
     },
     showTokens() {
       this.isShowTokens = !this.isShowTokens;
@@ -335,9 +337,6 @@ export default Vue.extend({
     setToken(item) {
       this.currentToken = item;
       this.closeTokens();
-    },
-    async currentPrice() {
-      await this.priceByTimestamp(this.$moment(new Date()).unix());
     },
     async getBlocks() {
       this.blocksTableBusy = true;

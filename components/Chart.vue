@@ -89,14 +89,14 @@ export default {
       ];
     },
   },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.updateWidth);
-  },
   created() {
     window.addEventListener('resize', this.updateWidth);
   },
   async mounted() {
     await this.createChartData();
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.updateWidth);
   },
   methods: {
     ...mapActions({
@@ -162,7 +162,7 @@ export default {
       const dayFrom = new Date(timestamp).toISOString();
       const transactionsInfo = await this.transactionsByTime({ dayFrom, dayTo });
       let min = transactionsInfo.result.count[0].count;
-      let max = transactionsInfo.result.count[0].count;
+      let max = null;
       transactionsInfo.result.count.forEach((item) => {
         if (+item.count > max) {
           max = +item.count;
