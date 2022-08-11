@@ -48,4 +48,7 @@ export default {
   resetTokenPrices(state) {
     state.tokenPrices = [];
   },
+  setCirculatingSupply(state, data) {
+    state.supply.count = data;
+  },
 };

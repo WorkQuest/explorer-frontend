@@ -115,6 +115,11 @@ const connectProvider = async (type = 'read') => {
   return null;
 };
 
+export const gasPrice = async () => {
+  await connectProvider('read');
+  return await web3Anonymous.eth.getGasPrice();
+};
+
 export const fetchContractData = async (type = 'read', abi, address, method, params = null) => {
   const instance = await connectProvider(type);
   const contract = new instance.eth.Contract(abi, address);
