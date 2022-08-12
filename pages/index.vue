@@ -70,7 +70,7 @@
                 v-if="item.value"
                 class="value"
               >
-                ${{ item.value }}
+                {{ item.value }}
               </p>
               <div
                 v-else
@@ -193,7 +193,7 @@ export default Vue.extend({
             alt: 'icon ticket',
           },
           text: this.$t('ui.statistics.price'),
-          value: this.getPrice,
+          value: `$${this.getPrice}`,
         },
         {
           class: 'capitalization',
@@ -203,7 +203,7 @@ export default Vue.extend({
             alt: 'icon market-cap',
           },
           text: this.$t('ui.statistics.marketCap'),
-          value: this.FormattingLargeNumber(this.calcMarketCap),
+          value: `$${this.FormattingLargeNumber(this.calcMarketCap)}`,
         },
         {
           class: 'gas',
@@ -505,8 +505,6 @@ export default Vue.extend({
 
   .value {
     grid-area: value;
-    overflow-x: scroll;
-    white-space: nowrap;
   }
 }
 
