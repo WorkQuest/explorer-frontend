@@ -203,7 +203,7 @@ export default Vue.extend({
             alt: 'icon market-cap',
           },
           text: this.$t('ui.statistics.marketCap'),
-          value: `$${(this.FormattingLargeNumber(this.calcMarketCap)).toFixed(2)}`,
+          value: `$${this.FormattingLargeNumber(this.calcMarketCap)}`,
         },
         {
           class: 'gas',
