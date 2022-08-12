@@ -106,7 +106,7 @@ Vue.mixin({
       if (num.isGreaterThan(999999999999)) {
         return '> 1 trillion';
       }
-      return number;
+      return number.toFixed(2);
     },
   },
 });

@@ -355,7 +355,7 @@ export default Vue.extend({
 :deep(.google-visualization-tooltip) {
   border-radius: 8px;
   border: 1px solid #F7F8FA;
-  width: 130px!important;
+  width: 140px!important;
   height: 45px!important;
 }
 :deep(.google-visualization-tooltip-item span) {
