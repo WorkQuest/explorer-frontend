@@ -259,8 +259,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      priceByTimestamp: 'tx/getPriceByTimestamp',
-      priceCoingecko: 'tx/getPriceInCoingecko',
+      priceByTimestamp: 'statistics/getPriceByTimestamp',
+      priceCoingecko: 'statistics/getPriceInCoingecko',
     }),
     convertNativeToDollar(value) {
       const valueInDollars = (value * this.currentPrice);
