@@ -121,6 +121,10 @@ export const allTokenTransfers = {
 
 export const tokenPrices = [];
 
+export const supply = {
+  count: 0,
+};
+
 export default () => ({
   allTokens,
   currentToken,
@@ -131,4 +135,5 @@ export default () => ({
     decimals: 18,
   },
   tokenPrices,
+  supply,
 });

@@ -13,7 +13,7 @@ export default function ({
       if (route.name === 'tx-id' && route.params.id) {
         const tx = await getTransactionByTxHash(route.params.id);
         if (tx.ok) return true;
-      }
+      } else if (config.url.includes('/transactions/count')) return true;
       nuxtError({ statusCode: 404, message: serverErrorMessage(app, locale, serverMessage) });
       throw config;
     }

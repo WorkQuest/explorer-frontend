@@ -98,5 +98,15 @@ Vue.mixin({
     DeleteFromStorage(key) {
       sessionStorage.removeItem(key);
     },
+    FormattingLargeNumber(number) {
+      const num = new BigNumber(number);
+      if (num.isLessThan(999999999999) && num.isGreaterThan(999999999)) {
+        return '> 1 billion';
+      }
+      if (num.isGreaterThan(999999999999)) {
+        return '> 1 trillion';
+      }
+      return number.toFixed(2);
+    },
   },
 });

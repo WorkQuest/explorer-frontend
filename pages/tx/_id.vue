@@ -259,8 +259,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      priceByTimestamp: 'tx/getPriceByTimestamp',
-      priceCoingecko: 'tx/getPriceInCoingecko',
+      priceByTimestamp: 'statistics/getPriceByTimestamp',
+      priceCoingecko: 'statistics/getPriceInCoingecko',
     }),
     convertNativeToDollar(value) {
       const valueInDollars = (value * this.currentPrice);
@@ -458,7 +458,7 @@ export default {
     position: relative;
   }
 
-  ::v-deep .item {
+  :deep(.item) {
     &:nth-child(1) .item__header {
       margin-bottom: 10px;
     }
@@ -501,7 +501,7 @@ export default {
 }
 
 @include _991 {
-  ::v-deep .item {
+  :deep(.item) {
     display: flex;
     align-items: center;
 
@@ -595,7 +595,7 @@ export default {
     background: $white;
     padding-top: 22px;
   }
-  ::v-deep .item {
+  :deep(.item) {
     &__info_blue {
       font-size: 18px;
     }
