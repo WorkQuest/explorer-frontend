@@ -180,7 +180,6 @@ export default Vue.extend({
       WQTDecimal: 'tokens/getWQTTokenDecimals',
       txsCount: 'tx/getTxsCount',
       getPrice: 'statistics/getPrice',
-      getGasPrice: 'statistics/getGasPrice',
       getSupply: 'tokens/getSupply',
     }),
     statisticsBlocks() {
@@ -212,8 +211,8 @@ export default Vue.extend({
             icon: 'min-gas',
             alt: 'icon min-gas',
           },
-          text: this.$t('ui.statistics.minGasPrice'),
-          value: this.CurrentGasPrice,
+          text: this.$t('ui.tx.minFee'),
+          value: '18 WQT',
         },
         {
           class: 'transactions',
@@ -293,11 +292,6 @@ export default Vue.extend({
         },
       ];
     },
-    CurrentGasPrice() {
-      return this.getGasPrice
-        ? `${this.FormatSmallNumber(new BigNumber(this.getGasPrice).shiftedBy(-18))} WQT`
-        : this.$t('ui.loading');
-    },
     calcMarketCap() {
       return new BigNumber(this.getSupply).shiftedBy(-18) * this.getPrice;
     },
@@ -316,12 +310,10 @@ export default Vue.extend({
       priceByTimestamp: 'statistics/getPriceByTimestamp',
       priceCoingecko: 'statistics/getPriceInCoingecko',
       circulatingSupply: 'tokens/getCirculatingSupply',
-      gasPrice: 'statistics/getGasPrice',
     }),
     async getAllData() {
       await Promise.all([
         this.circulatingSupply(),
-        this.gasPrice(),
         this.priceByTimestamp(this.$moment().unix()),
         this.getBlocks(),
         this.getTransactions(),
