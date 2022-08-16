@@ -136,14 +136,10 @@ export default {
         this.chartOptions.chartArea.width = width - 440;
       } else if (width > 710 && width < 769) {
         this.chartOptions.width = width - 100;
-        // this.chartOptions.height = width - 610;
         this.chartOptions.chartArea.width = width - 150;
-        // this.chartOptions.chartArea.height = width - 600;
       } else if (width > 640 && width < 710) {
         this.chartOptions.width = width - 100;
-        // this.chartOptions.height = width - 450;
         this.chartOptions.chartArea.width = width - 150;
-        // this.chartOptions.chartArea.height = width - 550;
       } else if (width > 481 && width < 640) {
         this.chartOptions.width = width - 100;
         this.chartOptions.chartArea.width = width - 150;
