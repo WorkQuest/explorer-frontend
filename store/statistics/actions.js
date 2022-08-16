@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js';
 import { error } from '~/utils';
-import { gasPrice } from '~/utils/web3';
 
 export default {
   async getPriceByTimestamp({ commit, dispatch }, unix) {
@@ -35,15 +34,6 @@ export default {
       return response;
     } catch (e) {
       return error(e.code || 500, 'getTransactionsByTime', e);
-    }
-  },
-  async getGasPrice({ commit }) {
-    try {
-      const r = await gasPrice();
-      commit('setGasPrice', r);
-      return r;
-    } catch (e) {
-      return error(e.code || 500, 'getGasPrice', e);
     }
   },
 };

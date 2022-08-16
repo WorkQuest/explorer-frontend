@@ -57,6 +57,7 @@
       "value": "Value",
       "fee": "Txn Fee",
       "feeFull": "Transaction Fee",
+      "minFee": "Min transaction fee",
       "txDetails": "Transaction Details",
       "status": "Status",
       "logs": "Transaction Receipt Event Logs",

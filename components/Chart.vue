@@ -53,7 +53,7 @@ export default {
         },
         chartArea: {
           width: 460,
-          height: 110,
+          height: 140,
         },
         legend: {
           position: 'none',
@@ -100,6 +100,7 @@ export default {
   },
   async mounted() {
     await this.createChartData();
+    this.updateWidth();
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.updateWidth);
@@ -114,7 +115,7 @@ export default {
         this.chartOptions.width = 550;
         this.chartOptions.height = 150;
         this.chartOptions.chartArea.width = 500;
-        this.chartOptions.chartArea.height = 110;
+        this.chartOptions.chartArea.height = 140;
       } else if (width > 1075 && width < 1080) {
         this.chartOptions.width = width - 370;
         this.chartOptions.height = width - 750;
@@ -136,14 +137,10 @@ export default {
         this.chartOptions.chartArea.width = width - 440;
       } else if (width > 710 && width < 769) {
         this.chartOptions.width = width - 100;
-        this.chartOptions.height = width - 500;
         this.chartOptions.chartArea.width = width - 150;
-        this.chartOptions.chartArea.height = width - 600;
       } else if (width > 640 && width < 710) {
         this.chartOptions.width = width - 100;
-        this.chartOptions.height = width - 450;
         this.chartOptions.chartArea.width = width - 150;
-        this.chartOptions.chartArea.height = width - 550;
       } else if (width > 481 && width < 640) {
         this.chartOptions.width = width - 100;
         this.chartOptions.chartArea.width = width - 150;
@@ -168,7 +165,7 @@ export default {
           min = +item.count;
         }
       });
-      this.chartOptions.vAxis.ticks = [min, max + 25];
+      this.chartOptions.vAxis.ticks = [min, max];
       this.chartData = transactionsInfo.result.count.reduce((acc, item) => [...acc, [this.$moment(new Date(item.date)).format('DD MMMM, YYYY'), +item.count]], [['Date', 'Transactions']]);
     },
   },
