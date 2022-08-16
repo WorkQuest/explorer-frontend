@@ -66,6 +66,7 @@
     </div>
   </ValidationProvider>
 </template>
+
 <script>
 export default {
   props: {
@@ -162,6 +163,7 @@ export default {
   },
 };
 </script>
+
 <style lang="scss" scoped>
 .ctm-field {
   &__selector {
@@ -326,5 +328,41 @@ export default {
       }
     }
   }
+
+  @include _767 {
+    &_default, &_white {
+      .ctm-field__input {
+        &::placeholder {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  @include _480 {
+    &_default, &_white {
+      .ctm-field__input {
+        &::placeholder {
+          font-size: 12px;
+        }
+      }
+    }
+    &__search {
+      left: 10px;
+    }
+  }
+  @include _350 {
+    &_default, &_white {
+      .ctm-field__input {
+        &::placeholder {
+          font-size: 11px;
+        }
+        &_padding {
+          padding: 0 0 0 40px;
+        }
+      }
+    }
+  }
 }
+
 </style>

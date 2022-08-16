@@ -100,6 +100,7 @@ export default {
   },
   async mounted() {
     await this.createChartData();
+    this.updateWidth();
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.updateWidth);
