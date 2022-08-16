@@ -11,7 +11,6 @@
         :is-search="true"
         :is-hide-error="true"
         rules="required"
-        :auto-focus="true"
         :placeholder="$tc('ui.forms.searchPlaceholder')"
         @enter="handleSubmit(onSearch)"
       />
@@ -137,6 +136,7 @@ export default {
     &__wrapper {
       grid-template-areas: "field field" "dd btn";
       grid-gap: 20px;
+      padding: 10px;
     }
   }
 }
