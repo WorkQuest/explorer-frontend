@@ -47,13 +47,13 @@ export default {
       chartOptions: {
         curveType: 'function',
         width: 550,
-        height: 150,
+        height: 170,
         tooltip: {
           isHtml: true,
         },
         chartArea: {
           width: 460,
-          height: 140,
+          height: 200,
         },
         legend: {
           position: 'none',
@@ -74,7 +74,6 @@ export default {
           gridlines: {
             color: '#FFF',
           },
-          ticks: [200, 500, 800],
           textStyle: {
             fontSize: '12',
             color: '#AAB0B9',
@@ -87,7 +86,7 @@ export default {
     historyDays() {
       const day1 = new Date().setDate(new Date().getDate() - 14);
       const day2 = new Date().setDate(new Date().getDate() - 7);
-      const day3 = new Date();
+      const day3 = new Date().setDate(new Date().getDate() - 1);
       return [
         this.$moment(day1).format('DD MMMM'),
         this.$moment(day2).format('DD MMMM'),
@@ -113,9 +112,9 @@ export default {
       const width = window.innerWidth;
       if (width > 1080) {
         this.chartOptions.width = 550;
-        this.chartOptions.height = 150;
+        this.chartOptions.height = 170;
         this.chartOptions.chartArea.width = 500;
-        this.chartOptions.chartArea.height = 140;
+        this.chartOptions.chartArea.height = 200;
       } else if (width > 1075 && width < 1080) {
         this.chartOptions.width = width - 370;
         this.chartOptions.height = width - 750;
@@ -123,9 +122,9 @@ export default {
         this.chartOptions.chartArea.height = width - 850;
       } else if (width > 1000 && width < 1070) {
         this.chartOptions.width = width - 370;
-        this.chartOptions.height = 350;
+        this.chartOptions.height = 320;
         this.chartOptions.chartArea.width = width - 500;
-        this.chartOptions.chartArea.height = 250;
+        this.chartOptions.chartArea.height = 380;
       } else if (width > 900 && width < 1000) {
         this.chartOptions.width = width - 380;
         this.chartOptions.chartArea.width = width - 440;
@@ -156,17 +155,33 @@ export default {
       const dayFrom = new Date(timestamp).toISOString();
       const transactionsInfo = await this.transactionsByTime({ dayFrom, dayTo });
       if (!transactionsInfo.ok) return;
-      let min = transactionsInfo.result.count[0].count;
+      // added count = 0 for days without transactions
+      const normalArray = [];
+      for (let i = 14; i > 0; i -= 1) {
+        normalArray.push({
+          date: this.$moment(new Date().setDate(new Date().getDate() - i)).format('YYYY-MM-DD'),
+          count: '0',
+        });
+      }
+      normalArray.forEach((item) => {
+        const temp = transactionsInfo.result.count.find((el) => el.date === item.date);
+        if (!temp) return;
+        item.count = temp.count;
+      });
+      console.log('normal arr after for each', normalArray);
+      // min and max for Y-axis in chart
+      let min = normalArray[0].count;
       let max = null;
-      transactionsInfo.result.count.forEach((item) => {
+      normalArray.forEach((item) => {
         if (+item.count > max) {
           max = +item.count;
         } else if (+item.count < min) {
           min = +item.count;
         }
       });
-      this.chartOptions.vAxis.ticks = [min, max];
-      this.chartData = transactionsInfo.result.count.reduce((acc, item) => [...acc, [this.$moment(new Date(item.date)).format('DD MMMM, YYYY'), +item.count]], [['Date', 'Transactions']]);
+
+      this.chartOptions.vAxis.ticks = [min, max + 25];
+      this.chartData = normalArray.reduce((acc, item) => [...acc, [this.$moment(new Date(item.date)).format('DD MMMM, YYYY'), +item.count]], [['Date', 'Transactions']]);
     },
   },
 };
@@ -177,7 +192,22 @@ export default {
   &-days {
     display: flex;
     width: 100%;
-    justify-content: space-around;
+    justify-content: space-between;
+    padding-left: 35px;
+    @include _1080 {
+      justify-content: space-around;
+      padding-left: 0;
+    }
+    @include _767 {
+      justify-content: space-between;
+      padding: 0 50px;
+    }
+    @include _575 {
+      padding: 0 50px 0 35px;
+    }
+    @include _480 {
+      padding: 0 35px;
+    }
     &_day {
       font-size: 12px;
       line-height: 16px;
