@@ -156,23 +156,22 @@ export default {
       const transactionsInfo = await this.transactionsByTime({ dayFrom, dayTo });
       if (!transactionsInfo.ok) return;
       // added count = 0 for days without transactions
-      const normalArray = [];
+      const fullArrayDates = [];
       for (let i = 14; i > 0; i -= 1) {
-        normalArray.push({
+        fullArrayDates.push({
           date: this.$moment(new Date().setDate(new Date().getDate() - i)).format('YYYY-MM-DD'),
           count: '0',
         });
       }
-      normalArray.forEach((item) => {
-        const temp = transactionsInfo.result.count.find((el) => el.date === item.date);
-        if (!temp) return;
-        item.count = temp.count;
+      fullArrayDates.forEach((item) => {
+        const existDate = transactionsInfo.result.count.find((el) => el.date === item.date);
+        if (!existDate) return;
+        item.count = existDate.count;
       });
-      console.log('normal arr after for each', normalArray);
       // min and max for Y-axis in chart
-      let min = normalArray[0].count;
+      let min = fullArrayDates[0].count;
       let max = null;
-      normalArray.forEach((item) => {
+      fullArrayDates.forEach((item) => {
         if (+item.count > max) {
           max = +item.count;
         } else if (+item.count < min) {
@@ -181,7 +180,7 @@ export default {
       });
 
       this.chartOptions.vAxis.ticks = [min, max + 25];
-      this.chartData = normalArray.reduce((acc, item) => [...acc, [this.$moment(new Date(item.date)).format('DD MMMM, YYYY'), +item.count]], [['Date', 'Transactions']]);
+      this.chartData = fullArrayDates.reduce((acc, item) => [...acc, [this.$moment(new Date(item.date)).format('DD MMMM, YYYY'), +item.count]], [['Date', 'Transactions']]);
     },
   },
 };
