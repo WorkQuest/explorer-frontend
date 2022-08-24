@@ -1,4 +1,4 @@
-import shrinkRay from 'shrink-ray-current';
+// import shrinkRay from 'shrink-ray-current';
 import localeEn from './locales/en.json';
 import localeRu from './locales/ru.json';
 
@@ -54,8 +54,6 @@ export default {
     components: ['b-table', 'b-skeleton', 'b-collapse', 'b-skeleton-table'],
   },
   build: {
-    productionGzip: true,
-    productionGzipExtensions: ['js', 'css', 'svg', 'scss', 'vue', 'html'],
     extend(config, { isClient }) {
       config.node = { fs: 'empty' };
       if (isClient) {
@@ -117,7 +115,7 @@ export default {
     WQ_PROVIDER: process.env.WQ_PROVIDER,
     WQ_ORACLE_URL: process.env.WQ_ORACLE_URL,
   },
-  render: {
-    compressor: shrinkRay(),
-  },
+  // render: {
+  //   compressor: shrinkRay(),
+  // },
 };
