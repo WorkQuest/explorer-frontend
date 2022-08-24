@@ -1,4 +1,3 @@
-// import shrinkRay from 'shrink-ray-current';
 import localeEn from './locales/en.json';
 import localeRu from './locales/ru.json';
 
@@ -115,7 +114,4 @@ export default {
     WQ_PROVIDER: process.env.WQ_PROVIDER,
     WQ_ORACLE_URL: process.env.WQ_ORACLE_URL,
   },
-  // render: {
-  //   compressor: shrinkRay(),
-  // },
 };
