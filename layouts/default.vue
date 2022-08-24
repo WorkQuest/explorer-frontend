@@ -521,6 +521,11 @@ export default {
     grid-gap: 5px;
     cursor: pointer;
 
+    & > img {
+      width: 40px;
+      height: 30px;
+    }
+
     &_mobile {
       display: none;
     }

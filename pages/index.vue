@@ -488,6 +488,8 @@ export default Vue.extend({
   align-items: center;
   .icon {
     grid-area:icon;
+    width: 32px;
+    height: 32px;
   }
 
   .text {
@@ -550,6 +552,10 @@ export default Vue.extend({
       height: 46px;
       position: relative;
       margin-left: auto;
+      & > img {
+        width: 24px;
+        height: 24px;
+      }
     }
 
     &_networks {
