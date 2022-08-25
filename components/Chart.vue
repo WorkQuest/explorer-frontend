@@ -114,33 +114,33 @@ export default {
         this.chartOptions.width = 550;
         this.chartOptions.height = 170;
         this.chartOptions.chartArea.width = 500;
-        this.chartOptions.chartArea.height = 200;
-      } else if (width > 1075 && width < 1080) {
+        this.chartOptions.chartArea.height = 160;
+      } else if (width > 1070 && width <= 1080) {
         this.chartOptions.width = width - 370;
         this.chartOptions.height = width - 750;
         this.chartOptions.chartArea.width = width - 500;
-        this.chartOptions.chartArea.height = width - 850;
-      } else if (width > 1000 && width < 1070) {
+        this.chartOptions.chartArea.height = width - 880;
+      } else if (width > 1000 && width <= 1070) {
         this.chartOptions.width = width - 370;
         this.chartOptions.height = 320;
         this.chartOptions.chartArea.width = width - 500;
-        this.chartOptions.chartArea.height = 380;
-      } else if (width > 900 && width < 1000) {
+        this.chartOptions.chartArea.height = 300;
+      } else if (width > 900 && width <= 1000) {
         this.chartOptions.width = width - 380;
         this.chartOptions.chartArea.width = width - 440;
-      } else if (width > 875 && width < 900) {
+      } else if (width > 875 && width <= 900) {
         this.chartOptions.width = width - 380;
         this.chartOptions.chartArea.width = width - 440;
-      } else if (width > 769 && width < 875) {
+      } else if (width > 769 && width <= 875) {
         this.chartOptions.width = width - 380;
         this.chartOptions.chartArea.width = width - 440;
-      } else if (width > 710 && width < 769) {
+      } else if (width > 710 && width <= 769) {
         this.chartOptions.width = width - 100;
         this.chartOptions.chartArea.width = width - 150;
-      } else if (width > 640 && width < 710) {
+      } else if (width > 640 && width <= 710) {
         this.chartOptions.width = width - 100;
         this.chartOptions.chartArea.width = width - 150;
-      } else if (width > 481 && width < 640) {
+      } else if (width > 481 && width <= 640) {
         this.chartOptions.width = width - 100;
         this.chartOptions.chartArea.width = width - 150;
       } else {
