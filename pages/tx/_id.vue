@@ -3,7 +3,7 @@
     <button
       class="txs__back"
       type="button"
-      @click="back()"
+      @click="back"
     >
       <span class="icon-short_left" />
       {{ $t('ui.back') }}
@@ -161,7 +161,7 @@ export default {
             info: this.tx.tokenTransfers.map((item) => ({
               from: item.fromAddress.smartContract ? item.fromAddress?.smartContract?.address_hash.hex : item.fromAddress.hash.bech32,
               to: item.toAddress.smartContract ? item.toAddress?.smartContract?.address_hash.hex : item.toAddress.hash.bech32,
-              amount: new BigNumber(item.amount).shiftedBy(item.decimals || -18).toString(),
+              amount: new BigNumber(item.amount).shiftedBy(-Number(item?.tokenContractAddress?.token?.decimals) || -18).toString(),
               token: item.tokenContractAddress.token.name,
               tokenAddress: item.tokenContractAddress.hash.hex,
               tokenIconUrl: item.tokenContractAddress.token.metadata.iconUrl || require('~/assets/img/tokens/logo_gray.svg'),
