@@ -7,6 +7,8 @@
         class="absence__img"
         src="~/assets/img/app/smile_sad.svg"
         alt="empty-icon"
+        width="110"
+        height="110"
       >
       <div
         v-if="description !== ''"
@@ -66,6 +68,11 @@ export default {
     flex-direction: column;
     align-items: center;
     grid-gap: 20px;
+  }
+
+  &__img {
+    width: 110px;
+    height: 110px;
   }
 
   &__desc {

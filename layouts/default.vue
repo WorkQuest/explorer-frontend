@@ -15,6 +15,8 @@
                 <img
                   src="~assets/img/app/logo.svg"
                   alt="WorkQuest"
+                  width="40"
+                  height="30"
                 >
                 <span class="header__text">WorkQuest</span>
               </div>

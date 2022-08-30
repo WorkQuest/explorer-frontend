@@ -179,6 +179,8 @@ export default {
 
     img {
       margin-right: 5px;
+      height: 24px;
+      width: 24px;
     }
 
     span {
