@@ -23,7 +23,7 @@
     "statistics": {
       "marketCap": "Market cap on WorkNet",
       "minGasPrice": "Min gas price",
-      "history": "Transaction history last 14 days",
+      "history": "Transaction history for the last 14 days",
       "info": "Coins info",
       "price": "Price"
     },
