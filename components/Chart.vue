@@ -54,6 +54,8 @@ export default {
         chartArea: {
           width: 460,
           height: 200,
+          top: 4,
+          bottom: 4,
         },
         legend: {
           position: 'none',
@@ -153,18 +155,25 @@ export default {
       const currentDay = new Date();
       const timestamp = currentDay.setDate(currentDay.getDate() - 14);
       const dayFrom = new Date(timestamp).toISOString();
-      const transactionsInfo = await this.transactionsByTime({ dayFrom, dayTo });
+      const transactionsInfo = await this.transactionsByTime({
+        dayFrom,
+        dayTo,
+      });
       if (!transactionsInfo.ok) return;
       // added count = 0 for days without transactions
       const fullArrayDates = [];
       for (let i = 14; i > 0; i -= 1) {
         fullArrayDates.push({
-          date: this.$moment(new Date().setDate(new Date().getDate() - i)).format('YYYY-MM-DD'),
+          date: this.$moment(
+            new Date().setDate(new Date().getDate() - i),
+          ).format('YYYY-MM-DD'),
           count: '0',
         });
       }
       fullArrayDates.forEach((item) => {
-        const existDate = transactionsInfo.result.count.find((el) => el.date === item.date);
+        const existDate = transactionsInfo.result.count.find(
+          (el) => el.date === item.date,
+        );
         if (!existDate) return;
         item.count = existDate.count;
       });
@@ -180,7 +189,16 @@ export default {
       });
 
       this.chartOptions.vAxis.ticks = [min, max + 25];
-      this.chartData = fullArrayDates.reduce((acc, item) => [...acc, [this.$moment(new Date(item.date)).format('DD MMMM, YYYY'), +item.count]], [['Date', 'Transactions']]);
+      this.chartData = fullArrayDates.reduce(
+        (acc, item) => [
+          ...acc,
+          [
+            this.$moment(new Date(item.date)).format('DD MMMM, YYYY'),
+            +item.count,
+          ],
+        ],
+        [['Date', 'Transactions']],
+      );
     },
   },
 };
@@ -210,7 +228,7 @@ export default {
     &_day {
       font-size: 12px;
       line-height: 16px;
-      color: #AAB0B9;
+      color: #aab0b9;
     }
   }
 }
