@@ -1,43 +1,52 @@
 // MAIN | TEST | DEV
 
 export const NetworkData = new Map([
-  ['MAIN', {
-    chainId: '0x7D9',
-    chainName: 'WorkNet',
-    rpcUrls: ['https://mainnet-gate.workquest.co/'],
-    nativeCurrency: {
-      name: 'WQT',
-      symbol: 'WQT',
-      decimals: 18,
+  [
+    'MAIN',
+    {
+      chainId: '0x7D9',
+      chainName: 'WorkNet',
+      rpcUrls: ['https://mainnet-gate.workquest.co/'],
+      nativeCurrency: {
+        name: 'WQT',
+        symbol: 'WQT',
+        decimals: 18,
+      },
+      blockExplorerUrls: ['https://explorer.workquest.co'],
     },
-    blockExplorerUrls: ['https://explorer.workquest.co'],
-  }],
-  ['TEST', {
-    chainId: '0x7C7',
-    chainName: 'WorkNet TEST',
-    rpcUrls: ['https://testnet-gate.workquest.co/'],
-    nativeCurrency: {
-      name: 'WQT',
-      symbol: 'WQT',
-      decimals: 18,
+  ],
+  [
+    'TEST',
+    {
+      chainId: '0x7C7',
+      chainName: 'WorkNet TEST',
+      rpcUrls: ['https://testnet-gate.workquest.co/'],
+      nativeCurrency: {
+        name: 'WQT',
+        symbol: 'WQT',
+        decimals: 18,
+      },
+      blockExplorerUrls: ['https://testnet-explorer.workquest.co'],
     },
-    blockExplorerUrls: ['https://testnet-explorer.workquest.co'],
-  }],
-  ['DEV', {
-    chainId: '0x13488D0',
-    chainName: 'WorkNet DEV',
-    rpcUrls: ['https://dev-node-nyc3.workquest.co'],
-    nativeCurrency: {
-      name: 'WQT',
-      symbol: 'WQT',
-      decimals: 18,
+  ],
+  [
+    'DEV',
+    {
+      chainId: '0x13488D0',
+      chainName: 'WorkNet DEV',
+      rpcUrls: ['https://dev-node-nyc3.workquest.co'],
+      nativeCurrency: {
+        name: 'WQT',
+        symbol: 'WQT',
+        decimals: 18,
+      },
+      blockExplorerUrls: ['https://dev-explorer.workquest.co'],
     },
-    blockExplorerUrls: ['https://dev-explorer.workquest.co'],
-  }],
+  ],
 ]);
 
 export const links = {
-  terms: 'https://workquest.co/terms_conditions',
-  privacy: 'https://workquest.co/privacy_policy',
+  terms: '/terms_conditions',
+  privacy: '/privacy_policy',
   metamask: 'https://metamask.io/',
 };
