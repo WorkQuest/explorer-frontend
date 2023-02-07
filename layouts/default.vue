@@ -149,11 +149,7 @@
           :class="{ hidden: isMobileMenu }"
         >
           <search-filter
-            v-if="
-              $route.fullPath !== '/' &&
-                $route.fullPath !== '/privacy_policy' &&
-                $route.fullPath !== '/terms_conditions'
-            "
+            v-if="$route.fullPath !== '/'"
             class="search"
           />
           <nuxt :key="$route.query.page || $route.path" />
@@ -168,15 +164,16 @@
             </p>
           </div>
           <div class="footer__right">
-            <nuxt-link
+            <a
               v-for="(item, i) in footerLinks"
               :key="`${i}-footerLink`"
+              target="_blank"
               rel="noopener"
-              :to="item.path"
+              :href="item.path"
               class="footer__link"
             >
-              {{ item.title }}
-            </nuxt-link>
+              · {{ item.title }}
+            </a>
           </div>
         </div>
       </div>
