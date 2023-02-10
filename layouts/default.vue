@@ -106,7 +106,12 @@
                 @click="toggleMobileMenu"
               >
                 <button class="header__button header__button_menu">
-                  <span :class="{'icon-hamburger': !isMobileMenu, 'icon-close_big': isMobileMenu}" />
+                  <span
+                    :class="{
+                      'icon-hamburger': !isMobileMenu,
+                      'icon-close_big': isMobileMenu,
+                    }"
+                  />
                 </button>
               </div>
             </div>
@@ -115,7 +120,7 @@
         <!-- mobile header -->
         <div
           class="header__mobile"
-          :class="{'header__mobile_visible': isMobileMenu}"
+          :class="{ header__mobile_visible: isMobileMenu }"
         >
           <div
             v-if="isMobileMenu"
@@ -141,13 +146,12 @@
 
         <div
           class="template__content"
-          :class="{'hidden': isMobileMenu}"
+          :class="{ hidden: isMobileMenu }"
         >
           <search-filter
             v-if="$route.fullPath !== '/'"
             class="search"
           />
-
           <nuxt :key="$route.query.page || $route.path" />
         </div>
         <div class="template__footer footer">
@@ -256,7 +260,9 @@ export default {
     this.locales = this.$i18n.locales;
     this.$moment.locale(this.currentLocale);
     document.documentElement.setAttribute('lang', this.currentLocale);
-    this.currentNetwork = process.env.PRODUCTION === 'TEST' ? this.networks.testnet : this.networks.mainnet;
+    this.currentNetwork = process.env.PRODUCTION === 'TEST'
+      ? this.networks.testnet
+      : this.networks.mainnet;
   },
   methods: {
     toRoute(path) {
@@ -362,11 +368,10 @@ export default {
 }
 
 .template {
-
   &__main {
     display: grid;
     min-height: 100vh;
-    background: #F7F8FA;
+    background: #f7f8fa;
     grid-template-rows: auto 1fr auto;
     margin: 0;
   }
@@ -386,7 +391,7 @@ export default {
     top: 0;
     z-index: 100;
     background: $white;
-    box-shadow: 0 1px 0 #E6E9EC;
+    box-shadow: 0 1px 0 #e6e9ec;
     width: 100%;
     display: flex;
     align-items: center;
@@ -479,13 +484,13 @@ export default {
     }
 
     &_locale {
-       width: 86px;
-       height: 46px;
+      width: 86px;
+      height: 46px;
 
-       span {
-         padding-left: 3px;
-       }
-     }
+      span {
+        padding-left: 3px;
+      }
+    }
 
     &_networks {
       width: 110px;
@@ -543,11 +548,15 @@ export default {
   }
 }
 
-.locale, .network {
+.locale,
+.network {
   position: absolute;
   top: calc(72px + 5px);
   background: $white;
-  box-shadow: 0 17px 17px rgba(0, 0, 0, 0.05), 0 5.125px 5.125px rgba(0, 0, 0, 0.03), 0 2.12866px 2.12866px rgba(0, 0, 0, 0.025), 0 0.769896px 0.769896px rgba(0, 0, 0, 0.0174206);
+  box-shadow: 0 17px 17px rgba(0, 0, 0, 0.05),
+    0 5.125px 5.125px rgba(0, 0, 0, 0.03),
+    0 2.12866px 2.12866px rgba(0, 0, 0, 0.025),
+    0 0.769896px 0.769896px rgba(0, 0, 0, 0.0174206);
   border-radius: 6px;
   min-width: 86px;
   z-index: 10000000;
@@ -804,7 +813,8 @@ export default {
     display: flex;
     justify-content: space-between;
     padding: 25px 15px;
-    &__left, &__right {
+    &__left,
+    &__right {
       flex-wrap: wrap;
     }
   }
@@ -890,7 +900,8 @@ export default {
     flex-direction: column;
     padding: 25px 10px;
     grid-gap: 15px;
-    &__left, &__right {
+    &__left,
+    &__right {
       flex-direction: row;
       flex-wrap: nowrap;
     }
