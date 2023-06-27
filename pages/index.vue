@@ -212,7 +212,7 @@ export default Vue.extend({
             alt: 'icon min-gas',
           },
           text: this.$t('ui.tx.minFee'),
-          value: '18 WQT',
+          value: '4,5 WQT',
         },
         {
           class: 'transactions',
