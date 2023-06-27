@@ -54,6 +54,8 @@ export default {
         chartArea: {
           width: 460,
           height: 140,
+          top: 4,
+          bottom: 4,
         },
         legend: {
           position: 'none',
