@@ -37,7 +37,7 @@ export const NetworkData = new Map([
 ]);
 
 export const links = {
-  terms: 'https://workquest.co/terms_conditions',
-  privacy: 'https://workquest.co/privacy_policy',
+  terms: 'https://workquest.co/terms_conditions.html',
+  privacy: 'https://workquest.co/privacy_policy.html',
   metamask: 'https://metamask.io/',
 };
